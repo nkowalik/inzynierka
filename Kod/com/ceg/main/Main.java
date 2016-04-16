@@ -11,10 +11,10 @@ public class Main {
 	  public static void main(String[] args) {        
 	        Ccompiler compiler = new Ccompiler(); 
 	        String filename = "test.cpp";
-	        CodeParser.addNewlineAfterEachCout(filename, "wynik.cpp");
-	        CodeParser.removeAllNewlines("wynik.cpp", "test2.cpp");
+	        String resultFile = "wynik.cpp";
+	        CodeParser.addNewlineAfterEachCoutFromFile(filename, resultFile);
 	      
-	        compiler.CompileNRun(filename); // put .cpp file in program directory! (TODO: allow random location)
+	        compiler.CompileNRun(resultFile); // put .cpp file in program directory! (TODO: allow random location)
 	        List<String> result = new ArrayList<String>();
 	        Ccompiler.runAndReadOutput("test.exe", result, 1);
 	        if(!result.isEmpty()){
