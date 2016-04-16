@@ -61,6 +61,27 @@ public class Ccompiler {
         return;
         
     }
+    public void CompileNRunOnLinux(String filename){
+    	  try {
+    		  String[] args = new String[]{"/bin/bash","-c", "g++", "-o", "executable", filename};
+              Process cmd = new ProcessBuilder(args).start(); // start cmd process
+             
+              String line;
+              BufferedReader reader = new BufferedReader(new InputStreamReader(cmd.getInputStream()));
+              line = reader.readLine();
+              while (true) {
+                  if(line.equals("")) // cos, co konczy poprawne wykonanie komendy g++
+                      break;
+                  line = reader.readLine();
+              }
+              cmd.destroy(); // kill process, job is done
+          }
+          catch (Exception err) {
+              err.printStackTrace();
+          }
+          
+          return;
+    }
     
     // uruchamia program executable i wczytuje liczbe expectedLength linii wyjscia do listy output
     static public void runAndReadOutput(String executable, List<String> output, int expectedLength){
@@ -97,5 +118,10 @@ public class Ccompiler {
         	ex.printStackTrace();
         }
     }
-    
+
+	// uruchamia program executable i wczytuje liczbe expectedLength linii wyjscia do listy output
+	static public void runAndReadOutputOnLinux(String executable, List<String> output, int expectedLength){
+	    
+	}
 }
+
