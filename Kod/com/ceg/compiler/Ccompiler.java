@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package testgenerator;
+package com.ceg.compiler;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
 
 /**
  *
@@ -57,6 +60,42 @@ public class Ccompiler {
         
         return;
         
+    }
+    
+    // uruchamia program executable i wczytuje liczbe expectedLength linii wyjscia do listy output
+    static public void runAndReadOutput(String executable, List<String> output, int expectedLength){
+        try {
+            Process cmd = new ProcessBuilder("cmd.exe").start(); // start cmd process
+            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(cmd.getOutputStream()));
+            Path currentRelativePath = Paths.get("");
+ 	        String s = currentRelativePath.toAbsolutePath().toString();
+ 	        s+="\\";
+ 	        s+=executable;
+            File file = new File(s);
+            if(file.exists() && file.canExecute()){
+            	writer.write(executable);
+            	writer.newLine();
+            	BufferedReader reader = new BufferedReader(new InputStreamReader(cmd.getInputStream()));
+            	writer.flush();
+            	String line;
+            	line = reader.readLine();
+            	line = reader.readLine();
+            	line = reader.readLine();
+            	line = reader.readLine();
+            	for(int i = 0; i < expectedLength; i++){
+            		line = reader.readLine();
+            		if(line!=null && !line.equals(" ")){
+            			output.add(line);
+            		}	
+            	}
+            	writer.close();
+            	reader.close();
+            }
+            cmd.destroy();
+        }
+        catch(Exception ex){
+        	ex.printStackTrace();
+        }
     }
     
 }
