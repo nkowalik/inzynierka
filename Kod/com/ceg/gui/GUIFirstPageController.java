@@ -5,11 +5,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.*;
 import javafx.stage.Stage;
 
+/**
+ *
+ * @author Natalia
+ */
 
-public class FirstPageController {
+
+public class GUIFirstPageController {
 
     public void createNewExam(ActionEvent event) throws Exception {
-        Parent firstPage = FXMLLoader.load(getClass().getResource("secondPage.fxml"));
+        Parent firstPage = FXMLLoader.load(getClass().getResource("GUISecondPage.fxml"));
         Scene firstScene = new Scene (firstPage);
 
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();

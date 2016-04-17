@@ -6,11 +6,17 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class Main extends Application {
+/**
+ *
+ * @author Natalia
+ */
+
+
+public class GUIMain extends Application {
 
     @Override
-    public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("firstPage.fxml"));
+    public void start(Stage primaryStage) throws Exception {
+        Parent root = FXMLLoader.load(getClass().getResource("GUIFirstPage.fxml"));
         primaryStage.setTitle("CEG");
         primaryStage.setScene(new Scene(root, 300, 275));
         primaryStage.show();

@@ -13,7 +13,13 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import java.util.*;
 
-public class SecondPageController implements Initializable {
+/**
+ *
+ * @author Natalia
+ */
+
+
+public class GUISecondPageController implements Initializable {
 
     List<String> list;
 
