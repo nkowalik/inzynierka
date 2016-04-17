@@ -9,7 +9,8 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-
+/* klasa odpowiedzialna za generowanie pdfa. Aby utworzyæ dokument nale¿y utworzyæ obiekt tej klasy za pomoc¹ 
+   konstruktora, który jako argumenty przyjmuje nazwê przysz³ego pliku pdf, tekst polecenia i listê linii kodu */
 public class PDFGenerator {
     private final PDDocument document;
     private PDPage actualPage;
