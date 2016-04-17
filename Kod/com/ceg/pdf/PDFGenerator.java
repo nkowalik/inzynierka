@@ -9,18 +9,18 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDFont;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
-/* klasa odpowiedzialna za generowanie pdfa. Aby utworzyæ dokument nale¿y utworzyæ obiekt tej klasy za pomoc¹ 
-   konstruktora, który jako argumenty przyjmuje nazwê przysz³ego pliku pdf, tekst polecenia i listê linii kodu */
+/* klasa odpowiedzialna za generowanie pdfa. Aby utworzyÄ‡ dokument naleÅ¼y utworzyÄ‡ obiekt tej klasy za pomocÄ… 
+   konstruktora, ktÃ³ry jako argumenty przyjmuje nazwÄ™ przyszÅ‚ego pliku pdf, tekst polecenia i listÄ™ linii kodu */
 public class PDFGenerator {
     private final PDDocument document;
     private PDPage actualPage;
     public static PDPageContentStream cs;
-    protected final int leftMargin = 30;
-    protected int topMargin = 760;
-    protected int breakBetweenTasks = 45;
+    private final int leftMargin = 30;
+    private int topMargin = 760;
+    private final int breakBetweenTasks = 45;
     
     
-    PDFGenerator(String fileName, String command, List<String> code) throws IOException {
+    public PDFGenerator(String fileName, String command, List<String> code) throws IOException {
         document = new PDDocument();
         actualPage = new PDPage();
         document.addPage(actualPage);
