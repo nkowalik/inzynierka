@@ -20,6 +20,7 @@ import java.util.Scanner;
 public class Task {
     private ArrayList<String> code;
     private ArrayList<String> contents;
+    private ArrayList<String> answers;
     private int type;
     
     public Task(){
@@ -55,6 +56,12 @@ public class Task {
     }
     public void setContents(List<String> newContents){
         contents = (ArrayList<String>)newContents;
+    }
+     public ArrayList<String> getAnswers(){
+        return answers;
+    }
+    public void setAnswers(List<String> newAnswers){
+        answers = (ArrayList<String>)newAnswers;
     }
     public int getType(){
         return type;
