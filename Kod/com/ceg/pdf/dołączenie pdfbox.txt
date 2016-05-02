@@ -1,6 +1,0 @@
-Dodanie dependency do projektu Maven:
-
-groupID: org.apache.pdfbox 
-artifactID: pdfbox 
-version: 2.0.0-RC2 
-type: jar
