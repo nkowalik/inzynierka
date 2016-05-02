@@ -58,19 +58,20 @@ public class Ccompiler {
             err.printStackTrace();
         }
         
-        return;
-        
+        return;        
     }
-    public void CompileNRunOnLinux(String filename){
-    	  try {
-    		  String[] args = new String[]{"/bin/bash","-c", "g++", "-o", "executable", filename};
+
+ public static void CompileNRunOnLinux(String filename){
+     try {
+    	      String[] args = new String[]{"/bin/bash","-c", "g++ -o executable "+filename};
               Process cmd = new ProcessBuilder(args).start(); // start cmd process
-             
+            
               String line;
               BufferedReader reader = new BufferedReader(new InputStreamReader(cmd.getInputStream()));
               line = reader.readLine();
+               
               while (true) {
-                  if(line.equals("")) // cos, co konczy poprawne wykonanie komendy g++
+                  if(line == null || line.contains("compilation terminated.") || line.isEmpty()) // cos, co konczy wykonanie komendy g++
                       break;
                   line = reader.readLine();
               }
@@ -81,7 +82,7 @@ public class Ccompiler {
           }
           
           return;
-    }
+  }
     
     // uruchamia program executable i wczytuje liczbe expectedLength linii wyjscia do listy output
     static public void runAndReadOutput(String executable, List<String> output, int expectedLength){
@@ -121,7 +122,26 @@ public class Ccompiler {
 
 	// uruchamia program executable i wczytuje liczbe expectedLength linii wyjscia do listy output
 	static public void runAndReadOutputOnLinux(String executable, List<String> output, int expectedLength){
-	    
+	     try {
+		 String[] args = new String[]{"/bin/bash","-c","./"+executable};
+                Process cmd = new ProcessBuilder(args).start(); // start cmd process
+
+                String line;
+                BufferedReader reader = new BufferedReader(new InputStreamReader(cmd.getInputStream()));
+                line = reader.readLine();
+                while (true) {
+                    if(line == null)
+                        break;
+                     output.add(line);
+                    line = reader.readLine();
+                }
+                cmd.destroy(); // kill process, job is done
+          }
+          catch (Exception err) {
+              err.printStackTrace();
+          }
+          
+          return;
 	}
 }
 
