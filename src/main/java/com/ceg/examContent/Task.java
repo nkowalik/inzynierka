@@ -5,6 +5,7 @@
  */
 package com.ceg.examContent;
 
+import com.ceg.compiler.GCC;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
@@ -22,11 +23,13 @@ public class Task {
     private ArrayList<String> contents;
     private ArrayList<String> answers;
     private int type;
+    public GCC compiler;
+    
     
     public Task(){
         ArrayList<String> defaultCode = new ArrayList<>();
         ArrayList<String> defaultContents = new ArrayList<>();
-
+        compiler = new GCC();
         try {
             Scanner s = new Scanner(new File("polecenie.txt"));
             while (s.hasNext()) {
@@ -34,12 +37,14 @@ public class Task {
             }
             s.close();
 
-            Scanner s1 = new Scanner(new File("kod.txt"));
+            Scanner s1 = new Scanner(new File("test.cpp"));
             for (int i = 0; s1.hasNext(); i++) {
                 defaultCode.add(s1.nextLine());
             }
 
             s1.close();
+            contents = defaultContents;
+            code = defaultCode;
 
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
