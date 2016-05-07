@@ -19,9 +19,9 @@ import java.util.Scanner;
 
 // Klasa zawierająca dane pojedynczego zadania: typ (type), kod (code), treść polecenia (contents)
 public class Task {
-    private ArrayList<String> code;
-    private ArrayList<String> contents;
-    private ArrayList<String> answers;
+    private List<String> code;
+    private List<String> contents;
+    private List<String> answers;
     private int type;
     public GCC compiler;
     
@@ -50,23 +50,23 @@ public class Task {
             System.err.println(ex);
         }
     }
-    public ArrayList<String> getCode(){
+    public List<String> getCode(){
         return code;
     }
     public void setCode(List<String> newCode){
-        code = (ArrayList<String>)newCode;
+        code = newCode;
     }
-    public ArrayList<String> getContents(){
+    public List<String> getContents(){
         return contents;
     }
     public void setContents(List<String> newContents){
-        contents = (ArrayList<String>)newContents;
+        contents = newContents;
     }
-     public ArrayList<String> getAnswers(){
+     public List<String> getAnswers(){
         return answers;
     }
     public void setAnswers(List<String> newAnswers){
-        answers = (ArrayList<String>)newAnswers;
+        answers = newAnswers;
     }
     public int getType(){
         return type;

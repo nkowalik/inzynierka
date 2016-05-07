@@ -7,13 +7,16 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
 public abstract class PDFAbstractTask {
     protected static PDFont font;
     protected static int fontSize = 10;
-    protected static PDPageContentStream cs = PDFGenerator.cs;
+    protected static PDPageContentStream cs;
     protected final static int lineHeight = 15;
     protected int finalY;
     protected int startX;
     protected int textWidth;
     protected float actualWidth = 0;    
     
+    public PDFAbstractTask(){
+        cs = PDFGenerator.cs;
+    }
     public int getFinalY() {
         return finalY;
     }    

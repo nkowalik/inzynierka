@@ -23,6 +23,7 @@ public class PDFCode extends PDFAbstractTask {
                                                             " " );
     
     PDFCode(int startX, int startY, int textWidth) {
+        super();
         font = PDType1Font.COURIER;
         this.startX = startX;
         this.finalY = startY;
