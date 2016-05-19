@@ -1,6 +1,10 @@
 package com.ceg.gui;
 
 
+import java.util.*;
+import javafx.scene.control.IndexRange;
+import org.fxmisc.richtext.CodeArea;
+import org.fxmisc.richtext.LineNumberFactory;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.pdf.PDFGenerator;
@@ -13,7 +17,6 @@ import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import java.io.IOException;
 import java.net.URL;
-import java.util.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 
@@ -26,12 +29,11 @@ import javafx.beans.value.ObservableValue;
 public class GUISecondPageController implements Initializable {
 
     List<String> list;
-    List<String> list2;
 
     @FXML
     TextArea text;
     @FXML
-    TextArea code;
+    CodeArea code;
     @FXML
     ListView listView;
 
@@ -40,8 +42,11 @@ public class GUISecondPageController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         list = new ArrayList<>();
-        list2 = new ArrayList<>();
         listView.setItems(listItems);
+        
+        //ustawienie numerowania linii dla części z kodem
+        code.setParagraphGraphicFactory(LineNumberFactory.get(code));
+        code.setWrapText(true);
         
         // utworzenie nowego egzaminu i dodanie pierwszego zadania
         Task t = new Task();
@@ -80,12 +85,29 @@ public class GUISecondPageController implements Initializable {
            
         code.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                Exam.getInstance().getCurrentTask().setCode(Arrays.asList(newValue.split("\n")));
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {                
+                Exam.getInstance().getCurrentTask().setTestCode(Arrays.asList(newValue.split("\n")));
+                /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
+                String newCode = newValue;
+                String newPDFCode = newValue;
+                
+                for (int i = newValue.length() - 1; i >= 0; i--) {
+                    List<String> s = (List<String>) code.getStyleOfChar(i);
+                    if (!s.isEmpty()) {
+                        if ("test".equals(s.get(s.size() - 1))) {
+                            newCode = newCode.substring(0, i) + newCode.substring(i+1);
+                        }
+                        else if ("hidden".equals(s.get(s.size() - 1))) {
+                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
+                        }
+                    }
+                }
+                Exam.getInstance().getCurrentTask().setCode(Arrays.asList(newCode.split("\n"))); 
+                Exam.getInstance().getCurrentTask().setPDFCode(Arrays.asList(newPDFCode.split("\n")));
             }
         });
     }
-
+    
     public void execute(ActionEvent actionEvent) {
        List<String> result = new ArrayList<String>();
        
@@ -104,7 +126,7 @@ public class GUISecondPageController implements Initializable {
                 String line = contentsList.get(index);
                 txt+=line+"\n";
         }
-        PDFGenerator gen = new PDFGenerator("plik.pdf", txt, Exam.getInstance().getCurrentTask().getCode());
+        PDFGenerator gen = new PDFGenerator("plik.pdf", txt, Exam.getInstance().getCurrentTask().getPDFCode());
     }
 
     public void compile(ActionEvent actionEvent) {
@@ -118,4 +140,17 @@ public class GUISecondPageController implements Initializable {
 
     }
 
+    public void testMarker(ActionEvent actionEvent) {
+        changeStyle("test");
+    }    
+    public void hideMarker(ActionEvent actionEvent) {
+        changeStyle("hidden");
+    }    
+    public void normalMarker(ActionEvent actionEvent) {
+        changeStyle("normal");
+    }    
+    private void changeStyle(String className) {
+        IndexRange ir = code.getSelection();        
+        code.setStyleClass(ir.getStart(), ir.getEnd(), className);
+    }
 }

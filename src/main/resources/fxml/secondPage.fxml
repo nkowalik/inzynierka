@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
+<?import org.fxmisc.richtext.*?>
 
 <GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUISecondPageController">
     <columnConstraints>
@@ -34,10 +35,10 @@
         </left>
 
             <right>
-            <TextArea fx:id="code" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="420.0" promptText="Tutaj wpisz kod programu..." BorderPane.alignment="TOP_CENTER">
+            <CodeArea fx:id="code" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="420.0" BorderPane.alignment="TOP_CENTER">
                <BorderPane.margin>
                   <Insets right="40.0" />
-               </BorderPane.margin></TextArea>
+               </BorderPane.margin></CodeArea>
             </right>
             <bottom>
                 <ButtonBar prefHeight="40.0" prefWidth="200.0">

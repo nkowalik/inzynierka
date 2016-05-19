@@ -17,9 +17,13 @@ import java.util.Scanner;
  * @author marta
  */
 
-// Klasa zawierająca dane pojedynczego zadania: typ (type), kod (code), treść polecenia (contents)
+/* Klasa zawierająca dane pojedynczego zadania: typ (type), wykonywany kod (code), 
+   kod z częścią zamarkowaną jako testowa (testCode), kod, widoczny dla studenta na arkuszu (PDFCode), 
+   treść polecenia (contents) */
 public class Task {
     private List<String> code;
+    private List<String> testCode;
+    private List<String> PDFCode;
     private List<String> contents;
     private List<String> answers;
     private int type;
@@ -45,6 +49,8 @@ public class Task {
             s1.close();
             contents = defaultContents;
             code = defaultCode;
+            testCode = defaultCode;
+            PDFCode = defaultCode;
 
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
@@ -53,8 +59,20 @@ public class Task {
     public List<String> getCode(){
         return code;
     }
+    public List<String> getTestCode(){
+        return testCode;
+    }
+    public List<String> getPDFCode(){
+        return PDFCode;
+    }
     public void setCode(List<String> newCode){
         code = newCode;
+    }
+    public void setTestCode(List<String> newCode) {
+        testCode = newCode;
+    }
+    public void setPDFCode(List<String> newCode) {
+        PDFCode = newCode;
     }
     public List<String> getContents(){
         return contents;

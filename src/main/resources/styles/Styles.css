@@ -1,3 +1,17 @@
 .button {
     -fx-font-weight: bold;
 }
+
+.test {   
+    -fx-fill: orange;
+    -fx-font-weight: bold;
+}
+
+.hidden {
+    -fx-fill: royalblue;
+    -fx-font-weight: bold;
+}
+
+.normal {
+    -fx-fill: black;
+}
