@@ -96,8 +96,9 @@ public class GUISecondPageController implements Initializable {
                     if (!s.isEmpty()) {
                         if ("test".equals(s.get(s.size() - 1))) {
                             newCode = newCode.substring(0, i) + newCode.substring(i+1);
+                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
                         }
-                        else if ("hidden".equals(s.get(s.size() - 1))) {
+                        if ("hidden".equals(s.get(s.size() - 1))) {
                             newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
                         }
                     }
