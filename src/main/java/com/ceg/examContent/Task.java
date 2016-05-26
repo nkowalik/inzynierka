@@ -26,7 +26,7 @@ public class Task {
     private List<String> PDFCode;
     private List<String> contents;
     private List<String> answers;
-    private int type;
+    private TaskType type;
     public GCC compiler;
     
     
@@ -86,10 +86,10 @@ public class Task {
     public void setAnswers(List<String> newAnswers){
         answers = newAnswers;
     }
-    public int getType(){
+    public TaskType getType(){
         return type;
     }
-    public void setType(int newType){
+    public void setType(TaskType newType){
         type = newType;
     }
     
