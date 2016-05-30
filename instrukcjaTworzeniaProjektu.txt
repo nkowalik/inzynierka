@@ -1,0 +1,29 @@
+Tworzenie projektu (NetBeans):
+1. Wybranie z pozycji Maven projektu JavaFX Application
+2. Uzupe³nienie danych o tworzonym projekcie, jako pakiet podajemy pakiet, 
+   w którym bêdzie znajdowa³ siê main (com.ceg.gui)
+3. Dodajemy pliki i pakiety z kodem (pliki fxml i css znajduj¹ siê w Other 
+   Sources, tam te¿ trzeba je dodaæ).
+4. W drzewie projtucie szukamy katalogu Project Files i otwieramy plik pom.xml.
+5. W elemencie project odszukujemy element properties i zmieniamy w nim 
+   œcie¿kê do klasy main (UWAGA! czêsto zdarza siê, ¿e nie dzia³a, gdy trzeba 
+   zmieniæ pakiet, w którym znajduje siê klasa main, ze zmian¹ samej nazwy
+   nie ma problemów).
+6. Dodajemy dependencies poprzez prawy klik w drzewie projektu na folder 
+   Dependencies -> Add dependency.
+
+            groupId - org.apache.pdfbox
+            artifactId - pdfbox
+            version - 2.0.0-RC2
+
+            groupId - commons-lang
+            artifactId - commons-lang
+            version - 2.3
+
+            groupId - org.fxmisc.richtext
+            artifactId - richtextfx
+            version - 0.6.10
+
+7. Odpalamy projekt i cieszymy siê nowym :)
+
+ 
