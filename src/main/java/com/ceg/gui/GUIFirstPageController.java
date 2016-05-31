@@ -16,7 +16,9 @@ public class GUIFirstPageController {
     public void createNewExam(ActionEvent event) throws Exception {
         Parent firstPage = FXMLLoader.load(getClass().getResource("/fxml/secondPage.fxml"));
         Scene firstScene = new Scene (firstPage);
-
+        
+        firstScene.getStylesheets().add("/styles/Styles.css");
+        
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
         appStage.setScene(firstScene);

@@ -9,6 +9,7 @@ public class PDFCommand extends PDFAbstractTask {
     private final float spaceWidth;
         
     PDFCommand(int startX, int startY, int textWidth) throws IOException {
+        super();
         font = PDType1Font.TIMES_ROMAN;
         spaceWidth = getWidth(" ");
         this.startX = startX;
