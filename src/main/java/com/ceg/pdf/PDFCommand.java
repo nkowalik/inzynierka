@@ -1,6 +1,7 @@
 package com.ceg.pdf;
 
 import java.io.IOException;
+import java.util.List;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class PDFCommand extends PDFAbstractTask {
@@ -8,20 +9,18 @@ public class PDFCommand extends PDFAbstractTask {
     private String line = "";
     private final float spaceWidth;
         
-    PDFCommand(int startX, int startY, int textWidth) throws IOException {
-        super();
-        font = PDType1Font.TIMES_ROMAN;
+    PDFCommand(int textWidth, PDType1Font font, int fontSize) throws IOException {
+        super(textWidth, font, fontSize);
         spaceWidth = getWidth(" ");
-        this.startX = startX;
-        this.textWidth = textWidth;
-        this.finalY = startY;
     }
     
     /*  Funkcja odpowiedzialna za formatowanie tekstu polecenia. Argumentem jest tekst polecenia.
         Dzieli wyrazy po spacji i układa jak najwięcej w jednej linii. Wrażliwa na znaki entera:
         każdy enter w poleceniu będzie widoczny w dokumencie pdf. Brak możliwości używania innych
-        białych znaków poza spacją i enterem. */
-    public void textSplitting (String string) throws IOException {
+        białych znaków poza spacją i enterem. */    
+    @Override
+    public void textSplitting (List<String> command) throws IOException {
+        String string = mergeStringList(command);
         float actualWordWidth;
         words = string.split(" ");        
         
@@ -35,7 +34,7 @@ public class PDFCommand extends PDFAbstractTask {
             
             //linia wystarczająco długa, żaden wyraz więcej się nie zmieści
             if (actualWidth + actualWordWidth + spaceWidth  >= textWidth) {
-                writeLine(line);
+                actualTaskLines.add(line);
                 line = word;
                 actualWidth = actualWordWidth;
             }
@@ -52,7 +51,7 @@ public class PDFCommand extends PDFAbstractTask {
         }
         //jeśli linia nie jest pusta, wypisujemy ją
         if (!line.isEmpty()) {
-            writeLine(line);
+            actualTaskLines.add(line);
         }
     }
     
@@ -72,7 +71,7 @@ public class PDFCommand extends PDFAbstractTask {
             
             //linia wystarczająco długa, zapisujemy
             if (actualWidth + actualWordWidth + spaceWidth  >= textWidth) {
-                writeLine(line);
+                actualTaskLines.add(line);
                 line = "";
             }
             
@@ -82,7 +81,7 @@ public class PDFCommand extends PDFAbstractTask {
                     lineIsEmpty = true;
                 }
                 else {
-                    writeLine(line);
+                    actualTaskLines.add(line);
                     line = "";
                     actualWidth = 0;
                 }
@@ -91,5 +90,15 @@ public class PDFCommand extends PDFAbstractTask {
             line += word2;   
             actualWidth += actualWordWidth;
         }
+    }
+    
+    private String mergeStringList(List<String> command) {
+        String txt = new String();
+        // pobranie treści polecenia w formie listy, sklejenie jej w jednego Stringa      
+        for (int index = 0 ; index < command.size(); index++) {
+            String line = command.get(index);
+            txt+=line+"\n";
+        }
+        return txt;
     }
 }

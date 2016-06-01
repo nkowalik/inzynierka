@@ -49,4 +49,8 @@ public class Exam {
     public Task getTaskAtIndex(int idx){
         return tasks.get(idx);
     }
+    /*zmienić tak, aby kompilowany był cały egzamin*/
+    public boolean compileExam() {
+        return true;
+    }
 }
