@@ -29,21 +29,18 @@ import javafx.beans.value.ObservableValue;
 public class GUISecondPageController implements Initializable {
 
     List<String> list;
-
+    List<String> list2;
     @FXML
     TextArea text;
     @FXML
     CodeArea code;
     @FXML
-    ListView listView;
-
-    final ObservableList<String> listItems = FXCollections.observableArrayList(" Typ1", " Typ2", " Typ3", " Typ4");
+    TextArea result;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         list = new ArrayList<>();
-        listView.setItems(listItems);
-        
+        list2 = new ArrayList<>();
         //ustawienie numerowania linii dla części z kodem
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
@@ -110,19 +107,30 @@ public class GUISecondPageController implements Initializable {
     }
     
     public void execute(ActionEvent actionEvent) {
-       List<String> result = new ArrayList<String>();
-       
-       Exam inst = Exam.getInstance();
-       inst.getCurrentTask().compiler.execute(result);
-        if(!result.isEmpty()){
-                // do something useful here
+        List<String> outcome = new ArrayList<String>();
+
+        Exam inst = Exam.getInstance();
+
+        inst.getCurrentTask().compiler.createFile(inst.getCurrentTask().getCode(), "zad1.cpp");
+        inst.getCurrentTask().compiler.compile(outcome);
+
+        /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic */
+        if(outcome.isEmpty()) // jesli kompilacja przebiegla pomyslnie
+            inst.getCurrentTask().compiler.execute(outcome);
+
+        if(!outcome.isEmpty()){
+            result.clear();
+            for(String s : outcome) {
+                result.appendText(s + "\n");
+            }
         }
+
     }
 
     public void createPDF(ActionEvent actionEvent) throws IOException {
         PDFGenerator gen = new PDFGenerator("plik.pdf");
     }
-
+/*
     public void compile(ActionEvent actionEvent) {
       
         //CodeParser.addNewlineAfterEachCoutFromFile(filename, resultFile);
@@ -133,7 +141,7 @@ public class GUISecondPageController implements Initializable {
          inst.getCurrentTask().compiler.compile(result);
 
     }
-
+*/
     public void testMarker(ActionEvent actionEvent) {
         changeStyle("test");
     }    
