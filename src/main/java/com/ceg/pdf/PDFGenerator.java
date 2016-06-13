@@ -8,13 +8,11 @@ import java.util.List;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 /* klasa odpowiedzialna za generowanie pdfa. Aby utworzyć dokument należy utworzyć obiekt tej klasy za pomocą 
    konstruktora, który jako argumenty przyjmuje nazwę przyszłego pliku pdf, tekst polecenia i listę linii kodu */
 public class PDFGenerator {
-    private final PDDocument document;
+    public static final PDDocument document = new PDDocument();
     private PDPage actualPage = null;
     public static PDPageContentStream cs;
     
@@ -24,37 +22,33 @@ public class PDFGenerator {
     private final static int leftCodeMargin = leftMargin + commandWidth + leftMargin;
     private static final int topMargin = 760;
     private static final int bottomMargin = 40;
-    private static final int breakBetweenTasks = 25;
-    
-    private static final PDFont font = PDType1Font.TIMES_ROMAN;
-    private static final int fontSize = 12;
+    private static final int breakBetweenTasks = 25;   
     
     private int actualY;
     
     /* wywołanie konstruktora powoduje utworzenie dokumentu pdf. Argumentem nazwa przyszłego pliku pdf */
-    public PDFGenerator(String fileName) throws IOException {
+    public PDFGenerator(String fileName, String commandFont, String codeFont) throws IOException {
         boolean newPage;
-        
-        //tworzenie dokumentu
-        document = new PDDocument();
         
         //tworzenie nowej strony i dodanie jej do dokumentu
         createNewPage();
         
-        PDFHeader header = new PDFHeader(new PDFLine(font, fontSize));
+        PDFHeader header = new PDFHeader();
         actualY = header.setHeader(leftMargin, topMargin, breakBetweenTasks);
 
         List<Task> taskList = Exam.getInstance().getTasks();
         
-        PDFCommand comm = new PDFCommand(commandWidth, PDType1Font.TIMES_ROMAN, 10);
-        PDFCode code = new PDFCode(codeWidth, PDType1Font.COURIER, 10);
+        PDFCommand comm = new PDFCommand(commandWidth, commandFont, 10);
+        PDFCode code = new PDFCode(codeWidth, codeFont, 10);
+        PDFAnswer answer = new PDFAnswer(commandWidth, commandFont, 10);
         
         for (Task i : taskList) {           
             comm.textSplitting(i.getContents());
             code.textSplitting(i.getPDFCode());
+            answer.textSplitting(i.getPDFAnswers());
             
             //jeśli zadanie nie mieści się na stronie, to tworzymy nową stronę
-            if (actualY - comm.getLineHeight()*comm.getNumberOfLines() < bottomMargin &&
+            if (actualY - comm.getLineHeight()*(comm.getNumberOfLines() + answer.getNumberOfLines()) < bottomMargin  &&
                 actualY - code.getLineHeight()*code.getNumberOfLines() < bottomMargin) {
                 createNewPage();
                 newPage = true;
@@ -65,6 +59,7 @@ public class PDFGenerator {
                 
             int commandLines = comm.writeToPDF(leftMargin, actualY);
             int codeLines = code.writeToPDF(leftCodeMargin, actualY);
+            commandLines = answer.writeToPDF(leftMargin, commandLines);
             
             actualY = (commandLines < codeLines) ? commandLines : codeLines; 
             

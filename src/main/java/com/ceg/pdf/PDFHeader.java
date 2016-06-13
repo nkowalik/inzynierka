@@ -1,5 +1,6 @@
 package com.ceg.pdf;
 
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -9,8 +10,8 @@ import java.io.IOException;
 public class PDFHeader {
     private final PDFLine line;
     
-    public PDFHeader(PDFLine line) {
-        this.line = line;
+    public PDFHeader() throws IOException {
+        this.line = new PDFLine("times", 12);
     }
     
         /* Funkcja dodająca nagłówek postaci miejsc na imię  i nazwisko oraz numer indeksu studenta */
@@ -23,8 +24,7 @@ public class PDFHeader {
         
         //przejście do następnej linii
         topMargin -= 15;
-        
-        line.setText("Imie i nazwisko");
+        line.setText("Imię i nazwisko");
         line.writeLine(leftMargin + 1, topMargin);
         
         line.setText("Nr indeksu");

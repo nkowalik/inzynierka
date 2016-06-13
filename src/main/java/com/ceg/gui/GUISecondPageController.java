@@ -8,12 +8,9 @@ import org.fxmisc.richtext.LineNumberFactory;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.pdf.PDFGenerator;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import java.io.IOException;
 import java.net.URL;
@@ -120,6 +117,7 @@ public class GUISecondPageController implements Initializable {
 
         if(!outcome.isEmpty()){
             result.clear();
+            //result.appendText("");
             for(String s : outcome) {
                 result.appendText(s + "\n");
             }
@@ -128,7 +126,7 @@ public class GUISecondPageController implements Initializable {
     }
 
     public void createPDF(ActionEvent actionEvent) throws IOException {
-        PDFGenerator gen = new PDFGenerator("plik.pdf");
+        PDFGenerator gen = new PDFGenerator("plik.pdf", "times", "courier");
     }
 /*
     public void compile(ActionEvent actionEvent) {

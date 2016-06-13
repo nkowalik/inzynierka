@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public abstract class PDFAbstractTask {
     protected PDFLine pdfLine;
@@ -14,10 +13,10 @@ public abstract class PDFAbstractTask {
     protected float actualWidth = 0;  
     protected ArrayList<String> actualTaskLines;
     
-    public PDFAbstractTask(int textWidth, PDType1Font font, int fontSize){
+    public PDFAbstractTask(int textWidth, String fontName, int fontSize) throws IOException{
         cs = PDFGenerator.cs;
         actualTaskLines = new ArrayList<>();
-        pdfLine = new PDFLine(font, fontSize);
+        pdfLine = new PDFLine(fontName, fontSize);
         this.textWidth = textWidth;
         lineHeight = fontSize;
     } 

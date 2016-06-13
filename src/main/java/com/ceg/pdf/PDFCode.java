@@ -3,7 +3,6 @@ package com.ceg.pdf;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class PDFCode extends PDFAbstractTask {
     private String line;
@@ -22,8 +21,8 @@ public class PDFCode extends PDFAbstractTask {
                                                             "<",
                                                             " " );
     
-    PDFCode(int textWidth, PDType1Font font, int fontSize) {
-        super(textWidth, font, fontSize);
+    PDFCode(int textWidth, String fontName, int fontSize) throws IOException {
+        super(textWidth, fontName, fontSize);
     }
     
     /*  Funkcja formatująca kod do pdfa. Jako parametr przyjmuje listę linii kodu.

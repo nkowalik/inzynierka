@@ -1,8 +1,9 @@
 package com.ceg.pdf;
 
 import static com.ceg.pdf.PDFGenerator.cs;
+import java.io.File;
 import java.io.IOException;
-import org.apache.pdfbox.pdmodel.font.PDFont;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 /**
  *
@@ -10,19 +11,27 @@ import org.apache.pdfbox.pdmodel.font.PDFont;
  */
 public class PDFLine {
     private String lineText;
-    private final PDFont font;
+    private PDType0Font font;
     private final int fontSize;
     
-    public PDFLine(PDFont font, int fontSize) {
+    public PDFLine(PDType0Font font, int fontSize) {
         this.font = font;
         this.fontSize = fontSize;
+    }
+    
+    public PDFLine(String fontName, int fontSize) throws IOException {
+        this.fontSize = fontSize;
+        chooseFont(fontName);
     }
     
     public void setText(String text) {
         lineText = text;
     }
-    public PDFont getFont() {
+    public PDType0Font getFont() {
         return font;
+    }
+    public void setFont(PDType0Font font) {
+        this.font = font;
     }
     public int getFontSize() {
         return fontSize;
@@ -35,5 +44,32 @@ public class PDFLine {
         cs.newLineAtOffset(startX, startY);
         cs.showText(lineText);
         cs.endText();
+    }
+    
+    private void chooseFont(String fontName) throws IOException {
+        File fontFile;
+        
+        switch(fontName) {
+            case "times":
+                fontFile = new File("fonts\\times.ttf");
+                break;
+            case "arial":
+                fontFile = new File("fonts\\arial.ttf");
+                break;
+            case "arialNarrow":
+                fontFile = new File("fonts\\ARIALN.ttf");
+                break;
+            case "courier":
+                fontFile = new File("fonts\\cour.ttf");
+                break;
+            case "verdana":
+                fontFile = new File("fonts\\verdana.ttf");
+                break;
+            default:
+                fontFile = new File("fonts\\times.ttf");
+                break;
+        }
+        
+        font = PDType0Font.load(PDFGenerator.document, fontFile);
     }
 }
