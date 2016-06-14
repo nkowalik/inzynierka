@@ -60,7 +60,7 @@
           </Menu>
           <Menu mnemonicParsing="false" text="Zadanie">
             <items>
-              <MenuItem mnemonicParsing="false" text="Dodaj" />
+              <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Ustawienia">

@@ -2,7 +2,13 @@ package com.ceg.gui;
 
 
 import java.util.*;
+
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.IndexRange;
+import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import com.ceg.examContent.Exam;
@@ -161,4 +167,14 @@ public class GUISecondPageController implements Initializable {
         }
         code.setStyleClass(ir.getStart(), ir.getEnd(), className);
     }
+
+    public void addTask(ActionEvent event) throws Exception {
+        Stage addingTaskStage = new Stage();
+        Parent scene = FXMLLoader.load(getClass().getResource("/fxml/addTask.fxml"));
+        addingTaskStage.setTitle("Nowe zadanie");
+        addingTaskStage.setScene(new Scene(scene, 650, 480));
+        addingTaskStage.show();
+
+    }
+
 }
