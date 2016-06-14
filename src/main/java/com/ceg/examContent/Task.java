@@ -31,8 +31,8 @@ public class Task {
     
     
     public Task(){
-        ArrayList<String> defaultCode = new ArrayList<>();
-        ArrayList<String> defaultContents = new ArrayList<>();
+        List<String> defaultCode = new ArrayList<>();
+        List<String> defaultContents = new ArrayList<>();
         compiler = new GCC();
         try {
             Scanner s = new Scanner(new File("polecenie.txt"));

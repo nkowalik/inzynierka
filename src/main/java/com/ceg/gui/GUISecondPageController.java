@@ -7,6 +7,8 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
+import com.ceg.examContent.TaskTypeMultipleOutput;
+import com.ceg.examContent.TaskTypeSimpleOutput;
 import com.ceg.pdf.PDFGenerator;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -50,6 +52,8 @@ public class GUISecondPageController implements Initializable {
         
         // utworzenie nowego egzaminu i dodanie pierwszego zadania
         Task t = new Task();
+        t.setType(new TaskTypeMultipleOutput());
+        
         Exam.getInstance().init();
         Exam.getInstance().addTask(t);
         
@@ -86,7 +90,7 @@ public class GUISecondPageController implements Initializable {
         code.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {                
-                Exam.getInstance().getCurrentTask().setTestCode(Arrays.asList(newValue.split("\n")));
+                Exam.getInstance().getCurrentTask().setTestCode(new ArrayList<String>(Arrays.asList(newValue.split("\n"))));
                 /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
                 String newCode = newValue;
                 String newPDFCode = newValue;
@@ -103,19 +107,29 @@ public class GUISecondPageController implements Initializable {
                         }
                     }
                 }
-                Exam.getInstance().getCurrentTask().setCode(Arrays.asList(newCode.split("\n"))); 
-                Exam.getInstance().getCurrentTask().setPDFCode(Arrays.asList(newPDFCode.split("\n")));
+                Exam.getInstance().getCurrentTask().setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n")))); 
+                Exam.getInstance().getCurrentTask().setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
             }
         });
     }
     
     public void execute(ActionEvent actionEvent) {
-       List<String> result = new ArrayList<String>();
+       List<String> result = new ArrayList<>();
+       List<String> answers = new ArrayList<>();
        
        Exam inst = Exam.getInstance();
-       inst.getCurrentTask().compiler.execute(result);
+       inst.getCurrentTask().getType().callExecute(inst.getCurrentTask(), result);
+      // inst.getCurrentTask().compiler.execute(result);
         if(!result.isEmpty()){
-                // do something useful here
+                inst.getCurrentTask().getType().generateAnswers(result, answers);
+                
+                // TEMPORARY
+                
+                for(int i=0;i<answers.size();i++){
+                    System.out.println(answers.get(i));
+                }
+                
+                // TEMPORARY
         }
     }
 
@@ -127,6 +141,7 @@ public class GUISecondPageController implements Initializable {
                 String line = contentsList.get(index);
                 txt+=line+"\n";
         }
+        
         PDFGenerator gen = new PDFGenerator("plik.pdf", txt, Exam.getInstance().getCurrentTask().getPDFCode());
     }
 
@@ -135,9 +150,15 @@ public class GUISecondPageController implements Initializable {
         //CodeParser.addNewlineAfterEachCoutFromFile(filename, resultFile);
         
          Exam inst = Exam.getInstance();
-         List<String> result = new ArrayList<String>();
-         inst.getCurrentTask().compiler.createFile(inst.getCurrentTask().getCode(), "zad1.cpp");
-         inst.getCurrentTask().compiler.compile(result);
+         List<String> result = new ArrayList<>(); 
+         inst.getCurrentTask().getType().callCompile(inst.getCurrentTask(), result);
+         if(!result.isEmpty()){
+             for(int i=0;i<result.size();i++){
+                 System.out.println(result.get(i));
+             }
+         }
+      //   inst.getCurrentTask().compiler.createFile(inst.getCurrentTask().getCode(), "zad1.cpp");
+       //  inst.getCurrentTask().compiler.compile(result);
 
     }
 

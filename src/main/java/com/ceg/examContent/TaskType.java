@@ -18,7 +18,7 @@ import java.util.List;
 */ 
 abstract public class TaskType {
     String defaultContents;
-    private TaskParameters params;
+    protected TaskParameters params;
     
     
     public abstract void generateAnswers(List<String> output, List<String> answers);
