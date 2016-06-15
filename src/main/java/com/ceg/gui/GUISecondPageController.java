@@ -176,5 +176,8 @@ public class GUISecondPageController implements Initializable {
         addingTaskStage.show();
 
     }
+    
+    
+    
 
 }

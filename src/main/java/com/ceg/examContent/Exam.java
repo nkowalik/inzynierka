@@ -7,6 +7,7 @@ package com.ceg.examContent;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Observable;
 
 /**
  *
@@ -16,7 +17,7 @@ import java.util.List;
     klasa Exam stanowi kontekst dla modelu danych aplikacji, dla każdego wywołania aplikacji istnieje jedna statyczna instancja
     Exam jest zbiorem obiektów klasy Task
 */
-public class Exam {
+public class Exam extends Observable {
     private ArrayList<Task> tasks;
     
     private final static Exam instance = new Exam();
@@ -41,7 +42,12 @@ public class Exam {
         tasks = (ArrayList<Task>) newTasks;
     }
     public void addTask(Task t){
-        tasks.add(t);
+        synchronized(this) {
+            tasks.add(t);
+        }
+        setChanged();
+        notifyObservers(tasks);
+        clearChanged();
     }
     public void addTaskAtIndex(Task t, int idx){
         tasks.add(idx,t);

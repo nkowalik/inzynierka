@@ -1,5 +1,6 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -69,8 +70,10 @@ public class GUIAddTaskController extends Component {
         Task t = new Task();
         t.setContents(contentList); // TODO: Powinno modyfikować zawartość SecondPage
         t.setCode(codeList);
+        Exam.getInstance().addTask(t);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
+        
     }
 
     public void cancelEdition(ActionEvent event) throws Exception {

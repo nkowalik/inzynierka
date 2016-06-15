@@ -14,13 +14,20 @@ import javafx.stage.Stage;
  */
 
 public class GUIMain extends Application {
-
+    
+    private static Stage pStage;
+    
+    public static Stage getStage() {
+        return pStage;
+    }
+    
      @Override
     public void start(Stage primaryStage) throws Exception{
+        pStage = primaryStage;
         Parent root = FXMLLoader.load(getClass().getResource("/fxml/firstPage.fxml"));
         primaryStage.setTitle("CEG");
 
-        primaryStage.setScene(new Scene(root, 300, 275));
+        primaryStage.setScene(new Scene(root, 950, 551));
         primaryStage.show();
     }
 
