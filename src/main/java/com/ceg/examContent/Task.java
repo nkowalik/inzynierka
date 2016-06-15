@@ -26,6 +26,7 @@ public class Task {
     private List<String> PDFCode;
     private List<String> contents;
     private List<String> answers;
+    private List<String> PDFAnswers;
     private int type;
     public GCC compiler;
     
@@ -33,6 +34,11 @@ public class Task {
     public Task(){
         ArrayList<String> defaultCode = new ArrayList<>();
         ArrayList<String> defaultContents = new ArrayList<>();
+        
+        /* to tylko na razie */
+        PDFAnswers = new ArrayList<>();
+        PDFAnswers.add("f(0) = _______");
+        
         compiler = new GCC();
         try {
             Scanner s = new Scanner(new File("polecenie.txt"));
@@ -80,8 +86,11 @@ public class Task {
     public void setContents(List<String> newContents){
         contents = newContents;
     }
-     public List<String> getAnswers(){
+    public List<String> getAnswers(){
         return answers;
+    }
+    public List<String> getPDFAnswers() {
+        return PDFAnswers;
     }
     public void setAnswers(List<String> newAnswers){
         answers = newAnswers;

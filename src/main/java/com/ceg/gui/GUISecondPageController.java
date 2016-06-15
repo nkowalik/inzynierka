@@ -14,12 +14,9 @@ import org.fxmisc.richtext.LineNumberFactory;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.pdf.PDFGenerator;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import java.io.IOException;
 import java.net.URL;
@@ -126,6 +123,7 @@ public class GUISecondPageController implements Initializable {
 
         if(!outcome.isEmpty()){
             result.clear();
+            //result.appendText("");
             for(String s : outcome) {
                 result.appendText(s + "\n");
             }
@@ -134,14 +132,7 @@ public class GUISecondPageController implements Initializable {
     }
 
     public void createPDF(ActionEvent actionEvent) throws IOException {
-        String txt = new String();
-        List<String> contentsList = Exam.getInstance().getCurrentTask().getContents();
-        // pobranie treści polecenia w formie listy, sklejenie jej w jednego Stringa      
-        for (int index = 0 ; index < contentsList.size(); index++) {
-                String line = contentsList.get(index);
-                txt+=line+"\n";
-        }
-        PDFGenerator gen = new PDFGenerator("plik.pdf", txt, Exam.getInstance().getCurrentTask().getPDFCode());
+        PDFGenerator gen = new PDFGenerator("plik.pdf", "times", "courier");
     }
 /*
     public void compile(ActionEvent actionEvent) {
@@ -165,7 +156,15 @@ public class GUISecondPageController implements Initializable {
         changeStyle("normal");
     }    
     private void changeStyle(String className) {
-        IndexRange ir = code.getSelection();        
+        IndexRange ir = code.getSelection(); 
+        int end = ir.getEnd();
+        String c = code.getText();
+        while (end < code.getLength()) {
+            if (c.charAt(end) == '\n') {
+                break;
+            }
+            end++;
+        }
         code.setStyleClass(ir.getStart(), ir.getEnd(), className);
     }
 

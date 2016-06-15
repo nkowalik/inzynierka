@@ -3,7 +3,6 @@ package com.ceg.pdf;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 public class PDFCode extends PDFAbstractTask {
     private String line;
@@ -22,18 +21,15 @@ public class PDFCode extends PDFAbstractTask {
                                                             "<",
                                                             " " );
     
-    PDFCode(int startX, int startY, int textWidth) {
-        super();
-        font = PDType1Font.COURIER;
-        this.startX = startX;
-        this.finalY = startY;
-        this.textWidth = textWidth;
+    PDFCode(int textWidth, String fontName, int fontSize) throws IOException {
+        super(textWidth, fontName, fontSize);
     }
     
     /*  Funkcja formatująca kod do pdfa. Jako parametr przyjmuje listę linii kodu.
         Reaguje na spacje i tabulatory (jeśli używa się albo jednego albo drugiego.
-        Nie przesyłać z enterami.    */
-    public void textSplitting(List<String> codeLines) throws IOException {
+        Nie przesyłać z enterami.    */   
+    @Override
+    public void textSplitting (List<String> codeLines) throws IOException {
         float actualLineWidth;
         for (String codeLine : codeLines) { 
             line = codeLine;
@@ -41,7 +37,7 @@ public class PDFCode extends PDFAbstractTask {
             actualLineWidth = getWidth(line); 
             
             if (actualLineWidth <= textWidth) {
-                writeLine(line);
+                actualTaskLines.add(line);
             }
             
             else {
@@ -70,14 +66,12 @@ public class PDFCode extends PDFAbstractTask {
                     return false;
                 String end;
                 end = line.substring(0, i+1);
-                float a = getWidth(end);
-                float b = textWidth;
                 if (getWidth(end) <= textWidth) {
-                    writeLine(end);
+                    actualTaskLines.add(end);
                     line = line.substring(i+1);
                     i = line.length();
                     if (getWidth(line) <= textWidth) {
-                        writeLine(line);
+                        actualTaskLines.add(line);
                         return true;
                     }
                 }

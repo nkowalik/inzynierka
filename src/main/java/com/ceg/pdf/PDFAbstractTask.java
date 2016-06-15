@@ -1,39 +1,47 @@
 package com.ceg.pdf;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
 
 public abstract class PDFAbstractTask {
-    protected static PDFont font;
-    protected static int fontSize = 10;
+    protected PDFLine pdfLine;
+    private final int lineHeight;
     protected static PDPageContentStream cs;
-    protected final static int lineHeight = 15;
-    protected int finalY;
-    protected int startX;
     protected int textWidth;
-    protected float actualWidth = 0;    
+    protected float actualWidth = 0;  
+    protected ArrayList<String> actualTaskLines;
     
-    public PDFAbstractTask(){
+    public PDFAbstractTask(int textWidth, String fontName, int fontSize) throws IOException{
         cs = PDFGenerator.cs;
+        actualTaskLines = new ArrayList<>();
+        pdfLine = new PDFLine(fontName, fontSize);
+        this.textWidth = textWidth;
+        lineHeight = fontSize;
+    } 
+    public int getNumberOfLines() {
+        return actualTaskLines.size();
     }
-    public int getFinalY() {
-        return finalY;
-    }    
-       
+    public int getLineHeight() {
+       return lineHeight; 
+    }
+    
     /*  Wyrzuca szerokość tekstu napisanego daną czcionką o konkretnym rozmiarze    */
     protected float getWidth(String text) throws IOException {
-        return font.getStringWidth(text) / 1000 * fontSize;
+        return pdfLine.getFont().getStringWidth(text) / 1000 * pdfLine.getFontSize();
     }
     
-    /*  Zapisuje linię do dokumentu i przechodzi do następnej   */
-    public void writeLine(String text) throws IOException {
-        cs.setFont(font, fontSize);
-        cs.beginText();
-        cs.newLineAtOffset(startX, finalY);
-        cs.showText(text);
-        cs.endText();
-        
-        finalY -= lineHeight;
+    public void textSplitting (List<String> command) throws IOException {
+    }
+    
+    public int writeToPDF(int x, int y) throws IOException{ 
+        for (String i : actualTaskLines) {
+            pdfLine.setText(i);
+            pdfLine.writeLine(x, y);
+            y -= lineHeight;
+        }
+        actualTaskLines.clear();
+        return y;
     }
 }
