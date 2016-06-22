@@ -6,12 +6,12 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.TextArea;
 import javafx.stage.Stage;
-import org.fxmisc.richtext.CodeArea;
 
+import javax.swing.*;
+import java.awt.*;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Scanner;
 
 /**
@@ -20,8 +20,9 @@ import java.util.Scanner;
  */
 
 
-public class GUIAddTaskController {
+public class GUIAddTaskController extends Component {
     ArrayList<String> contentList = new ArrayList<>();
+    ArrayList<String> codeList = new ArrayList<>();
     @FXML
     TextArea text;
     @FXML
@@ -43,7 +44,7 @@ public class GUIAddTaskController {
             System.err.println(ex);
         }
 
-        // TO DO
+        // TODO
     }
     public void addType2() {
         try {
@@ -61,12 +62,13 @@ public class GUIAddTaskController {
             System.err.println(ex);
         }
 
-        // TO DO
+        // TODO
     }
 
     public void finishEdition(ActionEvent event) throws Exception {
         Task t = new Task();
-        t.setContents(contentList); //////////////////////////////// Powinno modyfikować zawartość SecondPage ?
+        t.setContents(contentList); // TODO: Powinno modyfikować zawartość SecondPage
+        t.setCode(codeList);
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
     }
@@ -74,5 +76,30 @@ public class GUIAddTaskController {
     public void cancelEdition(ActionEvent event) throws Exception {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
+    }
+
+    public void selectCodeFile() {
+        JFileChooser fileChooser = new JFileChooser();
+        fileChooser.setCurrentDirectory(new File(System.getProperty("user.home")));
+        int result = fileChooser.showOpenDialog(this);
+        if (result == JFileChooser.APPROVE_OPTION) {
+            File selectedFile = fileChooser.getSelectedFile();
+            try {
+                Scanner s = new Scanner(new File(selectedFile.getName()));
+                System.out.println(selectedFile.getName());
+                codeList.clear();
+                while(s.hasNext()) {
+                    codeList.add(s.nextLine());
+                }
+                s.close();
+                code.clear();
+                for (String i : codeList) {
+                    code.appendText(i + "\n");
+                }
+            } catch (FileNotFoundException ex) {
+                System.err.println(ex);
+            }
+        }
+
     }
 }
