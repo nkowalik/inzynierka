@@ -30,7 +30,7 @@ public class PDFGenerator {
     private String testDate;
     
     /* wywołanie konstruktora powoduje utworzenie dokumentu pdf. Argumentem nazwa przyszłego pliku pdf */
-    public PDFGenerator(String fileName, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate) throws IOException {
+    public PDFGenerator(String fileName, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate, String testType) throws IOException {
         boolean newPage;
         
         //tworzenie nowej strony i dodanie jej do dokumentu

@@ -43,7 +43,7 @@
                         <Insets left="10.0" right="10.0" />
                      </VBox.margin>
                   </MenuBar>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#selectCodeFile" text="Załaduj kod">
+                  <Button alignment="CENTER" mnemonicParsing="false" text="Załaduj kod">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></Button>

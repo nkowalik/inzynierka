@@ -1,4 +1,4 @@
-﻿package com.ceg.gui;
+package com.ceg.gui;
 
 
 import java.util.*;
@@ -13,7 +13,6 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
-import com.ceg.pdf.PDFGenerator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -123,7 +122,6 @@ public class GUISecondPageController implements Initializable {
 
         if(!outcome.isEmpty()){
             result.clear();
-            //result.appendText("");
             for(String s : outcome) {
                 result.appendText(s + "\n");
             }
@@ -132,8 +130,11 @@ public class GUISecondPageController implements Initializable {
     }
 
     public void createPDF(ActionEvent actionEvent) throws IOException {
-        String testDate = "21.01.2017";
-        PDFGenerator gen = new PDFGenerator("plik.pdf", "times", 10, "courier", 10, testDate);
+        Stage pdfSavingStage = new Stage();
+        Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfSaving.fxml"));
+        pdfSavingStage.setTitle("Zapisz plik");
+        pdfSavingStage.setScene(new Scene(scene, 600, 400));
+        pdfSavingStage.show();
     }
 /*
     public void compile(ActionEvent actionEvent) {
