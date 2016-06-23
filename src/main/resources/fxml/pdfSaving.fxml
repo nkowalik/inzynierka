@@ -106,23 +106,25 @@
                         </Button>
                         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                            <children>
-                              <TextField fx:id="dateDay" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="47.0">
+                              <ChoiceBox fx:id="dateDay" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="47.0">
                                  <HBox.margin>
                                     <Insets top="15.0" />
                                  </HBox.margin>
-                              </TextField>
+                              </ChoiceBox>
                               <ChoiceBox fx:id="dateMonth" prefHeight="25.0" prefWidth="56.0">
                                  <HBox.margin>
                                     <Insets left="10.0" top="15.0" />
                                  </HBox.margin>
                               </ChoiceBox>
-                              <TextField fx:id="dateYear" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="105.0">
+                              <ChoiceBox fx:id="dateYear" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="105.0">
                                  <HBox.margin>
                                     <Insets left="10.0" top="15.0" />
                                  </HBox.margin>
-                              </TextField>
+                              </ChoiceBox>
                            </children>
                         </HBox>
+                        <Label alignment="CENTER" prefHeight="17.0" prefWidth="162.0" text="Nazwa pliku pdf:" GridPane.rowIndex="4" />
+                        <TextField fx:id="fileName" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1" GridPane.rowIndex="4" />
                      </children>
                   </GridPane>
                </content>

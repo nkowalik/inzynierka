@@ -4,13 +4,18 @@ import com.ceg.pdf.PDFGenerator;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
+import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -41,15 +46,20 @@ public class PdfSavingController implements Initializable {
     @FXML
     TextField filePath;
     @FXML
-    TextField dateDay;
+    ChoiceBox dateDay;
     @FXML
     ChoiceBox dateMonth;
     @FXML
-    TextField dateYear;
+    ChoiceBox dateYear;
+    @FXML
+    TextField fileName;
     
     private final List<String> fontList = Arrays.asList("Arial", "Arial Narrow", "Courier","Times New Roman", "Verdana");
     private final List<String> testTypeList = Arrays.asList("student", "nauczyciel", "interaktywny");
     private final List<String> monthList = new ArrayList<>();
+    private final List<String> yearList = new ArrayList<>();
+    
+    private final ObservableList<String> daysList = FXCollections.observableList(new ArrayList<>());
     
     private String commandFontName;
     private String codeFontName;
@@ -59,8 +69,15 @@ public class PdfSavingController implements Initializable {
     private String date; 
     private String filePathName;
     
+    private Integer year;
+    private Integer month;
+    private Integer day;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        Calendar calendar = Calendar.getInstance();
+        
         for (Integer i = 1; i <= 12; i++) {
             if (i < 10) {
                 monthList.add('0' + i.toString());
@@ -79,17 +96,73 @@ public class PdfSavingController implements Initializable {
         testType.setValue("student");
         
         dateMonth.setItems(FXCollections.observableList(monthList));
-        dateMonth.setValue(monthList.get(0));
+        month = calendar.get(calendar.MONTH) + 1;
+        if (month < 10)
+            dateMonth.setValue('0' + month.toString());
+        else
+            dateMonth.setValue(month.toString());
         
         commandFontSize.setText("10");
         codeFontSize.setText("10");
         
-        dateDay.setText("15");
-        dateYear.setText("2017");
+        year = calendar.get(calendar.YEAR);
+        for (Integer i  = year; i <= year+10; i++) {
+            yearList.add(i.toString());
+        }
+        dateYear.setItems(FXCollections.observableList(yearList));
+        dateYear.setValue(year.toString());
+        
+        YearMonth yM = YearMonth.of(year, month);
+        Integer days = yM.lengthOfMonth();
+        for (Integer i = 1; i <= days; i++) {
+            daysList.add(i.toString());
+        }
+        day = (Integer)calendar.get(calendar.DAY_OF_MONTH);
+        dateDay.setItems(daysList);
+        dateDay.setValue(day.toString());
         
         File file = new File(".");
-        String path = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-1);
-        filePath.setText(path + "plik.pdf");
+        String path = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);
+        filePath.setText(path);
+        fileName.setText("egzamin.pdf");
+        
+        dateMonth.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                daysList.clear();
+                month = newValue.intValue() + 1;
+                YearMonth yM = YearMonth.of(year, month);
+                Integer days = yM.lengthOfMonth();
+                for (Integer i = 1; i <= days; i++) {
+                    daysList.add(i.toString());
+                }
+                dateDay.setValue(day.toString());
+            }
+        });
+        
+        dateDay.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (newValue.intValue() != -1)
+                    day = Integer.parseInt(daysList.get(newValue.intValue()));
+            }           
+        });
+        
+        dateYear.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                year = Integer.parseInt(yearList.get(newValue.intValue()));
+                
+                daysList.clear();
+                
+                YearMonth yM = YearMonth.of(year, month);
+                Integer days = yM.lengthOfMonth();
+                for (Integer i = 1; i <= days; i++) {
+                    daysList.add(i.toString());
+                }
+                dateDay.setValue(day.toString());
+            }           
+        });
     }
     
     public void saveFile(ActionEvent event) {
@@ -101,9 +174,16 @@ public class PdfSavingController implements Initializable {
         
         testTypeName = testType.getValue().toString();
         
-        date = dateDay.getText() + '.' + dateMonth.getValue().toString() + '.' + dateYear.getText();
+        date = "";
         
-        filePathName = filePath.getText();
+        if (day < 10)
+            date = "0";
+        date += day.toString() + '.';
+        if (month < 10)
+            date += '0';
+        date += month.toString() + '.' + year.toString();
+        
+        filePathName = filePath.getText() + '\\' + fileName.getText();
         
         try {
             PDFGenerator gen = new PDFGenerator(    filePathName, 

@@ -13,7 +13,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 /* klasa odpowiedzialna za generowanie pdfa. Aby utworzyć dokument należy utworzyć obiekt tej klasy za pomocą 
    konstruktora, który jako argumenty przyjmuje nazwę przyszłego pliku pdf, tekst polecenia i listę linii kodu */
 public class PDFGenerator {
-    public static final PDDocument document = new PDDocument();
+    public static PDDocument document;
     private PDPage actualPage = null;
     public static PDPageContentStream cs;
     
@@ -31,6 +31,7 @@ public class PDFGenerator {
     
     /* wywołanie konstruktora powoduje utworzenie dokumentu pdf. Argumentem nazwa przyszłego pliku pdf */
     public PDFGenerator(String fileName, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate, String testType) throws IOException {
+        document = new PDDocument();
         boolean newPage;
         
         //tworzenie nowej strony i dodanie jej do dokumentu
