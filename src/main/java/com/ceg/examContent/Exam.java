@@ -21,13 +21,12 @@ public class Exam extends Observable {
     private ArrayList<Task> tasks;
     
     private final static Exam instance = new Exam();
-    private int idx;
+    public int idx;
 
 
     public Task getCurrentTask() {
-        return tasks.get(idx);
+        return tasks.get(idx-1);
     }
-
     public static Exam getInstance() {
         return instance;
     }
@@ -42,18 +41,18 @@ public class Exam extends Observable {
         tasks = (ArrayList<Task>) newTasks;
     }
     public void addTask(Task t){
-        synchronized(this) {
-            tasks.add(t);
-        }
-        setChanged();
-        notifyObservers(tasks);
-        clearChanged();
+        tasks.add(t);
+        idx++;
     }
     public void addTaskAtIndex(Task t, int idx){
         tasks.add(idx,t);
     }
     public Task getTaskAtIndex(int idx){
         return tasks.get(idx);
+    }
+    public void deleteCurrentTask() {
+        tasks.remove(idx-1);
+        idx--;
     }
     /*zmienić tak, aby kompilowany był cały egzamin*/
     public boolean compileExam() {
