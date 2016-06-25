@@ -131,7 +131,8 @@ public class GUIMainController implements Initializable {
 
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
-        PDFGenerator gen = new PDFGenerator("plik.pdf", "times", "courier");
+        String testDate = "21.01.2017";
+        PDFGenerator gen = new PDFGenerator("plik.pdf", "times", 10, "courier", 10, testDate);
     }
     public void testMarker(ActionEvent actionEvent) {
         changeStyle("test");
