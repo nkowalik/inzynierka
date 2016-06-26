@@ -3,11 +3,12 @@ package com.ceg.pdf;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import java.awt.Desktop;
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
-import static javax.imageio.ImageIO.getCacheDirectory;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -85,7 +86,16 @@ public class PDFGenerator {
         document.save(newFile);
         document.close();
         Desktop desktop = Desktop.getDesktop();
-        desktop.open(newFile);
+        EventQueue EQ = new EventQueue();
+        if(desktop.isSupported(Desktop.Action.OPEN)){
+             EQ.invokeLater(() -> {
+                 try {
+                     desktop.open(newFile);
+                 } catch (IOException ex) {
+                     Logger.getLogger(PDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             });
+        }
     }
     
     private void createNewPage() throws IOException {

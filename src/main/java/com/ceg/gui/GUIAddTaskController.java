@@ -51,7 +51,8 @@ public class GUIAddTaskController implements Initializable {
     MenuItem taskTypeLineNumbers;
     
     private static Stage stage = null;
-    private static GUIAddTaskController instance = null;
+    private static GUIAddTaskController addTaskInstance = null;
+    private static GUIMainController mainInstance = null;
 
     public static synchronized void show() throws IOException {
         if(stage == null) {
@@ -71,12 +72,12 @@ public class GUIAddTaskController implements Initializable {
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        instance = this;
+        addTaskInstance = this;
+        mainInstance = GUIMainController.getInstance();
     }
     public static GUIAddTaskController getInstance() {
-        return instance;
+        return addTaskInstance;
     }
-
     public void addType(String sTxt) {
         try {
             Scanner s = new Scanner(new File(sTxt));
@@ -95,53 +96,53 @@ public class GUIAddTaskController implements Initializable {
     }
     public void addTypeSimpleOutput() {
         chooseType.setText(taskTypeSimpleOutput.getText());
-        GUIMainController.setStageName("CEG - " + taskTypeSimpleOutput.getText());
+        mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
         addType("simple_output.txt");
     }
     public void addTypeReturnedValue() {
         chooseType.setText(taskTypeReturnedValue.getText());
-        GUIMainController.setStageName("CEG - " + taskTypeReturnedValue.getText());
+        mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
         addType("returned_value.txt");
     }
     public void addTypeComplexOutput() {
         chooseType.setText(taskTypeComplexOutput.getText());
-        GUIMainController.setStageName("CEG - " + taskTypeComplexOutput.getText());
+        mainInstance.setStageName("CEG - " + taskTypeComplexOutput.getText());
         addType("complex_output.txt");
     }
     public void addTypeGaps() {
         chooseType.setText(taskTypeGaps.getText());
-        GUIMainController.setStageName("CEG - " + taskTypeGaps.getText());
+        mainInstance.setStageName("CEG - " + taskTypeGaps.getText());
         addType("gaps.txt");
     }
     public void addTypeVarValue() {
         chooseType.setText(taskTypeVarValue.getText());
-        GUIMainController.setStageName("CEG - " + taskTypeVarValue.getText());
+        mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
         addType("var_value.txt");
     }
     public void addTypeLineNumbers() {
         chooseType.setText(taskTypeLineNumbers.getText());
-        GUIMainController.setStageName("CEG - " + taskTypeLineNumbers.getText());
+        mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
         addType("line_numbers.txt");
     }
     public void finishEdition(ActionEvent event) throws Exception {
         Task t = new Task();
         t.setContents(contentList);
         t.setCode(codeList);
-        Exam.getInstance().addTask(t);
+        Exam.getInstance().addTask(t); // wrzuca na koniec, ustawia idx na size-1 (koniec)
         stage.hide();
         
-        GUIMainController.getInstance().addNewTabPaneTab();
-        GUIMainController.getInstance().updateWindow();
+        mainInstance.getInstance().addNewTabPaneTab();
+        mainInstance.getInstance().updateWindow(Exam.getInstance().idx);
         
     }
     public static void clearFields() {
-        GUIAddTaskController.getInstance().text.clear();
-        GUIAddTaskController.getInstance().code.clear();
-        GUIAddTaskController.getInstance().codeList = new ArrayList<>();
-        GUIAddTaskController.getInstance().contentList = new ArrayList<>();
+        addTaskInstance.text.clear();
+        addTaskInstance.code.clear();
+        addTaskInstance.codeList = new ArrayList<>();
+        addTaskInstance.contentList = new ArrayList<>();
     }
     public void cancelEdition(ActionEvent event) throws Exception {
-        GUIMainController.setStageName("CEG");
+        mainInstance.setStageName("CEG");
         stage.hide();
     }
     public void selectCodeFile() throws IOException {

@@ -24,8 +24,8 @@ public class Exam extends Observable {
     public int idx;
 
 
-    public Task getCurrentTask() {
-        return tasks.get(idx-1);
+    public Task getLastTask() {
+        return tasks.get(tasks.size() - 1);
     }
     public static Exam getInstance() {
         return instance;
@@ -42,18 +42,26 @@ public class Exam extends Observable {
     }
     public void addTask(Task t){
         tasks.add(t);
-        idx++;
+        idx = tasks.size() - 1;
     }
+    /*
     public void addTaskAtIndex(Task t, int idx){
         tasks.add(idx,t);
     }
+    */
     public Task getTaskAtIndex(int idx){
         return tasks.get(idx);
     }
-    public void deleteCurrentTask() {
-        tasks.remove(idx-1);
-        idx--;
+    public void deleteTaskAtIndex(int idx) {
+        tasks.remove(idx);
+        if(idx == tasks.size())
+            idx--;
     }
+    /*
+    public void setCurrentTaskIndex(int idx) {
+        this.idx = idx;
+    }
+    */
     /*zmienić tak, aby kompilowany był cały egzamin*/
     public boolean compileExam() {
         return true;

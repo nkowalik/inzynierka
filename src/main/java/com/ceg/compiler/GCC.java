@@ -7,8 +7,12 @@ package com.ceg.compiler;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
@@ -39,7 +43,7 @@ execute(lista linii wyjsciowych)
 public class GCC {
     
     private String path;
-    private File file;
+    private File file = null;
     private String cppName;
     private String executableName;
     
@@ -63,23 +67,47 @@ public class GCC {
     
     // utworzony plik mozna modyfikowac funkcja parsujaca, nie jest sprawdzane, czy zostal on zmieniony od czasu utworzenia
     
-    public void createFile(List<String> lines, String name) {
+    public boolean createFile(List<String> lines, String name) {
+        if(!lines.isEmpty()) {
+            try {
+                Files.write(Paths.get(this.path + "/" + name), lines, Charset.forName("UTF-8"));
+                file = new File(this.path + "/" + name);
+
+            } catch (IOException ex) {
+                Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
+            }
+
+            this.cppName = this.file.getAbsolutePath();
+            this.executableName = this.path.toString() + "/" + this.file.getName().substring(0, this.file.getName().lastIndexOf("."));
+            return true;
+        }
+        else
+            return false;
+    }
+    
+    public void createFile(List<String> lines) {
+        PrintWriter writer;
+        StringBuilder sb = new StringBuilder();
+        for(String s : lines) {
+            sb.append(s);
+            sb.append("\t");
+        }
+        file = new File(this.path + "/" + "code.cpp");
         try {
-            Files.write(Paths.get(this.path + "/" + name), lines, Charset.forName("UTF-8"));
-            file = new File(this.path + "/" + name);
-            
-        } catch (IOException ex) {
+            writer = new PrintWriter(file);
+            writer.print(sb.toString());
+            writer.close();
+            this.cppName = this.file.getAbsolutePath();
+            this.executableName = this.path.toString() + "/" + this.file.getName().substring(0, this.file.getName().lastIndexOf("."));
+        } catch (FileNotFoundException ex) {
             Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
         }
-        
-        this.cppName = this.file.getAbsolutePath();
-        this.executableName = this.path.toString() + "/" + this.file.getName().substring(0, this.file.getName().lastIndexOf("."));
-        
     }
     
     // kompilacja pliku .cpp stworzonego przy użyciu funkcji createFile
     
     public void compile(List<String> output) {
+        
         if(file.exists()) {
             try {
                 ProcessBuilder builder = null;

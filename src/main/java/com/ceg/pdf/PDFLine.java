@@ -51,22 +51,22 @@ public class PDFLine {
         
         switch(fontName) {
             case "Times New Roman":
-                fontFile = new File("fonts\\times.ttf");
+                fontFile = new File("fonts/times.ttf");
                 break;
             case "Arial":
-                fontFile = new File("fonts\\arial.ttf");
+                fontFile = new File("fonts/arial.ttf");
                 break;
             case "Arial Narrow":
-                fontFile = new File("fonts\\ARIALN.ttf");
+                fontFile = new File("fonts/ARIALN.ttf");
                 break;
             case "Courier":
-                fontFile = new File("fonts\\cour.ttf");
+                fontFile = new File("fonts/cour.ttf");
                 break;
             case "Verdana":
-                fontFile = new File("fonts\\verdana.ttf");
+                fontFile = new File("fonts/verdana.ttf");
                 break;
             default:
-                fontFile = new File("fonts\\times.ttf");
+                fontFile = new File("fonts/times.ttf");
                 break;
         }
         

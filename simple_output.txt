@@ -1,1 +1,1 @@
-Podaj co pojawi siÄ™ na wyjÅ›ciu w wyniku wykonania podanego programu.
+Podaj co pojawi siê na wyjœciu w wyniku wykonania podanego programu.

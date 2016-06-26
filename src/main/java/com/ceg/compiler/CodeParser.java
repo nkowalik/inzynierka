@@ -1,10 +1,7 @@
 package com.ceg.compiler;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.List;
+
 
 public class CodeParser {
 	
@@ -27,22 +24,9 @@ public class CodeParser {
 		return couts;
 	}
 	
-	// TEMP !!!
-	// modyfikuje kod zapisany w pliku .cpp na dysku	
-	static public int addNewlineAfterEachCoutFromFile(String pathSrc, String pathDest){
-		List<String> lines = new ArrayList<String>();
-		List<String> result = new ArrayList<String>();
-		int couts = 0;
-		try {
-			lines = Files.readAllLines(Paths.get(pathSrc));
-			couts = CodeParser.addNewlineAfterEachCout((ArrayList<String>)lines, (ArrayList<String>)result);
-			Files.write(Paths.get(pathDest), result);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return 0;
-		}
-		return couts;
-	}
+	static public int deleteOtherCouts(int lineNo, ArrayList<String> code){
+            int count = 0;
+            return count;
+        }
 	
 }
