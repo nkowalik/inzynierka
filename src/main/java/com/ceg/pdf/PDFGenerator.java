@@ -3,10 +3,13 @@ package com.ceg.pdf;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import java.awt.Desktop;
+import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import static javax.imageio.ImageIO.getCacheDirectory;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -81,11 +84,21 @@ public class PDFGenerator {
     
     /* Funkcja tworząca dokument pdf */
     private void savePDF(String fileName) throws IOException {
+        EventQueue EQ = new EventQueue();
         File newFile = new File(fileName);
         document.save(newFile);
         document.close();
         Desktop desktop = Desktop.getDesktop();
-        desktop.open(newFile);
+        if(desktop.isSupported(Desktop.Action.OPEN)){
+             EQ.invokeLater(() -> {
+                 try {
+                     desktop.open(newFile);
+                 } catch (IOException ex) {
+                     Logger.getLogger(PDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                 }
+             });
+            //desktop.open(newFile);
+        }
     }
     
     private void createNewPage() throws IOException {

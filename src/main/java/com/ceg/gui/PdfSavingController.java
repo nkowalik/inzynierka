@@ -183,7 +183,7 @@ public class PdfSavingController implements Initializable {
             date += '0';
         date += month.toString() + '.' + year.toString();
         
-        filePathName = filePath.getText() + '\\' + fileName.getText();
+        filePathName = filePath.getText() + '/' + fileName.getText();
         
         try {
             PDFGenerator gen = new PDFGenerator(    filePathName, 
