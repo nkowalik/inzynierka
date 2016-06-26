@@ -1,5 +1,6 @@
 package com.ceg.gui;
 
+import java.io.IOException;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
 import javafx.fxml.FXMLLoader;
@@ -14,16 +15,11 @@ import javafx.stage.Stage;
  */
 
 public class GUIMain extends Application {
-
-     @Override
+    
+    @Override
     public void start(Stage primaryStage) throws Exception{
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/firstPage.fxml"));
-        primaryStage.setTitle("CEG");
-
-        primaryStage.setScene(new Scene(root, 300, 275));
-        primaryStage.show();
+        GUIMainController.show();
     }
-
 
     public static void main(String[] args) {
         launch(args);

@@ -14,7 +14,6 @@ ceg.iml
 executable
 nbactions.xml
 /target/*
-*.txt
 *.pdf
 nb-configuration.xml
 pom.xml

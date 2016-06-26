@@ -1,64 +1,82 @@
 package com.ceg.pdf;
 
+import com.ceg.examContent.Exam;
+import com.ceg.examContent.Task;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import static javax.imageio.ImageIO.getCacheDirectory;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-import org.apache.pdfbox.pdmodel.font.PDFont;
-import org.apache.pdfbox.pdmodel.font.PDType1Font;
 
 /* klasa odpowiedzialna za generowanie pdfa. Aby utworzyć dokument należy utworzyć obiekt tej klasy za pomocą 
    konstruktora, który jako argumenty przyjmuje nazwę przyszłego pliku pdf, tekst polecenia i listę linii kodu */
 public class PDFGenerator {
-    private final PDDocument document;
-    private PDPage actualPage;
+    public static PDDocument document;
+    private PDPage actualPage = null;
     public static PDPageContentStream cs;
-    private final int leftMargin = 30;
-    private int topMargin = 760;
-    private final int breakBetweenTasks = 45;
     
-    /* wywołanie konstruktora powoduje utworzenie dokumentu pdf. Argumentami nazwa przyszłego pliku pdf
-       oraz String z poleceniem i lista linii kodu */
-    public PDFGenerator(String fileName, String command, List<String> code) throws IOException {
-        
-        //tworzenie dokumentu
+    private static final int commandWidth = 250;
+    private static final int codeWidth = 250;
+    private final static int leftMargin = 30;
+    private final static int leftCodeMargin = leftMargin + commandWidth + leftMargin;
+    private static final int topMargin = 760;
+    private static final int bottomMargin = 40;
+    private static final int breakBetweenTasks = 25;   
+    
+    private int actualY;
+    
+    private String testDate;
+    
+    /* wywołanie konstruktora powoduje utworzenie dokumentu pdf. Argumentem nazwa przyszłego pliku pdf */
+    public PDFGenerator(String fileName, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate, String testType) throws IOException {
         document = new PDDocument();
+        boolean newPage;
+        //tworzenie nowej strony i dodanie jej do dokumentu
+        createNewPage();
         
-        //tworzenie nowej strony i dodanie jej do dokumentu (na razie zakłada się, że jest jedna strona
-        actualPage = new PDPage();
-        document.addPage(actualPage);
-        cs = new PDPageContentStream(document, actualPage);
+        this.testDate = testDate;
         
-        setNameLastNameAndStudentNumber();
-        
-        //dodanie określonej przerwy pomiędzy zadaniami i pomiędzy nagłówkiem a pierwszym zadaniem
-        topMargin -= breakBetweenTasks;
+        PDFHeader header = new PDFHeader();
+        actualY = header.setHeader(leftMargin, topMargin, breakBetweenTasks, testDate);
 
-        //utworzenie obiektu polecenia i wywołanie na nim metody formatowania i zapisania do pdf
-        PDFCommand comm = new PDFCommand(leftMargin, topMargin, 250);
-        comm.textSplitting(command);
+        List<Task> taskList = Exam.getInstance().getTasks();
         
-        //utworzenie obiektu kodu i wywołanie na nim metody formatowania i zapisania do pdf
-        PDFCode cod = new PDFCode(250 + leftMargin + 1, topMargin, 250);
-        cod.textSplitting(code);
-
+        PDFCommand comm = new PDFCommand(commandWidth, commandFont, commandFontSize);
+        PDFCode code = new PDFCode(codeWidth, codeFont, codeFontSize);
+        PDFAnswer answer = new PDFAnswer(commandWidth, commandFont, commandFontSize);
+        
+        for (Task i : taskList) {           
+            comm.textSplitting(i.getContents());
+            code.textSplitting(i.getPDFCode());
+            answer.textSplitting(i.getPDFAnswers());
+            
+            //jeśli zadanie nie mieści się na stronie, to tworzymy nową stronę
+            if (actualY - comm.getLineHeight()*(comm.getNumberOfLines() + answer.getNumberOfLines()) < bottomMargin  &&
+                actualY - code.getLineHeight()*code.getNumberOfLines() < bottomMargin) {
+                createNewPage();
+                newPage = true;
+            } 
+            else {
+                newPage = false;
+            }
+                
+            int commandLines = comm.writeToPDF(leftMargin, actualY);
+            int codeLines = code.writeToPDF(leftCodeMargin, actualY);
+            commandLines = answer.writeToPDF(leftMargin, commandLines);
+            
+            actualY = (commandLines < codeLines) ? commandLines : codeLines; 
+            
+            if (!newPage) {
+                actualY -= breakBetweenTasks;
+            }
+        }
         cs.close();
+        
         savePDF(fileName);
-    }
-    
-    /* Funkcja dodająca nagłówek postaci miejsc na imię  i nazwisko oraz numer indeksu studenta */
-    private void setNameLastNameAndStudentNumber() throws IOException {        
-        writeLine(  "_________________________________________________________", 
-                    leftMargin, topMargin);
-        writeLine("___________", 500, topMargin);
-        
-        //przejście do następnej linii
-        topMargin -= 15;
-        
-        writeLine("Imie i nazwisko", leftMargin + 1, topMargin);
-        writeLine("Nr indeksu", 501, topMargin);
     }
     
     /* Funkcja tworząca dokument pdf */
@@ -66,17 +84,18 @@ public class PDFGenerator {
         File newFile = new File(fileName);
         document.save(newFile);
         document.close();
+        Desktop desktop = Desktop.getDesktop();
+        desktop.open(newFile);
     }
     
-    /* Funkcja do zapisu linii do dokumentu. Potrzebna do zapisania nagłówka. Wykorzystywany font: 
-       Times New Roman o wielkości 12 */
-    public void writeLine(String text, int startX, int startY) throws IOException {
-        PDFont font = PDType1Font.TIMES_ROMAN;       
-        cs.setFont(font, 12);
+    private void createNewPage() throws IOException {
+        if (actualPage != null)
+            cs.close();
         
-        cs.beginText();
-        cs.newLineAtOffset(startX, startY);
-        cs.showText(text);
-        cs.endText();
+        actualPage = new PDPage();
+        document.addPage(actualPage);
+        cs = new PDPageContentStream(document, actualPage);
+        
+        actualY = topMargin;
     }
 }
