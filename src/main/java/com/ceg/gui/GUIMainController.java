@@ -23,6 +23,8 @@ import java.net.URL;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 
 
@@ -37,6 +39,8 @@ public class GUIMainController implements Initializable {
     TextArea text;
     @FXML
     CodeArea code;
+    @FXML
+    TabPane tabPane;
     @FXML
     TextArea result;
     @FXML
@@ -224,8 +228,15 @@ public class GUIMainController implements Initializable {
     public void clearResult() {
         result.clear();
     }
-
     public static void setStageName (String str){
         stage.setTitle(str);
+    }
+    public void addNewTabPaneTab() {
+        Tab newTab = new Tab("Test");
+        tabPane.getTabs().add(newTab);
+        tabPane.getSelectionModel().select(newTab);
+    }
+    public void deleteCurrentTabPaneTab() {
+        
     }
 }

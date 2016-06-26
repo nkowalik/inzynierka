@@ -129,7 +129,8 @@ public class GUIAddTaskController implements Initializable {
         t.setCode(codeList);
         Exam.getInstance().addTask(t);
         stage.hide();
-
+        
+        GUIMainController.getInstance().addNewTabPaneTab();
         GUIMainController.getInstance().updateWindow();
         
     }
