@@ -1,0 +1,1 @@
+Podaj jaki tekst zostanie wypisany na ekran w wyniku wywołania funkcji:

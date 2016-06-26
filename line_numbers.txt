@@ -1,0 +1,1 @@
+Podaj numery linii, które powodują błąd kompilacji programu.

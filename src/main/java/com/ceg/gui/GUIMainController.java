@@ -224,4 +224,8 @@ public class GUIMainController implements Initializable {
     public void clearResult() {
         result.clear();
     }
+
+    public static void setStageName (String str){
+        stage.setTitle(str);
+    }
 }

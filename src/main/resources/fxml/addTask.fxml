@@ -30,12 +30,14 @@
                <children>
                   <MenuBar>
                     <menus>
-                      <Menu mnemonicParsing="false" text="Wybierz typ zadania">
+                      <Menu fx:id="chooseType" mnemonicParsing="false" text="Wybierz typ zadania">
                         <items>
-                          <MenuItem fx:id="type1" mnemonicParsing="false" onAction="#addType1" text="Typ 1" />
-                              <MenuItem fx:id="type2" mnemonicParsing="false" onAction="#addType2" text="Typ 2" />
-                              <MenuItem fx:id="type3" mnemonicParsing="false" text="Typ 3" />
-                            <MenuItem mnemonicParsing="false" text="TO DO" />
+                          <MenuItem fx:id="taskTypeSimpleOutput" mnemonicParsing="false" onAction="#addTypeSimpleOutput" text="Wyjście programu" />
+                              <MenuItem fx:id="taskTypeReturnedValue" mnemonicParsing="false" onAction="#addTypeReturnedValue" text="Zwrócona liczba" />
+                              <MenuItem fx:id="taskTypeComplexOutput" mnemonicParsing="false" onAction="#addTypeComplexOutput" text="Wyjście funkcji" />
+                              <MenuItem fx:id="taskTypeGaps" mnemonicParsing="false" onAction="#addTypeGaps" text="Uzupełnianie pól" />
+                              <MenuItem fx:id="taskTypeVarValue" mnemonicParsing="false" onAction="#addTypeVarValue" text="Wartości zmiennych" />
+                              <MenuItem fx:id="taskTypeLineNumbers" mnemonicParsing="false" onAction="#addTypeLineNumbers" text="Numery linii" />
                         </items>
                       </Menu>
                     </menus>
@@ -47,8 +49,6 @@
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></Button>
-                  <Button mnemonicParsing="false" text="Zmień czcionkę" />
-                  <Button mnemonicParsing="false" text="TO DO" />
                   <Button mnemonicParsing="false" onAction="#finishEdition" text="Zakończ">
                      <VBox.margin>
                         <Insets top="50.0" />
