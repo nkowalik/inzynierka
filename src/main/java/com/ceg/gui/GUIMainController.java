@@ -131,8 +131,11 @@ public class GUIMainController implements Initializable {
 
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
-        String testDate = "21.01.2017";
-        PDFGenerator gen = new PDFGenerator("plik.pdf", "times", 10, "courier", 10, testDate);
+        Stage pdfSavingStage = new Stage();
+        Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfSaving.fxml"));
+        pdfSavingStage.setTitle("Zapisz plik");
+        pdfSavingStage.setScene(new Scene(scene, 600, 400));
+        pdfSavingStage.show();
     }
     public void testMarker(ActionEvent actionEvent) {
         changeStyle("test");
