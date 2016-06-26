@@ -119,6 +119,7 @@ public class GUIMainController implements Initializable {
 
         /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic */
         if(outcome.isEmpty()) // jesli kompilacja przebiegla pomyslnie
+            outcome.add("Kompilacja przebiegła pomyślnie.");
             inst.getCurrentTask().compiler.execute(outcome);
 
         if(!outcome.isEmpty()){
