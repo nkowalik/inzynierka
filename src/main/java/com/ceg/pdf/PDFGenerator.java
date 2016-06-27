@@ -6,11 +6,9 @@ import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.io.File;
 import java.io.IOException;
-import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import static javax.imageio.ImageIO.getCacheDirectory;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -84,11 +82,11 @@ public class PDFGenerator {
     
     /* Funkcja tworząca dokument pdf */
     private void savePDF(String fileName) throws IOException {
-        EventQueue EQ = new EventQueue();
         File newFile = new File(fileName);
         document.save(newFile);
         document.close();
         Desktop desktop = Desktop.getDesktop();
+        EventQueue EQ = new EventQueue();
         if(desktop.isSupported(Desktop.Action.OPEN)){
              EQ.invokeLater(() -> {
                  try {
@@ -97,7 +95,6 @@ public class PDFGenerator {
                      Logger.getLogger(PDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
                  }
              });
-            //desktop.open(newFile);
         }
     }
     

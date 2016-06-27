@@ -1,1 +1,1 @@
-Podaj numery linii, ktÃ³re powodujÄ… bÅ‚Ä…d kompilacji programu.
+Podaj numery linii, które powoduj¹ b³¹d kompilacji programu.

@@ -40,6 +40,7 @@ public class Task {
         PDFAnswers.add("f(0) = _______");
         
         compiler = new GCC();
+        /*
         try {
             Scanner s = new Scanner(new File("polecenie.txt"));
             while (s.hasNext()) {
@@ -61,6 +62,7 @@ public class Task {
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
         }
+                */
     }
     public List<String> getCode(){
         return code;

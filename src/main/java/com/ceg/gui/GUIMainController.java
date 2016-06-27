@@ -4,7 +4,6 @@ package com.ceg.gui;
 import java.util.*;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.IndexRange;
@@ -13,7 +12,6 @@ import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
-import com.ceg.pdf.PDFGenerator;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -23,6 +21,8 @@ import java.net.URL;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tab;
+import javafx.scene.control.TabPane;
 import javafx.scene.layout.Pane;
 
 
@@ -38,6 +38,8 @@ public class GUIMainController implements Initializable {
     @FXML
     CodeArea code;
     @FXML
+    TabPane tabPane;
+    @FXML
     TextArea result;
     @FXML
     Button executeBtn;
@@ -46,24 +48,27 @@ public class GUIMainController implements Initializable {
     
     private static Stage stage = null;
     private static GUIMainController instance = null;
+    private static Exam exam = null;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         instance = this;
-        if(Exam.getInstance().idx == 0)
+        if(Exam.getInstance().idx == 0) {
             Exam.getInstance().init();
+            exam = Exam.getInstance();
+        }
         // dodanie listenerów na zmiany w polach tekstowych
         text.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                Exam.getInstance().getCurrentTask().setContents(Arrays.asList(newValue.split("\n")));
+                Exam.getInstance().getTaskAtIndex(exam.idx).setContents(Arrays.asList(newValue.split("\n")));
                 
             }
         });
         code.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {                
-                Exam.getInstance().getCurrentTask().setTestCode(Arrays.asList(newValue.split("\n")));
+                Exam.getInstance().getLastTask().setTestCode(Arrays.asList(newValue.split("\n")));
                 /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
                 String newCode = newValue;
                 String newPDFCode = newValue;
@@ -80,15 +85,22 @@ public class GUIMainController implements Initializable {
                         }
                     }
                 }
-                Exam.getInstance().getCurrentTask().setCode(Arrays.asList(newCode.split("\n"))); 
-                Exam.getInstance().getCurrentTask().setPDFCode(Arrays.asList(newPDFCode.split("\n")));
+                Exam.getInstance().getTaskAtIndex(exam.idx).setCode(Arrays.asList(newCode.split("\n"))); 
+                Exam.getInstance().getTaskAtIndex(exam.idx).setPDFCode(Arrays.asList(newPDFCode.split("\n")));
+            }
+        });
+        tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
+            @Override
+            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
+                if(newValue != null)
+                    updateWindow(Integer.parseInt(newValue.getId()));
             }
         });
         
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
         
-        updateWindow();
+        updateWindow(0);
     }
     public static synchronized void show() throws IOException {
         if(stage == null) {
@@ -112,24 +124,21 @@ public class GUIMainController implements Initializable {
     public void execute(ActionEvent actionEvent) {
         List<String> outcome = new ArrayList<String>();
 
-        Exam inst = Exam.getInstance();
-
-        inst.getCurrentTask().compiler.createFile(inst.getCurrentTask().getCode(), "zad1.cpp");
-        inst.getCurrentTask().compiler.compile(outcome);
-
+        exam.getLastTask().compiler.createFile(exam.getLastTask().getCode());
+        exam.getLastTask().compiler.compile(outcome);
+        
         /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic */
-        if(outcome.isEmpty()) // jesli kompilacja przebiegla pomyslnie
+        if(outcome.isEmpty()) {// jesli kompilacja przebiegla pomyslnie
             outcome.add("Kompilacja przebiegła pomyślnie.");
-            inst.getCurrentTask().compiler.execute(outcome);
-
-        if(!outcome.isEmpty()){
+            exam.getLastTask().compiler.execute(outcome);
+        }
+        else {
             result.clear();
             //result.appendText("");
             for(String s : outcome) {
                 result.appendText(s + "\n");
             }
-        }
-
+        } 
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
         Stage pdfSavingStage = new Stage();
@@ -164,7 +173,7 @@ public class GUIMainController implements Initializable {
     }
     public void deleteTask(ActionEvent event) throws Exception {
         
-        if(Exam.getInstance().getTasks().size() == 0) {
+        if(Exam.getInstance().getTasks().isEmpty()) {
             text.setVisible(false);
             code.setVisible(false);
             result.setVisible(false);
@@ -172,8 +181,10 @@ public class GUIMainController implements Initializable {
             testExecuteBtn.setVisible(false);
         }
         else {
-            Exam.getInstance().deleteCurrentTask();
-            updateWindow();
+            int idx = tabPane.getSelectionModel().getSelectedIndex();
+            exam.deleteTaskAtIndex(idx);
+            deleteCurrentTabPaneTab();
+            updateWindow(exam.idx);
         }
     }
     public void showTask(boolean visibility) {
@@ -183,13 +194,14 @@ public class GUIMainController implements Initializable {
         executeBtn.setVisible(visibility);
         testExecuteBtn.setVisible(visibility);
     }
-    public void updateWindow() {
-        if(Exam.getInstance().getTasks().isEmpty()) {  // gdy egzamin nie zawiera żadnych zadań
+    public void updateWindow(int idx) {
+        if(exam.getTasks().isEmpty()) {  // gdy egzamin nie zawiera żadnych zadań
             showTask(false); // ukryj elementy związane z Taskiem
         }
         else {
             showTask(true);
-            Task t = Exam.getInstance().getCurrentTask();
+            Task t = exam.getTaskAtIndex(idx);
+            exam.idx = idx;
             updateText(t.getContents()); // może Text, żeby pasowało do konwencji nazw
             updateCode(t.getCode());
             clearResult();
@@ -225,8 +237,25 @@ public class GUIMainController implements Initializable {
     public void clearResult() {
         result.clear();
     }
-
     public static void setStageName (String str){
         stage.setTitle(str);
     }
+    public void addNewTabPaneTab() {
+        Tab newTab = new Tab("Zadanie " + (exam.idx + 1));
+        newTab.setId(Integer.toString(exam.idx)); // ustaw identyfikator na size - 1 bo nowy tab jest ostatni
+        tabPane.getTabs().add(newTab);
+        tabPane.getSelectionModel().select(newTab);
+    }
+    public void deleteCurrentTabPaneTab() {
+        tabPane.getTabs().remove(exam.idx);
+        updateTabPaneTabIndexes();
+    }
+    public void updateTabPaneTabIndexes() {
+        for(int i = 0; i < tabPane.getTabs().size(); i++) {
+            tabPane.getTabs().get(i).setId(Integer.toString(i));
+            tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
+        }
+    }
+    
+    
 }
