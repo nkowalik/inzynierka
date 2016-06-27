@@ -31,38 +31,13 @@ public class Task {
     public GCC compiler;
     
     
-    public Task(){
-        ArrayList<String> defaultCode = new ArrayList<>();
-        ArrayList<String> defaultContents = new ArrayList<>();
-        
+    public Task(){      
         /* to tylko na razie */
         PDFAnswers = new ArrayList<>();
         PDFAnswers.add("f(0) = _______");
         
         compiler = new GCC();
-        /*
-        try {
-            Scanner s = new Scanner(new File("polecenie.txt"));
-            while (s.hasNext()) {
-                defaultContents.add(s.nextLine());
-            }
-            s.close();
-
-            Scanner s1 = new Scanner(new File("test.cpp"));
-            for (int i = 0; s1.hasNext(); i++) {
-                defaultCode.add(s1.nextLine());
-            }
-
-            s1.close();
-            contents = defaultContents;
-            code = defaultCode;
-            testCode = defaultCode;
-            PDFCode = defaultCode;
-
-        } catch (FileNotFoundException ex) {
-            System.err.println(ex);
-        }
-                */
+       
     }
     public List<String> getCode(){
         return code;

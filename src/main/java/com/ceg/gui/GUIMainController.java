@@ -131,6 +131,9 @@ public class GUIMainController implements Initializable {
         if(outcome.isEmpty()) {// jesli kompilacja przebiegla pomyslnie
             outcome.add("Kompilacja przebiegła pomyślnie.");
             exam.getLastTask().compiler.execute(outcome);
+            for(String s : outcome) {
+                result.appendText(s + "\n");
+            }
         }
         else {
             result.clear();
