@@ -30,7 +30,7 @@ public class TaskTypeComplexOutput extends TaskType{
     @Override
     public void callCompile(Task task, List<String> output) {
         CodeParser.addNewlineAfterEachCout(task.getCode(), task.getTestCode());
-        task.compiler.createFile(task.getTestCode(), "multiple.cpp");
+        task.compiler.createFile(task.getCode(), "multiple.cpp");
         task.compiler.compile(output);
     }
 
