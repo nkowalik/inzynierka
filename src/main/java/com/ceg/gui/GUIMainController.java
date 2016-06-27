@@ -68,7 +68,7 @@ public class GUIMainController implements Initializable {
         code.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {                
-                Exam.getInstance().getLastTask().setTestCode(Arrays.asList(newValue.split("\n")));
+                Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
                 /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
                 String newCode = newValue;
                 String newPDFCode = newValue;
@@ -85,8 +85,8 @@ public class GUIMainController implements Initializable {
                         }
                     }
                 }
-                Exam.getInstance().getTaskAtIndex(exam.idx).setCode(Arrays.asList(newCode.split("\n"))); 
-                Exam.getInstance().getTaskAtIndex(exam.idx).setPDFCode(Arrays.asList(newPDFCode.split("\n")));
+                Exam.getInstance().getTaskAtIndex(exam.idx).setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n")))); 
+                Exam.getInstance().getTaskAtIndex(exam.idx).setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
             }
         });
         tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
@@ -124,13 +124,13 @@ public class GUIMainController implements Initializable {
     public void execute(ActionEvent actionEvent) {
         List<String> outcome = new ArrayList<String>();
 
-        exam.getLastTask().compiler.createFile(exam.getLastTask().getCode());
-        exam.getLastTask().compiler.compile(outcome);
+       // exam.getLastTask().compiler.createFile(exam.getLastTask().getCode());
+        exam.getLastTask().getType().callCompile(exam.getLastTask(),outcome);
         
         /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic */
         if(outcome.isEmpty()) {// jesli kompilacja przebiegla pomyslnie
             outcome.add("Kompilacja przebiegła pomyślnie.");
-            exam.getLastTask().compiler.execute(outcome);
+            exam.getLastTask().getType().callExecute(exam.getLastTask(),outcome);
             for(String s : outcome) {
                 result.appendText(s + "\n");
             }

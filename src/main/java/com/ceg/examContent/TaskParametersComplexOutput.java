@@ -13,9 +13,9 @@ import javafx.scene.control.TextInputDialog;
  *
  * @author marta
  */
-public class TaskParametersMultipleOutput extends TaskParameters{
+public class TaskParametersComplexOutput extends TaskParameters{
    
-    public TaskParametersMultipleOutput() {
+    public TaskParametersComplexOutput() {
         askForParams();
         //super.setNoOfAnswers(1);
     }

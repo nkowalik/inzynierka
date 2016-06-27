@@ -13,10 +13,10 @@ import java.util.List;
  *
  * @author marta
  */
-public class TaskTypeMultipleOutput extends TaskType{
+public class TaskTypeComplexOutput extends TaskType{
     
-    public TaskTypeMultipleOutput() {
-        super.params = new TaskParametersMultipleOutput();
+    public TaskTypeComplexOutput() {
+        super.params = new TaskParametersComplexOutput();
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
     }
     
@@ -29,7 +29,7 @@ public class TaskTypeMultipleOutput extends TaskType{
 
     @Override
     public void callCompile(Task task, List<String> output) {
-        CodeParser.addNewlineAfterEachCout((ArrayList<String>)task.getCode(), (ArrayList<String>)task.getTestCode());
+        CodeParser.addNewlineAfterEachCout(task.getCode(), task.getTestCode());
         task.compiler.createFile(task.getTestCode(), "multiple.cpp");
         task.compiler.compile(output);
     }

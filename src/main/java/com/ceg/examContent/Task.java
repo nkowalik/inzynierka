@@ -27,11 +27,12 @@ public class Task {
     private List<String> contents;
     private List<String> answers;
     private List<String> PDFAnswers;
-    private int type;
+    private TaskType type;
     public GCC compiler;
     
     
-    public Task(){      
+    public Task(TaskType tt){  
+        this.type = tt;
         /* to tylko na razie */
         PDFAnswers = new ArrayList<>();
         PDFAnswers.add("f(0) = _______");
@@ -72,10 +73,10 @@ public class Task {
     public void setAnswers(List<String> newAnswers){
         answers = newAnswers;
     }
-    public int getType(){
+    public TaskType getType(){
         return type;
     }
-    public void setType(int newType){
+    public void setType(TaskType newType){
         type = newType;
     }
     

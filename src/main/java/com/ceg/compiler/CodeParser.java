@@ -1,6 +1,6 @@
 package com.ceg.compiler;
 
-import java.util.ArrayList;
+import java.util.List;
 
 
 public class CodeParser {
@@ -10,7 +10,7 @@ public class CodeParser {
 	// zwraca liczbe znalezionych coutow
 	// IN: List<String> lines - wejsciowa lista linii kodu
 	// OUT: List<String> result - wynikowa lista linii kodu
-	static public int addNewlineAfterEachCout(ArrayList<String> lines, ArrayList<String> result){
+	static public int addNewlineAfterEachCout(List<String> lines, List<String> result){
 		int couts = 0;
 		result.addAll(lines); // skopiuj liste wejsciowa
 		
@@ -24,7 +24,7 @@ public class CodeParser {
 		return couts;
 	}
 	
-	static public int deleteOtherCouts(int lineNo, ArrayList<String> code){
+	static public int deleteOtherCouts(int lineNo, List<String> code){
             int count = 0;
             return count;
         }
