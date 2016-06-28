@@ -1,4 +1,4 @@
-package com.ceg.pdf;
+﻿package com.ceg.pdf;
 
 import java.io.IOException;
 import java.util.List;
@@ -19,7 +19,9 @@ public class PDFCommand extends PDFAbstractTask {
         białych znaków poza spacją i enterem. */    
     @Override
     public void textSplitting (List<String> command) throws IOException {
-        String string = mergeStringList(command);
+	line = "";
+        actualWidth = 0;       
+	String string = mergeStringList(command);
         string = string.replace("\n", " ");
         float actualWordWidth;
         words = string.split(" ");        
