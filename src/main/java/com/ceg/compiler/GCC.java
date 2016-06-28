@@ -90,7 +90,7 @@ public class GCC {
         StringBuilder sb = new StringBuilder();
         for(String s : lines) {
             sb.append(s);
-            sb.append("\t");
+            sb.append("\n");
         }
         file = new File(this.path + "/" + "code.cpp");
         try {

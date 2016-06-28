@@ -2,6 +2,9 @@ package com.ceg.gui;
 
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
+import com.ceg.examContent.TaskType;
+import com.ceg.examContent.TaskTypeComplexOutput;
+import com.ceg.examContent.TaskTypeSimpleOutput;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -31,6 +34,7 @@ public class GUIAddTaskController implements Initializable {
     
     ArrayList<String> contentList = new ArrayList<>();
     ArrayList<String> codeList = new ArrayList<>();
+    TaskType type;
     @FXML
     TextArea text;
     @FXML
@@ -98,34 +102,40 @@ public class GUIAddTaskController implements Initializable {
         chooseType.setText(taskTypeSimpleOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
         addType("simple_output.txt");
+        type = new TaskTypeSimpleOutput();
     }
     public void addTypeReturnedValue() {
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
         addType("returned_value.txt");
+         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeComplexOutput() {
         chooseType.setText(taskTypeComplexOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeComplexOutput.getText());
         addType("complex_output.txt");
+        type = new TaskTypeComplexOutput();
     }
     public void addTypeGaps() {
         chooseType.setText(taskTypeGaps.getText());
         mainInstance.setStageName("CEG - " + taskTypeGaps.getText());
         addType("gaps.txt");
+        type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeVarValue() {
         chooseType.setText(taskTypeVarValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
         addType("var_value.txt");
+        type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeLineNumbers() {
         chooseType.setText(taskTypeLineNumbers.getText());
         mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
         addType("line_numbers.txt");
+        type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void finishEdition(ActionEvent event) throws Exception {
-        Task t = new Task();
+        Task t = new Task(type);
         t.setContents(contentList);
         t.setCode(codeList);
         Exam.getInstance().addTask(t); // wrzuca na koniec, ustawia idx na size-1 (koniec)
