@@ -1,6 +1,6 @@
 package com.ceg.gui;
 
-import com.ceg.pdf.PDFGenerator;
+import com.ceg.examContent.Exam;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -24,14 +24,7 @@ public class IfPdfExistController implements Initializable {
     }   
     
     public void zapisz(ActionEvent event) {
-        /*PDFGenerator gen = new PDFGenerator(    pdfFile, 
-                                                commandFontName, 
-                                                commandFontSizeNumber, 
-                                                codeFontName, 
-                                                codeFontSizeNumber, 
-                                                date, 
-                                                testTypeName); */
-        PdfSavingController.pdfGenerate();
+        Exam.getInstance().pdfSettings.pdfGenerate(PdfSavingController.appStage);
         
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
