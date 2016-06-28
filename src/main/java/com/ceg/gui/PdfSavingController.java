@@ -18,8 +18,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.stage.DirectoryChooser;
@@ -61,13 +64,14 @@ public class PdfSavingController implements Initializable {
     
     private final ObservableList<String> daysList = FXCollections.observableList(new ArrayList<String>());
     
-    private String commandFontName;
-    private String codeFontName;
-    private Integer commandFontSizeNumber;
-    private Integer codeFontSizeNumber;
-    private String testTypeName;
-    private String date; 
-    private String filePathName;
+    private static String commandFontName;
+    private static String codeFontName;
+    private static Integer commandFontSizeNumber;
+    private static Integer codeFontSizeNumber;
+    private static String testTypeName;
+    private static String date; 
+    //private String filePathName;
+    private static File pdfFile;
     
     private Integer year;
     private Integer month;
@@ -165,7 +169,7 @@ public class PdfSavingController implements Initializable {
         });
     }
     
-    public void saveFile(ActionEvent event) {
+    public void saveFile(ActionEvent event) throws IOException {
         commandFontName = commandFont.getValue().toString();
         codeFontName = codeFont.getValue().toString();
         
@@ -183,23 +187,35 @@ public class PdfSavingController implements Initializable {
             date += '0';
         date += month.toString() + '.' + year.toString();
         
-        filePathName = filePath.getText() + '/' + fileName.getText();
+        String filePathName = filePath.getText() + '/' + fileName.getText();
         
-        try {
-            PDFGenerator gen = new PDFGenerator(    filePathName, 
-                                                    commandFontName, 
-                                                    commandFontSizeNumber, 
-                                                    codeFontName, 
-                                                    codeFontSizeNumber, 
-                                                    date, 
-                                                    testTypeName); 
-        } 
-        catch (IOException ex) {
-            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex);
+        pdfFile = new File(filePathName);
+        
+        if (pdfFile.exists() && !pdfFile.isDirectory()) {
+            Stage ifPdfExistStage = new Stage();
+            Parent scene = FXMLLoader.load(getClass().getResource("/fxml/ifPdfExist.fxml"));
+            ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
+            ifPdfExistStage.setScene(new Scene(scene, 430, 125));
+            ifPdfExistStage.show();
         }
         
-        Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        appStage.hide();
+        else {
+            try {
+                PDFGenerator gen = new PDFGenerator(    pdfFile, 
+                                                        commandFontName, 
+                                                        commandFontSizeNumber, 
+                                                        codeFontName, 
+                                                        codeFontSizeNumber, 
+                                                        date, 
+                                                        testTypeName); 
+            } 
+            catch (IOException ex) {
+                Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        
+            Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            appStage.hide();
+        }
     }
     
     public void cancel(ActionEvent event) {
@@ -214,6 +230,20 @@ public class PdfSavingController implements Initializable {
         
         if (dir != null) {
             filePath.setText(dir.getAbsolutePath());
+        }
+    }
+    
+    public static void pdfGenerate() {
+        try {
+            PDFGenerator gen = new PDFGenerator(    pdfFile,
+                    commandFontName,
+                    commandFontSizeNumber,
+                    codeFontName,
+                    codeFontSizeNumber,
+                    date,
+                    testTypeName);
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 }

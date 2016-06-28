@@ -33,7 +33,7 @@ public class PDFGenerator {
     private String testDate;
     
     /* wywołanie konstruktora powoduje utworzenie dokumentu pdf. Argumentem nazwa przyszłego pliku pdf */
-    public PDFGenerator(String fileName, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate, String testType) throws IOException {
+    public PDFGenerator(File pdfFile, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate, String testType) throws IOException {
         document = new PDDocument();
         boolean newPage;
         //tworzenie nowej strony i dodanie jej do dokumentu
@@ -77,20 +77,19 @@ public class PDFGenerator {
         }
         cs.close();
         
-        savePDF(fileName);
+        savePDF(pdfFile);
     }
     
     /* Funkcja tworząca dokument pdf */
-    private void savePDF(String fileName) throws IOException {
-        File newFile = new File(fileName);
-        document.save(newFile);
+    private void savePDF(File pdfFile) throws IOException {
+        document.save(pdfFile);
         document.close();
         Desktop desktop = Desktop.getDesktop();
         EventQueue EQ = new EventQueue();
         if(desktop.isSupported(Desktop.Action.OPEN)){
              EQ.invokeLater(() -> {
                  try {
-                     desktop.open(newFile);
+                     desktop.open(pdfFile);
                  } catch (IOException ex) {
                      Logger.getLogger(PDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
                  }
