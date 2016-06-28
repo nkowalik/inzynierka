@@ -16,6 +16,7 @@ import java.util.List;
 public class TaskTypeComplexOutput extends TaskType{
     
     public TaskTypeComplexOutput() {
+        super();
         super.params = new TaskParametersComplexOutput();
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
     }
@@ -29,7 +30,7 @@ public class TaskTypeComplexOutput extends TaskType{
 
     @Override
     public void callCompile(Task task, List<String> output) {
-        CodeParser.addNewlineAfterEachCout(task.getCode(), task.getTestCode());
+        CodeParser.addNewlineAfterEachCout(task.getCode());
         task.compiler.createFile(task.getCode(), "multiple.cpp");
         task.compiler.compile(output);
     }
@@ -37,5 +38,14 @@ public class TaskTypeComplexOutput extends TaskType{
     @Override
     public void callExecute(Task task, List<String> output) {
         task.compiler.execute(output);
+        task.getType().generateAnswers(output, task.getAnswers());
+    }
+    
+    @Override
+    public void preparePdfAnswers(Task task){
+        task.getPDFAnswers().clear();
+        for(int i=0;i<this.params.getNoOfAnswers();i++){
+            task.getPDFAnswers().add("__________");   
+        }
     }
 }

@@ -33,9 +33,11 @@ public class Task {
     
     public Task(TaskType tt){  
         this.type = tt;
+        this.answers = new ArrayList<>();
         /* to tylko na razie */
         PDFAnswers = new ArrayList<>();
-        PDFAnswers.add("f(0) = _______");
+        type.preparePdfAnswers(this);
+        //PDFAnswers.add("f(0) = _______");
         
         compiler = new GCC();
        

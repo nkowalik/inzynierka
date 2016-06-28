@@ -9,9 +9,8 @@ public class CodeParser {
 	// dopisuje "cout<<endl" 
 	// za kazdym znalezionym wywolaniem "cout" 
 	// zwraca liczbe znalezionych coutow
-	// IN: List<String> lines - wejsciowa lista linii kodu
-	// OUT: List<String> result - wynikowa lista linii kodu
-	static public int addNewlineAfterEachCout(List<String> lines, List<String> result){
+	// INOUT: List<String> lines - wejsciowa lista linii kodu
+	static public int addNewlineAfterEachCout(List<String> lines){
             int couts = 0;
             for (ListIterator<String> iterator = lines.listIterator(); iterator.hasNext() ;)
             {
@@ -26,14 +25,23 @@ public class CodeParser {
                     couts++;
                 }
             }
-            result = lines;
             return couts;
 		
 	}
 	
-	static public int deleteOtherCouts(int lineNo, List<String> code){
-            int count = 0;
-            return count;
+        // usuwa wszystkie linie, w których wystąpił "cout" lub "printf"
+        // poza liniami o numerach zawartych w liście lineNo
+        // IN: List lineNo - lista numerów linii, których nie należy usuwać
+        // INOUT: List<String> code - lista linii kodu
+	static public void deleteOtherCouts(List lineNo, List<String> code){
+            for (ListIterator<String> iterator = code.listIterator(); iterator.hasNext() ;)
+            {
+                String str = iterator.next();
+                if ((!lineNo.contains(iterator.nextIndex()-1))  && (str.contains("cout <<") || str.contains("cout<<") || str.contains("printf(")))
+                {
+                    iterator.remove();
+                }
+            }
         }
 	
 }

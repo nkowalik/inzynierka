@@ -24,6 +24,7 @@ abstract public class TaskType {
     public abstract void generateAnswers(List<String> output, List<String> answers);
     public abstract void callCompile(Task task, List<String> output);
     public abstract void callExecute(Task task, List<String> output);
+    public abstract void preparePdfAnswers(Task task);
     
     public String getDefaultContents() {
         return defaultContents;

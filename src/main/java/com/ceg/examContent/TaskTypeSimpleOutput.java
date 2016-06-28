@@ -14,6 +14,7 @@ import java.util.List;
 public class TaskTypeSimpleOutput extends TaskType{
 
     public TaskTypeSimpleOutput() {
+        super();
         super.params = new TaskParametersSimpleOutput();
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku wykonania programu.";
     }
@@ -34,5 +35,12 @@ public class TaskTypeSimpleOutput extends TaskType{
     @Override
     public void callExecute(Task task, List<String> output) {
         task.compiler.execute(output);
+        task.getType().generateAnswers(output, task.getAnswers());
+    }
+    
+    @Override
+    public void preparePdfAnswers(Task task){
+        task.getPDFAnswers().clear();
+        task.getPDFAnswers().add("Wynik = _______");
     }
 }
