@@ -1,6 +1,7 @@
 package com.ceg.compiler;
 
-import java.util.ArrayList;
+import java.util.List;
+import java.util.ListIterator;
 
 
 public class CodeParser {
@@ -8,25 +9,39 @@ public class CodeParser {
 	// dopisuje "cout<<endl" 
 	// za kazdym znalezionym wywolaniem "cout" 
 	// zwraca liczbe znalezionych coutow
-	// IN: List<String> lines - wejsciowa lista linii kodu
-	// OUT: List<String> result - wynikowa lista linii kodu
-	static public int addNewlineAfterEachCout(ArrayList<String> lines, ArrayList<String> result){
-		int couts = 0;
-		result.addAll(lines); // skopiuj liste wejsciowa
+	// INOUT: List<String> lines - wejsciowa lista linii kodu
+	static public int addNewlineAfterEachCout(List<String> lines){
+            int couts = 0;
+            for (ListIterator<String> iterator = lines.listIterator(); iterator.hasNext() ;)
+            {
+                String str = iterator.next();
+                if (str.contains("cout <<") || str.contains("cout<<"))
+                {
+                    iterator.add("cout<<endl;");
+                    couts++;
+                }
+                else if(str.contains("printf")){
+                    iterator.add("printf(\"\\n\");");
+                    couts++;
+                }
+            }
+            return couts;
 		
-		for (int index = 0 ; index < result.size(); index++) {
-			String line = result.get(index);
-			if(line.contains("cout <<") || line.contains("cout<<")){
-				couts++;
-				result.add(++index, "cout<<endl;");
-			}
-		}
-		return couts;
 	}
 	
-	static public int deleteOtherCouts(int lineNo, ArrayList<String> code){
-            int count = 0;
-            return count;
+        // usuwa wszystkie linie, w których wystąpił "cout" lub "printf"
+        // poza liniami o numerach zawartych w liście lineNo
+        // IN: List lineNo - lista numerów linii, których nie należy usuwać
+        // INOUT: List<String> code - lista linii kodu
+	static public void deleteOtherCouts(List lineNo, List<String> code){
+            for (ListIterator<String> iterator = code.listIterator(); iterator.hasNext() ;)
+            {
+                String str = iterator.next();
+                if ((!lineNo.contains(iterator.nextIndex()-1))  && (str.contains("cout <<") || str.contains("cout<<") || str.contains("printf(")))
+                {
+                    iterator.remove();
+                }
+            }
         }
 	
 }

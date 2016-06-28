@@ -5,6 +5,7 @@
  */
 package com.ceg.examContent;
 
+import com.ceg.compiler.CodeParser;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,12 +13,12 @@ import java.util.List;
  *
  * @author marta
  */
-public class TaskTypeSimpleOutput extends TaskType{
-
-    public TaskTypeSimpleOutput() {
+public class TaskTypeComplexOutput extends TaskType{
+    
+    public TaskTypeComplexOutput() {
         super();
-        super.params = new TaskParametersSimpleOutput();
-        defaultContents = "Podaj co pojawi się na wyjściu w wyniku wykonania programu.";
+        super.params = new TaskParametersComplexOutput();
+        defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
     }
     
     @Override
@@ -30,7 +31,8 @@ public class TaskTypeSimpleOutput extends TaskType{
     @Override
     public void callCompile(Task task, List<String> output) {
         List<String> code = new ArrayList<>(task.getCode());
-        task.compiler.createFile(code, "simple.cpp");
+        CodeParser.addNewlineAfterEachCout(code);
+        task.compiler.createFile(code, "multiple.cpp");
         task.compiler.compile(output);
     }
 
@@ -43,6 +45,8 @@ public class TaskTypeSimpleOutput extends TaskType{
     @Override
     public void preparePdfAnswers(Task task){
         task.getPDFAnswers().clear();
-        task.getPDFAnswers().add("Wynik = _______");
+        for(int i=0;i<this.params.getNoOfAnswers();i++){
+            task.getPDFAnswers().add("__________");   
+        }
     }
 }

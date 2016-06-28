@@ -71,5 +71,6 @@ public class PDFLine {
         }
         
         font = PDType0Font.load(PDFGenerator.document, fontFile);
+       
     }
 }
