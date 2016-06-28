@@ -5,6 +5,7 @@
  */
 package com.ceg.examContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -28,7 +29,8 @@ public class TaskTypeSimpleOutput extends TaskType{
 
     @Override
     public void callCompile(Task task, List<String> output) {
-        task.compiler.createFile(task.getCode(), "simple.cpp");
+        List<String> code = new ArrayList<>(task.getCode());
+        task.compiler.createFile(code, "simple.cpp");
         task.compiler.compile(output);
     }
 
