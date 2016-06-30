@@ -22,7 +22,7 @@ public class TaskTypeSimpleOutput extends TaskType{
     
     @Override
     public void generateAnswers(List<String> output, List<String> answers){
-        for(int i=1;i<super.getParams().getNoOfAnswers();i++){
+        for(int i=1;i<super.getParams().getNoOfAnswers()+1;i++){
             answers.add(output.get(i));
         }
     }
