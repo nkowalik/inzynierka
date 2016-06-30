@@ -7,6 +7,7 @@ public class PDFCommand extends PDFAbstractTask {
     protected String[] words;
     protected String line = "";
     protected final float spaceWidth;
+    private Integer taskNumber;
         
     PDFCommand(int textWidth, String fontName, int fontSize) throws IOException {
         super(textWidth, fontName, fontSize);
@@ -22,6 +23,7 @@ public class PDFCommand extends PDFAbstractTask {
 	line = "";
         actualWidth = 0;       
 	String string = mergeStringList(command);
+        string = taskNumber.toString() + ". " + string;
         string = string.replace("\n", " ");
         float actualWordWidth;
         words = string.split(" ");        
@@ -61,5 +63,9 @@ public class PDFCommand extends PDFAbstractTask {
             txt+=line+"\n";
         }
         return txt;
+    }
+    
+    public void setTaskNumber(int taskNumber) {
+        this.taskNumber = taskNumber;
     }
 }

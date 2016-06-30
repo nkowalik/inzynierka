@@ -1,4 +1,4 @@
-﻿package com.ceg.pdf;
+package com.ceg.pdf;
 
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
@@ -52,17 +52,16 @@ public class PDFGenerator {
         else {
             answer = new PDFTeachersAnswer(commandWidth, commandFont, commandFontSize);
         }
-        
-        for (Task i : taskList) {           
+        Integer taskNumber = 1;
+        for (Task i : taskList) {
+            comm.setTaskNumber(taskNumber++);
             comm.textSplitting(i.getContents());
             code.textSplitting(i.getPDFCode());
             
             answer.textSplitting(i.getPDFAnswers());
-            
             answer.setAnswers(i.getAnswers());
-            
             //jeśli zadanie nie mieści się na stronie, to tworzymy nową stronę
-            if (actualY - comm.getLineHeight()*(comm.getNumberOfLines() + answer.getNumberOfLines()) < bottomMargin  ||
+            if (actualY - comm.getLineHeight()*comm.getNumberOfLines() - answer.getLineHeight()*answer.getNumberOfLines() < bottomMargin  ||
                 actualY - code.getLineHeight()*code.getNumberOfLines() < bottomMargin) {
                 createNewPage();
                 newPage = true;
