@@ -1,4 +1,4 @@
-package com.ceg.pdf;
+﻿package com.ceg.pdf;
 
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
@@ -62,7 +62,7 @@ public class PDFGenerator {
             answer.setAnswers(i.getAnswers());
             
             //jeśli zadanie nie mieści się na stronie, to tworzymy nową stronę
-            if (actualY - comm.getLineHeight()*(comm.getNumberOfLines() + answer.getNumberOfLines()) < bottomMargin  &&
+            if (actualY - comm.getLineHeight()*(comm.getNumberOfLines() + answer.getNumberOfLines()) < bottomMargin  ||
                 actualY - code.getLineHeight()*code.getNumberOfLines() < bottomMargin) {
                 createNewPage();
                 newPage = true;
