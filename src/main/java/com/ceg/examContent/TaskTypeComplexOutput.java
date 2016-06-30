@@ -23,7 +23,7 @@ public class TaskTypeComplexOutput extends TaskType{
     
     @Override
     public void generateAnswers(List<String> output, List<String> answers){
-        for(int i=0;i<super.getParams().getNoOfAnswers();i++){
+        for(int i=1;i<super.getParams().getNoOfAnswers();i++){
             answers.add(output.get(i));
         }
     }
