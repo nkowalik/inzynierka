@@ -43,6 +43,6 @@ public class TaskTypeSimpleOutput extends TaskType{
     @Override
     public void preparePdfAnswers(Task task){
         task.getPDFAnswers().clear();
-        task.getPDFAnswers().add("Wynik = _______");
+        task.getPDFAnswers().add("Wynik = #placeForAnswer");
     }
 }

@@ -1,5 +1,6 @@
 package com.ceg.pdf;
 
+import com.ceg.examContent.Exam;
 import java.io.IOException;
 import java.util.List;
 
@@ -7,10 +8,14 @@ import java.util.List;
  *
  * @author Martyna
  */
-public class PDFAnswer extends PDFAbstractTask {
 
+/* klasa odpowiedzialna za wyglad pola odpowiedzi w arkuszu pdf */
+public class PDFAnswer extends PDFAbstractTask {
+    
+    /**/    
     public PDFAnswer(int textWidth, String fontName, int fontSize) throws IOException {
         super(textWidth, fontName, fontSize);
+        lineHeight+=2;
     }
     
     @Override
@@ -54,5 +59,16 @@ public class PDFAnswer extends PDFAbstractTask {
                 }
             }
         }
+    }
+    
+    public void setAnswers(List<String> answers) {       
+    }
+    
+    @Override
+    public int writeToPDF(int x, int y) throws IOException{ 
+        for (int i=0; i<actualTaskLines.size(); i++) {
+            actualTaskLines.set(i, actualTaskLines.get(i).replace("#placeForAnswer", "_________"));
+        }
+        return super.writeToPDF(x, y);
     }
 }

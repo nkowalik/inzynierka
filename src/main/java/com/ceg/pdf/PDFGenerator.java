@@ -30,16 +30,12 @@ public class PDFGenerator {
     
     private int actualY;
     
-    private String testDate;
-    
     /* wywołanie konstruktora powoduje utworzenie dokumentu pdf. Argumentem nazwa przyszłego pliku pdf */
     public PDFGenerator(File pdfFile, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate, String testType) throws IOException {
         document = new PDDocument();
         boolean newPage;
         //tworzenie nowej strony i dodanie jej do dokumentu
         createNewPage();
-        
-        this.testDate = testDate;
         
         PDFHeader header = new PDFHeader();
         actualY = header.setHeader(leftMargin, topMargin, breakBetweenTasks, testDate);
@@ -48,12 +44,22 @@ public class PDFGenerator {
         
         PDFCommand comm = new PDFCommand(commandWidth, commandFont, commandFontSize);
         PDFCode code = new PDFCode(codeWidth, codeFont, codeFontSize);
-        PDFAnswer answer = new PDFAnswer(commandWidth, commandFont, commandFontSize);
+        PDFAnswer answer;
+        
+        if (Exam.getInstance().pdfSettings.getTestType().equals("student")) {
+            answer = new PDFAnswer(commandWidth, commandFont, commandFontSize);
+        }
+        else {
+            answer = new PDFTeachersAnswer(commandWidth, commandFont, commandFontSize);
+        }
         
         for (Task i : taskList) {           
             comm.textSplitting(i.getContents());
             code.textSplitting(i.getPDFCode());
+            
             answer.textSplitting(i.getPDFAnswers());
+            
+            answer.setAnswers(i.getAnswers());
             
             //jeśli zadanie nie mieści się na stronie, to tworzymy nową stronę
             if (actualY - comm.getLineHeight()*(comm.getNumberOfLines() + answer.getNumberOfLines()) < bottomMargin  &&

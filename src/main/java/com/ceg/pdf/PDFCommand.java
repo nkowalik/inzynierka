@@ -1,4 +1,4 @@
-﻿package com.ceg.pdf;
+package com.ceg.pdf;
 
 import java.io.IOException;
 import java.util.List;
