@@ -122,6 +122,7 @@ public class GUIMainController implements Initializable {
         return instance;
     }
     public void execute(ActionEvent actionEvent) {
+        result.clear();
         List<String> outcome = new ArrayList<String>();
 
        // exam.getLastTask().compiler.createFile(exam.getLastTask().getCode());
@@ -177,11 +178,7 @@ public class GUIMainController implements Initializable {
     public void deleteTask(ActionEvent event) throws Exception {
         
         if(Exam.getInstance().getTasks().isEmpty()) {
-            text.setVisible(false);
-            code.setVisible(false);
-            result.setVisible(false);
-            executeBtn.setVisible(false);
-            testExecuteBtn.setVisible(false);
+            showTask(false);
         }
         else {
             int idx = tabPane.getSelectionModel().getSelectedIndex();
