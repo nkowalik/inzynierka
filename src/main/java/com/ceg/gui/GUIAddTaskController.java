@@ -40,6 +40,8 @@ public class GUIAddTaskController implements Initializable {
     @FXML
     TextArea code;
     @FXML
+    Button finish;
+    @FXML
     Menu chooseType;
     @FXML
     MenuItem taskTypeSimpleOutput;
@@ -94,6 +96,7 @@ public class GUIAddTaskController implements Initializable {
             for (String i : contentList) {
                 text.appendText(i + "\n");
             }
+            finish.setDisable(false);
         } catch (FileNotFoundException ex) {
             System.err.println(ex);
         }
@@ -143,7 +146,9 @@ public class GUIAddTaskController implements Initializable {
         
         mainInstance.getInstance().addNewTabPaneTab();
         mainInstance.getInstance().updateWindow(Exam.getInstance().idx);
-        
+
+        chooseType.setText("Typ zadania");
+        finish.setDisable(true);
     }
     public static void clearFields() {
         addTaskInstance.text.clear();
@@ -161,6 +166,7 @@ public class GUIAddTaskController implements Initializable {
         if(file != null) {
             loadFile(file);
         }
+        finish.setDisable(false);
     }
     public void loadFile(File file) throws IOException {
         Scanner s = new Scanner(file);
