@@ -37,8 +37,6 @@ public class Task {
         /* to tylko na razie */
         PDFAnswers = new ArrayList<>();
         type.preparePdfAnswers(this);
-        //PDFAnswers.add("f(0) = _______");
-        
         compiler = new GCC();
        
     }

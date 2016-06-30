@@ -7,7 +7,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 
 public abstract class PDFAbstractTask {
     protected PDFLine pdfLine;
-    private final int lineHeight;
+    protected int lineHeight;
     protected static PDPageContentStream cs;
     protected int textWidth;
     protected float actualWidth = 0;  

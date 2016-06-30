@@ -19,7 +19,9 @@ public class PDFCommand extends PDFAbstractTask {
         białych znaków poza spacją i enterem. */    
     @Override
     public void textSplitting (List<String> command) throws IOException {
-        String string = mergeStringList(command);
+	line = "";
+        actualWidth = 0;       
+	String string = mergeStringList(command);
         string = string.replace("\n", " ");
         float actualWordWidth;
         words = string.split(" ");        
