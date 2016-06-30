@@ -46,7 +46,7 @@ public class TaskTypeComplexOutput extends TaskType{
     public void preparePdfAnswers(Task task){
         task.getPDFAnswers().clear();
         for(int i=0;i<this.params.getNoOfAnswers();i++){
-            task.getPDFAnswers().add("#placeForAnswer");   
+            task.getPDFAnswers().add(" #placeForAnswer");   
         }
     }
 }
