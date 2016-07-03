@@ -148,13 +148,13 @@ public class GUIAddTaskController implements Initializable {
         mainInstance.getInstance().updateWindow(Exam.getInstance().idx);
 
         chooseType.setText("Typ zadania");
-        finish.setDisable(true);
     }
     public static void clearFields() {
         addTaskInstance.text.clear();
         addTaskInstance.code.clear();
         addTaskInstance.codeList = new ArrayList<>();
         addTaskInstance.contentList = new ArrayList<>();
+        addTaskInstance.finish.setDisable(true);
     }
     public void cancelEdition(ActionEvent event) throws Exception {
         mainInstance.setStageName("CEG");
@@ -166,7 +166,6 @@ public class GUIAddTaskController implements Initializable {
         if(file != null) {
             loadFile(file);
         }
-        finish.setDisable(false);
     }
     public void loadFile(File file) throws IOException {
         Scanner s = new Scanner(file);
@@ -179,5 +178,6 @@ public class GUIAddTaskController implements Initializable {
         for (String i : codeList) {
             code.appendText(i + "\n");
         }
+        finish.setDisable(false);
     }
 }
