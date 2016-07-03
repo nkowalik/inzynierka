@@ -9,6 +9,7 @@ import com.ceg.compiler.GCC;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -34,6 +35,7 @@ public class Task {
     
     public Task(TaskType tt){  
         this.type = tt;
+        setCode(Arrays.asList(""));
         this.answers = new ArrayList<>();
         /* to tylko na razie */
         PDFAnswers = new ArrayList<>();

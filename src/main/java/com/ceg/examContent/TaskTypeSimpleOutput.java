@@ -36,7 +36,8 @@ public class TaskTypeSimpleOutput extends TaskType{
 
     @Override
     public void callExecute(Task task, List<String> output) {
-        task.compiler.execute(output);
+        List<String> code = new ArrayList<>(task.getCode());
+        task.compiler.execute2(code, "simple.cpp", output);
         task.getType().generateAnswers(output, task.getAnswers());
     }
     

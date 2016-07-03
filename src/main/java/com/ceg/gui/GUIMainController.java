@@ -70,6 +70,7 @@ public class GUIMainController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {                
                 Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
                 /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
+
                 String newCode = newValue;
                 String newPDFCode = newValue;
                 clearResult();
@@ -127,9 +128,12 @@ public class GUIMainController implements Initializable {
 
         //exam.getLastTask().compiler.createFile(exam.getLastTask().getCode());
         //exam.getLastTask().getType().callCompile(exam.getLastTask(),outcome);
-        exam.getCurrentTask().getType().callCompile(exam.getCurrentTask(), outcome);
-        
-        /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic */
+        exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
+        for(String s : outcome) {
+            result.appendText(s + "\n");
+        }
+        exam.getCurrentTask().setResult(result.getText());
+        /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic *//*
         if(outcome.isEmpty()) {// jesli kompilacja przebiegla pomyslnie
             outcome.add("Kompilacja przebiegła pomyślnie.");
             exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(),outcome);
@@ -144,7 +148,7 @@ public class GUIMainController implements Initializable {
                 result.appendText(s + "\n");
             }
             exam.getCurrentTask().setResult(result.getText());
-        } 
+        } */
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
         Stage pdfSavingStage = new Stage();

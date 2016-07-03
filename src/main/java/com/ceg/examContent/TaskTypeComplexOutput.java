@@ -38,7 +38,9 @@ public class TaskTypeComplexOutput extends TaskType{
 
     @Override
     public void callExecute(Task task, List<String> output) {
-        task.compiler.execute(output);
+        List<String> code = new ArrayList<>(task.getCode());
+        CodeParser.addNewlineAfterEachCout(code);
+        task.compiler.execute2(code, "multiple.cpp", output);
         task.getType().generateAnswers(output, task.getAnswers());
     }
     
