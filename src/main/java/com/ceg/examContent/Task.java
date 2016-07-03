@@ -27,6 +27,7 @@ public class Task {
     private List<String> contents;
     private List<String> answers;
     private List<String> PDFAnswers;
+    private String result;
     private TaskType type;
     public GCC compiler;
     
@@ -78,6 +79,12 @@ public class Task {
     }
     public void setType(TaskType newType){
         type = newType;
+    }
+    public String getResult() {
+        return result;
+    }
+    public void setResult(String newResult) {
+        result = newResult;
     }
     
 }
