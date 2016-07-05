@@ -57,7 +57,7 @@ public class PDFLine {
                 fontFile = new File("fonts/arial.ttf");
                 break;
             case "Arial Narrow":
-                fontFile = new File("fonts/ARIALN.ttf");
+                fontFile = new File("fonts/arialn.ttf");
                 break;
             case "Courier":
                 fontFile = new File("fonts/cour.ttf");

@@ -96,11 +96,11 @@ public class PdfSavingController implements Initializable {
         else
             dateMonth.setValue(month.toString());
         
-        commandFontSize.setText("10");
-        codeFontSize.setText("10");
+        commandFontSize.setText(pdfSettings.getCommandFontSize().toString());
+        codeFontSize.setText(pdfSettings.getCodeFontSize().toString());
         
         Integer year = pdfSettings.getYear();
-        for (Integer i  = year; i <= year+10; i++) {
+        for (Integer i  = 2008; i <= year+10; i++) {
             yearList.add(i.toString());
         }
         dateYear.setItems(FXCollections.observableList(yearList));
@@ -173,10 +173,13 @@ public class PdfSavingController implements Initializable {
         Exam.getInstance().pdfSettings = pdfSettings;
         
         if (pdfFile.exists() && !pdfFile.isDirectory()) {
+            appStage.setAlwaysOnTop(false);
             Stage ifPdfExistStage = new Stage();
             Parent scene = FXMLLoader.load(getClass().getResource("/fxml/ifPdfExist.fxml"));
             ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
             ifPdfExistStage.setScene(new Scene(scene, 430, 125));
+            ifPdfExistStage.setResizable(false);
+            ifPdfExistStage.setAlwaysOnTop(true);
             ifPdfExistStage.show();
         }
         
@@ -192,9 +195,11 @@ public class PdfSavingController implements Initializable {
     }
     
     public void browse(ActionEvent event) {
+        appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        
         DirectoryChooser dirChooser = new DirectoryChooser () ;
         dirChooser.setTitle("Wybierz lokalizację pliku");
-        File dir = dirChooser.showDialog(null);
+        File dir = dirChooser.showDialog(appStage);
         
         if (dir != null) {
             filePath.setText(dir.getAbsolutePath());
