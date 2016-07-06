@@ -85,7 +85,7 @@ public class GUIMainController implements Initializable {
                         }
                     }
                 }
-                Exam.getInstance().getTaskAtIndex(exam.idx).setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n")))); 
+                Exam.getInstance().getTaskAtIndex(exam.idx).setCode(new ArrayList<>(Arrays.asList(newCode.split("\n")))); 
                 Exam.getInstance().getTaskAtIndex(exam.idx).setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
             }
         });
@@ -136,6 +136,9 @@ public class GUIMainController implements Initializable {
             }
         }
         else {
+            if(exam.getLastTask().getType().name == "LineNumbers"){
+                exam.getLastTask().getType().callExecute(exam.getLastTask(),outcome);
+            }
             result.clear();
             //result.appendText("");
             for(String s : outcome) {
