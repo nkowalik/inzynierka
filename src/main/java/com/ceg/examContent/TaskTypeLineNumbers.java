@@ -22,6 +22,7 @@ public class TaskTypeLineNumbers extends TaskType{
 
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers) {
+        answers.clear();
         for(String line: output){
             if(line.contains("error")){
                 String[] substr = line.split(":");
