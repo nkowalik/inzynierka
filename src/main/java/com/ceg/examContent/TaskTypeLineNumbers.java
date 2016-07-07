@@ -5,7 +5,6 @@
  */
 package com.ceg.examContent;
 
-import com.ceg.compiler.CodeParser;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,44 +12,46 @@ import java.util.List;
  *
  * @author marta
  */
-public class TaskTypeComplexOutput extends TaskType{
+public class TaskTypeLineNumbers extends TaskType{
     
-    public TaskTypeComplexOutput() {
+    public TaskTypeLineNumbers() {
         super();
-        super.params = new TaskParametersComplexOutput();
-        name = "ComplexOutput";
-        defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
+        super.params = new TaskParametersLineNumbers();
+        name="LineNumbers";
     }
-    
+
     @Override
-    public void generateAnswers(Task task, List<String> output, List<String> answers){
+    public void generateAnswers(Task task, List<String> output, List<String> answers) {
         answers.clear();
-        for(int i=1;i<super.getParams().getNoOfAnswers()+1;i++){
-            answers.add(output.get(i));
+        for(String line: output){
+            if(line.contains("error")){
+                String[] substr = line.split(":");
+                int lineNumber = Integer.parseInt(substr[1])-1;
+                String[] codeLine = task.getCode().get(lineNumber).split("//");
+                answers.add(codeLine[1]);
+            }               
         }
     }
 
     @Override
     public void callCompile(Task task, List<String> output) {
-        List<String> code = new ArrayList<>(task.getCode());
-        CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.createFile(code, "multiple.cpp");
+        task.compiler.createFile(task.getCode(), "linenumbers.cpp");
         task.compiler.compile(output);
     }
 
     @Override
     public void callExecute(Task task, List<String> output) {
         List<String> code = new ArrayList<>(task.getCode());
-        CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.execute2(code, "multiple.cpp", output);
+        task.compiler.execute2(code, "linenumbers.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
-    
+
     @Override
-    public void preparePdfAnswers(Task task){
+    public void preparePdfAnswers(Task task) {
         task.getPDFAnswers().clear();
         for(int i=0;i<this.params.getNoOfAnswers();i++){
             task.getPDFAnswers().add(" #placeForAnswer");   
         }
     }
+    
 }

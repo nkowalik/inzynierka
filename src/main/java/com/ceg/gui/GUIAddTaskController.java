@@ -4,6 +4,7 @@ import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.examContent.TaskType;
 import com.ceg.examContent.TaskTypeComplexOutput;
+import com.ceg.examContent.TaskTypeLineNumbers;
 import com.ceg.examContent.TaskTypeSimpleOutput;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -135,7 +136,7 @@ public class GUIAddTaskController implements Initializable {
         chooseType.setText(taskTypeLineNumbers.getText());
         mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
         addType("line_numbers.txt");
-        type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
+        type = new TaskTypeLineNumbers();
     }
     public void finishEdition(ActionEvent event) throws Exception {
         Task t = new Task(type);

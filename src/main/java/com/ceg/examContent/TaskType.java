@@ -18,10 +18,11 @@ import java.util.List;
 */ 
 abstract public class TaskType {
     String defaultContents;
+    public String name;
     protected TaskParameters params;
     
     
-    public abstract void generateAnswers(List<String> output, List<String> answers);
+    public abstract void generateAnswers(Task task, List<String> output, List<String> answers);
     public abstract void callCompile(Task task, List<String> output);
     public abstract void callExecute(Task task, List<String> output);
     public abstract void preparePdfAnswers(Task task);
