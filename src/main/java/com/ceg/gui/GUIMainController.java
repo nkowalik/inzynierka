@@ -154,7 +154,9 @@ public class GUIMainController implements Initializable {
         Stage pdfSavingStage = new Stage();
         Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfSaving.fxml"));
         pdfSavingStage.setTitle("Zapisz plik");
-        pdfSavingStage.setScene(new Scene(scene, 600, 400));
+        pdfSavingStage.setScene(new Scene(scene, 580, 379));
+        pdfSavingStage.setResizable(false);
+        pdfSavingStage.setAlwaysOnTop(true);
         pdfSavingStage.show();
     }
     public void testMarker(ActionEvent actionEvent) {

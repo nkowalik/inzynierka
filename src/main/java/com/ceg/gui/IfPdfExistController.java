@@ -33,5 +33,6 @@ public class IfPdfExistController implements Initializable {
     public void anuluj(ActionEvent event) {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
+        PdfSavingController.appStage.setAlwaysOnTop(true);
     }
 }
