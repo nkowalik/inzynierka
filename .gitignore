@@ -26,4 +26,7 @@ src/main/java/com/ceg/compiler/Ccompiler.java~
 /manifest.mf
 /nbproject/
 /src/main/java/META-INF/
+/out/
+/src/main/main.iml
+
 
