@@ -5,6 +5,7 @@
  */
 package com.ceg.examContent;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -33,12 +34,14 @@ public class TaskTypeLineNumbers extends TaskType{
 
     @Override
     public void callCompile(Task task, List<String> output) {
-        task.compiler.createFile(task.getCode(), "multiple.cpp");
+        task.compiler.createFile(task.getCode(), "linenumbers.cpp");
         task.compiler.compile(output);
     }
 
     @Override
     public void callExecute(Task task, List<String> output) {
+        List<String> code = new ArrayList<>(task.getCode());
+        task.compiler.execute2(code, "linenumbers.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
 
