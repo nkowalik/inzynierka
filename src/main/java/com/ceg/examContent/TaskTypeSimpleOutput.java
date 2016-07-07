@@ -17,13 +17,12 @@ public class TaskTypeSimpleOutput extends TaskType{
     public TaskTypeSimpleOutput() {
         super();
         super.params = new TaskParametersSimpleOutput();
-        name = "SimpleOutput";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku wykonania programu.";
     }
     
     @Override
-    public void generateAnswers(Task task, List<String> output, List<String> answers){
-        for(int i=1;i<super.getParams().getNoOfAnswers()+1;i++){
+    public void generateAnswers(List<String> output, List<String> answers){
+        for(int i=0;i<super.getParams().getNoOfAnswers();i++){
             answers.add(output.get(i));
         }
     }
@@ -37,8 +36,9 @@ public class TaskTypeSimpleOutput extends TaskType{
 
     @Override
     public void callExecute(Task task, List<String> output) {
-        task.compiler.execute(output);
-        task.getType().generateAnswers(task, output, task.getAnswers());
+        List<String> code = new ArrayList<>(task.getCode());
+        task.compiler.execute2(code, "simple.cpp", output);
+        task.getType().generateAnswers(output, task.getAnswers());
     }
     
     @Override

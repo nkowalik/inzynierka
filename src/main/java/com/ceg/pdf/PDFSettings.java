@@ -1,13 +1,11 @@
 package com.ceg.pdf;
 
 import com.ceg.gui.PdfSavingController;
-import com.ceg.pdf.PDFGenerator;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
 import javafx.stage.Stage;
 
 /**

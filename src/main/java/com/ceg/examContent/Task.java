@@ -9,6 +9,7 @@ import com.ceg.compiler.GCC;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -27,12 +28,14 @@ public class Task {
     private List<String> contents;
     private List<String> answers;
     private List<String> PDFAnswers;
+    private String result;
     private TaskType type;
     public GCC compiler;
     
     
     public Task(TaskType tt){  
         this.type = tt;
+        setCode(Arrays.asList(""));
         this.answers = new ArrayList<>();
         /* to tylko na razie */
         PDFAnswers = new ArrayList<>();
@@ -78,6 +81,12 @@ public class Task {
     }
     public void setType(TaskType newType){
         type = newType;
+    }
+    public String getResult() {
+        return result;
+    }
+    public void setResult(String newResult) {
+        result = newResult;
     }
     
 }

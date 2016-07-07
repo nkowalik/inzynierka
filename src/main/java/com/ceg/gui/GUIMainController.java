@@ -61,7 +61,7 @@ public class GUIMainController implements Initializable {
         text.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                Exam.getInstance().getTaskAtIndex(exam.idx).setContents(Arrays.asList(newValue.split("\n")));
+                Exam.getInstance().getCurrentTask().setContents(Arrays.asList(newValue.split("\n")));
                 
             }
         });
@@ -70,9 +70,10 @@ public class GUIMainController implements Initializable {
             public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {                
                 Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
                 /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
+
                 String newCode = newValue;
                 String newPDFCode = newValue;
-                
+                clearResult();
                 for (int i = newValue.length() - 1; i >= 0; i--) {
                     List<String> s = (List<String>) code.getStyleOfChar(i);
                     if (!s.isEmpty()) {
@@ -85,8 +86,8 @@ public class GUIMainController implements Initializable {
                         }
                     }
                 }
-                Exam.getInstance().getTaskAtIndex(exam.idx).setCode(new ArrayList<>(Arrays.asList(newCode.split("\n")))); 
-                Exam.getInstance().getTaskAtIndex(exam.idx).setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
+                Exam.getInstance().getCurrentTask().setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n")))); 
+                Exam.getInstance().getCurrentTask().setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
             }
         });
         tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
@@ -122,35 +123,40 @@ public class GUIMainController implements Initializable {
         return instance;
     }
     public void execute(ActionEvent actionEvent) {
+        result.clear();
         List<String> outcome = new ArrayList<String>();
 
-       // exam.getLastTask().compiler.createFile(exam.getLastTask().getCode());
-        exam.getLastTask().getType().callCompile(exam.getLastTask(),outcome);
-        
-        /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic */
+        //exam.getLastTask().compiler.createFile(exam.getLastTask().getCode());
+        //exam.getLastTask().getType().callCompile(exam.getLastTask(),outcome);
+        exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
+        for(String s : outcome) {
+            result.appendText(s + "\n");
+        }
+        exam.getCurrentTask().setResult(result.getText());
+        /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic *//*
         if(outcome.isEmpty()) {// jesli kompilacja przebiegla pomyslnie
             outcome.add("Kompilacja przebiegła pomyślnie.");
-            exam.getLastTask().getType().callExecute(exam.getLastTask(),outcome);
+            exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(),outcome);
             for(String s : outcome) {
                 result.appendText(s + "\n");
             }
+            exam.getCurrentTask().setResult(result.getText());
         }
         else {
-            if(exam.getLastTask().getType().name == "LineNumbers"){
-                exam.getLastTask().getType().callExecute(exam.getLastTask(),outcome);
-            }
             result.clear();
-            //result.appendText("");
             for(String s : outcome) {
                 result.appendText(s + "\n");
             }
-        } 
+            exam.getCurrentTask().setResult(result.getText());
+        } */
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
         Stage pdfSavingStage = new Stage();
         Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfSaving.fxml"));
         pdfSavingStage.setTitle("Zapisz plik");
-        pdfSavingStage.setScene(new Scene(scene, 600, 400));
+        pdfSavingStage.setScene(new Scene(scene, 580, 379));
+        pdfSavingStage.setResizable(false);
+        pdfSavingStage.setAlwaysOnTop(true);
         pdfSavingStage.show();
     }
     public void testMarker(ActionEvent actionEvent) {
@@ -180,16 +186,11 @@ public class GUIMainController implements Initializable {
     public void deleteTask(ActionEvent event) throws Exception {
         
         if(Exam.getInstance().getTasks().isEmpty()) {
-            text.setVisible(false);
-            code.setVisible(false);
-            result.setVisible(false);
-            executeBtn.setVisible(false);
-            testExecuteBtn.setVisible(false);
+            showTask(false);
         }
         else {
-            int idx = tabPane.getSelectionModel().getSelectedIndex();
-            exam.deleteTaskAtIndex(idx);
             deleteCurrentTabPaneTab();
+            exam.deleteTaskAtIndex(exam.idx);
             updateWindow(exam.idx);
         }
     }
@@ -211,6 +212,7 @@ public class GUIMainController implements Initializable {
             updateText(t.getContents()); // może Text, żeby pasowało do konwencji nazw
             updateCode(t.getCode());
             clearResult();
+            this.result.setText(t.getResult());
         }
     }
     public void updateText(List<String> text) {
@@ -255,6 +257,9 @@ public class GUIMainController implements Initializable {
     public void deleteCurrentTabPaneTab() {
         tabPane.getTabs().remove(exam.idx);
         updateTabPaneTabIndexes();
+        if(exam.idx != 0)
+            exam.idx--;
+        tabPane.getSelectionModel().select(exam.idx);
     }
     public void updateTabPaneTabIndexes() {
         for(int i = 0; i < tabPane.getTabs().size(); i++) {
@@ -262,6 +267,4 @@ public class GUIMainController implements Initializable {
             tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
         }
     }
-    
-    
 }

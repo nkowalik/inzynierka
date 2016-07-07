@@ -7,6 +7,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TitledPane?>
+<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
@@ -131,19 +132,15 @@
             </TitledPane>
         </panes>
       </Accordion>
-      <HBox prefHeight="50.0" prefWidth="200.0">
+      <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="39.0" prefWidth="600.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#saveFile" text="Zapisz plik">
-               <HBox.margin>
-                  <Insets left="450.0" top="12.0" />
-               </HBox.margin>
-            </Button>
-            <Button mnemonicParsing="false" onAction="#cancel" text="Anuluj">
-               <HBox.margin>
-                  <Insets left="10.0" top="12.0" />
-               </HBox.margin>
+            <Button layoutX="382.0" layoutY="7.0" minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#saveFile" text="Zapisz plik" AnchorPane.bottomAnchor="7.0" AnchorPane.rightAnchor="141.0" AnchorPane.topAnchor="7.0" />
+            <Button contentDisplay="RIGHT" layoutX="475.0" layoutY="7.0" minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#cancel" text="Anuluj" AnchorPane.bottomAnchor="7.0" AnchorPane.leftAnchor="475.0" AnchorPane.topAnchor="7.0">
+               <opaqueInsets>
+                  <Insets />
+               </opaqueInsets>
             </Button>
          </children>
-      </HBox>
+      </AnchorPane>
    </children>
 </VBox>
