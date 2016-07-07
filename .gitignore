@@ -18,4 +18,11 @@ nbactions.xml
 nb-configuration.xml
 pom.xml
 src/main/java/com/ceg/compiler/Ccompiler.java~
-.idea
+/.idea/
+/META-INF/
+/build.xml
+/build/
+/classes/
+/manifest.mf
+/nbproject/
+/src/main/java/META-INF/
