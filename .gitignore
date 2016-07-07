@@ -18,5 +18,6 @@ nbactions.xml
 nb-configuration.xml
 pom.xml
 src/main/java/com/ceg/compiler/Ccompiler.java~
-/.idea
-/nbproject
+/.idea/*
+/nbproject/*
+/classes/*
