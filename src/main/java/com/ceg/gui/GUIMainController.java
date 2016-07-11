@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.net.URL;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -164,13 +166,28 @@ public class GUIMainController implements Initializable {
         } */
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
+        boolean generate = true;
+        for (Task i : Exam.getInstance().getTasks()) {
+            List<String> codeLines = i.getPDFCode();
+            List<String> commandLines = i.getContents();
+            if (commandLines == null || codeLines == null) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Brak implementacji");
+                alert.setHeaderText("Kod lub treść zadania są puste, brak implementacji wyjątku.");
+
+                alert.showAndWait();
+                generate = false;
+            }
+        }
+        if (generate) {
         Stage pdfSavingStage = new Stage();
         Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfSaving.fxml"));
         pdfSavingStage.setTitle("Zapisz plik");
-        pdfSavingStage.setScene(new Scene(scene, 580, 379));
+        pdfSavingStage.setScene(new Scene(scene, 580, 399));
         pdfSavingStage.setResizable(false);
         pdfSavingStage.setAlwaysOnTop(true);
         pdfSavingStage.show();
+        }
     }
     public void testMarker(ActionEvent actionEvent) {
         changeStyle("test");
