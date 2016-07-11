@@ -8,6 +8,8 @@ package com.ceg.examContent;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  *
@@ -35,7 +37,16 @@ public class TaskTypeLineNumbers extends TaskType{
             }
         }
        catch (IndexOutOfBoundsException e) {
+            answers.clear();
+            
             System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+            
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Błąd");
+            alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
+            alert.setContentText("Sprawdź poprawność kodu.");
+
+            alert.showAndWait();
         }
     }
 

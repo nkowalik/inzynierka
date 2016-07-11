@@ -8,6 +8,7 @@ package com.ceg.examContent;
 import com.ceg.compiler.CodeParser;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Alert;
 
 /**
  *
@@ -31,7 +32,16 @@ public class TaskTypeComplexOutput extends TaskType{
             }
         }
         catch (IndexOutOfBoundsException e) {
+            answers.clear();
+            
             System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+            
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Błąd");
+            alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
+            alert.setContentText("Sprawdź poprawność kodu.");
+
+            alert.showAndWait();
         }
     }
 

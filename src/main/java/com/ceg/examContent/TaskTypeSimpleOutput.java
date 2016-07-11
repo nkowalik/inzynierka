@@ -30,6 +30,7 @@ public class TaskTypeSimpleOutput extends TaskType{
             }
         }
         catch (IndexOutOfBoundsException e) {
+            answers.clear();
             System.err.println("IndexOutOfBoundsException: " + e.getMessage());
         }
     }
