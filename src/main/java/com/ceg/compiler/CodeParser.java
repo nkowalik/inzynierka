@@ -12,18 +12,23 @@ public class CodeParser {
 	// INOUT: List<String> lines - wejsciowa lista linii kodu
 	static public int addNewlineAfterEachCout(List<String> lines){
             int couts = 0;
-            for (ListIterator<String> iterator = lines.listIterator(); iterator.hasNext() ;)
-            {
-                String str = iterator.next();
-                if (str.contains("cout <<") || str.contains("cout<<"))
+            try{
+                for (ListIterator<String> iterator = lines.listIterator(); iterator.hasNext() ;)
                 {
-                    iterator.add("cout<<endl;");
-                    couts++;
+                    String str = iterator.next();
+                    if (str.contains("cout <<") || str.contains("cout<<"))
+                    {
+                        iterator.add("cout<<endl;");
+                        couts++;
+                    }
+                    else if(str.contains("printf")){
+                        iterator.add("printf(\"\\n\");");
+                        couts++;
+                    }
                 }
-                else if(str.contains("printf")){
-                    iterator.add("printf(\"\\n\");");
-                    couts++;
-                }
+            }
+            catch (IndexOutOfBoundsException e) {
+                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
             }
             return couts;
 		
@@ -34,13 +39,18 @@ public class CodeParser {
         // IN: List lineNo - lista numerów linii, których nie należy usuwać
         // INOUT: List<String> code - lista linii kodu
 	static public void deleteOtherCouts(List lineNo, List<String> code){
-            for (ListIterator<String> iterator = code.listIterator(); iterator.hasNext() ;)
-            {
-                String str = iterator.next();
-                if ((!lineNo.contains(iterator.nextIndex()-1))  && (str.contains("cout <<") || str.contains("cout<<") || str.contains("printf(")))
+            try{
+                for (ListIterator<String> iterator = code.listIterator(); iterator.hasNext() ;)
                 {
-                    iterator.remove();
+                    String str = iterator.next();
+                    if ((!lineNo.contains(iterator.nextIndex()-1))  && (str.contains("cout <<") || str.contains("cout<<") || str.contains("printf(")))
+                    {
+                        iterator.remove();
+                    }
                 }
+            }
+            catch (IndexOutOfBoundsException e) {
+                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
             }
         }
 	

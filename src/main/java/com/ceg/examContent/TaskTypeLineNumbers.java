@@ -5,6 +5,7 @@
  */
 package com.ceg.examContent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,13 +24,18 @@ public class TaskTypeLineNumbers extends TaskType{
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers) {
         answers.clear();
-        for(String line: output){
-            if(line.contains("error")){
-                String[] substr = line.split(":");
-                int lineNumber = Integer.parseInt(substr[1])-1;
-                String[] codeLine = task.getCode().get(lineNumber).split("//");
-                answers.add(codeLine[1]);
-            }               
+        try{
+            for(String line: output){
+                if(line.contains("error")){
+                    String[] substr = line.split(":");
+                    int lineNumber = Integer.parseInt(substr[1])-1;
+                    String[] codeLine = task.getCode().get(lineNumber).split("//");
+                    answers.add(codeLine[1]);
+                }               
+            }
+        }
+       catch (IndexOutOfBoundsException e) {
+            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
         }
     }
 
