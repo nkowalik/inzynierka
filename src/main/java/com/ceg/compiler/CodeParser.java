@@ -2,6 +2,7 @@ package com.ceg.compiler;
 
 import java.util.List;
 import java.util.ListIterator;
+import javafx.scene.control.Alert;
 
 
 public class CodeParser {
@@ -29,6 +30,12 @@ public class CodeParser {
             }
             catch (IndexOutOfBoundsException e) {
                 System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Błąd");
+                alert.setHeaderText("Nastąpił błąd podczas parsowania kodu.");
+                alert.setContentText("Sprawdź poprawność kodu.");
+
+                alert.showAndWait();
             }
             return couts;
 		
