@@ -45,6 +45,12 @@ public class GUIMainController implements Initializable {
     Button executeBtn;
     @FXML
     Button testExecuteBtn;
+    @FXML
+    Button normalMarkerBtn;
+    @FXML
+    Button testMarkerBtn;
+    @FXML
+    Button hideMarkerBtn;
     
     private static Stage stage = null;
     private static GUIMainController instance = null;
@@ -101,6 +107,9 @@ public class GUIMainController implements Initializable {
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
         
+        hideMarkerBtn.getStyleClass().add("hiddenButton");
+        testMarkerBtn.getStyleClass().add("testButton");
+        
         updateWindow(0);
     }
     public static synchronized void show() throws IOException {
@@ -110,7 +119,11 @@ public class GUIMainController implements Initializable {
             loader.setLocation(location);
             
             Scene scene = new Scene((Pane)loader.load(location.openStream()));
-            
+            boolean result;          
+            result = scene.getStylesheets().add("/styles/Styles.css");
+            if(false == result){
+                //TODO: report error
+            }
             stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("CEG");
@@ -200,6 +213,9 @@ public class GUIMainController implements Initializable {
         result.setVisible(visibility);
         executeBtn.setVisible(visibility);
         testExecuteBtn.setVisible(visibility);
+        normalMarkerBtn.setVisible(visibility);
+        testMarkerBtn.setVisible(visibility);
+        hideMarkerBtn.setVisible(visibility);
     }
     public void updateWindow(int idx) {
         if(exam.getTasks().isEmpty()) {  // gdy egzamin nie zawiera żadnych zadań
