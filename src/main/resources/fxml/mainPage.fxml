@@ -64,10 +64,10 @@
                 <Menu mnemonicParsing="false" text="Zadanie">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
-                    <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Usun" />
+                    <MenuItem disable="true" mnemonicParsing="false" onAction="#deleteTask" text="Usun"/>
                   </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Ustawienia">
+                <Menu disable="true" mnemonicParsing="false" text="Ustawienia">
                   <items>
                     <MenuItem mnemonicParsing="false" text="TO DO" />
                   </items>
