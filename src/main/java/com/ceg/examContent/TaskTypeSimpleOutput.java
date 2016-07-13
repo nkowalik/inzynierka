@@ -24,8 +24,14 @@ public class TaskTypeSimpleOutput extends TaskType{
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers){
         answers.clear();
-        for(int i=1;i<super.getParams().getNoOfAnswers()+1;i++){
-            answers.add(output.get(i));
+        try{
+            for(int i=1;i<super.getParams().getNoOfAnswers()+1;i++){
+                answers.add(output.get(i));
+            }
+        }
+        catch (IndexOutOfBoundsException e) {
+            answers.clear();
+            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
         }
     }
 

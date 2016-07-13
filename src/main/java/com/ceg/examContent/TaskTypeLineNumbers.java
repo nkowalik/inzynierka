@@ -5,8 +5,11 @@
  */
 package com.ceg.examContent;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 
 /**
  *
@@ -23,13 +26,27 @@ public class TaskTypeLineNumbers extends TaskType{
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers) {
         answers.clear();
-        for(String line: output){
-            if(line.contains("error")){
-                String[] substr = line.split(":");
-                int lineNumber = Integer.parseInt(substr[1])-1;
-                String[] codeLine = task.getCode().get(lineNumber).split("//");
-                answers.add(codeLine[1]);
-            }               
+        try{
+            for(String line: output){
+                if(line.contains("error")){
+                    String[] substr = line.split(":");
+                    int lineNumber = Integer.parseInt(substr[1])-1;
+                    String[] codeLine = task.getCode().get(lineNumber).split("//");
+                    answers.add(codeLine[1]);
+                }               
+            }
+        }
+       catch (IndexOutOfBoundsException e) {
+            answers.clear();
+            
+            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+            
+            Alert alert = new Alert(AlertType.ERROR);
+            alert.setTitle("Błąd");
+            alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
+            alert.setContentText("Sprawdź poprawność kodu.");
+
+            alert.showAndWait();
         }
     }
 
