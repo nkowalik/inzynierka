@@ -2,6 +2,14 @@
     -fx-font-weight: bold;
 }
 
+.testButton{
+    -fx-background-color: orange;
+}
+
+.hiddenButton{
+    -fx-background-color: royalblue;
+}
+
 .test {   
     -fx-fill: orange;
     -fx-font-weight: bold;

@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.net.URL;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
@@ -45,6 +47,12 @@ public class GUIMainController implements Initializable {
     Button executeBtn;
     @FXML
     Button testExecuteBtn;
+    @FXML
+    Button normalMarkerBtn;
+    @FXML
+    Button testMarkerBtn;
+    @FXML
+    Button hideMarkerBtn;
     
     private static Stage stage = null;
     private static GUIMainController instance = null;
@@ -101,6 +109,9 @@ public class GUIMainController implements Initializable {
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
         
+        hideMarkerBtn.getStyleClass().add("hiddenButton");
+        testMarkerBtn.getStyleClass().add("testButton");
+        
         updateWindow(0);
     }
     public static synchronized void show() throws IOException {
@@ -110,7 +121,11 @@ public class GUIMainController implements Initializable {
             loader.setLocation(location);
             
             Scene scene = new Scene((Pane)loader.load(location.openStream()));
-            
+            boolean result;          
+            result = scene.getStylesheets().add("/styles/Styles.css");
+            if(false == result){
+                //TODO: report error
+            }
             stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("CEG");
@@ -151,13 +166,28 @@ public class GUIMainController implements Initializable {
         } */
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
+        boolean generate = true;
+        for (Task i : Exam.getInstance().getTasks()) {
+            List<String> codeLines = i.getPDFCode();
+            List<String> commandLines = i.getContents();
+            if (commandLines == null || codeLines == null) {
+                Alert alert = new Alert(AlertType.INFORMATION);
+                alert.setTitle("Brak implementacji");
+                alert.setHeaderText("Kod lub treść zadania są puste, brak implementacji wyjątku.");
+
+                alert.showAndWait();
+                generate = false;
+            }
+        }
+        if (generate) {
         Stage pdfSavingStage = new Stage();
         Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfSaving.fxml"));
         pdfSavingStage.setTitle("Zapisz plik");
-        pdfSavingStage.setScene(new Scene(scene, 580, 379));
+        pdfSavingStage.setScene(new Scene(scene, 580, 399));
         pdfSavingStage.setResizable(false);
         pdfSavingStage.setAlwaysOnTop(true);
         pdfSavingStage.show();
+        }
     }
     public void testMarker(ActionEvent actionEvent) {
         changeStyle("test");
@@ -200,6 +230,9 @@ public class GUIMainController implements Initializable {
         result.setVisible(visibility);
         executeBtn.setVisible(visibility);
         testExecuteBtn.setVisible(visibility);
+        normalMarkerBtn.setVisible(visibility);
+        testMarkerBtn.setVisible(visibility);
+        hideMarkerBtn.setVisible(visibility);
     }
     public void updateWindow(int idx) {
         if(exam.getTasks().isEmpty()) {  // gdy egzamin nie zawiera żadnych zadań
