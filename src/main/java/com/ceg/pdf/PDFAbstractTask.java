@@ -1,5 +1,6 @@
 package com.ceg.pdf;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -32,10 +33,15 @@ public abstract class PDFAbstractTask {
         return pdfLine.getFont().getStringWidth(text) / 1000 * pdfLine.getFontSize();
     }
     
-    public void textSplitting (List<String> command) throws IOException {
+    public void textSplitting (List<String> command) throws IOException, EmptyPartOfTaskException {
+        if (command.isEmpty())
+            throw new EmptyPartOfTaskException();
     }
     
-    public int writeToPDF(int x, int y) throws IOException{ 
+    public int writeToPDF(int x, int y) throws IOException, EmptyPartOfTaskException {
+        if (actualTaskLines.isEmpty())
+            throw new EmptyPartOfTaskException();
+        
         for (String i : actualTaskLines) {
             pdfLine.setText(i);
             pdfLine.writeLine(x, y);

@@ -1,6 +1,7 @@
 package com.ceg.pdf;
 
 import com.ceg.examContent.Exam;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.io.IOException;
 import java.util.List;
 
@@ -65,7 +66,7 @@ public class PDFAnswer extends PDFAbstractTask {
     }
     
     @Override
-    public int writeToPDF(int x, int y) throws IOException{ 
+    public int writeToPDF(int x, int y) throws IOException, EmptyPartOfTaskException { 
         for (int i=0; i<actualTaskLines.size(); i++) {
             actualTaskLines.set(i, actualTaskLines.get(i).replace("#placeForAnswer", "_________"));
         }

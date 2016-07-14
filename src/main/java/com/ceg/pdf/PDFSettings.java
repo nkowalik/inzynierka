@@ -1,11 +1,15 @@
 package com.ceg.pdf;
 
+import com.ceg.examContent.Exam;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.gui.PdfSavingController;
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 /**
@@ -129,6 +133,9 @@ public class PDFSettings {
     
     public void pdfGenerate(Stage stage) {
         try {
+            System.out.println(Exam.getInstance().getTaskAtIndex(0).getAnswers().size());
+            System.out.println(Exam.getInstance().getTaskAtIndex(0).getPDFCode().size());
+            System.out.println(Exam.getInstance().getTaskAtIndex(0).getContents().size());
             PDFGenerator gen = new PDFGenerator(    pdfFile,
                     commandFont,
                     commandFontSize,
@@ -138,6 +145,12 @@ public class PDFSettings {
                     testType);
         } catch (IOException ex) {
             Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (EmptyPartOfTaskException ex) {
+            Alert alert = new Alert(AlertType.INFORMATION);
+            alert.setTitle("Błąd egzaminu");
+            alert.setHeaderText("Sprawdź czy pola z poleceniem i kodem nie są puste oraz czy podana liczba odpowiedzi zgadza się ze stanem faktycznym.");
+               
+            alert.showAndWait();
         }
         stage.hide();
     }

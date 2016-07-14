@@ -41,7 +41,8 @@ public class Task {
         PDFAnswers = new ArrayList<>();
         type.preparePdfAnswers(this);
         compiler = new GCC();
-       
+        PDFCode = new ArrayList<>();
+        contents = new ArrayList<>();
     }
     public List<String> getCode(){
         return code;
