@@ -23,16 +23,15 @@ public class IfPdfExistController implements Initializable {
         // TODO
     }   
     
-    public void zapisz(ActionEvent event) {
-        Exam.getInstance().pdfSettings.pdfGenerate(PdfSavingController.appStage);
-        
+    public void zapisz(ActionEvent event) {       
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
+        
+        Exam.getInstance().pdfSettings.pdfGenerate(PdfSavingController.appStage);
     }
     
     public void anuluj(ActionEvent event) {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
-        PdfSavingController.appStage.setAlwaysOnTop(true);
     }
 }

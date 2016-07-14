@@ -25,6 +25,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
@@ -158,8 +159,24 @@ public class PdfSavingController implements Initializable {
         });
     }
     
+    public static synchronized void show() throws IOException {
+        if(appStage == null) {
+            URL location = GUIMainController.class.getResource("/fxml/pdfSaving.fxml");
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(location);
+            
+            Scene scene = new Scene((Pane)loader.load(location.openStream()));
+            appStage = new Stage();
+            appStage.setScene(scene);
+            appStage.setTitle("Zapisz plik");
+        }
+        
+        appStage.show();
+        appStage.toFront();
+    }
+    
     public void saveFile(ActionEvent event) throws IOException {   
-        appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         pdfSettings.setCommandFont(commandFont.getValue().toString());
         pdfSettings.setCodeFont(codeFont.getValue().toString());
         
@@ -170,13 +187,11 @@ public class PdfSavingController implements Initializable {
         pdfSettings.setPdfFilePath(filePath.getText());
         String extension = fileName.getText().substring(fileName.getText().length() - 4, fileName.getText().length());
         if (!extension.equals(".pdf")) {
-            appStage.setAlwaysOnTop(false);
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
             alert.setTitle("Brak implementacji");
             alert.setHeaderText("Nazwa pliku nie kończy się rozszerzeniem .pdf");
 
             alert.showAndWait();
-            appStage.setAlwaysOnTop(true);
         }
         else {
             pdfSettings.setPdfFileName(fileName.getText());
@@ -186,7 +201,6 @@ public class PdfSavingController implements Initializable {
             Exam.getInstance().pdfSettings = pdfSettings;
 
             if (pdfFile.exists() && !pdfFile.isDirectory()) {
-                appStage.setAlwaysOnTop(false);
                 Stage ifPdfExistStage = new Stage();
                 Parent scene = FXMLLoader.load(getClass().getResource("/fxml/ifPdfExist.fxml"));
                 ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
@@ -204,12 +218,12 @@ public class PdfSavingController implements Initializable {
     }
     
     public void cancel(ActionEvent event) {
-        appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
     }
     
     public void browse(ActionEvent event) {
-        appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         
         DirectoryChooser dirChooser = new DirectoryChooser () ;
         dirChooser.setTitle("Wybierz lokalizację pliku");
