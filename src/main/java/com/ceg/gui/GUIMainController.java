@@ -62,6 +62,7 @@ public class GUIMainController implements Initializable {
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
+    private static boolean codeChanged = false;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -80,9 +81,11 @@ public class GUIMainController implements Initializable {
         });
         code.textProperty().addListener(new ChangeListener<String>() {
             @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {                
-                Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
-                /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
+            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
+                    codeChanged = true;
+                    clearResult();
+        /*        Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
+                /* usuwa zamarkowane znaki i dodaje kod do klasy Task /
 
                 String newCode = newValue;
                 String newPDFCode = newValue;
@@ -91,22 +94,24 @@ public class GUIMainController implements Initializable {
                     List<String> s = (List<String>) code.getStyleOfChar(i);
                     if (!s.isEmpty()) {
                         if ("test".equals(s.get(s.size() - 1))) {
-                            newCode = newCode.substring(0, i) + newCode.substring(i+1);
-                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
+                            newCode = newCode.substring(0, i) + newCode.substring(i + 1);
+                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i + 1);
                         }
                         if ("hidden".equals(s.get(s.size() - 1))) {
-                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
+                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i + 1);
                         }
                     }
                 }
-                Exam.getInstance().getCurrentTask().setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n")))); 
-                Exam.getInstance().getCurrentTask().setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
+                Exam.getInstance().getCurrentTask().setCode(new ArrayList<>(Arrays.asList(newCode.split("\n"))));
+                Exam.getInstance().getCurrentTask().setPDFCode(new ArrayList<>(Arrays.asList(newPDFCode.split("\n")))); */
             }
         });
         tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
                 if(newValue != null)
+                    if(oldValue != null)
+                        readCode();
                     updateWindow(Integer.parseInt(newValue.getId()));
             }
         });
@@ -142,7 +147,31 @@ public class GUIMainController implements Initializable {
     public static GUIMainController getInstance() {
         return instance;
     }
+    public void readCode(){
+        String newValue = code.getText();
+          Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
+                /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
+
+                String newCode = newValue;
+                String newPDFCode = newValue;
+                clearResult();
+                for (int i = newValue.length() - 1; i >= 0; i--) {
+                    List<String> s = (List<String>) code.getStyleOfChar(i);
+                    if (!s.isEmpty()) {
+                        if ("test".equals(s.get(s.size() - 1))) {
+                            newCode = newCode.substring(0, i) + newCode.substring(i+1);
+                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
+                        }
+                        if ("hidden".equals(s.get(s.size() - 1))) {
+                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
+                        }
+                    }
+                }
+                Exam.getInstance().getCurrentTask().setCode(new ArrayList<>(Arrays.asList(newCode.split("\n")))); 
+                Exam.getInstance().getCurrentTask().setPDFCode(new ArrayList<>(Arrays.asList(newPDFCode.split("\n"))));
+    }
     public void execute(ActionEvent actionEvent) {
+        readCode();
         result.clear();
         List<String> outcome = new ArrayList<String>();
 
@@ -171,6 +200,7 @@ public class GUIMainController implements Initializable {
         } */
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
+        readCode();
         PdfSavingController.show();
     }
     public void testMarker(ActionEvent actionEvent) {
