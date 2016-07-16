@@ -23,8 +23,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.Dialog;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 
 
@@ -53,6 +56,8 @@ public class GUIMainController implements Initializable {
     Button testMarkerBtn;
     @FXML
     Button hideMarkerBtn;
+    @FXML
+    MenuItem changeAnswersNum;
     
     private static Stage stage = null;
     private static GUIMainController instance = null;
@@ -203,6 +208,28 @@ public class GUIMainController implements Initializable {
             updateWindow(exam.idx);
         }
     }
+    public void changeNumberofAnswers(ActionEvent event) throws Exception {
+        int answNum = Integer.MAX_VALUE-1;
+        Dialog dialog;
+        dialog = new TextInputDialog("MAX");
+	dialog.setTitle("Liczba odpowiedzi");
+	dialog.setHeaderText("Ile odpowiedzi będzie miało zadanie?");
+	
+	Optional<String> result = dialog.showAndWait();
+	String entered = "MAX";
+	 
+	if (result.isPresent()) {	 
+	    entered = result.get();
+            if(!entered.contentEquals("MAX"))
+                try{
+                    answNum= Integer.valueOf(entered);
+                }
+                catch(NumberFormatException ex){
+                    answNum=Integer.MAX_VALUE-1;
+                }
+        }
+        exam.getTaskAtIndex(exam.idx).getType().getParams().setNoOfAnswers(answNum);
+    }
     public void showTask(boolean visibility) {
         text.setVisible(visibility);
         code.setVisible(visibility);
@@ -212,15 +239,23 @@ public class GUIMainController implements Initializable {
         normalMarkerBtn.setVisible(visibility);
         testMarkerBtn.setVisible(visibility);
         hideMarkerBtn.setVisible(visibility);
+        if(visibility){
+            if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
+                changeAnswersNum.setVisible(visibility);
+            }
+            else{
+                changeAnswersNum.setVisible(false);
+            }
+        }
     }
     public void updateWindow(int idx) {
         if(exam.getTasks().isEmpty()) {  // gdy egzamin nie zawiera żadnych zadań
             showTask(false); // ukryj elementy związane z Taskiem
         }
-        else {
-            showTask(true);
+        else {         
             Task t = exam.getTaskAtIndex(idx);
             exam.idx = idx;
+            showTask(true);
             updateText(t.getContents()); // może Text, żeby pasowało do konwencji nazw
             updateCode(t.getCode());
             clearResult();

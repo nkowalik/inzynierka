@@ -26,23 +26,37 @@ public class TaskTypeComplexOutput extends TaskType{
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers){
         answers.clear();
-        try{
-            for(int i=1;i<super.getParams().getNoOfAnswers()+1;i++){
-                answers.add(output.get(i));
+        // jeśli nastąpił błąd kompilacji, wygeneruj odpowiedź: "Błąd"
+        if(!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
+            answers.add("Błąd");
+            this.params.setNoOfAnswers(1);
+        }
+        else{          
+            try{
+                int i=0;
+                for(String line: output){
+                    if(i<super.getParams().getNoOfAnswers()+1){
+                        if(i>0)
+                            answers.add(output.get(i));
+                        i++;
+                    }
+                }
+                this.params.setNoOfAnswers(i-1);
+            }
+            catch (IndexOutOfBoundsException e) {
+                answers.clear();
+                this.params.setNoOfAnswers(0);
+                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Błąd");
+                alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
+                alert.setContentText("Sprawdź poprawność kodu.");
+
+                alert.showAndWait();
             }
         }
-        catch (IndexOutOfBoundsException e) {
-            answers.clear();
-            
-            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
-            
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Błąd");
-            alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
-            alert.setContentText("Sprawdź poprawność kodu.");
-
-            alert.showAndWait();
-        }
+        preparePdfAnswers(task);
     }
 
     @Override

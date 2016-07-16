@@ -39,7 +39,7 @@ public class Task {
         this.answers = new ArrayList<>();
         /* to tylko na razie */
         PDFAnswers = new ArrayList<>();
-        type.preparePdfAnswers(this);
+       // type.preparePdfAnswers(this);
         compiler = new GCC();
         PDFCode = new ArrayList<>();
         contents = new ArrayList<>();
