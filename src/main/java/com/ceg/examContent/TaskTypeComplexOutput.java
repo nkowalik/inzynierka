@@ -37,7 +37,7 @@ public class TaskTypeComplexOutput extends TaskType{
                 for(String line: output){
                     if(i<super.getParams().getNoOfAnswers()+1){
                         if(i>0)
-                            answers.add(output.get(i));
+                            answers.add(line);
                         i++;
                     }
                 }
