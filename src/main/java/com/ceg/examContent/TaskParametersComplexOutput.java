@@ -5,10 +5,6 @@
  */
 package com.ceg.examContent;
 
-import java.util.Optional;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.TextInputDialog;
-
 /**
  *
  * @author marta
@@ -16,24 +12,6 @@ import javafx.scene.control.TextInputDialog;
 public class TaskParametersComplexOutput extends TaskParameters{
    
     public TaskParametersComplexOutput() {
-        askForParams();
-        //super.setNoOfAnswers(1);
-    }
-    
-    private void askForParams(){
-        Dialog dialog;
-        dialog = new TextInputDialog("1");
-	dialog.setTitle("Liczba odpowiedzi");
-	dialog.setHeaderText("Ile odpowiedzi będzie miało zadanie?");
-	 
-	Optional<String> result = dialog.showAndWait();
-	String entered = "none.";
-	 
-	if (result.isPresent()) {
-	 
-	    entered = result.get();
-            super.setNoOfAnswers(Integer.valueOf(entered));
-        }
-    }
-    
+        super.setNoOfAnswers(Integer.MAX_VALUE-1); 
+    }   
 }

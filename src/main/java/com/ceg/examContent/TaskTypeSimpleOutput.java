@@ -33,6 +33,7 @@ public class TaskTypeSimpleOutput extends TaskType{
             answers.clear();
             System.err.println("IndexOutOfBoundsException: " + e.getMessage());
         }
+         preparePdfAnswers(task);
     }
 
     @Override

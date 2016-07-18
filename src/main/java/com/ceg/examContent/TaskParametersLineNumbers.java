@@ -16,7 +16,7 @@ import javafx.scene.control.TextInputDialog;
 public class TaskParametersLineNumbers extends TaskParameters{
     
      public TaskParametersLineNumbers() {
-        askForParams();
+        //askForParams();
         //super.setNoOfAnswers(1);
     }
     

@@ -26,28 +26,39 @@ public class TaskTypeLineNumbers extends TaskType{
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers) {
         answers.clear();
-        try{
-            for(String line: output){
-                if(line.contains("error")){
-                    String[] substr = line.split(":");
-                    int lineNumber = Integer.parseInt(substr[1])-1;
-                    String[] codeLine = task.getCode().get(lineNumber).split("//");
-                    answers.add(codeLine[1]);
-                }               
+        // jeśli nie nastąpił błąd kompilacji, nie dodaj jedną odpowiedź
+        if(output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
+            answers.add("Brak błędów kompilacji.");
+            this.params.setNoOfAnswers(1);
+        }
+        else{
+            try{
+                int answersCnt = 0;
+                for(String line: output){
+                    if(line.contains("error")){
+                        String[] substr = line.split(":");
+                        int lineNumber = Integer.parseInt(substr[1])-1;
+                        String[] codeLine = task.getCode().get(lineNumber).split("//");
+                        answers.add(codeLine[1]);
+                        answersCnt++;
+                    }               
+                }
+                this.params.setNoOfAnswers(answersCnt);
+            }
+           catch (IndexOutOfBoundsException e) {
+                answers.clear();
+                this.params.setNoOfAnswers(0);
+                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+
+                Alert alert = new Alert(AlertType.ERROR);
+                alert.setTitle("Błąd");
+                alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
+                alert.setContentText("Sprawdź poprawność kodu.");
+
+                alert.showAndWait();
             }
         }
-       catch (IndexOutOfBoundsException e) {
-            answers.clear();
-            
-            System.err.println("IndexOutOfBoundsException: " + e.getMessage());
-            
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Błąd");
-            alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
-            alert.setContentText("Sprawdź poprawność kodu.");
-
-            alert.showAndWait();
-        }
+        preparePdfAnswers(task);
     }
 
     @Override
