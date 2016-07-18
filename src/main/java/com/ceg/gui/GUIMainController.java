@@ -32,7 +32,6 @@ import javafx.scene.layout.Pane;
  *
  * @author Natalia
  */
-
 public class GUIMainController implements Initializable {
 
     @FXML
@@ -57,6 +56,10 @@ public class GUIMainController implements Initializable {
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
+    private enum Status {
+        ADD, DELETE, SWITCH
+    }
+    private Status status = Status.SWITCH;
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -81,7 +84,7 @@ public class GUIMainController implements Initializable {
 
                 String newCode = newValue;
                 String newPDFCode = newValue;
-                clearResult();
+                updateResult("");
                 for (int i = newValue.length() - 1; i >= 0; i--) {
                     List<String> s = (List<String>) code.getStyleOfChar(i);
                     if (!s.isEmpty()) {
@@ -101,8 +104,26 @@ public class GUIMainController implements Initializable {
         tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
             @Override
             public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-                if(newValue != null)
-                    updateWindow(Integer.parseInt(newValue.getId()));
+                switch (status) {
+                    case DELETE:
+                        if(Integer.parseInt(oldValue.getId()) == 0) { // usuwana jest pierwsza pozycja
+                            updateTabPaneTabIndexes();
+                            updateWindow(0);
+                        }
+                        else {
+                            if(newValue != null) {
+                                updateTabPaneTabIndexes();
+                                updateWindow(Integer.parseInt(newValue.getId()));
+                            }
+                        }
+                        status = Status.SWITCH;
+                        break;
+                    case ADD:
+                        status = Status.SWITCH;
+                    case SWITCH:
+                        updateWindow(Integer.parseInt(newValue.getId()));
+                        break;
+                }
             }
         });
         
@@ -214,14 +235,11 @@ public class GUIMainController implements Initializable {
         GUIAddTaskController.show();
     }
     public void deleteTask(ActionEvent event) throws Exception {
-        
         if(Exam.getInstance().getTasks().isEmpty()) {
             showTask(false);
         }
         else {
             deleteCurrentTabPaneTab();
-            exam.deleteTaskAtIndex(exam.idx);
-            updateWindow(exam.idx);
         }
     }
     public void showTask(boolean visibility) {
@@ -242,10 +260,9 @@ public class GUIMainController implements Initializable {
             showTask(true);
             Task t = exam.getTaskAtIndex(idx);
             exam.idx = idx;
-            updateText(t.getContents()); // może Text, żeby pasowało do konwencji nazw
+            updateText(t.getContents());
             updateCode(t.getCode());
-            clearResult();
-            this.result.setText(t.getResult());
+            updateResult(t.getResult());
         }
     }
     public void updateText(List<String> text) {
@@ -275,24 +292,24 @@ public class GUIMainController implements Initializable {
             }
         }
     }
-    public void clearResult() {
-        result.clear();
+    public void updateResult(String text) {
+        this.result.clear();
+        this.result.setText(text);
     }
     public static void setStageName (String str){
         stage.setTitle(str);
     }
     public void addNewTabPaneTab() {
+        status = Status.ADD;
         Tab newTab = new Tab("Zadanie " + (exam.idx + 1));
-        newTab.setId(Integer.toString(exam.idx)); // ustaw identyfikator na size - 1 bo nowy tab jest ostatni
+        newTab.setId(Integer.toString(exam.idx));
         tabPane.getTabs().add(newTab);
         tabPane.getSelectionModel().select(newTab);
     }
     public void deleteCurrentTabPaneTab() {
+        status = Status.DELETE;
+        exam.deleteTaskAtIndex(exam.idx);
         tabPane.getTabs().remove(exam.idx);
-        updateTabPaneTabIndexes();
-        if(exam.idx != 0)
-            exam.idx--;
-        tabPane.getSelectionModel().select(exam.idx);
     }
     public void updateTabPaneTabIndexes() {
         for(int i = 0; i < tabPane.getTabs().size(); i++) {

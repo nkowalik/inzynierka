@@ -75,7 +75,7 @@
                 <Menu mnemonicParsing="false" text="Zadanie">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
-                    <MenuItem disable="true" mnemonicParsing="false" onAction="#deleteTask" text="Usun"/>
+                    <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Usun"/>
                   </items>
                 </Menu>
                 <Menu disable="true" mnemonicParsing="false" text="Ustawienia">

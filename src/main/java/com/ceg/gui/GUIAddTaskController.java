@@ -142,11 +142,11 @@ public class GUIAddTaskController implements Initializable {
         Task t = new Task(type);
         t.setContents(contentList);
         t.setCode(codeList);
-        Exam.getInstance().addTask(t); // wrzuca na koniec, ustawia idx na size-1 (koniec)
+        Exam.getInstance().addTask(t); // wrzuca na koniec listy, ustawia idx na size-1 (ostatni element)
         stage.hide();
         
         mainInstance.getInstance().addNewTabPaneTab();
-        mainInstance.getInstance().updateWindow(Exam.getInstance().idx);
+        //mainInstance.getInstance().updateWindow(Exam.getInstance().idx);
 
         chooseType.setText("Typ zadania");
     }

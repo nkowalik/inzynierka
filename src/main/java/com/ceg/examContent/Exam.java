@@ -50,18 +50,19 @@ public class Exam extends Observable {
         tasks.add(t);
         idx = tasks.size() - 1;
     }
-    
     public Task getCurrentTask(){
         return tasks.get(idx);
     }
-    
     public Task getTaskAtIndex(int idx){
         return tasks.get(idx);
     }
     public void deleteTaskAtIndex(int idx) {
         tasks.remove(idx);
-        if(idx != 0)
-            this.idx--;
+        /*// todo ustawić zmianę indeksów tak, by odpowiadała zachowaniu tab remove
+        *//*if(idx != 0)
+            this.idx--;*//*
+        if(idx == tasks.size() && idx != 0)
+            this.idx--;*/
     }
     /*
     public void setCurrentTaskIndex(int idx) {
