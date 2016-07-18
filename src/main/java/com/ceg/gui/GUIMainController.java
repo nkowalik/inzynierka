@@ -73,62 +73,37 @@ public class GUIMainController implements Initializable {
             Exam.getInstance().init();
             exam = Exam.getInstance();
         }
-        // dodanie listenerów na zmiany w polach tekstowych
-        text.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {
-                Exam.getInstance().getCurrentTask().setContents(Arrays.asList(newValue.split("\n")));
-                
-            }
-        });
-        code.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observableValue, String oldValue, String newValue) {                
-                Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
-                /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
 
-                String newCode = newValue;
-                String newPDFCode = newValue;
-                updateResult("");
-                for (int i = newValue.length() - 1; i >= 0; i--) {
-                    List<String> s = (List<String>) code.getStyleOfChar(i);
-                    if (!s.isEmpty()) {
-                        if ("test".equals(s.get(s.size() - 1))) {
-                            newCode = newCode.substring(0, i) + newCode.substring(i+1);
-                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
-                        }
-                        if ("hidden".equals(s.get(s.size() - 1))) {
-                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
+        code.textProperty().addListener((observableValue, oldValue, newValue) -> {
+            result.setText("");
+        });
+
+        tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            switch (status) {
+                case DELETE:
+                    if(Integer.parseInt(oldValue.getId()) == 0) { // usuwana jest pierwsza pozycja
+                        updateTabPaneTabIndexes();
+                        updateWindow(0);
+                    }
+                    else {
+                        if(newValue != null) {
+                            updateTabPaneTabIndexes();
+                            updateWindow(Integer.parseInt(newValue.getId()));
                         }
                     }
-                }
-                Exam.getInstance().getCurrentTask().setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n")))); 
-                Exam.getInstance().getCurrentTask().setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
-            }
-        });
-        tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-            @Override
-            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-                switch (status) {
-                    case DELETE:
-                        if(Integer.parseInt(oldValue.getId()) == 0) { // usuwana jest pierwsza pozycja
-                            updateTabPaneTabIndexes();
-                            updateWindow(0);
-                        }
-                        else {
-                            if(newValue != null) {
-                                updateTabPaneTabIndexes();
-                                updateWindow(Integer.parseInt(newValue.getId()));
-                            }
-                        }
-                        status = Status.SWITCH;
-                        break;
-                    case ADD:
-                        status = Status.SWITCH;
-                    case SWITCH:
-                        updateWindow(Integer.parseInt(newValue.getId()));
-                        break;
-                }
+                    status = Status.SWITCH;
+                    break;
+                case ADD:
+                    status = Status.SWITCH;
+                case SWITCH:
+                    if(oldValue != null) {
+                        int id = Integer.parseInt(oldValue.getId());
+                        saveCode(id);
+                        saveContent(id);
+                        saveResult(id);
+                    }
+                    updateWindow(Integer.parseInt(newValue.getId()));
+                    break;
             }
         });
         
@@ -165,31 +140,14 @@ public class GUIMainController implements Initializable {
     }
     public void execute(ActionEvent actionEvent) {
         result.clear();
+        saveCode(exam.idx);
         List<String> outcome = new ArrayList<String>();
 
-        //exam.getLastTask().compiler.createFile(exam.getLastTask().getCode());
-        //exam.getLastTask().getType().callCompile(exam.getLastTask(),outcome);
         exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
         for(String s : outcome) {
             result.appendText(s + "\n");
         }
         exam.getCurrentTask().setResult(result.getText());
-        /* uwaga, ten warunek moze nie dzialac na kompilatorze linuxa - jesli nie dziala, trzeba go bedzie zmienic *//*
-        if(outcome.isEmpty()) {// jesli kompilacja przebiegla pomyslnie
-            outcome.add("Kompilacja przebiegła pomyślnie.");
-            exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(),outcome);
-            for(String s : outcome) {
-                result.appendText(s + "\n");
-            }
-            exam.getCurrentTask().setResult(result.getText());
-        }
-        else {
-            result.clear();
-            for(String s : outcome) {
-                result.appendText(s + "\n");
-            }
-            exam.getCurrentTask().setResult(result.getText());
-        } */
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
         PdfSavingController.show();
@@ -331,5 +289,32 @@ public class GUIMainController implements Initializable {
             tabPane.getTabs().get(i).setId(Integer.toString(i));
             tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
         }
+    }
+    public void saveCode(int idx) {
+        Exam.getInstance().getTaskAtIndex(idx).setTestCode(new ArrayList<>((Arrays.asList(code.getText().split("\n")))));
+            /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
+
+        String newCode = code.getText();
+        String newPDFCode = code.getText();
+        for (int i = code.getText().length() - 1; i >= 0; i--) {
+            List<String> s = (List<String>) code.getStyleOfChar(i);
+            if (!s.isEmpty()) {
+                if ("test".equals(s.get(s.size() - 1))) {
+                    newCode = newCode.substring(0, i) + newCode.substring(i+1);
+                    newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
+                }
+                if ("hidden".equals(s.get(s.size() - 1))) {
+                    newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
+                }
+            }
+        }
+        Exam.getInstance().getTaskAtIndex(idx).setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n"))));
+        Exam.getInstance().getTaskAtIndex(idx).setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
+    }
+    public void saveContent(int idx) {
+        Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));
+    }
+    public void saveResult(int idx) {
+        Exam.getInstance().getTaskAtIndex(idx).setResult(result.getText());
     }
 }

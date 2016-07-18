@@ -29,10 +29,7 @@ public class Exam extends Observable {
     public Exam() {
         pdfSettings = new PDFSettings("Times New Roman", "Courier", 10, 10, "student", "egzamin.pdf");
     }
-    
-    public Task getLastTask() {
-        return tasks.get(tasks.size() - 1);
-    }
+
     public static Exam getInstance() {
         return instance;
     }
@@ -58,17 +55,7 @@ public class Exam extends Observable {
     }
     public void deleteTaskAtIndex(int idx) {
         tasks.remove(idx);
-        /*// todo ustawić zmianę indeksów tak, by odpowiadała zachowaniu tab remove
-        *//*if(idx != 0)
-            this.idx--;*//*
-        if(idx == tasks.size() && idx != 0)
-            this.idx--;*/
     }
-    /*
-    public void setCurrentTaskIndex(int idx) {
-        this.idx = idx;
-    }
-    */
     /*zmienić tak, aby kompilowany był cały egzamin*/
     public boolean compileExam() {
         return true;

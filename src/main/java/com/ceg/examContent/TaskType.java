@@ -23,7 +23,6 @@ abstract public class TaskType {
     
     
     public abstract void generateAnswers(Task task, List<String> output, List<String> answers);
-    public abstract void callCompile(Task task, List<String> output);
     public abstract void callExecute(Task task, List<String> output);
     public abstract void preparePdfAnswers(Task task);
     

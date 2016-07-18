@@ -7,18 +7,13 @@ package com.ceg.compiler;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.io.OutputStream;
-import java.io.PrintWriter;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.CodeSource;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,10 +41,10 @@ public class GCC {
     private File file = null;
     private String cppName;
     private String executableName;
-    private boolean fileExist = false;
+    public String osName;
 
     public GCC() {
-        String name = System.getProperty("os.name").toLowerCase();
+        osName = System.getProperty("os.name").toLowerCase();
 
         CodeSource codeSource = GCC.class.getProtectionDomain().getCodeSource();
         File jarFile;
@@ -62,115 +57,7 @@ public class GCC {
 
     }
 
-    // nieważne czy kod zostanie wprowadzony z pliku czy ręcznie
-    // program wygeneruje plik .cpp dla konkretnego zadania
-    // nazwa z gory zdefiniowana przy wywolaniu
-
-    // utworzony plik mozna modyfikowac funkcja parsujaca, nie jest sprawdzane, czy zostal on zmieniony od czasu utworzenia
-
     public boolean createFile(List<String> lines, String name) {
-        if (!lines.isEmpty()) {
-            try {
-                Files.write(Paths.get(this.path + "/" + name), lines, Charset.forName("UTF-8"));
-                file = new File(this.path + "/" + name);
-
-            } catch (IOException ex) {
-                Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
-            }
-
-            this.cppName = this.file.getAbsolutePath();
-            this.executableName = this.path.toString() + "/" + this.file.getName().substring(0, this.file.getName().lastIndexOf("."));
-            fileExist = true;
-            return true;
-        } else {
-            fileExist = false;
-            return false;
-        }
-    }
-
-    public void createFile(List<String> lines) {
-        PrintWriter writer;
-        StringBuilder sb = new StringBuilder();
-        for (String s : lines) {
-            sb.append(s);
-            sb.append("\n");
-        }
-        file = new File(this.path + "/" + "code.cpp");
-        try {
-            writer = new PrintWriter(file);
-            writer.print(sb.toString());
-            writer.close();
-            this.cppName = this.file.getAbsolutePath();
-            this.executableName = this.path.toString() + "/" + this.file.getName().substring(0, this.file.getName().lastIndexOf("."));
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
-        }
-    }
-
-    // kompilacja pliku .cpp stworzonego przy użyciu funkcji createFile
-
-    public void compile(List<String> output) {
-
-        if (fileExist) {
-            try {
-                ProcessBuilder builder = null;
-                if (SystemUtils.IS_OS_WINDOWS) {
-                    builder = new ProcessBuilder("cmd.exe", "/c", "g++ " + this.cppName + " -o " + this.executableName + ".exe");
-                } else if (SystemUtils.IS_OS_LINUX) {
-                    builder = new ProcessBuilder("g++", this.cppName, "-o", this.executableName);
-                } else {
-                    System.out.println("Nieobsługiwany system operacyjny");
-                }
-                Process p = builder.start();
-
-                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getErrorStream()));
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    output.add(line);
-                }
-                p.waitFor();
-                p.destroy();
-
-            } catch (Exception err) {
-                err.printStackTrace();
-            }
-        }
-
-
-    }
-
-    // wykonanie wczesniej przygotowanego pliku
-    // metoda niestatyczna aby zapobiec wykonywaniu pliku przed jego kompilacją
-    // zawsze mozna uruchomic tylko ostatnio skompilowany plik
-    // tym samym dla kazdego zadania mozna miec osobny obiekt GCC z aktualnym plikiem
-
-    public void execute(List<String> output) {
-
-        // do zrobienia blokada w momencie w ktorym byla zmiania i nie bylo kompilacji (wtedy ponizszy warunek bedzie do wyrzucenia)
-        if (file != null) { // jesli file zostal zainicjalizowany, to znaczy, ze kompilacja tez sie odbyla
-            try {
-                ProcessBuilder builder = new ProcessBuilder(this.executableName);
-                Process p = builder.start();
-                BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
-                String line = null;
-                while ((line = reader.readLine()) != null) {
-                    output.add(line);
-                }
-                p.waitFor();
-                p.destroy();
-            } catch (IOException ex) {
-                Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (InterruptedException ex) {
-                Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        } else {
-            System.out.println("Brak pliku wykonywalnego");
-        }
-    }
-
-
-    public boolean createFile2(List<String> lines, String name) {
         if (!lines.isEmpty() && !(lines.get(0).equals("") && lines.size() == 1)) {
             try {
                 Files.write(Paths.get(this.path + "/" + name), lines, Charset.forName("UTF-8"));
@@ -187,8 +74,7 @@ public class GCC {
             return false;
         }
     }
-
-    public boolean compile2(List<String> output) {
+    public boolean compile(List<String> output) {
         if (file.exists()) {
             try {
                 ProcessBuilder builder = null;
@@ -221,10 +107,9 @@ public class GCC {
         } else
             return false;
     }
-
-    public void execute2(List<String> lines, String name, List<String> output) {
-        if(createFile2(lines, name)) {
-            if(compile2(output)) {
+    public void execute(List<String> lines, String name, List<String> output) {
+        if(createFile(lines, name)) {
+            if(compile(output)) {
                 output.add("Kompilacja przebiegła pomyślnie.");
                 try {
                     ProcessBuilder builder = new ProcessBuilder(this.executableName);

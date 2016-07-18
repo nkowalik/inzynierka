@@ -60,18 +60,10 @@ public class TaskTypeComplexOutput extends TaskType{
     }
 
     @Override
-    public void callCompile(Task task, List<String> output) {
-        List<String> code = new ArrayList<>(task.getCode());
-        CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.createFile(code, "multiple.cpp");
-        task.compiler.compile(output);
-    }
-
-    @Override
     public void callExecute(Task task, List<String> output) {
         List<String> code = new ArrayList<>(task.getCode());
         CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.execute2(code, "multiple.cpp", output);
+        task.compiler.execute(code, "multiple.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
     
