@@ -2,6 +2,7 @@ package com.ceg.pdf;
 
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.io.File;
@@ -31,7 +32,7 @@ public class PDFGenerator {
     private int actualY;
     
     /* wywołanie konstruktora powoduje utworzenie dokumentu pdf. Argumentem nazwa przyszłego pliku pdf */
-    public PDFGenerator(File pdfFile, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate, String testType) throws IOException {
+    public PDFGenerator(File pdfFile, String commandFont, int commandFontSize, String codeFont, int codeFontSize, String testDate, String testType) throws IOException, EmptyPartOfTaskException {
         document = new PDDocument();
         boolean newPage;
         //tworzenie nowej strony i dodanie jej do dokumentu

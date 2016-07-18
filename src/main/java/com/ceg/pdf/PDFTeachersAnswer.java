@@ -6,6 +6,7 @@
 package com.ceg.pdf;
 
 import com.ceg.examContent.Exam;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.io.IOException;
 import java.util.List;
 
@@ -28,7 +29,9 @@ public class PDFTeachersAnswer extends PDFAnswer {
     
     /* funkcja zapisująca do dokumentu pdf najpierw odpowiedzi dla nauczyciela a następnie całą treść zadania */
     @Override
-    public int writeToPDF(int x, int y) throws IOException{ 
+    public int writeToPDF(int x, int y) throws IOException, EmptyPartOfTaskException { 
+        if (answers.isEmpty())
+            throw new EmptyPartOfTaskException();
         answersIndex = 0;
         
         if (answers != null) {

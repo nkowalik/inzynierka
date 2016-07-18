@@ -1,5 +1,6 @@
 package com.ceg.pdf;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -29,7 +30,8 @@ public class PDFCode extends PDFAbstractTask {
         Reaguje na spacje i tabulatory (jeśli używa się albo jednego albo drugiego.
         Nie przesyłać z enterami.    */   
     @Override
-    public void textSplitting (List<String> codeLines) throws IOException {
+    public void textSplitting (List<String> codeLines) throws IOException, EmptyPartOfTaskException {
+        super.textSplitting(codeLines);
         float actualLineWidth;
         for (String codeLine : codeLines) { 
             line = codeLine;

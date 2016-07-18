@@ -1,5 +1,6 @@
 package com.ceg.pdf;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.io.IOException;
 import java.util.List;
 
@@ -19,7 +20,8 @@ public class PDFCommand extends PDFAbstractTask {
         każdy enter w poleceniu będzie widoczny w dokumencie pdf. Brak możliwości używania innych
         białych znaków poza spacją i enterem. */    
     @Override
-    public void textSplitting (List<String> command) throws IOException {
+    public void textSplitting (List<String> command) throws IOException, EmptyPartOfTaskException {
+        super.textSplitting(command);
 	line = "";
         actualWidth = 0;       
 	String string = mergeStringList(command);
