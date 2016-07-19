@@ -25,6 +25,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
+import javax.swing.*;
+
 /**
  *
  * @author Natalia
@@ -32,7 +34,7 @@ import javafx.stage.FileChooser;
 
 
 public class GUIAddTaskController implements Initializable {
-    
+
     ArrayList<String> contentList = new ArrayList<>();
     ArrayList<String> codeList = new ArrayList<>();
     TaskType type;
@@ -56,22 +58,24 @@ public class GUIAddTaskController implements Initializable {
     MenuItem taskTypeVarValue;
     @FXML
     MenuItem taskTypeLineNumbers;
-    
+
     private static Stage stage = null;
     private static GUIAddTaskController addTaskInstance = null;
     private static GUIMainController mainInstance = null;
+    private File lastPath;
 
     public static synchronized void show() throws IOException {
         if(stage == null) {
             URL location = GUIAddTaskController.class.getResource("/fxml/addTask.fxml");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
-            
+
             Scene scene = new Scene((Pane)loader.load(location.openStream()));
-            
+
             stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Dodaj nowe zadanie");
+            stage.setResizable(false);
         }
         clearFields();
         stage.show();
@@ -112,7 +116,7 @@ public class GUIAddTaskController implements Initializable {
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
         addType("returned_value.txt");
-         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
+        type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeComplexOutput() {
         chooseType.setText(taskTypeComplexOutput.getText());
@@ -144,7 +148,7 @@ public class GUIAddTaskController implements Initializable {
         t.setCode(codeList);
         Exam.getInstance().addTask(t); // wrzuca na koniec listy, ustawia idx na size-1 (ostatni element)
         stage.hide();
-        
+
         mainInstance.getInstance().addNewTabPaneTab();
         //mainInstance.getInstance().updateWindow(Exam.getInstance().idx);
 
@@ -162,10 +166,18 @@ public class GUIAddTaskController implements Initializable {
         stage.hide();
     }
     public void selectCodeFile() throws IOException {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(stage);
-        if(file != null) {
-            loadFile(file);
+        JFileChooser fileChooser = new JFileChooser();
+        if (lastPath != null) {
+            fileChooser.setCurrentDirectory(lastPath);
+        }
+        int returnedVal = fileChooser.showOpenDialog(null);
+        if (returnedVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            fileChooser.setCurrentDirectory(file);
+            lastPath = fileChooser.getCurrentDirectory();
+            if(file != null) {
+                loadFile(file);
+            }
         }
     }
     public void loadFile(File file) throws IOException {

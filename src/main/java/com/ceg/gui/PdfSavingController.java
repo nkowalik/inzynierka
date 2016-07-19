@@ -169,6 +169,7 @@ public class PdfSavingController implements Initializable {
             appStage = new Stage();
             appStage.setScene(scene);
             appStage.setTitle("Zapisz plik");
+            appStage.setResizable(false);
         }
         
         appStage.show();
@@ -208,6 +209,7 @@ public class PdfSavingController implements Initializable {
                 ifPdfExistStage.setResizable(false);
                 ifPdfExistStage.setAlwaysOnTop(true);
                 ifPdfExistStage.show();
+                ifPdfExistStage.setResizable(false);
             }
 
             else {

@@ -130,6 +130,7 @@ public class GUIMainController implements Initializable {
             stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("CEG");
+            stage.setResizable(false);
         }
         
         stage.show();
