@@ -62,7 +62,7 @@ public class GUIAddTaskController implements Initializable {
     private static Stage stage = null;
     private static GUIAddTaskController addTaskInstance = null;
     private static GUIMainController mainInstance = null;
-    private File lastPath;
+    private FileChooser fileChooser;
 
     public static synchronized void show() throws IOException {
         if(stage == null) {
@@ -80,10 +80,12 @@ public class GUIAddTaskController implements Initializable {
         clearFields();
         stage.show();
         stage.toFront();
+        GUIAddTaskController.getInstance().finish.setDisable(true);
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addTaskInstance = this;
+        fileChooser = new FileChooser();
         mainInstance = GUIMainController.getInstance();
     }
     public static GUIAddTaskController getInstance() {
@@ -150,7 +152,6 @@ public class GUIAddTaskController implements Initializable {
         stage.hide();
 
         mainInstance.getInstance().addNewTabPaneTab();
-        //mainInstance.getInstance().updateWindow(Exam.getInstance().idx);
 
         chooseType.setText("Typ zadania");
     }
@@ -166,18 +167,11 @@ public class GUIAddTaskController implements Initializable {
         stage.hide();
     }
     public void selectCodeFile() throws IOException {
-        JFileChooser fileChooser = new JFileChooser();
-        if (lastPath != null) {
-            fileChooser.setCurrentDirectory(lastPath);
-        }
-        int returnedVal = fileChooser.showOpenDialog(null);
-        if (returnedVal == JFileChooser.APPROVE_OPTION) {
-            File file = fileChooser.getSelectedFile();
-            fileChooser.setCurrentDirectory(file);
-            lastPath = fileChooser.getCurrentDirectory();
-            if(file != null) {
-                loadFile(file);
-            }
+
+        File file = fileChooser.showOpenDialog(stage);
+        if(file != null) {
+            fileChooser.setInitialDirectory(new File(file.getParent()));
+            loadFile(file);
         }
     }
     public void loadFile(File file) throws IOException {
@@ -191,6 +185,5 @@ public class GUIAddTaskController implements Initializable {
         for (String i : codeList) {
             code.appendText(i + "\n");
         }
-        finish.setDisable(false);
     }
 }
