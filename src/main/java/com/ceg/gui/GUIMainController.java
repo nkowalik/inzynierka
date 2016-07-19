@@ -150,6 +150,9 @@ public class GUIMainController implements Initializable {
         exam.getCurrentTask().setResult(result.getText());
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
+        saveCode(exam.idx);
+        saveContent(exam.idx);
+        saveResult(exam.idx);
         PdfSavingController.show();
     }
     public void testMarker(ActionEvent actionEvent) {
