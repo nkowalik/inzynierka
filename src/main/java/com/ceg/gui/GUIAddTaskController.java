@@ -25,6 +25,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
+import javax.swing.*;
+
 /**
  *
  * @author Natalia
@@ -60,6 +62,7 @@ public class GUIAddTaskController implements Initializable {
     private static Stage stage = null;
     private static GUIAddTaskController addTaskInstance = null;
     private static GUIMainController mainInstance = null;
+    private File lastPath;
 
     public static synchronized void show() throws IOException {
         if(stage == null) {
@@ -162,10 +165,18 @@ public class GUIAddTaskController implements Initializable {
         stage.hide();
     }
     public void selectCodeFile() throws IOException {
-        FileChooser fileChooser = new FileChooser();
-        File file = fileChooser.showOpenDialog(stage);
-        if(file != null) {
-            loadFile(file);
+        JFileChooser fileChooser = new JFileChooser();
+        if (lastPath != null) {
+            fileChooser.setCurrentDirectory(lastPath);
+        }
+        int returnedVal = fileChooser.showOpenDialog(null);
+        if (returnedVal == JFileChooser.APPROVE_OPTION) {
+            File file = fileChooser.getSelectedFile();
+            fileChooser.setCurrentDirectory(file);
+            lastPath = fileChooser.getCurrentDirectory();
+            if(file != null) {
+                loadFile(file);
+            }
         }
     }
     public void loadFile(File file) throws IOException {
