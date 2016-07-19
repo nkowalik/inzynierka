@@ -19,12 +19,13 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Accordion;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
+import javafx.scene.control.TitledPane;
 import javafx.scene.layout.Pane;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
@@ -170,13 +171,11 @@ public class PdfSavingController implements Initializable {
             appStage.setScene(scene);
             appStage.setTitle("Zapisz plik");
         }
-        
         appStage.show();
         appStage.toFront();
     }
     
     public void saveFile(ActionEvent event) throws IOException {   
-        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         pdfSettings.setCommandFont(commandFont.getValue().toString());
         pdfSettings.setCodeFont(codeFont.getValue().toString());
         
@@ -185,46 +184,40 @@ public class PdfSavingController implements Initializable {
         
         pdfSettings.setTestType(testType.getValue().toString());
         pdfSettings.setPdfFilePath(filePath.getText());
-        String extension = fileName.getText().substring(fileName.getText().length() - 4, fileName.getText().length());
-        if (!extension.equals(".pdf")) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Brak implementacji");
-            alert.setHeaderText("Nazwa pliku nie kończy się rozszerzeniem .pdf");
+        
+        String file = fileName.getText();
+        String extension = file.substring(file.length() - 4, file.length());
+        
+        if(!extension.equals(".pdf"))
+            file += ".pdf";
 
-            alert.showAndWait();
+        pdfSettings.setPdfFileName(file);
+
+        pdfSettings.saveFile();
+        File pdfFile = pdfSettings.getPdfFile();
+        Exam.getInstance().pdfSettings = pdfSettings;
+
+        if (pdfFile.exists() && !pdfFile.isDirectory()) {
+            Stage ifPdfExistStage = new Stage();
+            Parent scene = FXMLLoader.load(getClass().getResource("/fxml/ifPdfExist.fxml"));
+            ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
+            ifPdfExistStage.setScene(new Scene(scene, 430, 125));
+            ifPdfExistStage.setResizable(false);
+            ifPdfExistStage.setAlwaysOnTop(true);
+            ifPdfExistStage.show();
         }
+
         else {
-            pdfSettings.setPdfFileName(fileName.getText());
-
-            pdfSettings.saveFile();
-            File pdfFile = pdfSettings.getPdfFile();
-            Exam.getInstance().pdfSettings = pdfSettings;
-
-            if (pdfFile.exists() && !pdfFile.isDirectory()) {
-                Stage ifPdfExistStage = new Stage();
-                Parent scene = FXMLLoader.load(getClass().getResource("/fxml/ifPdfExist.fxml"));
-                ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
-                ifPdfExistStage.setScene(new Scene(scene, 430, 125));
-                ifPdfExistStage.setResizable(false);
-                ifPdfExistStage.setAlwaysOnTop(true);
-                ifPdfExistStage.show();
-            }
-
-            else {
-                Exam.getInstance().pdfSettings.pdfGenerate(appStage);           
-                appStage.hide();
-            }
+            Exam.getInstance().pdfSettings.pdfGenerate(appStage);           
+            appStage.hide();
         }
     }
     
     public void cancel(ActionEvent event) {
-        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
     }
     
-    public void browse(ActionEvent event) {
-        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        
+    public void browse(ActionEvent event) {        
         DirectoryChooser dirChooser = new DirectoryChooser () ;
         dirChooser.setTitle("Wybierz lokalizację pliku");
         File dir = dirChooser.showDialog(appStage);
