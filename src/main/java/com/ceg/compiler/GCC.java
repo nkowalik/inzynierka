@@ -79,9 +79,9 @@ public class GCC {
             try {
                 ProcessBuilder builder = null;
                 if (SystemUtils.IS_OS_WINDOWS) {
-                    builder = new ProcessBuilder("cmd.exe", "/c", "g++ " + this.cppName + " -o " + this.executableName + ".exe");
+                    builder = new ProcessBuilder(new String[]{"cmd.exe", "/c", "g++", "-o", this.executableName, this.cppName});
                 } else if (SystemUtils.IS_OS_LINUX) {
-                    builder = new ProcessBuilder("g++", this.cppName, "-o", this.executableName);
+                    builder = new ProcessBuilder(new String[]{"g++", "-o", this.executableName, this.cppName});
                 } else {
                     System.out.println("Nieobsługiwany system operacyjny");
                     return false;
