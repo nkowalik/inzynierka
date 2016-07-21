@@ -44,6 +44,7 @@ public class Task {
         PDFCode = new ArrayList<>();
         contents = new ArrayList<>();
     }
+     
     public List<String> getCode(){
         return code;
     }

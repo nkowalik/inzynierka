@@ -51,6 +51,8 @@ public class GUIMainController implements Initializable {
     @FXML
     Button hideMarkerBtn;
     @FXML
+    Button gapsMarkerBtn;
+    @FXML
     MenuItem changeAnswersNum;
     
     private static Stage stage = null;
@@ -107,6 +109,7 @@ public class GUIMainController implements Initializable {
         
         hideMarkerBtn.getStyleClass().add("hiddenButton");
         testMarkerBtn.getStyleClass().add("testButton");
+        gapsMarkerBtn.getStyleClass().add("gapsButton");
         
         updateWindow(0);
     }
@@ -159,7 +162,10 @@ public class GUIMainController implements Initializable {
     }    
     public void normalMarker(ActionEvent actionEvent) {
         changeStyle("normal");
-    }    
+    }  
+    public void gapsMarker(ActionEvent actionEvent) {
+        changeStyle("gap");
+    }  
     private void changeStyle(String className) {
         IndexRange ir = code.getSelection(); 
         int end = ir.getEnd();
@@ -214,12 +220,21 @@ public class GUIMainController implements Initializable {
         normalMarkerBtn.setVisible(visibility);
         testMarkerBtn.setVisible(visibility);
         hideMarkerBtn.setVisible(visibility);
+       
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
                 changeAnswersNum.setVisible(visibility);
             }
             else{
                 changeAnswersNum.setVisible(false);
+            }
+        }
+        if(visibility){
+            if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("Gaps")){
+                gapsMarkerBtn.setVisible(visibility);
+            }
+            else{
+                gapsMarkerBtn.setVisible(false);
             }
         }
     }
@@ -290,11 +305,14 @@ public class GUIMainController implements Initializable {
         }
     }
     public void saveCode(int idx) {
-        Exam.getInstance().getTaskAtIndex(idx).setTestCode(new ArrayList<>((Arrays.asList(code.getText().split("\n")))));
+        Task task = Exam.getInstance().getTaskAtIndex(idx);
+        task.setTestCode(new ArrayList<>((Arrays.asList(code.getText().split("\n")))));
+        
             /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
-
+       
         String newCode = code.getText();
-        String newPDFCode = code.getText();
+        String newPDFCode = code.getText();   
+        
         for (int i = code.getText().length() - 1; i >= 0; i--) {
             List<String> s = (List<String>) code.getStyleOfChar(i);
             if (!s.isEmpty()) {
@@ -305,10 +323,14 @@ public class GUIMainController implements Initializable {
                 if ("hidden".equals(s.get(s.size() - 1))) {
                     newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
                 }
+                if (task.getType().name == "Gaps" && "gap".equals(s.get(s.size() - 1))) {
+                    newPDFCode = newPDFCode.substring(0, i) + "_" + newPDFCode.substring(i+1);
+                }
             }
         }
-        Exam.getInstance().getTaskAtIndex(idx).setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n"))));
-        Exam.getInstance().getTaskAtIndex(idx).setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
+        task.setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n"))));
+        task.setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
+        
     }
     public void saveContent(int idx) {
         Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));
