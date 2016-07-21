@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
@@ -40,8 +35,6 @@ public class TaskTypeComplexOutput extends TaskType{
                             answers.add(line);
                         i++;
                     }
-                    }
-                this.params.setNoOfAnswers(i-1);
                 }
                 this.params.setNoOfAnswers(i-1);
             }
@@ -57,8 +50,6 @@ public class TaskTypeComplexOutput extends TaskType{
 
                 alert.showAndWait();
             }
-        }
-        preparePdfAnswers(task);
         }
         preparePdfAnswers(task);
     }

@@ -4,7 +4,6 @@ package com.ceg.gui;
 import java.util.*;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.IndexRange;
 import javafx.stage.Stage;
@@ -18,10 +17,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextArea;
 import java.io.IOException;
 import java.net.URL;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.MenuItem;
@@ -77,8 +72,6 @@ public class GUIMainController implements Initializable {
         code.textProperty().addListener((observableValue, oldValue, newValue) -> {
             result.setText("");
         });
-        /*        Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
-                /* usuwa zamarkowane znaki i dodaje kod do klasy Task /
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (status) {
@@ -95,12 +88,6 @@ public class GUIMainController implements Initializable {
                     }
                     status = Status.SWITCH;
                     break;
-            }
-        });
-        tabPane.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<Tab>() {
-            @Override
-            public void changed(ObservableValue<? extends Tab> observable, Tab oldValue, Tab newValue) {
-                if(newValue != null)
                 case ADD:
                     status = Status.SWITCH;
                 case SWITCH:
@@ -110,8 +97,6 @@ public class GUIMainController implements Initializable {
                         saveContent(id);
                         saveResult(id);
                     }
-                    if(oldValue != null)
-                        readCode();
                     updateWindow(Integer.parseInt(newValue.getId()));
                     break;
             }
@@ -149,31 +134,7 @@ public class GUIMainController implements Initializable {
     public static GUIMainController getInstance() {
         return instance;
     }
-    public void readCode(){
-        String newValue = code.getText();
-          Exam.getInstance().getLastTask().setTestCode(new ArrayList<>((Arrays.asList(newValue.split("\n")))));
-                /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
-
-                String newCode = newValue;
-                String newPDFCode = newValue;
-                clearResult();
-                for (int i = newValue.length() - 1; i >= 0; i--) {
-                    List<String> s = (List<String>) code.getStyleOfChar(i);
-                    if (!s.isEmpty()) {
-                        if ("test".equals(s.get(s.size() - 1))) {
-                            newCode = newCode.substring(0, i) + newCode.substring(i+1);
-                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
-                        }
-                        if ("hidden".equals(s.get(s.size() - 1))) {
-                            newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
-                        }
-                    }
-                }
-                Exam.getInstance().getCurrentTask().setCode(new ArrayList<>(Arrays.asList(newCode.split("\n")))); 
-                Exam.getInstance().getCurrentTask().setPDFCode(new ArrayList<>(Arrays.asList(newPDFCode.split("\n"))));
-    }
     public void execute(ActionEvent actionEvent) {
-        readCode();
         result.clear();
         saveCode(exam.idx);
         List<String> outcome = new ArrayList<String>();
