@@ -40,6 +40,8 @@ public class TaskTypeComplexOutput extends TaskType{
                             answers.add(line);
                         i++;
                     }
+                    }
+                this.params.setNoOfAnswers(i-1);
                 }
                 this.params.setNoOfAnswers(i-1);
             }
@@ -57,21 +59,15 @@ public class TaskTypeComplexOutput extends TaskType{
             }
         }
         preparePdfAnswers(task);
-    }
-
-    @Override
-    public void callCompile(Task task, List<String> output) {
-        List<String> code = new ArrayList<>(task.getCode());
-        CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.createFile(code, "multiple.cpp");
-        task.compiler.compile(output);
+        }
+        preparePdfAnswers(task);
     }
 
     @Override
     public void callExecute(Task task, List<String> output) {
         List<String> code = new ArrayList<>(task.getCode());
         CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.execute2(code, "multiple.cpp", output);
+        task.compiler.execute(code, "multiple.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
     

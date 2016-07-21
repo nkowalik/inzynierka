@@ -5,7 +5,6 @@
  */
 package com.ceg.examContent;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import javafx.scene.control.Alert;
@@ -37,7 +36,11 @@ public class TaskTypeLineNumbers extends TaskType{
                 for(String line: output){
                     if(line.contains("error")){
                         String[] substr = line.split(":");
-                        int lineNumber = Integer.parseInt(substr[1])-1;
+                        int lineNumber;
+                        if(task.compiler.osName.indexOf("win") >= 0) // windows uzywa dodatkowego znaku ':' po nazwie dysku
+                            lineNumber = Integer.parseInt(substr[2])-1;
+                        else
+                            lineNumber = Integer.parseInt(substr[1])-1;
                         String[] codeLine = task.getCode().get(lineNumber).split("//");
                         answers.add(codeLine[1]);
                         answersCnt++;
@@ -59,18 +62,14 @@ public class TaskTypeLineNumbers extends TaskType{
             }
         }
         preparePdfAnswers(task);
-    }
-
-    @Override
-    public void callCompile(Task task, List<String> output) {
-        task.compiler.createFile(task.getCode(), "linenumbers.cpp");
-        task.compiler.compile(output);
+        }
+        preparePdfAnswers(task);
     }
 
     @Override
     public void callExecute(Task task, List<String> output) {
         List<String> code = new ArrayList<>(task.getCode());
-        task.compiler.execute2(code, "linenumbers.cpp", output);
+        task.compiler.execute(code, "linenumbers.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
 

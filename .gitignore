@@ -28,5 +28,8 @@ src/main/java/com/ceg/compiler/Ccompiler.java~
 /src/main/java/META-INF/
 /out/
 /src/main/main.iml
+ceg.properties
+ceg.xml
+module_ceg.xml
 
 
