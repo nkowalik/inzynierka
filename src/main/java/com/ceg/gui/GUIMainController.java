@@ -24,6 +24,7 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
+import com.ceg.examContent.Code;
 
 
 /**
@@ -95,7 +96,7 @@ public class GUIMainController implements Initializable {
                 case SWITCH:
                     if(oldValue != null) {
                         int id = Integer.parseInt(oldValue.getId());
-                        saveCode(id);
+                        Code.saveCode(id, code);
                         saveContent(id);
                         saveResult(id);
                     }
@@ -139,7 +140,7 @@ public class GUIMainController implements Initializable {
     }
     public void execute(ActionEvent actionEvent) {
         result.clear();
-        saveCode(exam.idx);
+        Code.saveCode(exam.idx, code);
         List<String> outcome = new ArrayList<String>();
 
         exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
@@ -149,7 +150,7 @@ public class GUIMainController implements Initializable {
         exam.getCurrentTask().setResult(result.getText());
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
-        saveCode(exam.idx);
+        Code.saveCode(exam.idx, code);
         saveContent(exam.idx);
         saveResult(exam.idx);
         PdfSavingController.show();
@@ -304,34 +305,7 @@ public class GUIMainController implements Initializable {
             tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
         }
     }
-    public void saveCode(int idx) {
-        Task task = Exam.getInstance().getTaskAtIndex(idx);
-        task.setTestCode(new ArrayList<>((Arrays.asList(code.getText().split("\n")))));
-        
-            /* usuwa zamarkowane znaki i dodaje kod do klasy Task */
-       
-        String newCode = code.getText();
-        String newPDFCode = code.getText();   
-        
-        for (int i = code.getText().length() - 1; i >= 0; i--) {
-            List<String> s = (List<String>) code.getStyleOfChar(i);
-            if (!s.isEmpty()) {
-                if ("test".equals(s.get(s.size() - 1))) {
-                    newCode = newCode.substring(0, i) + newCode.substring(i+1);
-                    newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
-                }
-                if ("hidden".equals(s.get(s.size() - 1))) {
-                    newPDFCode = newPDFCode.substring(0, i) + newPDFCode.substring(i+1);
-                }
-                if (task.getType().name == "Gaps" && "gap".equals(s.get(s.size() - 1))) {
-                    newPDFCode = newPDFCode.substring(0, i) + "_" + newPDFCode.substring(i+1);
-                }
-            }
-        }
-        task.setCode(new ArrayList<String>(Arrays.asList(newCode.split("\n"))));
-        task.setPDFCode(new ArrayList<String>(Arrays.asList(newPDFCode.split("\n"))));
-        
-    }
+    
     public void saveContent(int idx) {
         Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));
     }
