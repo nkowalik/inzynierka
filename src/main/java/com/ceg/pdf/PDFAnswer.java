@@ -24,7 +24,7 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         textSplitting(lines);
     }
 
-    public PDFAnswer(int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
+    public PDFAnswer(List<String> lines, int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
         super();
         this.textWidth = textWidth;
         pdfLine = new PDFLine(font, fontSize);

@@ -20,7 +20,7 @@ public abstract class PDFAbstractTaskPart {
         PDFSettings pdfSettings = PDFSettings.getInstance();
         cs = PDFGenerator.cs;
         actualTaskLines = new ArrayList<>();
-        pdfLine = new PDFLine(pdfSettings.getCodeFont(), pdfSettings.getCodeFontSize());
+        //pdfLine = new PDFLine(pdfSettings.getCodeFont(), pdfSettings.getCodeFontSize());
         this.textWidth = 0;
         lineHeight = pdfSettings.getCodeFontSize();
     }

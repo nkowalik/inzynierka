@@ -94,7 +94,9 @@ public class PDFGenerator {
 
         int commandLines = comm.writeToPDF(actualY);
         int codeLines = code.writeToPDF(actualY);
-        commandLines = answer.writeToPDF(commandLines);
+        
+        if (answer.getNumberOfLines() > 0)
+            commandLines = answer.writeToPDF(commandLines);
 
         actualY = (commandLines < codeLines) ? commandLines : codeLines;
     }
@@ -119,6 +121,7 @@ public class PDFGenerator {
             default:
                 if (task.getType().name.equals("Gaps")) {
                     code = new PDFGapsCode(task.getPDFCode());
+                    //answer = new PDFAnswer(task.getPDFAnswers());
                     answer = code.answer;
                 }
                 else {

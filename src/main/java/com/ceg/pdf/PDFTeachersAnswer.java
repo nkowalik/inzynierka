@@ -28,8 +28,8 @@ public class PDFTeachersAnswer extends PDFAnswer {
         answersIndex = 0;
     }
 
-    public PDFTeachersAnswer(int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
-        super(textWidth, font, fontSize, leftMargin);
+    public PDFTeachersAnswer(List<String> lines, int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
+        super(lines, textWidth, font, fontSize, leftMargin);
         answersIndex = 0;
     }
     
@@ -43,16 +43,19 @@ public class PDFTeachersAnswer extends PDFAnswer {
         if (answers != null) {
             float answerWidth;
             PDFSettings pdfSettings = PDFSettings.getInstance();
-            PDFLine line = new PDFLine(pdfSettings.getCommandFont(), pdfSettings.getCommandFontSize());
+            //PDFLine line = new PDFLine(pdfSettings.getCommandFont(), pdfSettings.getCommandFontSize());
             int myY = y;
             for (String i : actualTaskLines) {
                 String[] answersPlaces;
-                answersPlaces = i.split("#placeForAnswer");
-                
-                for (String j: answersPlaces) {
-                    answerWidth = getWidth(j);
-                    line.setText(answers.get(answersIndex++));
-                    line.writeLine(leftMargin + (int)answerWidth + 2, myY);
+                if (i.contains("#placeForAnswer")) {
+                    i += ' ';
+                    answersPlaces = i.split("#placeForAnswer");               
+
+                    for (int j = 0; j < answersPlaces.length - 1; j++) {
+                        answerWidth = getWidth(answersPlaces[j]);
+                        pdfLine.setText(answers.get(answersIndex++));
+                        pdfLine.writeLine(leftMargin + (int)answerWidth + 2, myY);
+                    }
                 }
                 myY -= lineHeight;
             }            

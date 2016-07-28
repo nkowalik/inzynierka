@@ -9,11 +9,10 @@ import java.util.List;
  * Created by Martyna.Luczkowska on 2016-07-28.
  */
 public class PDFGapsCode extends PDFCode {
-    public PDFAnswer answer;
 
     PDFGapsCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
         super(lines);
-        answer = new PDFAnswer(textWidth, pdfLine.getFont(), pdfLine.getFontSize(), leftMargin);
+        answer = new PDFAnswer(lines, textWidth, pdfLine.getFont(), pdfLine.getFontSize(), leftMargin);
     }
 
     @Override
