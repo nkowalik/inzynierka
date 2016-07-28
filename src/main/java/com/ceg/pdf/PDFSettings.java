@@ -1,16 +1,16 @@
 package com.ceg.pdf;
 
-import com.ceg.examContent.Exam;
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.gui.PdfSavingController;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.stage.Stage;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.stage.Stage;
 
 /**
  *
@@ -31,7 +31,17 @@ public class PDFSettings {
     
     private String date;
     private File pdfFile;
-    
+
+    public static final int commandWidth = 250;
+    public static final int codeWidth = 250;
+    public final static int leftMargin = 30;
+    public final static int leftCodeMargin = leftMargin + commandWidth + leftMargin;
+    public static final int topMargin = 760;
+    public static final int bottomMargin = 40;
+    public static final int breakBetweenTasks = 25;
+
+    private static final PDFSettings instance = new PDFSettings("Times New Roman", "Courier", 10, 10, "student", "egzamin.pdf");
+
     public PDFSettings(String commandFont, String codeFont, Integer commandFontSize, Integer codeFontSize, String testType, String pdfFileName) {
         this.commandFont = commandFont;
         this.codeFont = codeFont;
@@ -44,7 +54,7 @@ public class PDFSettings {
         
         year = calendar.get(calendar.YEAR);
         month = calendar.get(calendar.MONTH) + 1;
-        day = (Integer)calendar.get(calendar.DAY_OF_MONTH);
+        day = calendar.get(calendar.DAY_OF_MONTH);
         
         File file = new File(".");
         pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);        
@@ -113,6 +123,10 @@ public class PDFSettings {
     public Integer getDay() {
         return day;
     }
+
+    public String getDate() {
+        return date;
+    }
     
     public File getPdfFile() {
         return pdfFile;
@@ -133,16 +147,7 @@ public class PDFSettings {
     
     public void pdfGenerate(Stage stage) {
         try {
-            System.out.println(Exam.getInstance().getTaskAtIndex(0).getAnswers().size());
-            System.out.println(Exam.getInstance().getTaskAtIndex(0).getPDFCode().size());
-            System.out.println(Exam.getInstance().getTaskAtIndex(0).getContents().size());
-            PDFGenerator gen = new PDFGenerator(    pdfFile,
-                    commandFont,
-                    commandFontSize,
-                    codeFont,
-                    codeFontSize,
-                    date,
-                    testType);
+            PDFGenerator gen = new PDFGenerator();
         } catch (IOException ex) {
             Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EmptyPartOfTaskException ex) {
@@ -153,5 +158,9 @@ public class PDFSettings {
             alert.showAndWait();
         }
         stage.hide();
+    }
+
+    public static PDFSettings getInstance() {
+        return instance;
     }
 }

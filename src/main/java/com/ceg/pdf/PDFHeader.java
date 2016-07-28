@@ -8,13 +8,16 @@ import java.io.IOException;
  */
 public class PDFHeader {
     private final PDFLine line;
+    private static int topMargin = PDFSettings.getInstance().topMargin;
+    private static final int leftMargin = PDFSettings.getInstance().leftMargin;
+    private static final String testDate = PDFSettings.getInstance().getDate();
     
     public PDFHeader() throws IOException {
         this.line = new PDFLine("times", 12);
     }
     
         /* Funkcja dodająca nagłówek postaci miejsc na imię  i nazwisko oraz numer indeksu studenta */
-    public int setHeader(int leftMargin, int topMargin, int breakAfterHeader, String testDate) throws IOException {        
+    public int setHeader(int breakAfterHeader) throws IOException {
         line.setText("________________________________________________________");
         line.writeLine(leftMargin, topMargin);
         

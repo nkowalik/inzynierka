@@ -5,8 +5,9 @@
  */
 package com.ceg.pdf;
 
-import com.ceg.examContent.Exam;
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -22,21 +23,26 @@ public class PDFTeachersAnswer extends PDFAnswer {
     //następnej luki
     private int answersIndex;
 
-    public PDFTeachersAnswer(int textWidth, String fontName, int fontSize) throws IOException {
-        super(textWidth, fontName, fontSize);
+    public PDFTeachersAnswer(List<String> lines) throws IOException {
+        super(lines);
         answersIndex = 0;
-    }       
+    }
+
+    public PDFTeachersAnswer(int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
+        super(textWidth, font, fontSize, leftMargin);
+        answersIndex = 0;
+    }
     
     /* funkcja zapisująca do dokumentu pdf najpierw odpowiedzi dla nauczyciela a następnie całą treść zadania */
     @Override
-    public int writeToPDF(int x, int y) throws IOException, EmptyPartOfTaskException { 
+    public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
         if (answers.isEmpty())
             throw new EmptyPartOfTaskException();
         answersIndex = 0;
         
         if (answers != null) {
             float answerWidth;
-            PDFSettings pdfSettings = Exam.getInstance().pdfSettings;
+            PDFSettings pdfSettings = PDFSettings.getInstance();
             PDFLine line = new PDFLine(pdfSettings.getCommandFont(), pdfSettings.getCommandFontSize());
             int myY = y;
             for (String i : actualTaskLines) {
@@ -46,12 +52,12 @@ public class PDFTeachersAnswer extends PDFAnswer {
                 for (String j: answersPlaces) {
                     answerWidth = getWidth(j);
                     line.setText(answers.get(answersIndex++));
-                    line.writeLine(x + (int)answerWidth + 2, myY);
+                    line.writeLine(leftMargin + (int)answerWidth + 2, myY);
                 }
                 myY -= lineHeight;
             }            
         }
-        return super.writeToPDF(x, y);
+        return super.writeToPDF(y);
     }
     
     @Override
