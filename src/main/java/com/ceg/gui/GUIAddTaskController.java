@@ -25,6 +25,8 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
+import javax.swing.*;
+
 /**
  *
  * @author Natalia
@@ -32,7 +34,7 @@ import javafx.stage.FileChooser;
 
 
 public class GUIAddTaskController implements Initializable {
-    
+
     ArrayList<String> contentList = new ArrayList<>();
     ArrayList<String> codeList = new ArrayList<>();
     TaskType type;
@@ -56,30 +58,34 @@ public class GUIAddTaskController implements Initializable {
     MenuItem taskTypeVarValue;
     @FXML
     MenuItem taskTypeLineNumbers;
-    
+
     private static Stage stage = null;
     private static GUIAddTaskController addTaskInstance = null;
     private static GUIMainController mainInstance = null;
+    private FileChooser fileChooser;
 
     public static synchronized void show() throws IOException {
         if(stage == null) {
             URL location = GUIAddTaskController.class.getResource("/fxml/addTask.fxml");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
-            
+
             Scene scene = new Scene((Pane)loader.load(location.openStream()));
-            
+
             stage = new Stage();
             stage.setScene(scene);
             stage.setTitle("Dodaj nowe zadanie");
+            stage.setResizable(false);
         }
         clearFields();
         stage.show();
         stage.toFront();
+        GUIAddTaskController.getInstance().finish.setDisable(true);
     }
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         addTaskInstance = this;
+        fileChooser = new FileChooser();
         mainInstance = GUIMainController.getInstance();
     }
     public static GUIAddTaskController getInstance() {
@@ -112,7 +118,7 @@ public class GUIAddTaskController implements Initializable {
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
         addType("returned_value.txt");
-         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
+        type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeComplexOutput() {
         chooseType.setText(taskTypeComplexOutput.getText());
@@ -144,9 +150,8 @@ public class GUIAddTaskController implements Initializable {
         t.setCode(codeList);
         Exam.getInstance().addTask(t); // wrzuca na koniec listy, ustawia idx na size-1 (ostatni element)
         stage.hide();
-        
+
         mainInstance.getInstance().addNewTabPaneTab();
-        //mainInstance.getInstance().updateWindow(Exam.getInstance().idx);
 
         chooseType.setText("Typ zadania");
     }
@@ -162,9 +167,10 @@ public class GUIAddTaskController implements Initializable {
         stage.hide();
     }
     public void selectCodeFile() throws IOException {
-        FileChooser fileChooser = new FileChooser();
+
         File file = fileChooser.showOpenDialog(stage);
         if(file != null) {
+            fileChooser.setInitialDirectory(new File(file.getParent()));
             loadFile(file);
         }
     }
@@ -179,6 +185,5 @@ public class GUIAddTaskController implements Initializable {
         for (String i : codeList) {
             code.appendText(i + "\n");
         }
-        finish.setDisable(false);
     }
 }
