@@ -17,12 +17,12 @@ public class CodeParser {
                 for (ListIterator<String> iterator = lines.listIterator(); iterator.hasNext() ;)
                 {
                     String str = iterator.next();
-                    if (str.contains("cout <<") || str.contains("cout<<"))
+                    if ((str.contains("cout <<") || str.contains("cout<<")) && (!str.contains("<<endl") && !str.contains("<< endl")))
                     {
                         iterator.add("cout<<endl;");
                         couts++;
                     }
-                    else if(str.contains("printf")){
+                    else if(str.matches(".*printf\\(\\\"(?!.*\\\\n).*")){
                         iterator.add("printf(\"\\n\");");
                         couts++;
                     }

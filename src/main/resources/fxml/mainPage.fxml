@@ -40,6 +40,7 @@
                             <Button fx:id="hideMarkerBtn" mnemonicParsing="false" onAction="#hideMarker" text="Ukryj" />
                             <Button fx:id="testMarkerBtn" mnemonicParsing="false"  onAction="#testMarker" text="Usuń" />
                             <Button fx:id="normalMarkerBtn" mnemonicParsing="false"  onAction="#normalMarker" text="Cofnij" />
+                            <Button fx:id="gapsMarkerBtn" visible="false" mnemonicParsing="false"  onAction="#gapsMarker" text="Luka" />
                       </children>
                 </HBox>
                 </children>
