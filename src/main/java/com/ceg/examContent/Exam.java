@@ -5,7 +5,6 @@
  */
 package com.ceg.examContent;
 
-import com.ceg.pdf.PDFSettings;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
@@ -20,14 +19,14 @@ import java.util.Observable;
 */
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
-    public PDFSettings pdfSettings;
+    //public PDFSettings pdfSettings;
     
     private final static Exam instance = new Exam();
     public int idx;
 
 
     public Exam() {
-        pdfSettings = new PDFSettings("Times New Roman", "Courier", 10, 10, "student", "egzamin.pdf");
+       // pdfSettings = new PDFSettings();
     }
 
     public static Exam getInstance() {

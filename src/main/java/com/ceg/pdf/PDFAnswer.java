@@ -1,7 +1,8 @@
 package com.ceg.pdf;
 
-import com.ceg.examContent.Exam;
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -11,11 +12,23 @@ import java.util.List;
  */
 
 /* klasa odpowiedzialna za wyglad pola odpowiedzi w arkuszu pdf */
-public class PDFAnswer extends PDFAbstractTask {
-    
-    /**/    
-    public PDFAnswer(int textWidth, String fontName, int fontSize) throws IOException {
-        super(textWidth, fontName, fontSize);
+public class PDFAnswer extends PDFAbstractTaskPart {
+
+    public PDFAnswer(List<String> lines) throws IOException {
+        super();
+        PDFSettings pdfSettings = PDFSettings.getInstance();
+        textWidth = pdfSettings.commandWidth;
+        pdfLine = new PDFLine(pdfSettings.getCommandFont(), pdfSettings.getCommandFontSize());
+        leftMargin = pdfSettings.leftMargin;
+        lineHeight+=2;
+        textSplitting(lines);
+    }
+
+    public PDFAnswer(List<String> lines, int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
+        super();
+        this.textWidth = textWidth;
+        pdfLine = new PDFLine(font, fontSize);
+        this.leftMargin = leftMargin;
         lineHeight+=2;
     }
     
@@ -66,10 +79,10 @@ public class PDFAnswer extends PDFAbstractTask {
     }
     
     @Override
-    public int writeToPDF(int x, int y) throws IOException, EmptyPartOfTaskException { 
+    public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
         for (int i=0; i<actualTaskLines.size(); i++) {
             actualTaskLines.set(i, actualTaskLines.get(i).replace("#placeForAnswer", "_________"));
         }
-        return super.writeToPDF(x, y);
+        return super.writeToPDF(y);
     }
 }

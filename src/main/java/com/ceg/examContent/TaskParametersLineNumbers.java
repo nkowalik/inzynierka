@@ -16,23 +16,7 @@ import javafx.scene.control.TextInputDialog;
 public class TaskParametersLineNumbers extends TaskParameters{
     
      public TaskParametersLineNumbers() {
-        //askForParams();
-        //super.setNoOfAnswers(1);
+        
     }
     
-    private void askForParams(){
-        Dialog dialog;
-        dialog = new TextInputDialog("1");
-	dialog.setTitle("Liczba odpowiedzi");
-	dialog.setHeaderText("Ile odpowiedzi będzie miało zadanie?");
-	 
-	Optional<String> result = dialog.showAndWait();
-	String entered = "none.";
-	 
-	if (result.isPresent()) {
-	 
-	    entered = result.get();
-            super.setNoOfAnswers(Integer.valueOf(entered));
-        }
-    }
 }

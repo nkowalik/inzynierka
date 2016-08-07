@@ -36,7 +36,7 @@
                           <MenuItem fx:id="taskTypeSimpleOutput" mnemonicParsing="false" onAction="#addTypeSimpleOutput" text="Wyjście programu" />
                               <MenuItem fx:id="taskTypeReturnedValue" disable="true" mnemonicParsing="false" onAction="#addTypeReturnedValue" text="Zwrócona liczba" />
                               <MenuItem fx:id="taskTypeComplexOutput" mnemonicParsing="false" onAction="#addTypeComplexOutput" text="Wyjście funkcji" />
-                              <MenuItem fx:id="taskTypeGaps" disable="true" mnemonicParsing="false" onAction="#addTypeGaps" text="Uzupełnianie pól" />
+                              <MenuItem fx:id="taskTypeGaps" mnemonicParsing="false" onAction="#addTypeGaps" text="Uzupełnianie pól" />
                               <MenuItem fx:id="taskTypeVarValue" disable="true" mnemonicParsing="false" onAction="#addTypeVarValue" text="Wartości zmiennych" />
                               <MenuItem fx:id="taskTypeLineNumbers" mnemonicParsing="false" onAction="#addTypeLineNumbers" text="Numery linii" />
                         </items>
