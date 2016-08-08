@@ -43,7 +43,6 @@ public class PDFTeachersAnswer extends PDFAnswer {
         if (answers != null) {
             float answerWidth;
             PDFSettings pdfSettings = PDFSettings.getInstance();
-            //PDFLine line = new PDFLine(pdfSettings.getCommandFont(), pdfSettings.getCommandFontSize());
             int myY = y;
             for (String i : actualTaskLines) {
                 String[] answersPlaces;

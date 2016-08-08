@@ -198,7 +198,6 @@ public class PdfSavingController implements Initializable {
 
             PDFSettings.getInstance().saveFile();
             File pdfFile = PDFSettings.getInstance().getPdfFile();
-           // Exam.getInstance().pdfSettings = pdfSettings;
 
             if (pdfFile.exists() && !pdfFile.isDirectory()) {
                 Stage ifPdfExistStage = new Stage();
@@ -219,13 +218,10 @@ public class PdfSavingController implements Initializable {
     }
     
     public void cancel(ActionEvent event) {
-        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
     }
     
-    public void browse(ActionEvent event) {
-        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        
+    public void browse(ActionEvent event) {        
         DirectoryChooser dirChooser = new DirectoryChooser () ;
         dirChooser.setTitle("Wybierz lokalizację pliku");
         File dir = dirChooser.showDialog(appStage);

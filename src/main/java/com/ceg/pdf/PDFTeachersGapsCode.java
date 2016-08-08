@@ -6,7 +6,8 @@ import java.io.IOException;
 import java.util.List;
 
 /**
- * Created by Martyna.Luczkowska on 2016-07-28.
+ * 
+ * @author Martyna
  */
 public class PDFTeachersGapsCode extends PDFGapsCode {
     PDFTeachersGapsCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
