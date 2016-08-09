@@ -4,15 +4,21 @@ import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.io.IOException;
 import java.util.List;
 
-public class PDFCommand extends PDFAbstractTask {
+public class PDFCommand extends PDFAbstractTaskPart {
     protected String[] words;
     protected String line = "";
     protected final float spaceWidth;
     private Integer taskNumber;
         
-    PDFCommand(int textWidth, String fontName, int fontSize) throws IOException {
-        super(textWidth, fontName, fontSize);
+    PDFCommand(List<String> lines, int taskNumber) throws IOException, EmptyPartOfTaskException {
+        super();
+        this.taskNumber = taskNumber;
+        PDFSettings pdfSettings = PDFSettings.getInstance();
+        textWidth = pdfSettings.commandWidth;
+        pdfLine = new PDFLine(pdfSettings.getCommandFont(), pdfSettings.getCommandFontSize());
+        leftMargin = pdfSettings.leftMargin;
         spaceWidth = getWidth(" ");
+        textSplitting(lines);
     }
     
     /*  Funkcja odpowiedzialna za formatowanie tekstu polecenia. Argumentem jest tekst polecenia.
@@ -22,9 +28,9 @@ public class PDFCommand extends PDFAbstractTask {
     @Override
     public void textSplitting (List<String> command) throws IOException, EmptyPartOfTaskException {
         super.textSplitting(command);
-	line = "";
+	    line = "";
         actualWidth = 0;       
-	String string = mergeStringList(command);
+	    String string = mergeStringList(command);
         string = taskNumber.toString() + ". " + string;
         string = string.replace("\n", " ");
         float actualWordWidth;
@@ -65,9 +71,5 @@ public class PDFCommand extends PDFAbstractTask {
             txt+=line+"\n";
         }
         return txt;
-    }
-    
-    public void setTaskNumber(int taskNumber) {
-        this.taskNumber = taskNumber;
     }
 }

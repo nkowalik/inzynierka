@@ -19,7 +19,6 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
@@ -71,7 +70,7 @@ public class PdfSavingController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
-        pdfSettings = Exam.getInstance().pdfSettings;
+        pdfSettings = PDFSettings.getInstance();
         
         Calendar calendar = Calendar.getInstance();
         
@@ -124,13 +123,13 @@ public class PdfSavingController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 daysList.clear();
-                pdfSettings.setMonth(newValue.intValue() + 1);
-                YearMonth yM = YearMonth.of(pdfSettings.getYear(), pdfSettings.getMonth());
+                PDFSettings.getInstance().setMonth(newValue.intValue() + 1);
+                YearMonth yM = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
                 Integer days = yM.lengthOfMonth();
                 for (Integer i = 1; i <= days; i++) {
                     daysList.add(i.toString());
                 }
-                dateDay.setValue(pdfSettings.getDay().toString());
+                dateDay.setValue(PDFSettings.getInstance().getDay().toString());
             }
         });
         
@@ -138,23 +137,23 @@ public class PdfSavingController implements Initializable {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 if (newValue.intValue() != -1)
-                    pdfSettings.setDay(Integer.parseInt(daysList.get(newValue.intValue())));
+                    PDFSettings.getInstance().setDay(Integer.parseInt(daysList.get(newValue.intValue())));
             }           
         });
         
         dateYear.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                pdfSettings.setYear(Integer.parseInt(yearList.get(newValue.intValue())));
+                PDFSettings.getInstance().setYear(Integer.parseInt(yearList.get(newValue.intValue())));
                 
                 daysList.clear();
                 
-                YearMonth yM = YearMonth.of(pdfSettings.getYear(), pdfSettings.getMonth());
+                YearMonth yM = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
                 Integer days = yM.lengthOfMonth();
                 for (Integer i = 1; i <= days; i++) {
                     daysList.add(i.toString());
                 }
-                dateDay.setValue(pdfSettings.getDay().toString());
+                dateDay.setValue(PDFSettings.getInstance().getDay().toString());
             }           
         });
     }
@@ -178,14 +177,14 @@ public class PdfSavingController implements Initializable {
     
     public void saveFile(ActionEvent event) throws IOException {   
         //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        pdfSettings.setCommandFont(commandFont.getValue().toString());
-        pdfSettings.setCodeFont(codeFont.getValue().toString());
+        PDFSettings.getInstance().setCommandFont(commandFont.getValue().toString());
+        PDFSettings.getInstance().setCodeFont(codeFont.getValue().toString());
         
-        pdfSettings.setCommandFontSize(Integer.parseInt(commandFontSize.getText()));
-        pdfSettings.setCodeFontSize(Integer.parseInt(codeFontSize.getText()));
+        PDFSettings.getInstance().setCommandFontSize(Integer.parseInt(commandFontSize.getText()));
+        PDFSettings.getInstance().setCodeFontSize(Integer.parseInt(codeFontSize.getText()));
         
-        pdfSettings.setTestType(testType.getValue().toString());
-        pdfSettings.setPdfFilePath(filePath.getText());
+        PDFSettings.getInstance().setTestType(testType.getValue().toString());
+        PDFSettings.getInstance().setPdfFilePath(filePath.getText());
         String extension = fileName.getText().substring(fileName.getText().length() - 4, fileName.getText().length());
         if (!extension.equals(".pdf")) {
             Alert alert = new Alert(Alert.AlertType.INFORMATION);
@@ -195,11 +194,11 @@ public class PdfSavingController implements Initializable {
             alert.showAndWait();
         }
         else {
-            pdfSettings.setPdfFileName(fileName.getText());
+            PDFSettings.getInstance().setPdfFileName(fileName.getText());
 
-            pdfSettings.saveFile();
-            File pdfFile = pdfSettings.getPdfFile();
-            Exam.getInstance().pdfSettings = pdfSettings;
+            PDFSettings.getInstance().saveFile();
+            File pdfFile = PDFSettings.getInstance().getPdfFile();
+           // Exam.getInstance().pdfSettings = pdfSettings;
 
             if (pdfFile.exists() && !pdfFile.isDirectory()) {
                 Stage ifPdfExistStage = new Stage();
@@ -213,7 +212,7 @@ public class PdfSavingController implements Initializable {
             }
 
             else {
-                Exam.getInstance().pdfSettings.pdfGenerate(appStage);           
+                PDFSettings.getInstance().pdfGenerate(appStage);           
                 appStage.hide();
             }
         }

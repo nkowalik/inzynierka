@@ -5,8 +5,10 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-public class PDFCode extends PDFAbstractTask {
+public class PDFCode extends PDFAbstractTaskPart {
     private String line;
+    public PDFAnswer answer = null;
+
     private final List<String> operatorList = Arrays.asList("//", 
                                                             ";", 
                                                             ",", 
@@ -22,8 +24,13 @@ public class PDFCode extends PDFAbstractTask {
                                                             "<",
                                                             " " );
     
-    PDFCode(int textWidth, String fontName, int fontSize) throws IOException {
-        super(textWidth, fontName, fontSize);
+    PDFCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
+        super();
+        PDFSettings pdfSettings = PDFSettings.getInstance();
+        textWidth = pdfSettings.codeWidth;
+        leftMargin = pdfSettings.leftCodeMargin;
+        pdfLine = new PDFLine(pdfSettings.getCodeFont(), pdfSettings.getCodeFontSize());
+        textSplitting(lines);
     }
     
     /*  Funkcja formatująca kod do pdfa. Jako parametr przyjmuje listę linii kodu.
@@ -81,5 +88,8 @@ public class PDFCode extends PDFAbstractTask {
             }
         }
         return true;
+    }
+
+    protected void setAnswer(PDFAnswer answer) {
     }
 }

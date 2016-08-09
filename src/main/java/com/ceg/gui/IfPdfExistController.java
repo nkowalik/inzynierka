@@ -1,6 +1,7 @@
 package com.ceg.gui;
 
 import com.ceg.examContent.Exam;
+import com.ceg.pdf.PDFSettings;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -27,7 +28,7 @@ public class IfPdfExistController implements Initializable {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
         
-        Exam.getInstance().pdfSettings.pdfGenerate(PdfSavingController.appStage);
+        PDFSettings.getInstance().pdfGenerate(PdfSavingController.appStage);
     }
     
     public void anuluj(ActionEvent event) {
