@@ -7,6 +7,7 @@ import com.ceg.examContent.TaskTypeComplexOutput;
 import com.ceg.examContent.TaskTypeGaps;
 import com.ceg.examContent.TaskTypeLineNumbers;
 import com.ceg.examContent.TaskTypeSimpleOutput;
+import com.ceg.xml.Tasks;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -26,7 +27,9 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
-import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Unmarshaller;
 
 /**
  *
@@ -92,8 +95,21 @@ public class GUIAddTaskController implements Initializable {
     public static GUIAddTaskController getInstance() {
         return addTaskInstance;
     }
-    public void addType(String sTxt) {
+    public void addType(String sTxt, String taskName) {
         try {
+            JAXBContext jc = JAXBContext.newInstance(Tasks.class);
+            Unmarshaller unmarshaller = jc.createUnmarshaller();
+            File xmlFile = new File( "tasks.xml" );
+            Tasks tasks = (Tasks) unmarshaller.unmarshal(xmlFile);
+
+            contentList.clear();
+            text.clear();
+            //contentList.add(tasks.getTaskData().getText());
+            //text.appendText(tasks.getTaskData().getText());
+
+            //contentList.add(xTasks.getTaskData().subList(index, index+1).toString());
+            //text.appendText(xTasks.getTaskData().subList(index, index+1).toString());
+
             Scanner s = new Scanner(new File(sTxt));
             contentList.clear();
             while(s.hasNext()) {
@@ -104,45 +120,49 @@ public class GUIAddTaskController implements Initializable {
             for (String i : contentList) {
                 text.appendText(i + "\n");
             }
+
             finish.setDisable(false);
-        } catch (FileNotFoundException ex) {
-            System.err.println(ex);
+
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
     }
     public void addTypeSimpleOutput() {
         chooseType.setText(taskTypeSimpleOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
-        addType("simple_output.txt");
+        addType("simple_output.txt", "Simple output");
         type = new TaskTypeSimpleOutput();
     }
     public void addTypeReturnedValue() {
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
-        addType("returned_value.txt");
+        addType("returned_value.txt", "Returned value");
         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeComplexOutput() {
         chooseType.setText(taskTypeComplexOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeComplexOutput.getText());
-        addType("complex_output.txt");
+        addType("complex_output.txt", "Complex output");
         type = new TaskTypeComplexOutput();
     }
     public void addTypeGaps() {
         chooseType.setText(taskTypeGaps.getText());
         mainInstance.setStageName("CEG - " + taskTypeGaps.getText());
-        addType("gaps.txt");
+        addType("gaps.txt", "Gaps");
         type = new TaskTypeGaps();
     }
     public void addTypeVarValue() {
         chooseType.setText(taskTypeVarValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
-        addType("var_value.txt");
+        addType("var_value.txt", "Var value");
         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeLineNumbers() {
         chooseType.setText(taskTypeLineNumbers.getText());
         mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
-        addType("line_numbers.txt");
+        addType("line_numbers.txt", "Line numbers");
         type = new TaskTypeLineNumbers();
     }
     public void finishEdition(ActionEvent event) throws Exception {
