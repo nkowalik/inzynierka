@@ -14,8 +14,16 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import org.fxmisc.richtext.*?>
+<?import javafx.stage.Screen?>
+<?import java.lang.Double?>
 
-<GridPane  alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
+<GridPane  alignment="center" hgap="0" vgap="0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController" 
+    prefWidth="${screen.visualBounds.width*0.5}" 
+    prefHeight="${screen.visualBounds.height*0.6}">
+    <fx:define>
+        <Screen fx:factory="getPrimary" fx:id="screen"/>
+        <Double fx:id="STANDARD_WIDTH" fx:value="440.0"/>
+    </fx:define>
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -24,14 +32,14 @@
       <RowConstraints />
     </rowConstraints>
     <children>
-        <BorderPane prefHeight="551.0" prefWidth="950.0" GridPane.rowIndex="1">
+      <BorderPane GridPane.rowIndex="1" GridPane.fillWidth="true" >
          <padding>
-            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+            <Insets bottom="10.0" left="0.0" right="0.0" top="10.0" />
          </padding>
          <center>
-            <VBox prefHeight="292.0" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
+            <VBox prefHeight="${screen.visualBounds.height*0.51}" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
                 <children>
-                <CodeArea fx:id="code" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="440.0"  BorderPane.alignment="TOP_RIGHT">
+                <CodeArea fx:id="code" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="${screen.visualBounds.height*0.46}" prefWidth="$STANDARD_WIDTH"  BorderPane.alignment="TOP_RIGHT">
                     <BorderPane.margin>
 
                    </BorderPane.margin></CodeArea>
@@ -47,10 +55,10 @@
             </VBox>
          </center>
          <left>
-            <VBox prefHeight="292.0" prefWidth="440.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="${screen.visualBounds.height*0.51}" prefWidth="$STANDARD_WIDTH" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="440.0" promptText="Miejsce na polecenie" />
-                  <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="440.0" />
+                  <TextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="$STANDARD_WIDTH" promptText="Miejsce na polecenie" />
+                  <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="$STANDARD_WIDTH" />
                   <HBox alignment="CENTER" spacing="10.0">
                      <children>
                         <Button fx:id="executeBtn" mnemonicParsing="false" onAction="#execute" prefWidth="120.0" text="Wykonaj" />
@@ -62,8 +70,11 @@
                </BorderPane.margin>
             </VBox>
          </left>
-         </BorderPane>
-      <VBox prefHeight="58.0" prefWidth="950.0">
+      </BorderPane>
+      <VBox GridPane.fillWidth="true" prefHeight="${screen.visualBounds.height*0.09}" prefWidth="${screen.visualBounds.width*0.5}">
+          <padding>
+            <Insets bottom="0.0" left="0.0" right="0.0" top="0.0" />
+         </padding>
          <children>
             <MenuBar>
               <menus>
@@ -86,7 +97,7 @@
                 </Menu>
               </menus>
             </MenuBar>
-            <TabPane fx:id="tabPane" prefHeight="35.0" prefWidth="950.0" tabClosingPolicy="UNAVAILABLE">
+            <TabPane fx:id="tabPane" tabClosingPolicy="UNAVAILABLE">
               <tabs>
               </tabs>
             </TabPane>

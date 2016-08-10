@@ -34,15 +34,15 @@ import javafx.stage.Stage;
  * @author Martyna
  */
 public class PdfSavingController implements Initializable {
-    @FXML
-    ChoiceBox commandFont;
-    @FXML
-    TextField commandFontSize;
+    //@FXML
+    //ChoiceBox commandFont;
+    //@FXML
+    //TextField commandFontSize;
     
-    @FXML
-    ChoiceBox codeFont;
-    @FXML
-    TextField codeFontSize;
+    //@FXML
+    //ChoiceBox codeFont;
+    //@FXML
+    //TextField codeFontSize;
     
     @FXML
     ChoiceBox testType;
@@ -82,11 +82,11 @@ public class PdfSavingController implements Initializable {
                 monthList.add(i.toString());
             }
         }
-        commandFont.setItems(FXCollections.observableList(fontList));
-        commandFont.setValue(pdfSettings.getCommandFont());
+       // commandFont.setItems(FXCollections.observableList(fontList));
+       // commandFont.setValue(pdfSettings.getCommandFont());
         
-        codeFont.setItems(FXCollections.observableList(fontList));
-        codeFont.setValue(pdfSettings.getCodeFont());
+       // codeFont.setItems(FXCollections.observableList(fontList));
+       // codeFont.setValue(pdfSettings.getCodeFont());
         
         testType.setItems(FXCollections.observableList(testTypeList));
         testType.setValue(pdfSettings.getTestType());
@@ -98,8 +98,8 @@ public class PdfSavingController implements Initializable {
         else
             dateMonth.setValue(month.toString());
         
-        commandFontSize.setText(pdfSettings.getCommandFontSize().toString());
-        codeFontSize.setText(pdfSettings.getCodeFontSize().toString());
+      //  commandFontSize.setText(pdfSettings.getCommandFontSize().toString());
+      //  codeFontSize.setText(pdfSettings.getCodeFontSize().toString());
         
         Integer year = pdfSettings.getYear();
         for (Integer i  = 2008; i <= year+10; i++) {
@@ -177,11 +177,15 @@ public class PdfSavingController implements Initializable {
     
     public void saveFile(ActionEvent event) throws IOException {   
         //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        PDFSettings.getInstance().setCommandFont(commandFont.getValue().toString());
-        PDFSettings.getInstance().setCodeFont(codeFont.getValue().toString());
+        //PDFSettings.getInstance().setCommandFont(commandFont.getValue().toString());
+        PDFSettings.getInstance().setCommandFont("Arial");
+        // PDFSettings.getInstance().setCodeFont(codeFont.getValue().toString());
+        PDFSettings.getInstance().setCodeFont("Courier");
         
-        PDFSettings.getInstance().setCommandFontSize(Integer.parseInt(commandFontSize.getText()));
-        PDFSettings.getInstance().setCodeFontSize(Integer.parseInt(codeFontSize.getText()));
+        //  PDFSettings.getInstance().setCommandFontSize(Integer.parseInt(commandFontSize.getText()));
+        PDFSettings.getInstance().setCommandFontSize(10);
+        // PDFSettings.getInstance().setCodeFontSize(Integer.parseInt(codeFontSize.getText()));
+        PDFSettings.getInstance().setCodeFontSize(10);
         
         PDFSettings.getInstance().setTestType(testType.getValue().toString());
         PDFSettings.getInstance().setPdfFilePath(filePath.getText());
