@@ -21,8 +21,8 @@ public class PDFGenerator {
     public static PDDocument document;
     private PDPage actualPage = null;
     public static PDPageContentStream cs;
-    private static int topMargin = PDFSettings.getInstance().topMargin;
-    private static int bottomMargin = PDFSettings.getInstance().bottomMargin;
+    private static final int topMargin = PDFSettings.getInstance().topMargin;
+    private static final int bottomMargin = PDFSettings.getInstance().bottomMargin;
 
     private PDFCommand comm;
     private PDFCode code;
@@ -45,7 +45,7 @@ public class PDFGenerator {
         
         Integer taskNumber = 1;
         for (Task i : taskList) {
-            if (i.getPDFCode().isEmpty() || i.getContents().isEmpty() || i.getAnswers().size() >= i.getPDFAnswers().size())
+            if (i.getPDFCode().isEmpty() || i.getContents().isEmpty() || i.getAnswers().size() < i.getPDFAnswers().size())
                 throw new EmptyPartOfTaskException();
             
             comm = new PDFCommand(i.getContents(), taskNumber++);
