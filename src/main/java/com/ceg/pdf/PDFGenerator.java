@@ -45,7 +45,7 @@ public class PDFGenerator {
         
         Integer taskNumber = 1;
         for (Task i : taskList) {
-            if (i.getPDFCode().isEmpty() || i.getContents().isEmpty() || i.getAnswers().size() >= i.getPDFAnswers().size())
+            if (i.getPDFCode().isEmpty() || i.getContents().isEmpty() || i.getAnswers().size() < i.getPDFAnswers().size())
                 throw new EmptyPartOfTaskException();
             
             comm = new PDFCommand(i.getContents(), taskNumber++);
