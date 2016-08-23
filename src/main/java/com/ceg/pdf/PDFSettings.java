@@ -1,10 +1,8 @@
 package com.ceg.pdf;
 
-import com.ceg.exceptions.EmptyExamException;
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.gui.Alerts;
 import com.ceg.gui.PdfSavingController;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -152,11 +150,7 @@ public class PDFSettings {
         } catch (IOException ex) {
             Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex);
         } catch (EmptyPartOfTaskException ex) {
-            Alert alert = new Alert(AlertType.INFORMATION);
-            alert.setTitle("Błąd egzaminu");
-            alert.setHeaderText("Sprawdź czy pola z poleceniem i kodem nie są puste oraz czy podana liczba odpowiedzi zgadza się ze stanem faktycznym.");
-               
-            alert.showAndWait();
+            Alerts.emptyPartOfTaskAlert();
         }
         stage.hide();
     }

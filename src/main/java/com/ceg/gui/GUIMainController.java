@@ -163,11 +163,7 @@ public class GUIMainController implements Initializable {
                 saveResult(exam.idx);
                 PdfSavingController.show();
             } catch (EmptyExamException ex) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Pusty egzamin");
-                alert.setHeaderText("Nie można utworzyć pustego dokumentu.");
-
-                alert.showAndWait();
+                Alerts.emptyExamAlert();
             }
     }
     public void testMarker(ActionEvent actionEvent) {

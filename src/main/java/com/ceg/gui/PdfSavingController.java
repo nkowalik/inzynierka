@@ -176,7 +176,6 @@ public class PdfSavingController implements Initializable {
     }
     
     public void saveFile(ActionEvent event) throws IOException {   
-        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         PDFSettings.getInstance().setCommandFont(commandFont.getValue().toString());
         PDFSettings.getInstance().setCodeFont(codeFont.getValue().toString());
         
@@ -187,33 +186,28 @@ public class PdfSavingController implements Initializable {
         PDFSettings.getInstance().setPdfFilePath(filePath.getText());
         String extension = fileName.getText().substring(fileName.getText().length() - 4, fileName.getText().length());
         if (!extension.equals(".pdf")) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Brak implementacji");
-            alert.setHeaderText("Nazwa pliku nie kończy się rozszerzeniem .pdf");
-
-            alert.showAndWait();
+            PDFSettings.getInstance().setPdfFileName(fileName.getText() + ".pdf");
         }
         else {
             PDFSettings.getInstance().setPdfFileName(fileName.getText());
+        }
+        PDFSettings.getInstance().saveFile();
+        File pdfFile = PDFSettings.getInstance().getPdfFile();
 
-            PDFSettings.getInstance().saveFile();
-            File pdfFile = PDFSettings.getInstance().getPdfFile();
+        if (pdfFile.exists() && !pdfFile.isDirectory()) {
+            Stage ifPdfExistStage = new Stage();
+            Parent scene = FXMLLoader.load(getClass().getResource("/fxml/ifPdfExist.fxml"));
+            ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
+            ifPdfExistStage.setScene(new Scene(scene, 430, 125));
+            ifPdfExistStage.setResizable(false);
+            ifPdfExistStage.setAlwaysOnTop(true);
+            ifPdfExistStage.show();
+            ifPdfExistStage.setResizable(false);
+        }
 
-            if (pdfFile.exists() && !pdfFile.isDirectory()) {
-                Stage ifPdfExistStage = new Stage();
-                Parent scene = FXMLLoader.load(getClass().getResource("/fxml/ifPdfExist.fxml"));
-                ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
-                ifPdfExistStage.setScene(new Scene(scene, 430, 125));
-                ifPdfExistStage.setResizable(false);
-                ifPdfExistStage.setAlwaysOnTop(true);
-                ifPdfExistStage.show();
-                ifPdfExistStage.setResizable(false);
-            }
-
-            else {
-                PDFSettings.getInstance().pdfGenerate(appStage);           
-                appStage.hide();
-            }
+        else {
+            PDFSettings.getInstance().pdfGenerate(appStage);           
+            appStage.hide();
         }
     }
     
