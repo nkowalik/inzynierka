@@ -21,8 +21,8 @@ public class PDFGenerator {
     public static PDDocument document;
     private PDPage actualPage = null;
     public static PDPageContentStream cs;
-    private static int topMargin = PDFSettings.getInstance().topMargin;
-    private static int bottomMargin = PDFSettings.getInstance().bottomMargin;
+    private static final int topMargin = PDFSettings.getInstance().topMargin;
+    private static final int bottomMargin = PDFSettings.getInstance().bottomMargin;
 
     private PDFCommand comm;
     private PDFCode code;
@@ -34,7 +34,7 @@ public class PDFGenerator {
     public PDFGenerator() throws IOException, EmptyPartOfTaskException {
         int breakBetweenTasks = PDFSettings.breakBetweenTasks;
 
-        //tworzeniedokumentu, pierwszej strony i dodanie jej do dokumentu
+        //tworzenie dokumentu, pierwszej strony i dodanie jej do dokumentu
         document = new PDDocument();
         createNewPage();
         
@@ -42,8 +42,12 @@ public class PDFGenerator {
         actualY = header.setHeader(breakBetweenTasks);
 
         List<Task> taskList = Exam.getInstance().getTasks();
+        
         Integer taskNumber = 1;
         for (Task i : taskList) {
+            if (i.getPDFCode().isEmpty() || i.getContents().isEmpty() || i.getAnswers().size() < i.getPDFAnswers().size())
+                throw new EmptyPartOfTaskException();
+            
             comm = new PDFCommand(i.getContents(), taskNumber++);
             createCodeAndAnswer(i);
 
@@ -119,15 +123,20 @@ public class PDFGenerator {
                 }
                 break;
             default:
-                if (task.getType().name.equals("Gaps")) {
-                    code = new PDFGapsCode(task.getPDFCode());
-                    //answer = new PDFAnswer(task.getPDFAnswers());
-                    answer = code.answer;
-                }
-                else {
-                    code = new PDFCode(task.getPDFCode());
-                    answer = new PDFAnswer(task.getPDFAnswers());
-                }
+                    switch (task.getType().name) {
+                        case "Gaps":
+                            code = new PDFGapsCode(task.getPDFCode());
+                            answer = code.answer;
+                            break;
+                        case "LineNumbers":
+                            code = new PDFLineNumbersCode(task.getPDFCode());
+                            answer = new PDFAnswer(task.getPDFAnswers());
+                            break;
+                        default:
+                            code = new PDFCode(task.getPDFCode());
+                            answer = new PDFAnswer(task.getPDFAnswers());
+                            break;
+                    }
                 break;
         }
         

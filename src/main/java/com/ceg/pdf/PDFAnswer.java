@@ -4,6 +4,7 @@ import com.ceg.exceptions.EmptyPartOfTaskException;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -13,11 +14,13 @@ import java.util.List;
 
 /* klasa odpowiedzialna za wyglad pola odpowiedzi w arkuszu pdf */
 public class PDFAnswer extends PDFAbstractTaskPart {
+    protected List<String> placesForAnswers = new ArrayList<>();
+    private final String placeForAnswer = "_________";
 
     public PDFAnswer(List<String> lines) throws IOException {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = pdfSettings.commandWidth;
+        textWidth = PDFSettings.commandWidth;
         pdfLine = new PDFLine(pdfSettings.getCommandFont(), pdfSettings.getCommandFontSize());
         leftMargin = pdfSettings.leftMargin;
         lineHeight+=2;
@@ -75,13 +78,26 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         }
     }
     
-    public void setAnswers(List<String> answers) {       
+    public void setAnswers(List<String> answers) {   
+        answers.stream().forEach((_item) -> {
+            placesForAnswers.add(placeForAnswer);
+        });
     }
     
     @Override
     public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
+        int answerIndex = 0;
         for (int i=0; i<actualTaskLines.size(); i++) {
-            actualTaskLines.set(i, actualTaskLines.get(i).replace("#placeForAnswer", "_________"));
+            if (actualTaskLines.get(i).contains("#placeForAnswer")) {
+                actualTaskLines.set(i, actualTaskLines.get(i) + ' ');
+                String[] list = actualTaskLines.get(i).split("#placeForAnswer");
+                String line = "";
+                
+                for (int j = 0; j < list.length - 1; j++) {
+                    line += list[j] + placesForAnswers.get(answerIndex++);
+                }
+            actualTaskLines.set(i, line + list[list.length - 1]);
+            }
         }
         return super.writeToPDF(y);
     }
