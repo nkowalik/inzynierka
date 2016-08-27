@@ -8,11 +8,12 @@ import java.util.List;
  * @author Natalia
  */
 
+@XmlRootElement(name="tasks")
 @XmlType( propOrder = { "name", "text", "taskData" })
 public class TaskData {
-    private String name;
-    private String text;
-    private List<TaskData> taskData;
+    String name;
+    String text;
+    List<TaskData> taskData;
 
     public String getName() {
         return name;

@@ -7,7 +7,9 @@ import com.ceg.examContent.TaskTypeComplexOutput;
 import com.ceg.examContent.TaskTypeGaps;
 import com.ceg.examContent.TaskTypeLineNumbers;
 import com.ceg.examContent.TaskTypeSimpleOutput;
+import com.ceg.xml.TaskData;
 import com.ceg.xml.Tasks;
+import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -29,6 +31,7 @@ import javafx.stage.FileChooser;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 
 /**
@@ -95,74 +98,52 @@ public class GUIAddTaskController implements Initializable {
     public static GUIAddTaskController getInstance() {
         return addTaskInstance;
     }
-    public void addType(String sTxt, String taskName) {
-        try {
-            JAXBContext jc = JAXBContext.newInstance(Tasks.class);
-            Unmarshaller unmarshaller = jc.createUnmarshaller();
-            File xmlFile = new File( "tasks.xml" );
-            Tasks tasks = (Tasks) unmarshaller.unmarshal(xmlFile);
+    public void addType(int index) {
+        TaskData tasks = TasksLoading.loadFromXml();
 
-            contentList.clear();
-            text.clear();
-            //contentList.add(tasks.getTaskData().getText());
-            //text.appendText(tasks.getTaskData().getText());
-
-            //contentList.add(xTasks.getTaskData().subList(index, index+1).toString());
-            //text.appendText(xTasks.getTaskData().subList(index, index+1).toString());
-
-            Scanner s = new Scanner(new File(sTxt));
-            contentList.clear();
-            while(s.hasNext()) {
-                contentList.add(s.nextLine());
-            }
-            s.close();
-            text.clear();
-            for (String i : contentList) {
-                text.appendText(i + "\n");
-            }
-
-            finish.setDisable(false);
-
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
+        contentList.clear();
+        text.clear();
+        if (tasks != null) {
+            contentList.add(tasks.getTaskData().get(index).getText());
+            text.appendText(tasks.getTaskData().get(index).getText());
         }
+
+        finish.setDisable(false);
     }
     public void addTypeSimpleOutput() {
         chooseType.setText(taskTypeSimpleOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
-        addType("simple_output.txt", "Simple output");
+        addType(0);
         type = new TaskTypeSimpleOutput();
     }
     public void addTypeReturnedValue() {
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
-        addType("returned_value.txt", "Returned value");
+        addType(1);
         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeComplexOutput() {
         chooseType.setText(taskTypeComplexOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeComplexOutput.getText());
-        addType("complex_output.txt", "Complex output");
+        addType(2);
         type = new TaskTypeComplexOutput();
     }
     public void addTypeGaps() {
         chooseType.setText(taskTypeGaps.getText());
         mainInstance.setStageName("CEG - " + taskTypeGaps.getText());
-        addType("gaps.txt", "Gaps");
+        addType(3);
         type = new TaskTypeGaps();
     }
     public void addTypeVarValue() {
         chooseType.setText(taskTypeVarValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
-        addType("var_value.txt", "Var value");
+        addType(4);
         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeLineNumbers() {
         chooseType.setText(taskTypeLineNumbers.getText());
         mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
-        addType("line_numbers.txt", "Line numbers");
+        addType(5);
         type = new TaskTypeLineNumbers();
     }
     public void finishEdition(ActionEvent event) throws Exception {

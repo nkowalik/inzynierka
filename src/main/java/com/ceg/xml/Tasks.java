@@ -9,13 +9,12 @@ import javax.xml.bind.annotation.*;
 
 @XmlRootElement
 public class Tasks {
-    private TaskData taskData;
+    TaskData taskData;
 
     @XmlElement(name="task-data")
     public TaskData getTaskData() {
         return taskData;
     }
-
     public void setTaskdata(TaskData taskData) {
         this.taskData = taskData;
     }
