@@ -2,6 +2,7 @@ package com.ceg.gui;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
+import javafx.scene.layout.Region;
 
 /**
  *
@@ -23,7 +24,7 @@ public final class Alerts {
     }
     
     public static void emptyExamAlert() {
-        showAlert(AlertType.ERROR, "Błąd", "Egzamin jest pusty", "Nie można wygenerować pustego arkusza, dodaj zadania");
+        showAlert(AlertType.ERROR, "Błąd", "Egzamin jest pusty", "Nie można wygenerować pustego arkusza, dodaj zadania.");
     }
     
     private static void showAlert(AlertType alertType, String title, String headerText, String contextText) {
@@ -31,6 +32,7 @@ public final class Alerts {
         alert.setTitle(title);
         alert.setHeaderText(headerText);
         alert.setContentText(contextText);
+        alert.getDialogPane().setMinHeight(Region.USE_PREF_SIZE);
                
         alert.showAndWait();
     }
