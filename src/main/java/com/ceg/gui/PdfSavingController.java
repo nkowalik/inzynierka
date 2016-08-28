@@ -1,6 +1,5 @@
 package com.ceg.gui;
 
-import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
 import java.io.File;
 import java.io.IOException;
@@ -8,10 +7,8 @@ import java.net.URL;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -72,8 +69,6 @@ public class PdfSavingController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) { 
         pdfSettings = PDFSettings.getInstance();
         
-        Calendar calendar = Calendar.getInstance();
-        
         for (Integer i = 1; i <= 12; i++) {
             if (i < 10) {
                 monthList.add('0' + i.toString());
@@ -119,42 +114,34 @@ public class PdfSavingController implements Initializable {
         filePath.setText(pdfSettings.getPdfFilePath());
         fileName.setText(pdfSettings.getPdfFileName());
         
-        dateMonth.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                daysList.clear();
-                PDFSettings.getInstance().setMonth(newValue.intValue() + 1);
-                YearMonth yM = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
-                Integer days = yM.lengthOfMonth();
-                for (Integer i = 1; i <= days; i++) {
-                    daysList.add(i.toString());
-                }
-                dateDay.setValue(PDFSettings.getInstance().getDay().toString());
+        dateMonth.getSelectionModel().selectedIndexProperty().addListener(
+                (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            daysList.clear();
+            PDFSettings.getInstance().setMonth(newValue.intValue() + 1);
+            YearMonth yM1 = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
+            Integer days1 = yM1.lengthOfMonth();
+            for (Integer i = 1; i <= days1; i++) {
+                daysList.add(i.toString());
             }
+            dateDay.setValue(PDFSettings.getInstance().getDay().toString());
         });
         
-        dateDay.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                if (newValue.intValue() != -1)
-                    PDFSettings.getInstance().setDay(Integer.parseInt(daysList.get(newValue.intValue())));
-            }           
+        dateDay.getSelectionModel().selectedIndexProperty().addListener(
+                (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            if (newValue.intValue() != -1)
+                PDFSettings.getInstance().setDay(Integer.parseInt(daysList.get(newValue.intValue())));           
         });
         
-        dateYear.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                PDFSettings.getInstance().setYear(Integer.parseInt(yearList.get(newValue.intValue())));
-                
-                daysList.clear();
-                
-                YearMonth yM = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
-                Integer days = yM.lengthOfMonth();
-                for (Integer i = 1; i <= days; i++) {
-                    daysList.add(i.toString());
-                }
-                dateDay.setValue(PDFSettings.getInstance().getDay().toString());
-            }           
+        dateYear.getSelectionModel().selectedIndexProperty().addListener(
+                (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
+            PDFSettings.getInstance().setYear(Integer.parseInt(yearList.get(newValue.intValue())));
+            daysList.clear();
+            YearMonth yM1 = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
+            Integer days1 = yM1.lengthOfMonth();
+            for (Integer i = 1; i <= days1; i++) {
+                daysList.add(i.toString());
+            }
+            dateDay.setValue(PDFSettings.getInstance().getDay().toString());           
         });
     }
     
@@ -176,7 +163,6 @@ public class PdfSavingController implements Initializable {
     }
     
     public void saveFile(ActionEvent event) throws IOException {   
-        //appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         PDFSettings.getInstance().setCommandFont(commandFont.getValue().toString());
         PDFSettings.getInstance().setCodeFont(codeFont.getValue().toString());
         

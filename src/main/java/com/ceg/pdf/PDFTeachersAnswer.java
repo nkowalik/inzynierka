@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
@@ -17,7 +12,7 @@ import java.util.List;
  */
 public class PDFTeachersAnswer extends PDFAnswer {
     //pole przechowujace listę odpowiedzi do zadania
-    private List<String> answers;
+    protected List<String> answers;
     
     //pole przechowujące informację, który indeks z listy odpowiedzi będzie wykorzystany w przypadku wystąpienia 
     //następnej luki
@@ -42,7 +37,6 @@ public class PDFTeachersAnswer extends PDFAnswer {
         
         if (answers != null) {
             float answerWidth;
-            PDFSettings pdfSettings = PDFSettings.getInstance();
             int myY = y;
             for (String i : actualTaskLines) {
                 String[] answersPlaces;
@@ -65,5 +59,6 @@ public class PDFTeachersAnswer extends PDFAnswer {
     @Override
     public void setAnswers(List<String> answers) {
         this.answers = answers;
+        super.setAnswers(answers);
     }
 }
