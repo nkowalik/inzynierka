@@ -1,1 +1,0 @@
-Jaka wartość zostanie zwrócona przez poniższe wywołania funkcji:
