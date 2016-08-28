@@ -1,6 +1,5 @@
 package com.ceg.pdf;
 
-import com.ceg.exceptions.EmptyExamException;
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.gui.PdfSavingController;
 import javafx.scene.control.Alert;
@@ -8,8 +7,11 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Calendar;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,6 +20,8 @@ import java.util.logging.Logger;
  * @author Martyna
  */
 public class PDFSettings {
+    private final Properties defaultSettings = new Properties();
+    
     private String commandFont;
     private String codeFont;
     private Integer commandFontSize;
@@ -33,32 +37,59 @@ public class PDFSettings {
     private String date;
     private File pdfFile;
 
-    public static final int commandWidth = 250;
-    public static final int codeWidth = 250;
-    public final static int leftMargin = 30;
-    public final static int leftCodeMargin = leftMargin + commandWidth + leftMargin;
-    public static final int topMargin = 760;
-    public static final int bottomMargin = 40;
-    public static final int breakBetweenTasks = 25;
+    public static int commandWidth;
+    public static int codeWidth;
+    public static int leftMargin;
+    public static int leftCodeMargin;
+    public static int topMargin;
+    public static int bottomMargin;
+    public static int breakBetweenTasks;
 
-    private static final PDFSettings instance = new PDFSettings("Times New Roman", "Courier", 10, 10, "student", "egzamin.pdf");
+    private static final PDFSettings instance = new PDFSettings();
 
-    public PDFSettings(String commandFont, String codeFont, Integer commandFontSize, Integer codeFontSize, String testType, String pdfFileName) {
-        this.commandFont = commandFont;
-        this.codeFont = codeFont;
-        this.commandFontSize = commandFontSize;
-        this.codeFontSize = codeFontSize;
-        this.testType = testType;
-        this.pdfFileName = pdfFileName;
+    public PDFSettings() {       
+        preparePropertiesInput();
         
-        Calendar calendar = Calendar.getInstance();
+        commandWidth = Integer.parseInt(defaultSettings.getProperty("command.width"));
+        codeWidth = Integer.parseInt(defaultSettings.getProperty("code.width"));
+        leftMargin = Integer.parseInt(defaultSettings.getProperty("left.margin"));
+        topMargin = Integer.parseInt(defaultSettings.getProperty("top.margin"));
+        bottomMargin = Integer.parseInt(defaultSettings.getProperty("bottom.margin"));
+        breakBetweenTasks = Integer.parseInt(defaultSettings.getProperty("break.between.tasks"));
         
-        year = calendar.get(calendar.YEAR);
-        month = calendar.get(calendar.MONTH) + 1;
-        day = calendar.get(calendar.DAY_OF_MONTH);
+        leftCodeMargin = leftMargin + commandWidth + leftMargin/2;
+        
+        this.commandFont = defaultSettings.getProperty("command.font");
+        this.codeFont = defaultSettings.getProperty("code.font");
+        this.commandFontSize = Integer.parseInt(defaultSettings.getProperty("command.font.size"));
+        this.codeFontSize = Integer.parseInt(defaultSettings.getProperty("code.font.size"));
+        this.testType = defaultSettings.getProperty("test.type");
+        this.pdfFileName = defaultSettings.getProperty("pdf.file.name");
+        
+        Calendar calendar = Calendar.getInstance();        
+        year = calendar.get(Calendar.YEAR);
+        month = calendar.get(Calendar.MONTH) + 1;
+        day = calendar.get(Calendar.DAY_OF_MONTH);
         
         File file = new File(".");
-        pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);        
+        pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);       
+    }
+    
+    private void preparePropertiesInput() {
+	String propFileName = "properties/pdfSettings.properties";
+ 
+	InputStream inputStream = getClass().getClassLoader().getResourceAsStream(propFileName);
+ 
+        try {
+            if (inputStream != null) {
+                defaultSettings.load(inputStream);
+            } 
+            else {
+                throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(PDFSettings.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public void setCommandFont(String commandFont) {
