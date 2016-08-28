@@ -99,7 +99,8 @@ public class GUIAddTaskController implements Initializable {
         return addTaskInstance;
     }
     public void addType(int index) {
-        TaskData tasks = TasksLoading.loadFromXml();
+        String fileName = "tasks.xml";
+        TaskData tasks = TasksLoading.loadFromXml(fileName);
 
         contentList.clear();
         text.clear();

@@ -10,16 +10,16 @@ import java.io.File;
  * @author Natalia
  */
 
-public class TasksLoading {
-    public static TaskData loadFromXml(String fileName) {
+public class ExamLoading {
+    public static ExamData loadFromXml(String fileName) {
         try {
             JAXBContext jc = JAXBContext.newInstance(Tasks.class);
             File file = new File(fileName);
 
             Unmarshaller unmarshaller = jc.createUnmarshaller();
-            TaskData taskData = (TaskData) unmarshaller.unmarshal(file);
+            ExamData examData = (ExamData) unmarshaller.unmarshal(file);
 
-            return taskData;
+            return examData;
         } catch (JAXBException e) {
             e.printStackTrace();
         }

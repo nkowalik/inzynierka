@@ -327,4 +327,12 @@ public class GUIMainController implements Initializable {
     public void saveResult(int idx) {
         Exam.getInstance().getTaskAtIndex(idx).setResult(result.getText());
     }
+
+    public void saveExam() {
+
+    }
+
+    public void loadExam() {
+
+    }
 }
