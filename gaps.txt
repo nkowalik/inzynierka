@@ -1,1 +1,0 @@
-Uzupełnij pola, aby program się kompilował.

@@ -25,6 +25,10 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import com.ceg.examContent.Code;
+import com.ceg.exceptions.EmptyExamException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.control.Alert;
 
 
 /**
@@ -150,10 +154,21 @@ public class GUIMainController implements Initializable {
         exam.getCurrentTask().setResult(result.getText());
     }
     public void createPDF(ActionEvent actionEvent) throws IOException {
-        Code.saveCode(exam.idx, code);
-        saveContent(exam.idx);
-        saveResult(exam.idx);
-        PdfSavingController.show();
+            try {
+                if (exam.getTasks().isEmpty()) {
+                    throw new EmptyExamException();
+                }                        
+                Code.saveCode(exam.idx, code);
+                saveContent(exam.idx);
+                saveResult(exam.idx);
+                PdfSavingController.show();
+            } catch (EmptyExamException ex) {
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                alert.setTitle("Pusty egzamin");
+                alert.setHeaderText("Nie można utworzyć pustego dokumentu.");
+
+                alert.showAndWait();
+            }
     }
     public void testMarker(ActionEvent actionEvent) {
         changeStyle("test");

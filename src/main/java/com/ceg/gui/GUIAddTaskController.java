@@ -7,6 +7,9 @@ import com.ceg.examContent.TaskTypeComplexOutput;
 import com.ceg.examContent.TaskTypeGaps;
 import com.ceg.examContent.TaskTypeLineNumbers;
 import com.ceg.examContent.TaskTypeSimpleOutput;
+import com.ceg.xml.TaskData;
+import com.ceg.xml.Tasks;
+import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
@@ -26,7 +29,10 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 
-import javax.swing.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 
 /**
  *
@@ -92,57 +98,52 @@ public class GUIAddTaskController implements Initializable {
     public static GUIAddTaskController getInstance() {
         return addTaskInstance;
     }
-    public void addType(String sTxt) {
-        try {
-            Scanner s = new Scanner(new File(sTxt));
-            contentList.clear();
-            while(s.hasNext()) {
-                contentList.add(s.nextLine());
-            }
-            s.close();
-            text.clear();
-            for (String i : contentList) {
-                text.appendText(i + "\n");
-            }
-            finish.setDisable(false);
-        } catch (FileNotFoundException ex) {
-            System.err.println(ex);
+    public void addType(int index) {
+        TaskData tasks = TasksLoading.loadFromXml();
+
+        contentList.clear();
+        text.clear();
+        if (tasks != null) {
+            contentList.add(tasks.getTaskData().get(index).getText());
+            text.appendText(tasks.getTaskData().get(index).getText());
         }
+
+        finish.setDisable(false);
     }
     public void addTypeSimpleOutput() {
         chooseType.setText(taskTypeSimpleOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
-        addType("simple_output.txt");
+        addType(0);
         type = new TaskTypeSimpleOutput();
     }
     public void addTypeReturnedValue() {
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
-        addType("returned_value.txt");
+        addType(1);
         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeComplexOutput() {
         chooseType.setText(taskTypeComplexOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeComplexOutput.getText());
-        addType("complex_output.txt");
+        addType(2);
         type = new TaskTypeComplexOutput();
     }
     public void addTypeGaps() {
         chooseType.setText(taskTypeGaps.getText());
         mainInstance.setStageName("CEG - " + taskTypeGaps.getText());
-        addType("gaps.txt");
+        addType(3);
         type = new TaskTypeGaps();
     }
     public void addTypeVarValue() {
         chooseType.setText(taskTypeVarValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
-        addType("var_value.txt");
+        addType(4);
         type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
     }
     public void addTypeLineNumbers() {
         chooseType.setText(taskTypeLineNumbers.getText());
         mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
-        addType("line_numbers.txt");
+        addType(5);
         type = new TaskTypeLineNumbers();
     }
     public void finishEdition(ActionEvent event) throws Exception {
