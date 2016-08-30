@@ -9,6 +9,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,15 +33,7 @@ import javafx.stage.Stage;
  * @author Martyna
  */
 public class PdfSavingController implements Initializable {
-    @FXML
-    ChoiceBox commandFont;
-    @FXML
-    TextField commandFontSize;
-    
-    @FXML
-    ChoiceBox codeFont;
-    @FXML
-    TextField codeFontSize;
+   
     
     @FXML
     ChoiceBox testType;
@@ -54,7 +48,7 @@ public class PdfSavingController implements Initializable {
     @FXML
     TextField fileName;
     
-    private final List<String> fontList = Arrays.asList("Arial", "Courier","Times New Roman", "Verdana");
+    
     //private final List<String> testTypeList = Arrays.asList("student", "nauczyciel", "interaktywny");
     private final List<String> testTypeList = Arrays.asList("student", "nauczyciel");
     private final List<String> monthList = new ArrayList<>();
@@ -77,11 +71,6 @@ public class PdfSavingController implements Initializable {
                 monthList.add(i.toString());
             }
         }
-        commandFont.setItems(FXCollections.observableList(fontList));
-        commandFont.setValue(pdfSettings.getCommandFont());
-        
-        codeFont.setItems(FXCollections.observableList(fontList));
-        codeFont.setValue(pdfSettings.getCodeFont());
         
         testType.setItems(FXCollections.observableList(testTypeList));
         testType.setValue(pdfSettings.getTestType());
@@ -92,9 +81,6 @@ public class PdfSavingController implements Initializable {
             dateMonth.setValue('0' + month.toString());
         else
             dateMonth.setValue(month.toString());
-        
-        commandFontSize.setText(pdfSettings.getCommandFontSize().toString());
-        codeFontSize.setText(pdfSettings.getCodeFontSize().toString());
         
         Integer year = pdfSettings.getYear();
         for (Integer i  = 2008; i <= year+10; i++) {
@@ -163,11 +149,6 @@ public class PdfSavingController implements Initializable {
     }
     
     public void saveFile(ActionEvent event) throws IOException {   
-        PDFSettings.getInstance().setCommandFont(commandFont.getValue().toString());
-        PDFSettings.getInstance().setCodeFont(codeFont.getValue().toString());
-        
-        PDFSettings.getInstance().setCommandFontSize(Integer.parseInt(commandFontSize.getText()));
-        PDFSettings.getInstance().setCodeFontSize(Integer.parseInt(codeFontSize.getText()));
         
         PDFSettings.getInstance().setTestType(testType.getValue().toString());
         PDFSettings.getInstance().setPdfFilePath(filePath.getText());
@@ -214,6 +195,14 @@ public class PdfSavingController implements Initializable {
         
         if (dir != null) {
             filePath.setText(dir.getAbsolutePath());
+        }
+    }
+    
+    public void advancedOptions(ActionEvent event){
+        try {
+            AdvancedOptionsController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
         }
     }
 }

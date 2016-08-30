@@ -84,7 +84,7 @@
             <RowConstraints />
             </rowConstraints>
             <children>
-                <Button layoutX="475.0" text="Opcje zaawansowane" BorderPane.alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.valignment="TOP" />
+                <Button layoutX="475.0" text="Opcje zaawansowane" onAction="#advancedOptions" BorderPane.alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.valignment="TOP" />
                 <Button minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#saveFile" prefHeight="25.0" prefWidth="96.0" text="Zapisz plik" GridPane.halignment="RIGHT" GridPane.rowIndex="1" />
                 <Button contentDisplay="RIGHT" minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#cancel" text="Anuluj" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1">
                 </Button> 
