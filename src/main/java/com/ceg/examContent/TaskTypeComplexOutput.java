@@ -1,9 +1,9 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
+import com.ceg.gui.Alerts;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.control.Alert;
 
 /**
  *
@@ -43,12 +43,7 @@ public class TaskTypeComplexOutput extends TaskType{
                 this.params.setNoOfAnswers(0);
                 System.err.println("IndexOutOfBoundsException: " + e.getMessage());
 
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Błąd");
-                alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
-                alert.setContentText("Sprawdź poprawność kodu.");
-
-                alert.showAndWait();
+                Alerts.generatingAnswersErrorAlert();
             }
         }
         preparePdfAnswers(task);
