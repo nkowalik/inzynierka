@@ -14,17 +14,17 @@ import javafx.scene.control.Alert;
  *
  * @author marta
  */
-public class TaskTypeVarValue extends TaskType{
+public class TaskTypeReturnedValue extends TaskType{
 
-    public TaskTypeVarValue() {
+    public TaskTypeReturnedValue() {
         super();
-        super.params = new TaskParametersVarValue();
-        name = "VarValue";
+        super.params = new TaskParametersReturnedValue();
+        name = "ReturnedValue";
     }
-
+    
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers) {
-          answers.clear();
+         answers.clear();
         // jeśli nastąpił błąd kompilacji, wygeneruj odpowiedź: "Błąd"
         if(!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
             answers.add("Błąd");
@@ -62,7 +62,7 @@ public class TaskTypeVarValue extends TaskType{
     public void callExecute(Task task, List<String> output) {
         List<String> code = new ArrayList<>(task.getCode());
         CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.execute(code, "varvalue.cpp", output);
+        task.compiler.execute(code, "retvalue.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
 
