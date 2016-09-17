@@ -3,6 +3,7 @@ package com.ceg.gui;
 
 import java.util.*;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.IndexRange;
@@ -138,6 +139,7 @@ public class GUIMainController implements Initializable {
         
         stage.show();
         stage.toFront();
+        stage.setOnCloseRequest(e -> Platform.exit());
     }
     public static GUIMainController getInstance() {
         return instance;
@@ -260,7 +262,7 @@ public class GUIMainController implements Initializable {
 
             showTask(true);
             updateText(t.getContents());
-            updateCode(t.getCode());
+            updateCode(t.getTestCode());
             updateResult(t.getResult());
         }
     }

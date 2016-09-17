@@ -196,7 +196,7 @@ public class PdfSavingController implements Initializable {
 
         if (pdfFile.exists() && !pdfFile.isDirectory()) {
             Stage ifPdfExistStage = new Stage();
-            Parent scene = FXMLLoader.load(getClass().getResource("/fxml/ifPdfExist.fxml"));
+            Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfOverwriting.fxml"));
             ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
             ifPdfExistStage.setScene(new Scene(scene, 430, 125));
             ifPdfExistStage.setResizable(false);
