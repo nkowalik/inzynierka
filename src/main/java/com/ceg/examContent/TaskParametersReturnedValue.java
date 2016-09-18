@@ -10,5 +10,9 @@ package com.ceg.examContent;
  * @author marta
  */
 public class TaskParametersReturnedValue extends TaskParameters{
+
+    public TaskParametersReturnedValue() {
+        super.setNoOfAnswers(Integer.MAX_VALUE-1); 
+    }
     
 }
