@@ -150,6 +150,7 @@ public class GUIAddTaskController implements Initializable {
         Task t = new Task(type);
         t.setContents(contentList);
         t.setCode(codeList);
+        t.setTestCode(codeList);
         Exam.getInstance().addTask(t); // wrzuca na koniec listy, ustawia idx na size-1 (ostatni element)
         stage.hide();
 
