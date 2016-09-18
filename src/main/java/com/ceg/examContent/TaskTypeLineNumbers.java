@@ -1,9 +1,8 @@
 package com.ceg.examContent;
 
+import com.ceg.gui.Alerts;
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
 
 /**
  *
@@ -47,13 +46,7 @@ public class TaskTypeLineNumbers extends TaskType{
                 answers.clear();
                 this.params.setNoOfAnswers(0);
                 System.err.println("IndexOutOfBoundsException: " + e.getMessage());
-
-                Alert alert = new Alert(AlertType.ERROR);
-                alert.setTitle("Błąd");
-                alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
-                alert.setContentText("Sprawdź poprawność kodu.");
-
-                alert.showAndWait();
+                Alerts.generatingAnswersErrorAlert();
             }
         }
         preparePdfAnswers(task);
