@@ -1,5 +1,6 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
 import java.io.File;
 import java.io.IOException;
@@ -7,9 +8,11 @@ import java.net.URL;
 import java.time.YearMonth;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.beans.value.ChangeListener;
 import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -63,6 +66,8 @@ public class PdfSavingController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) { 
         pdfSettings = PDFSettings.getInstance();
         
+        Calendar calendar = Calendar.getInstance();
+        
         for (Integer i = 1; i <= 12; i++) {
             if (i < 10) {
                 monthList.add('0' + i.toString());
@@ -100,34 +105,42 @@ public class PdfSavingController implements Initializable {
         filePath.setText(pdfSettings.getPdfFilePath());
         fileName.setText(pdfSettings.getPdfFileName());
         
-        dateMonth.getSelectionModel().selectedIndexProperty().addListener(
-                (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            daysList.clear();
-            PDFSettings.getInstance().setMonth(newValue.intValue() + 1);
-            YearMonth yM1 = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
-            Integer days1 = yM1.lengthOfMonth();
-            for (Integer i = 1; i <= days1; i++) {
-                daysList.add(i.toString());
+        dateMonth.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                daysList.clear();
+                PDFSettings.getInstance().setMonth(newValue.intValue() + 1);
+                YearMonth yM = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
+                Integer days = yM.lengthOfMonth();
+                for (Integer i = 1; i <= days; i++) {
+                    daysList.add(i.toString());
+                }
+                dateDay.setValue(PDFSettings.getInstance().getDay().toString());
             }
-            dateDay.setValue(PDFSettings.getInstance().getDay().toString());
         });
         
-        dateDay.getSelectionModel().selectedIndexProperty().addListener(
-                (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            if (newValue.intValue() != -1)
-                PDFSettings.getInstance().setDay(Integer.parseInt(daysList.get(newValue.intValue())));           
+        dateDay.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                if (newValue.intValue() != -1)
+                    PDFSettings.getInstance().setDay(Integer.parseInt(daysList.get(newValue.intValue())));
+            }           
         });
         
-        dateYear.getSelectionModel().selectedIndexProperty().addListener(
-                (ObservableValue<? extends Number> observable, Number oldValue, Number newValue) -> {
-            PDFSettings.getInstance().setYear(Integer.parseInt(yearList.get(newValue.intValue())));
-            daysList.clear();
-            YearMonth yM1 = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
-            Integer days1 = yM1.lengthOfMonth();
-            for (Integer i = 1; i <= days1; i++) {
-                daysList.add(i.toString());
-            }
-            dateDay.setValue(PDFSettings.getInstance().getDay().toString());           
+        dateYear.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                PDFSettings.getInstance().setYear(Integer.parseInt(yearList.get(newValue.intValue())));
+                
+                daysList.clear();
+                
+                YearMonth yM = YearMonth.of(PDFSettings.getInstance().getYear(), PDFSettings.getInstance().getMonth());
+                Integer days = yM.lengthOfMonth();
+                for (Integer i = 1; i <= days; i++) {
+                    daysList.add(i.toString());
+                }
+                dateDay.setValue(PDFSettings.getInstance().getDay().toString());
+            }           
         });
     }
     
@@ -154,33 +167,28 @@ public class PdfSavingController implements Initializable {
         PDFSettings.getInstance().setPdfFilePath(filePath.getText());
         String extension = fileName.getText().substring(fileName.getText().length() - 4, fileName.getText().length());
         if (!extension.equals(".pdf")) {
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Brak implementacji");
-            alert.setHeaderText("Nazwa pliku nie kończy się rozszerzeniem .pdf");
-
-            alert.showAndWait();
+            PDFSettings.getInstance().setPdfFileName(fileName.getText() + ".pdf");
         }
         else {
             PDFSettings.getInstance().setPdfFileName(fileName.getText());
+        }
+        PDFSettings.getInstance().saveFile();
+        File pdfFile = PDFSettings.getInstance().getPdfFile();
 
-            PDFSettings.getInstance().saveFile();
-            File pdfFile = PDFSettings.getInstance().getPdfFile();
+        if (pdfFile.exists() && !pdfFile.isDirectory()) {
+            Stage ifPdfExistStage = new Stage();
+            Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfOverwriting.fxml"));
+            ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
+            ifPdfExistStage.setScene(new Scene(scene, 430, 125));
+            ifPdfExistStage.setResizable(false);
+            ifPdfExistStage.setAlwaysOnTop(true);
+            ifPdfExistStage.show();
+            ifPdfExistStage.setResizable(false);
+        }
 
-            if (pdfFile.exists() && !pdfFile.isDirectory()) {
-                Stage ifPdfExistStage = new Stage();
-                Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfOverwriting.fxml"));
-                ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
-                ifPdfExistStage.setScene(new Scene(scene, 430, 125));
-                ifPdfExistStage.setResizable(false);
-                ifPdfExistStage.setAlwaysOnTop(true);
-                ifPdfExistStage.show();
-                ifPdfExistStage.setResizable(false);
-            }
-
-            else {
-                PDFSettings.getInstance().pdfGenerate(appStage);           
-                appStage.hide();
-            }
+        else {
+            PDFSettings.getInstance().pdfGenerate(appStage);           
+            appStage.hide();
         }
     }
     

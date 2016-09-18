@@ -3,6 +3,7 @@ package com.ceg.gui;
 
 import java.util.*;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.IndexRange;
@@ -148,6 +149,7 @@ public class GUIMainController implements Initializable {
         
         stage.show();
         stage.toFront();
+        stage.setOnCloseRequest(e -> Platform.exit());
     }
     public static GUIMainController getInstance() {
         return instance;
@@ -173,11 +175,7 @@ public class GUIMainController implements Initializable {
                 saveResult(exam.idx);
                 PdfSavingController.show();
             } catch (EmptyExamException ex) {
-                Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                alert.setTitle("Pusty egzamin");
-                alert.setHeaderText("Nie można utworzyć pustego dokumentu.");
-
-                alert.showAndWait();
+                Alerts.emptyExamAlert();
             }
     }
     public void testMarker(ActionEvent actionEvent) {
@@ -274,7 +272,7 @@ public class GUIMainController implements Initializable {
 
             showTask(true);
             updateText(t.getContents());
-            updateCode(t.getCode());
+            updateCode(t.getTestCode());
             updateResult(t.getResult());
         }
     }
