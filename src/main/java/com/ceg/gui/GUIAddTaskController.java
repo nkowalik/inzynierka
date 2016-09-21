@@ -6,7 +6,9 @@ import com.ceg.examContent.TaskType;
 import com.ceg.examContent.TaskTypeComplexOutput;
 import com.ceg.examContent.TaskTypeGaps;
 import com.ceg.examContent.TaskTypeLineNumbers;
+import com.ceg.examContent.TaskTypeReturnedValue;
 import com.ceg.examContent.TaskTypeSimpleOutput;
+import com.ceg.examContent.TaskTypeVarValue;
 import com.ceg.xml.TaskData;
 import com.ceg.xml.Tasks;
 import com.ceg.xml.TasksLoading;
@@ -120,7 +122,7 @@ public class GUIAddTaskController implements Initializable {
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
         addType(1);
-        type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
+        type = new TaskTypeReturnedValue();
     }
     public void addTypeComplexOutput() {
         chooseType.setText(taskTypeComplexOutput.getText());
@@ -138,7 +140,7 @@ public class GUIAddTaskController implements Initializable {
         chooseType.setText(taskTypeVarValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
         addType(4);
-        type = new TaskTypeSimpleOutput(); // UNSUPPORTED YET
+        type = new TaskTypeVarValue();
     }
     public void addTypeLineNumbers() {
         chooseType.setText(taskTypeLineNumbers.getText());
