@@ -30,6 +30,7 @@ import com.ceg.exceptions.EmptyExamException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.control.Alert;
+import javafx.scene.input.MouseEvent;
 
 
 /**
@@ -61,6 +62,15 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem changeAnswersNum;
     
+    @FXML
+    private void advancedOptionsClicked(MouseEvent event){
+        try {
+            AdvancedOptionsController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
+        }
+    }
+     
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
@@ -325,4 +335,6 @@ public class GUIMainController implements Initializable {
     public void saveResult(int idx) {
         Exam.getInstance().getTaskAtIndex(idx).setResult(result.getText());
     }
+    
+     
 }
