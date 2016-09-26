@@ -4,13 +4,13 @@ import com.ceg.gui.Alerts;
 import java.util.List;
 import java.util.ListIterator;
 
-
 public class CodeParser {
-	
-	// dopisuje "cout<<endl" 
-	// za kazdym znalezionym wywolaniem "cout" 
-	// zwraca liczbe znalezionych coutow
-	// INOUT: List<String> lines - wejsciowa lista linii kodu
+
+    /**
+     * Dopisuje nową linię po każdym wywołaniu instrukcji 'cout' lub 'printf'.
+     * @param lines Wejściowa lista linii kodu.
+     * @return Liczba znalezionych instrukcji wypisania na ekran.
+     */
 	static public int addNewlineAfterEachCout(List<String> lines){
             int couts = 0;
             try{
@@ -35,11 +35,12 @@ public class CodeParser {
             return couts;
 		
 	}
-	
-        // usuwa wszystkie linie, w których wystąpił "cout" lub "printf"
-        // poza liniami o numerach zawartych w liście lineNo
-        // IN: List lineNo - lista numerów linii, których nie należy usuwać
-        // INOUT: List<String> code - lista linii kodu
+
+    /**
+     * Usuwa wszystie linie w których wystąpiła instrukcja wypisania 'cout' lub 'printf'.
+     * @param lineNo Lista numerów linii, których nie należy usuwać.
+     * @param code Lista linii kodu.
+     */
 	static public void deleteOtherCouts(List lineNo, List<String> code){
             try{
                 for (ListIterator<String> iterator = code.listIterator(); iterator.hasNext() ;)

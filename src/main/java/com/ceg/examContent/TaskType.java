@@ -1,43 +1,59 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceg.examContent;
 
+import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.List;
 
 /**
- *
- * @author marta
+ * Klasa abstrakcyjna zawierająca dane typowe dla konkretnego typu zadania:
+ * defaultContents - domyślna treść polecenia
+ * name - nazwa zadania
+ * params - parametry zadania
+ * Oraz metody służące do generowania odpowiedzi.
  */
-
-/* 
-   * klasa zawierająca dane typowe dla konkretnego typu zadania: domyślną treść polecenia 
-   * (defaultContents), parametry i metody potrzebne do wygenerowania odpowiedzi
-*/ 
+@XmlSeeAlso({
+        TaskTypeComplexOutput.class,
+        TaskTypeGaps.class,
+        TaskTypeLineNumbers.class,
+        TaskTypeReturnedValue.class,
+        TaskTypeSimpleOutput.class,
+        TaskTypeVarValue.class
+})
 abstract public class TaskType {
     String defaultContents;
     public String name;
     protected TaskParameters params;
-    
-    
+
+    /**
+     * Generuje odpowiedzi do zadania.
+     * @param task Zadanie, dla którego ma zostać wygenerowana odpowiedź.
+     * @param output Lista linii wygenerowanych przez kompilator dla kodu zawartego w zadaniu task.
+     * @param answers Lista wyjściowa zawierająca odpowiedzi do zadania.
+     */
     public abstract void generateAnswers(Task task, List<String> output, List<String> answers);
+
+    /**
+     * Wykonuje kompilację kodu zawartego w zadaniu oraz wyznacza do niego odpowiedzi.
+     * Dla każdej instrukcji wypisania generuje dodatkowy znak nowej linii.
+     * @param task Zadanie które ma zostać wykonane.
+     * @param output Lista linii w których zostanie zapisane wyjście kompilatora.
+     */
     public abstract void callExecute(Task task, List<String> output);
+
+    /**
+     * Przygotowuje odpowiedzi, które znajdą się w pliku .pdf dla danego zadania.
+     * @param task Zadanie, dla którego mają zostać przygotowane odpowiedzi.
+     */
     public abstract void preparePdfAnswers(Task task);
     
     public String getDefaultContents() {
         return defaultContents;
     }
-
     public void setDefaultContents(String defaultContents) {
         this.defaultContents = defaultContents;
     }
-
     public TaskParameters getParams() {
         return params;
     }
-
     public void setParams(TaskParameters params) {
         this.params = params;
     }

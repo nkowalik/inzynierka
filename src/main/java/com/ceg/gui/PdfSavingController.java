@@ -1,6 +1,5 @@
 package com.ceg.gui;
 
-import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
 import java.io.File;
 import java.io.IOException;
@@ -23,7 +22,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -31,13 +29,10 @@ import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
- *
- * @author Martyna
+ * Klasa reprezentująca kontroler okna do generowania pliku .pdf.
  */
 public class PdfSavingController implements Initializable {
-   
-    
+
     @FXML
     ChoiceBox testType;
     @FXML
@@ -50,9 +45,7 @@ public class PdfSavingController implements Initializable {
     ChoiceBox dateYear;
     @FXML
     TextField fileName;
-    
-    
-    //private final List<String> testTypeList = Arrays.asList("student", "nauczyciel", "interaktywny");
+
     private final List<String> testTypeList = Arrays.asList("student", "nauczyciel");
     private final List<String> monthList = new ArrayList<>();
     private final List<String> yearList = new ArrayList<>();
@@ -61,7 +54,13 @@ public class PdfSavingController implements Initializable {
     
     public static Stage appStage;
     private PDFSettings pdfSettings;
-    
+
+    /**
+     * Dokonuje inicjalizacji głównego okna generacji pliku .pdf.
+     * Ustawia domyślne wartości, listenery.
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
         pdfSettings = PDFSettings.getInstance();
@@ -104,7 +103,8 @@ public class PdfSavingController implements Initializable {
 
         filePath.setText(pdfSettings.getPdfFilePath());
         fileName.setText(pdfSettings.getPdfFileName());
-        
+
+        // todo zamienić listenery na zapis przy nacisnięciu przycisku 'zapisz' (aktualizacja ustawień przy każdej zmianie jest zbyteczna)
         dateMonth.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -143,7 +143,11 @@ public class PdfSavingController implements Initializable {
             }           
         });
     }
-    
+
+    /**
+     * Wyświetla okno generowania pliku .pdf.
+     * @throws IOException
+     */
     public static synchronized void show() throws IOException {
         if(appStage == null) {
             URL location = GUIMainController.class.getResource("/fxml/pdfSaving.fxml");
@@ -160,7 +164,13 @@ public class PdfSavingController implements Initializable {
         appStage.show();
         appStage.toFront();
     }
-    
+
+    /**
+     * Zapisuje egzamin w formie pliku .pdf.
+     * W przypadku istnienia pliku o podanej nazwie wyświetla komunikat z odpowiednią informacją.
+     * @param event
+     * @throws IOException
+     */
     public void saveFile(ActionEvent event) throws IOException {   
         
         PDFSettings.getInstance().setTestType(testType.getValue().toString());
@@ -191,11 +201,19 @@ public class PdfSavingController implements Initializable {
             appStage.hide();
         }
     }
-    
+
+    /**
+     * Kończy proces generacji pliku .pdf (przed wciśnięciem przycisku 'Zapisz plik').
+     * @param event
+     */
     public void cancel(ActionEvent event) {
         appStage.hide();
     }
-    
+
+    /**
+     * Otwiera okno wyboru lokalizacji zapisu pliku.
+     * @param event
+     */
     public void browse(ActionEvent event) {        
         DirectoryChooser dirChooser = new DirectoryChooser () ;
         dirChooser.setTitle("Wybierz lokalizację pliku");
@@ -205,7 +223,11 @@ public class PdfSavingController implements Initializable {
             filePath.setText(dir.getAbsolutePath());
         }
     }
-    
+
+    /**
+     * Otwiera okno ustawień zaawansowanych.
+     * @param event
+     */
     public void advancedOptions(ActionEvent event){
         try {
             AdvancedOptionsController.show();

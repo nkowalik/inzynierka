@@ -1,11 +1,5 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceg.gui;
 
-import static com.ceg.gui.PdfSavingController.appStage;
 import com.ceg.pdf.PDFSettings;
 import java.io.IOException;
 import java.net.URL;
@@ -24,15 +18,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- *
- * @author marta
+ * Klasa reprezentująca kontroler opcji zaawansowanych.
  */
-public class AdvancedOptionsController implements Initializable{
-     @FXML
+public class AdvancedOptionsController implements Initializable {
+
+    @FXML
     ChoiceBox commandFont;
     @FXML
     TextField commandFontSize;
-    
     @FXML
     ChoiceBox codeFont;
     @FXML
@@ -42,7 +35,7 @@ public class AdvancedOptionsController implements Initializable{
     private PDFSettings pdfSettings;
     
     private final List<String> fontList = Arrays.asList("Arial", "Courier","Times New Roman", "Verdana");
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
         
@@ -58,7 +51,11 @@ public class AdvancedOptionsController implements Initializable{
         codeFontSize.setText(pdfSettings.getCodeFontSize().toString());
         
     }
-    
+
+    /**
+     * Wyświetla okno z ustawieniami zaawansowanymi, którego wygląd określony jest w odpowiednim pliku .fxml.
+     * @throws IOException
+     */
     public static synchronized void show() throws IOException {
         if(appStage == null) {
             URL location = GUIMainController.class.getResource("/fxml/advancedOptions.fxml");
@@ -75,7 +72,12 @@ public class AdvancedOptionsController implements Initializable{
         appStage.show();
         appStage.toFront();
     }
-    
+
+    /**
+     * Zmienia ustawienia generowania pliku .pdf (czcionka i jej rozmiar) na te, które zostały wybrane w oknie.
+     * @param event
+     * @throws IOException
+     */
     public void apply(ActionEvent event) throws IOException {   
         PDFSettings.getInstance().setCommandFont(commandFont.getValue().toString());
         PDFSettings.getInstance().setCodeFont(codeFont.getValue().toString());
@@ -85,7 +87,11 @@ public class AdvancedOptionsController implements Initializable{
         
         appStage.hide();
     }
-    
+
+    /**
+     * Zamyka okno opcji zaawansowanych.
+     * @param event
+     */
     public void cancel(ActionEvent event) {
         appStage.hide();
     }

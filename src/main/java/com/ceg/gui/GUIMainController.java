@@ -1,8 +1,7 @@
 package com.ceg.gui;
 
-
 import java.util.*;
-
+import com.ceg.examContent.Text;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
@@ -25,17 +24,13 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
-import com.ceg.examContent.Code;
 import com.ceg.exceptions.EmptyExamException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.scene.control.Alert;
 import javafx.scene.input.MouseEvent;
 
-
 /**
- *
- * @author Natalia
+ * Klasa reprezentująca kontroler głównego okna programu.
  */
 public class GUIMainController implements Initializable {
 
@@ -61,7 +56,6 @@ public class GUIMainController implements Initializable {
     Button gapsMarkerBtn;
     @FXML
     MenuItem changeAnswersNum;
-    
     @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
@@ -78,7 +72,16 @@ public class GUIMainController implements Initializable {
         ADD, DELETE, SWITCH
     }
     private Status status = Status.SWITCH;
-    
+
+    public static void setStageName (String str){
+        stage.setTitle(str);
+    }
+
+    /**
+     * Dokonuje inicjalizacji okna głównego, ustawia listenery na zmianę kodu oraz przełączanie zakładek.
+     * @param url
+     * @param rb
+     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         instance = this;
@@ -111,7 +114,7 @@ public class GUIMainController implements Initializable {
                 case SWITCH:
                     if(oldValue != null) {
                         int id = Integer.parseInt(oldValue.getId());
-                        Code.saveCode(id, code);
+                        saveText(id);
                         saveContent(id);
                         saveResult(id);
                     }
@@ -129,6 +132,11 @@ public class GUIMainController implements Initializable {
         
         updateWindow(0);
     }
+
+    /**
+     * Wyświetla główne okno programu.
+     * @throws IOException
+     */
     public static synchronized void show() throws IOException {
         if(stage == null) {
             URL location = GUIMainController.class.getResource("/fxml/mainPage.fxml");
@@ -154,9 +162,14 @@ public class GUIMainController implements Initializable {
     public static GUIMainController getInstance() {
         return instance;
     }
+
+    /**
+     * Wykonuje kod zawarty w polu CodeArea. Rezultat zapisuje w odpowiednim obiekcie klasy Task i wyświetla w oknie programu.
+     * @param actionEvent
+     */
     public void execute(ActionEvent actionEvent) {
         result.clear();
-        Code.saveCode(exam.idx, code);
+        saveText(exam.idx);
         List<String> outcome = new ArrayList<String>();
 
         exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
@@ -165,12 +178,18 @@ public class GUIMainController implements Initializable {
         }
         exam.getCurrentTask().setResult(result.getText());
     }
+
+    /**
+     * Otwiera okno generowania pliku .pdf na podstawie zadań zawartych w egzaminie.
+     * @param actionEvent
+     * @throws IOException
+     */
     public void createPDF(ActionEvent actionEvent) throws IOException {
             try {
                 if (exam.getTasks().isEmpty()) {
                     throw new EmptyExamException();
-                }                        
-                Code.saveCode(exam.idx, code);
+                }
+                saveText(exam.idx);
                 saveContent(exam.idx);
                 saveResult(exam.idx);
                 PdfSavingController.show();
@@ -178,6 +197,11 @@ public class GUIMainController implements Initializable {
                 Alerts.emptyExamAlert();
             }
     }
+
+    /**
+     * Ustawia typ dla zaznaczonego kodu w polu CodeArea po naciśnięciu przycisku 'usuń'.
+     * @param actionEvent
+     */
     public void testMarker(ActionEvent actionEvent) {
         changeStyle("test");
     }    
@@ -189,7 +213,12 @@ public class GUIMainController implements Initializable {
     }  
     public void gapsMarker(ActionEvent actionEvent) {
         changeStyle("gap");
-    }  
+    }
+
+    /**
+     * Ustawia typ dla kodu zawartego w polu CodeArea.
+     * @param className Nazwa typu do przypisania.
+     */
     private void changeStyle(String className) {
         IndexRange ir = code.getSelection(); 
         int end = ir.getEnd();
@@ -202,9 +231,21 @@ public class GUIMainController implements Initializable {
         }
         code.setStyleClass(ir.getStart(), ir.getEnd(), className);
     }
+
+    /**
+     * Wyświetla okno dodawania nowego zadania.
+     * @param event
+     * @throws Exception
+     */
     public void addTask(ActionEvent event) throws Exception {
         GUIAddTaskController.show();
     }
+
+    /**
+     * Usuwa zadanie wskazywane przez aktywną zakładkę.
+     * @param event
+     * @throws Exception
+     */
     public void deleteTask(ActionEvent event) throws Exception {
         if(Exam.getInstance().getTasks().isEmpty()) {
             showTask(false);
@@ -213,6 +254,12 @@ public class GUIMainController implements Initializable {
             deleteCurrentTabPaneTab();
         }
     }
+
+    /**
+     * Wyświetla okno dialogowe umożliwiające zmianę odpowiedzi w zadaniu.
+     * @param event
+     * @throws Exception
+     */
     public void changeNumberofAnswers(ActionEvent event) throws Exception {
         int answNum = Integer.MAX_VALUE-1;
         Dialog dialog;
@@ -235,6 +282,11 @@ public class GUIMainController implements Initializable {
         }
         exam.getTaskAtIndex(exam.idx).getType().getParams().setNoOfAnswers(answNum);
     }
+
+    /**
+     * Ustawia widoczność elementów okna głównego.
+     * @param visibility Określa żądaną widoczność elementów okna.
+     */
     public void showTask(boolean visibility) {
         text.setVisible(visibility);
         code.setVisible(visibility);
@@ -262,6 +314,11 @@ public class GUIMainController implements Initializable {
             }
         }
     }
+
+    /**
+     * Odświeża zawartość okna.
+     * @param idx Numer zadania które ma zostać wyświetlone.
+     */
     public void updateWindow(int idx) {
         if(exam.getTasks().isEmpty()) {  // gdy egzamin nie zawiera żadnych zadań
             showTask(false); // ukryj elementy związane z Taskiem
@@ -272,10 +329,15 @@ public class GUIMainController implements Initializable {
 
             showTask(true);
             updateText(t.getContents());
-            updateCode(t.getTestCode());
+            updateCode(t.getText());
             updateResult(t.getResult());
         }
     }
+
+    /**
+     * Aktualizuje tekst polecenia.
+     * @param text Lista linii zawierająca nową zawartość pola z poleceniem.
+     */
     public void updateText(List<String> text) {
         this.text.clear();
         if(!text.isEmpty()) {
@@ -290,26 +352,27 @@ public class GUIMainController implements Initializable {
             }
         }
     }
-    public void updateCode(List<String> text) {
-        code.clear();
-        if(!text.isEmpty()) {
-            int i=0;
-            String line = text.get(i);
-            while (i<text.size()) {
-                this.code.appendText(line + "\n");
-                i++;
-                if(i>=text.size()) break;
-                line = text.get(i);
-            }
-        }
+
+    /**
+     * Aktualizuje tekst kodu.
+     * @param text Obiekt klasy Text zawierający informacje o tekście i stanie znaczników.
+     */
+    public void updateCode(Text text) {
+        text.createCodeAreaText(code);
     }
+
+    /**
+     * Aktualizuje tekst zwrócony przez kompilator.
+     * @param text Tekst który ma zostać wyświetlony w polu wyjścia kompilatora.
+     */
     public void updateResult(String text) {
         this.result.clear();
         this.result.setText(text);
     }
-    public static void setStageName (String str){
-        stage.setTitle(str);
-    }
+
+    /**
+     * Dodaje nową zakładkę z zadaniem.
+     */
     public void addNewTabPaneTab() {
         status = Status.ADD;
         Tab newTab = new Tab("Zadanie " + (exam.idx + 1));
@@ -317,24 +380,85 @@ public class GUIMainController implements Initializable {
         tabPane.getTabs().add(newTab);
         tabPane.getSelectionModel().select(newTab);
     }
+
+    /**
+     * Usuwa aktywną zakładkę wraz z zawartym w niej zadaniem.
+     */
     public void deleteCurrentTabPaneTab() {
         status = Status.DELETE;
         exam.deleteTaskAtIndex(exam.idx);
         tabPane.getTabs().remove(exam.idx);
     }
+
+    /**
+     * Aktualizuje indeksy zakładek w przypadku zmiany ich organizacji (np. usunięcia jednej z nich).
+     */
     public void updateTabPaneTabIndexes() {
         for(int i = 0; i < tabPane.getTabs().size(); i++) {
             tabPane.getTabs().get(i).setId(Integer.toString(i));
             tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
         }
     }
-    
+
+    /**
+     * Zapisuje treść polecenia w odpowiednie pole obiektu reprezentującego dane zadanie.
+     * @param idx Indeks zadania, dla którego ma zostać uaktualnione pole z poleceniem.
+     */
     public void saveContent(int idx) {
         Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));
     }
+
+    /**
+     * Zapisuje wynik kompilacji w odpowiednie pole obiektu reprezentującego dane zadanie.
+     * @param idx Indeks zadania, dla którego ma zostać uaktualnione pole z wynikiem kompilacji.
+     */
     public void saveResult(int idx) {
         Exam.getInstance().getTaskAtIndex(idx).setResult(result.getText());
     }
-    
+
+    /**
+     * Zapisuje kod wraz ze znacznikami w odpowiednie pole obiektu reprezentującego dane zadanie.
+     * W przypadku zadania z lukami dodatkowo generuje odpowiedzi do zadania.
+     * @param idx Indeks zadania, dla którego ma zostać uaktualnione pole z kodem.
+     */
+    public void saveText(int idx) {
+        Task task = Exam.getInstance().getTaskAtIndex(idx);
+        task.getText().extractText(code);
+        if(task.getType().name.equals("Gaps")) {
+            task.calculateGapsAnswers(task.getText().getTextParts());
+            task.getType().getParams().setNoOfAnswers(task.getAnswers().size());
+        }
+    }
+
+    /**
+     * Zapisuje stan bieżącego zadania i generuje plik .xml z egzaminem.
+     */
+    public void saveCodeAreaToXML() {
+        saveText(exam.idx);
+        saveContent(exam.idx);
+        saveResult(exam.idx);
+        Exam.getInstance().save();
+    }
+
+    /**
+     * Laduje egzamin do programu ze z góry określonego pliku.
+     */
+    public void loadXMLToCodeArea() {
+
+        Exam.getInstance().load();
+        Text text = Exam.getInstance().getTaskAtIndex(0).getText();
+        text.createCodeAreaText(code);
+
+        int tabsNumber = tabPane.getTabs().size();
+        int difference = Exam.getInstance().getTasks().size() - tabsNumber;
+
+        if(difference != 0) {
+            for(int i = 0; i < difference; i++) {
+                Tab newTab = new Tab("Zadanie " + (tabsNumber + i + 1));
+                newTab.setId(Integer.toString(tabsNumber + i));
+                tabPane.getTabs().add(newTab);
+            }
+        }
+    }
      
 }

@@ -4,10 +4,8 @@ import javax.xml.bind.annotation.*;
 import java.util.List;
 
 /**
- *
- * @author Natalia
+ * Klasa reprezentująca typ zadania (polecenie).
  */
-
 @XmlRootElement(name="tasks")
 @XmlType( propOrder = { "name", "text", "taskData" })
 public class TaskData {

@@ -45,7 +45,7 @@ public class PDFGenerator {
         
         Integer taskNumber = 1;
         for (Task i : taskList) {
-            if (i.getPDFCode().isEmpty() || i.getContents().isEmpty() || i.getAnswers().size() < i.getPDFAnswers().size())
+            if (i.getText().getPDFCode().isEmpty() || i.getContents().isEmpty() || i.getAnswers().size() < i.getPdfAnswers().size())
                 throw new EmptyPartOfTaskException();
             
             comm = new PDFCommand(i.getContents(), taskNumber++);
@@ -109,12 +109,12 @@ public class PDFGenerator {
         switch(PDFSettings.getInstance().getTestType()) {
             case "nauczyciel":
                 if (task.getType().name.equals("Gaps")) {
-                    code = new PDFTeachersGapsCode(task.getPDFCode());
+                    code = new PDFTeachersGapsCode(task.getText().getPDFCode());
                     answer = code.answer;
                 }
                 else {
-                    code = new PDFCode(task.getPDFCode());
-                    answer = new PDFTeachersAnswer(task.getPDFAnswers());
+                    code = new PDFCode(task.getText().getPDFCode());
+                    answer = new PDFTeachersAnswer(task.getPdfAnswers());
                 }
                 break;
             case "interaktywny":
@@ -125,16 +125,16 @@ public class PDFGenerator {
             default:
                     switch (task.getType().name) {
                         case "Gaps":
-                            code = new PDFGapsCode(task.getPDFCode());
+                            code = new PDFGapsCode(task.getText().getPDFCode());
                             answer = code.answer;
                             break;
                         case "LineNumbers":
-                            code = new PDFLineNumbersCode(task.getPDFCode());
-                            answer = new PDFAnswer(task.getPDFAnswers());
+                            code = new PDFLineNumbersCode(task.getText().getPDFCode());
+                            answer = new PDFAnswer(task.getPdfAnswers());
                             break;
                         default:
-                            code = new PDFCode(task.getPDFCode());
-                            answer = new PDFAnswer(task.getPDFAnswers());
+                            code = new PDFCode(task.getText().getPDFCode());
+                            answer = new PDFAnswer(task.getPdfAnswers());
                             break;
                     }
                 break;

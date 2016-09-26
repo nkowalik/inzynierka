@@ -1,13 +1,9 @@
 package com.ceg.examContent;
 
 import com.ceg.gui.Alerts;
-import java.util.ArrayList;
+
 import java.util.List;
 
-/**
- *
- * @author marta
- */
 public class TaskTypeLineNumbers extends TaskType{
     
     public TaskTypeLineNumbers() {
@@ -35,7 +31,7 @@ public class TaskTypeLineNumbers extends TaskType{
                             lineNumber = Integer.parseInt(substr[2])-1;
                         else
                             lineNumber = Integer.parseInt(substr[1])-1;
-                        String[] codeLine = task.getCode().get(lineNumber).split("//");
+                        String[] codeLine = task.getText().getStandardCompilationCode().get(lineNumber).split("//");
                         answers.add(codeLine[1]);
                         answersCnt++;
                     }               
@@ -54,17 +50,16 @@ public class TaskTypeLineNumbers extends TaskType{
 
     @Override
     public void callExecute(Task task, List<String> output) {
-        List<String> code = new ArrayList<>(task.getCode());
+        List<String> code = task.getText().getStandardCompilationCode();
         task.compiler.execute(code, "linenumbers.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
 
     @Override
     public void preparePdfAnswers(Task task) {
-        task.getPDFAnswers().clear();
+        task.getPdfAnswers().clear();
         for(int i=0;i<this.params.getNoOfAnswers();i++){
-            task.getPDFAnswers().add(" #placeForAnswer");   
+            task.getPdfAnswers().add(" #placeForAnswer");
         }
     }
-    
 }

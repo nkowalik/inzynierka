@@ -2,13 +2,9 @@ package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
 import com.ceg.gui.Alerts;
-import java.util.ArrayList;
+
 import java.util.List;
 
-/**
- *
- * @author marta
- */
 public class TaskTypeComplexOutput extends TaskType{
     
     public TaskTypeComplexOutput() {
@@ -17,7 +13,7 @@ public class TaskTypeComplexOutput extends TaskType{
         name = "ComplexOutput";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
     }
-    
+
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers){
         answers.clear();
@@ -51,17 +47,17 @@ public class TaskTypeComplexOutput extends TaskType{
 
     @Override
     public void callExecute(Task task, List<String> output) {
-        List<String> code = new ArrayList<>(task.getCode());
+        List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
         task.compiler.execute(code, "multiple.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
-    
+
     @Override
     public void preparePdfAnswers(Task task){
-        task.getPDFAnswers().clear();
+        task.getPdfAnswers().clear();
         for(int i=0;i<this.params.getNoOfAnswers();i++){
-            task.getPDFAnswers().add(" #placeForAnswer");   
+            task.getPdfAnswers().add(" #placeForAnswer");
         }
     }
 }

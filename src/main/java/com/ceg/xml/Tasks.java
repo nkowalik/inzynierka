@@ -3,10 +3,8 @@ package com.ceg.xml;
 import javax.xml.bind.annotation.*;
 
 /**
- *
- * @author Natalia
+ * Klasa przechowująca dane o typach zadań.
  */
-
 @XmlRootElement
 public class Tasks {
     TaskData taskData;

@@ -2,7 +2,6 @@ package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,7 +19,6 @@ public abstract class PDFAbstractTaskPart {
         PDFSettings pdfSettings = PDFSettings.getInstance();
         cs = PDFGenerator.cs;
         actualTaskLines = new ArrayList<>();
-        //pdfLine = new PDFLine(pdfSettings.getCodeFont(), pdfSettings.getCodeFontSize());
         this.textWidth = 0;
         lineHeight = pdfSettings.getCodeFontSize();
     }
@@ -30,8 +28,13 @@ public abstract class PDFAbstractTaskPart {
     public int getLineHeight() {
        return lineHeight; 
     }
-    
-    /*  Wyrzuca szerokość tekstu napisanego daną czcionką o konkretnym rozmiarze    */
+
+    /**
+     * Oblicza szerokość tekstu napisanego czcionką o konkretnym rozmiarze.
+     * @param text Tekst dla którego jest obliczana szerokość.
+     * @return
+     * @throws IOException
+     */
     protected float getWidth(String text) throws IOException {
         return pdfLine.getFont().getStringWidth(text) / 1000 * pdfLine.getFontSize();
     }
