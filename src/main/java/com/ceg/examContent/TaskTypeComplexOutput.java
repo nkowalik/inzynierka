@@ -1,7 +1,7 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
-import com.ceg.gui.Alerts;
+import com.ceg.utils.Alerts;
 import java.util.ArrayList;
 import java.util.List;
 

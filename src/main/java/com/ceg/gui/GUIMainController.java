@@ -1,6 +1,7 @@
 package com.ceg.gui;
 
 
+import com.ceg.utils.Alerts;
 import java.util.*;
 
 import javafx.fxml.FXMLLoader;
@@ -26,9 +27,6 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import com.ceg.examContent.Code;
 import com.ceg.exceptions.EmptyExamException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.scene.control.Alert;
 
 
 /**

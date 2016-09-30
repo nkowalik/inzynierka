@@ -1,7 +1,7 @@
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
-import com.ceg.gui.Alerts;
+import com.ceg.utils.Alerts;
 import com.ceg.gui.PdfSavingController;
 import javafx.stage.Stage;
 

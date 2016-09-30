@@ -1,6 +1,5 @@
 package com.ceg.gui;
 
-import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
 import java.io.File;
 import java.io.IOException;
@@ -21,7 +20,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
@@ -175,7 +173,9 @@ public class PdfSavingController implements Initializable {
         appStage.toFront();
     }
     
-    public void saveFile(ActionEvent event) throws IOException {   
+    public void saveFile(ActionEvent event) throws IOException {  
+        GUIExamCompilationController.show();
+        
         PDFSettings.getInstance().setCommandFont(commandFont.getValue().toString());
         PDFSettings.getInstance().setCodeFont(codeFont.getValue().toString());
         

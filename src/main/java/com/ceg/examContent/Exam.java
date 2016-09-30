@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceg.examContent;
 
 import java.util.ArrayList;
@@ -19,6 +14,7 @@ import java.util.Observable;
 */
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
+    private float compilationProgress = -1.0f;
     
     private final static Exam instance = new Exam();
     public int idx;
@@ -34,6 +30,19 @@ public class Exam extends Observable {
          tasks = new ArrayList<>();
          idx = 0;
     }
+    
+    public boolean compile() {
+        List<String> output = new ArrayList<>();
+        compilationProgress = 0;
+        
+        return tasks.stream().map((p) -> {
+            output.clear();
+            p.getType().callExecute(p, output);
+            compilationProgress += 1.0f/tasks.size();
+            return p;
+        }).noneMatch((_item) -> (!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")));
+    }
+        
     public List<Task> getTasks(){
         return tasks;
     }
@@ -53,8 +62,7 @@ public class Exam extends Observable {
     public void deleteTaskAtIndex(int idx) {
         tasks.remove(idx);
     }
-    /*zmienić tak, aby kompilowany był cały egzamin*/
-    public boolean compileExam() {
-        return true;
+    public float getCompilationProgress() {
+        return compilationProgress;
     }
 }
