@@ -33,7 +33,8 @@ public class Task {
     
     public Task(TaskType tt){  
         this.type = tt;
-        setCode(Arrays.asList(""));
+        code = new ArrayList<>();
+        testCode = new ArrayList<>();
         this.answers = new ArrayList<>();
         /* to tylko na razie */
         PDFAnswers = new ArrayList<>();

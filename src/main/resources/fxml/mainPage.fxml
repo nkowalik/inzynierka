@@ -14,6 +14,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
 <?import org.fxmisc.richtext.*?>
+<?import javafx.scene.control.Label?>
 
 <GridPane  alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
     <columnConstraints>
@@ -79,10 +80,11 @@
                     <MenuItem fx:id="changeAnswersNum" visible="false" mnemonicParsing="false" onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi"/>
                   </items>
                 </Menu>
-                <Menu disable="true" mnemonicParsing="false" text="Ustawienia">
-                  <items>
-                    <MenuItem mnemonicParsing="false" text="TO DO" />
-                  </items>
+                <Menu mnemonicParsing="false">
+                    <graphic>
+                        <Label  onMouseClicked="#advancedOptionsClicked"  mnemonicParsing="false" text="Ustawienia">
+                        </Label>
+                    </graphic>
                 </Menu>
               </menus>
             </MenuBar>

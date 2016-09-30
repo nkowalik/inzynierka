@@ -4,6 +4,7 @@ package com.ceg.gui;
 import com.ceg.utils.Alerts;
 import java.util.*;
 
+import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.IndexRange;
@@ -27,7 +28,9 @@ import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import com.ceg.examContent.Code;
 import com.ceg.exceptions.EmptyExamException;
-
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.input.MouseEvent;
 
 /**
  *
@@ -58,6 +61,15 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem changeAnswersNum;
     
+    @FXML
+    private void advancedOptionsClicked(MouseEvent event){
+        try {
+            AdvancedOptionsController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
+        }
+    }
+     
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
@@ -136,6 +148,7 @@ public class GUIMainController implements Initializable {
         
         stage.show();
         stage.toFront();
+        stage.setOnCloseRequest(e -> Platform.exit());
     }
     public static GUIMainController getInstance() {
         return instance;
@@ -258,7 +271,7 @@ public class GUIMainController implements Initializable {
 
             showTask(true);
             updateText(t.getContents());
-            updateCode(t.getCode());
+            updateCode(t.getTestCode());
             updateResult(t.getResult());
         }
     }
@@ -321,4 +334,6 @@ public class GUIMainController implements Initializable {
     public void saveResult(int idx) {
         Exam.getInstance().getTaskAtIndex(idx).setResult(result.getText());
     }
+    
+     
 }
