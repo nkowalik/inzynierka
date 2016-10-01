@@ -5,12 +5,12 @@ import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 
-/**
- *
- * @author Natalia
- */
-
 public class TasksLoading {
+
+    /**
+     * Laduje polecenia ze z góry zdefiniowanego pliku .xml i zapisuje w obiekcie TaskData.
+     * @return Obiekt zawierający dane o typach zadań.
+     */
     public static TaskData loadFromXml() {
         try {
             JAXBContext jc = JAXBContext.newInstance(Tasks.class);

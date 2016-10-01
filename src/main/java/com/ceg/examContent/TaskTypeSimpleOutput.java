@@ -1,17 +1,7 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceg.examContent;
 
-import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author marta
- */
 public class TaskTypeSimpleOutput extends TaskType{
 
     public TaskTypeSimpleOutput() {
@@ -38,14 +28,14 @@ public class TaskTypeSimpleOutput extends TaskType{
 
     @Override
     public void callExecute(Task task, List<String> output) {
-        List<String> code = new ArrayList<>(task.getCode());
+        List<String> code = task.getText().getStandardCompilationCode();
         task.compiler.execute(code, "simple.cpp", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
     
     @Override
     public void preparePdfAnswers(Task task){
-        task.getPDFAnswers().clear();
-        task.getPDFAnswers().add("Wynik = #placeForAnswer");
+        task.getPdfAnswers().clear();
+        task.getPdfAnswers().add("Wynik = #placeForAnswer");
     }
 }
