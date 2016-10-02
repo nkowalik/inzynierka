@@ -5,7 +5,7 @@ import com.ceg.examContent.Text;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.IndexRange;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -14,15 +14,10 @@ import com.ceg.examContent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
+
 import java.io.IOException;
 import java.net.URL;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextInputDialog;
+
 import javafx.scene.layout.Pane;
 import com.ceg.exceptions.EmptyExamException;
 import java.util.logging.Level;
@@ -34,6 +29,8 @@ import javafx.scene.input.MouseEvent;
  */
 public class GUIMainController implements Initializable {
 
+    @FXML
+    MenuBar menu;
     @FXML
     TextArea text;
     @FXML
@@ -238,6 +235,7 @@ public class GUIMainController implements Initializable {
      * @throws Exception
      */
     public void addTask(ActionEvent event) throws Exception {
+        Text text = new Text();
         GUIAddTaskController.show();
     }
 
@@ -375,7 +373,7 @@ public class GUIMainController implements Initializable {
      */
     public void addNewTabPaneTab() {
         status = Status.ADD;
-        Tab newTab = new Tab("Zadanie " + (exam.idx + 1));
+        DraggableTab newTab = new DraggableTab("Zadanie " + (exam.idx + 1));
         newTab.setId(Integer.toString(exam.idx));
         tabPane.getTabs().add(newTab);
         tabPane.getSelectionModel().select(newTab);
@@ -396,7 +394,9 @@ public class GUIMainController implements Initializable {
     public void updateTabPaneTabIndexes() {
         for(int i = 0; i < tabPane.getTabs().size(); i++) {
             tabPane.getTabs().get(i).setId(Integer.toString(i));
-            tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
+            //tabPane.getTabs().get(exam.idx).setGraphic(new Label("Zadanie " + (i+1))); //todo powoduje błędy przy przenoszeniu, ale tekst zmienia - sprawdzic dlaczego
+            //tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
+            //tabPane.getTabs().get(i).setText(new javafx.scene.text.Text("Zadanie " + (i+1)));
         }
     }
 

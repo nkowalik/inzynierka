@@ -74,6 +74,12 @@ public class Exam extends Observable {
         tasks.remove(idx);
     }
 
+    public void changeTasksOrder(int oldIndex, int newIndex) {
+        Task task = tasks.get(oldIndex);
+        tasks.remove(oldIndex);
+        tasks.add(newIndex, task);
+    }
+
     // todo zmienić tak, aby kompilowany był cały egzamin*/
     public boolean compileExam() {
         return true;
