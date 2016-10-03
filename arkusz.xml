@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<exam>
+    <idx>0</idx>
+    <tasks>
+        <compiler>
+            <osName>windows 7</osName>
+        </compiler>
+        <contents>Podaj jaki tekst zostanie wypisany na ekran w wyniku wywołania funkcji:</contents>
+        <text>
+            <textParts>
+                <textPart>
+                    <text></text>
+                    <type>[]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeComplexOutput">
+            <name>ComplexOutput</name>
+            <defaultContents>Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.</defaultContents>
+            <params xsi:type="taskParametersComplexOutput">
+                <noOfAnswers>2147483646</noOfAnswers>
+            </params>
+        </type>
+    </tasks>
+</exam>

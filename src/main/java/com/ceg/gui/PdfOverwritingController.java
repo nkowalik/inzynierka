@@ -1,6 +1,5 @@
 package com.ceg.gui;
 
-import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -10,27 +9,29 @@ import javafx.scene.Node;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
- *
- * @author Martyna
+ * Klasa reprezentująca kontroler okna do nadpisywania pliku.
  */
 public class PdfOverwritingController implements Initializable {
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }   
-    
+    }
+
+    /**
+     * Generuje plik .pdf nadpisując wcześniej istniejący (o tej samej nazwie).
+     * @param event
+     */
     public void save(ActionEvent event) {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
         
         PDFSettings.getInstance().pdfGenerate(PdfSavingController.appStage);
     }
-    
+
+    /**
+     * Zamyka okno nadpisywania pliku.
+     * @param event
+     */
     public void cancel(ActionEvent event) {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();

@@ -1,16 +1,7 @@
 package com.ceg.gui;
 
-import com.ceg.examContent.Exam;
-import com.ceg.examContent.Task;
-import com.ceg.examContent.TaskType;
-import com.ceg.examContent.TaskTypeComplexOutput;
-import com.ceg.examContent.TaskTypeGaps;
-import com.ceg.examContent.TaskTypeLineNumbers;
-import com.ceg.examContent.TaskTypeReturnedValue;
-import com.ceg.examContent.TaskTypeSimpleOutput;
-import com.ceg.examContent.TaskTypeVarValue;
+import com.ceg.examContent.*;
 import com.ceg.xml.TaskData;
-import com.ceg.xml.Tasks;
 import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,7 +10,6 @@ import javafx.stage.Stage;
 
 import javafx.scene.control.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -30,19 +20,12 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
+import org.fxmisc.richtext.CodeArea;
 
 /**
- *
- * @author Natalia
+ * Klasa reprezentująca kontroler okna dodawania zadania.
  */
-
-
-public class GUIAddTaskController implements Initializable {
+public class GUIManageTaskController implements Initializable {
 
     ArrayList<String> contentList = new ArrayList<>();
     ArrayList<String> codeList = new ArrayList<>();
@@ -50,9 +33,11 @@ public class GUIAddTaskController implements Initializable {
     @FXML
     TextArea text;
     @FXML
-    TextArea code;
+    CodeArea code;
     @FXML
     Button finish;
+    @FXML
+    Button loadCode;
     @FXML
     Menu chooseType;
     @FXML
@@ -69,13 +54,17 @@ public class GUIAddTaskController implements Initializable {
     MenuItem taskTypeLineNumbers;
 
     private static Stage stage = null;
-    private static GUIAddTaskController addTaskInstance = null;
+    private static GUIManageTaskController manageTaskInstance = null;
     private static GUIMainController mainInstance = null;
     private FileChooser fileChooser;
 
-    public static synchronized void show() throws IOException {
+    /**
+     * Wyświetla okno dodawania zadania.
+     * @throws IOException
+     */
+    public static synchronized void show(String action) throws IOException {
         if(stage == null) {
-            URL location = GUIAddTaskController.class.getResource("/fxml/addTask.fxml");
+            URL location = GUIManageTaskController.class.getResource("/fxml/manageTask.fxml");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
 
@@ -83,23 +72,47 @@ public class GUIAddTaskController implements Initializable {
 
             stage = new Stage();
             stage.setScene(scene);
-            stage.setTitle("Dodaj nowe zadanie");
             stage.setResizable(false);
         }
         clearFields();
+        if (action.equals("add")) {
+            stage.setTitle("Dodaj nowe zadanie");
+        }
+        else if (action.equals("edit")) {
+            stage.setTitle("Edycja zadania");
+        }
         stage.show();
         stage.toFront();
-        GUIAddTaskController.getInstance().finish.setDisable(true);
+        GUIManageTaskController.getInstance().finish.setDisable(true);
+        if (action.equals("edit")) {
+            GUIManageTaskController.getInstance().loadCode.setDisable(true);
+        }
     }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        addTaskInstance = this;
+        manageTaskInstance = this;
         fileChooser = new FileChooser();
         mainInstance = GUIMainController.getInstance();
     }
-    public static GUIAddTaskController getInstance() {
-        return addTaskInstance;
+    public static GUIManageTaskController getInstance() {
+        return manageTaskInstance;
     }
+
+    /**
+     * Wpisuje do okna edycji zadania kod i polecenie z okna głównego.
+     * @param text Kod pobrany z okna głównego.
+     */
+    public void editTask(Text text, TaskType taskType) {
+        code.clear();
+        code.appendText(text.getTextParts().get(0).getText());
+
+    }
+
+    /**
+     * Wpisuje do okna treść polecenia dla wybranego typu zadania.
+     * @param index Numer wybranego zadania.
+     */
     public void addType(int index) {
         TaskData tasks = TasksLoading.loadFromXml();
 
@@ -112,6 +125,10 @@ public class GUIAddTaskController implements Initializable {
 
         finish.setDisable(false);
     }
+
+    /**
+     * Ustawia typ wybranego zadania, zmienia nagłówek okna dodawania zadania na odpowiadający wybranemu typowi.
+     */
     public void addTypeSimpleOutput() {
         chooseType.setText(taskTypeSimpleOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
@@ -148,29 +165,73 @@ public class GUIAddTaskController implements Initializable {
         addType(5);
         type = new TaskTypeLineNumbers();
     }
+
+    /**
+     * Kończy tworzenie zadania w GUI. Tworzy nowy obiekt zadania, uzupełnia jego dane i zapisuje w egzaminie.
+     * Dodaje nową zakładkę z zadaniem i przełącza sie na nią.
+     * @param event
+     * @throws Exception
+     */
     public void finishEdition(ActionEvent event) throws Exception {
         Task t = new Task(type);
         t.setContents(contentList);
-        t.setCode(codeList);
-        t.setTestCode(codeList);
-        Exam.getInstance().addTask(t); // wrzuca na koniec listy, ustawia idx na size-1 (ostatni element)
+        t.getText().extractText(code);
+        if (stage.getTitle().equals("Dodaj nowe zadanie")) {
+            Exam.getInstance().addTask(t);
+            mainInstance.getInstance().addNewTabPaneTab();
+        }
+        else {
+            Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
+            TaskType taskType = Exam.getInstance().getCurrentTask().getType();
+            switch (taskType.name) {
+                case "SimpleOutput":
+                    addTypeSimpleOutput();
+                    break;
+                case "ReturnedValue":
+                    addTypeReturnedValue();
+                    break;
+                case "ComplexOutput":
+                    addTypeComplexOutput();
+                    break;
+                case "Gaps":
+                    addTypeGaps();
+                    break;
+                case "VarValue":
+                    addTypeVarValue();
+                    break;
+                case "LineNumbers":
+                    addTypeLineNumbers();
+                    break;
+            }
+        }
         stage.hide();
-
-        mainInstance.getInstance().addNewTabPaneTab();
-
         chooseType.setText("Typ zadania");
     }
+
+    /**
+     * Czyści pola znajdujące się w oknie dodawania zadania.
+     */
     public static void clearFields() {
-        addTaskInstance.text.clear();
-        addTaskInstance.code.clear();
-        addTaskInstance.codeList = new ArrayList<>();
-        addTaskInstance.contentList = new ArrayList<>();
-        addTaskInstance.finish.setDisable(true);
+        manageTaskInstance.text.clear();
+        manageTaskInstance.code.clear();
+        manageTaskInstance.codeList = new ArrayList<>();
+        manageTaskInstance.contentList = new ArrayList<>();
+        manageTaskInstance.finish.setDisable(true);
     }
+
+    /**
+     * Przerywa edycję i zamyka okno dodawania zadania.
+     * @param event
+     * @throws Exception
+     */
     public void cancelEdition(ActionEvent event) throws Exception {
         mainInstance.setStageName("CEG");
         stage.hide();
     }
+
+    /**
+     * Wyświetla okno wyboru pliku i ładuje go po zatwierdzeniu.
+     */
     public void selectCodeFile() throws IOException {
 
         File file = fileChooser.showOpenDialog(stage);
@@ -179,6 +240,12 @@ public class GUIAddTaskController implements Initializable {
             loadFile(file);
         }
     }
+
+    /**
+     * Laduje plik wybrany w oknie wyboru wpisując jego zawartość w polu CodeArea.
+     * @param file
+     * @throws IOException
+     */
     public void loadFile(File file) throws IOException {
         Scanner s = new Scanner(file);
         codeList.clear();

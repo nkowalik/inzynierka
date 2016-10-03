@@ -12,8 +12,9 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.VBox?>
+<?import org.fxmisc.richtext.*?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIAddTaskController">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIManageTaskController">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -49,7 +50,7 @@
                         <Cursor fx:constant="DEFAULT" />
                      </cursor>
                   </MenuBar>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#selectCodeFile" text="Załaduj kod">
+                  <Button fx:id="loadCode" alignment="CENTER" mnemonicParsing="false" onAction="#selectCodeFile" text="Załaduj kod">
                      <VBox.margin>
                         <Insets />
                      </VBox.margin></Button>
@@ -75,7 +76,7 @@
             <VBox prefHeight="300.0" prefWidth="350.0" BorderPane.alignment="CENTER">
                <children>
                   <TextArea fx:id="text" editable="false" prefHeight="200.0" prefWidth="200.0" />
-                  <TextArea fx:id="code" editable="false" prefHeight="200.0" prefWidth="200.0" />
+                  <CodeArea fx:id="code" editable="false" prefHeight="200.0" prefWidth="200.0" />
                </children>
             </VBox>
          </right>
