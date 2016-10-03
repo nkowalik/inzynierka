@@ -18,9 +18,15 @@ public class GCC {
 
     private String path;
     private File file = null;
+    public String osName;
     private String cppName;
     private String executableName;
-    public String osName;
+    private ProcessBuilder console;
+    private final static GCC instance = new GCC();
+    
+    public static GCC getInstance() {
+        return instance;
+    }
 
     /**
      * Tworzy obiekt kompilatora.
@@ -38,6 +44,19 @@ public class GCC {
             Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
         }
 
+    }
+    
+    /**
+     * Tworzy proces konsoli
+     * 
+     * @return true jeśli operacja się powiedzie, false w przypadku błędu
+     */
+    public boolean startConsole(){
+        return true;
+    }
+    
+    public boolean stopConsole(){
+        return true;
     }
 
     /**
