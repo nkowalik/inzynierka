@@ -14,7 +14,8 @@ import java.util.Observable;
 */
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
-    private float compilationProgress = -1.0f;
+    private int compilationProgress = -1;
+    private List<String> outputList = new ArrayList<>();
     
     private final static Exam instance = new Exam();
     public int idx;
@@ -33,14 +34,23 @@ public class Exam extends Observable {
     
     public boolean compile() {
         List<String> output = new ArrayList<>();
-        compilationProgress = 0;
-        
-        return tasks.stream().map((p) -> {
+        compilationProgress = -1;
+        outputList.clear();
+        for (Task i : tasks) {
             output.clear();
-            p.getType().callExecute(p, output);
-            compilationProgress += 1.0f/tasks.size();
-            return p;
-        }).noneMatch((_item) -> (!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")));
+            i.getType().callExecute(i, output);
+            compilationProgress++;
+            outputList.add("Zadanie " + (compilationProgress+1) + " : " + output.get(0) + "\n");
+            if (!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")) {
+                output.remove(0);
+                output.stream().forEach((s) -> {
+                    outputList.add(s + "\n");
+                });
+                return false;
+            }            
+        }
+        compilationProgress++;
+        return true;
     }
         
     public List<Task> getTasks(){
@@ -62,7 +72,10 @@ public class Exam extends Observable {
     public void deleteTaskAtIndex(int idx) {
         tasks.remove(idx);
     }
-    public float getCompilationProgress() {
+    public int getCompilationProgress() {
         return compilationProgress;
+    }
+    public List<String> getOutputList() {
+        return outputList;
     }
 }
