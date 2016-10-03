@@ -21,7 +21,6 @@ public class GCC {
     public String osName;
     private String cppName;
     private String executableName;
-    private ProcessBuilder console;
     private final static GCC instance = new GCC();
     
     public static GCC getInstance() {
@@ -44,19 +43,6 @@ public class GCC {
             Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
         }
 
-    }
-    
-    /**
-     * Tworzy proces konsoli
-     * 
-     * @return true jeśli operacja się powiedzie, false w przypadku błędu
-     */
-    public boolean startConsole(){
-        return true;
-    }
-    
-    public boolean stopConsole(){
-        return true;
     }
 
     /**
