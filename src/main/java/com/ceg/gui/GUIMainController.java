@@ -65,9 +65,18 @@ public class GUIMainController implements Initializable {
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
-    private enum Status {
-        ADD, DELETE, SWITCH
+    public enum Status {
+        ADD, DELETE, SWITCH, DRAG
     }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     private Status status = Status.SWITCH;
 
     public static void setStageName (String str){
@@ -93,6 +102,9 @@ public class GUIMainController implements Initializable {
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (status) {
+                case DRAG:
+
+                    break;
                 case DELETE:
                     if(Integer.parseInt(oldValue.getId()) == 0) { // usuwana jest pierwsza pozycja
                         updateTabPaneTabIndexes();
@@ -190,6 +202,12 @@ public class GUIMainController implements Initializable {
                 saveContent(exam.idx);
                 saveResult(exam.idx);
                 PdfSavingController.show();
+                status = Status.DRAG;
+                DraggableTab tab = new DraggableTab("Zadanie x"); // todo zmiana nazwy dziala, teraz nalezy tylko zmieniac nazwe przy zmianie kolejnosci zakladek i usuwaniu ich
+                tab.setId(Integer.toString(exam.idx));
+                tabPane.getTabs().set(exam.idx, tab);
+                tabPane.selectionModelProperty().get().select(exam.idx);
+                status = Status.SWITCH;
             } catch (EmptyExamException ex) {
                 Alerts.emptyExamAlert();
             }
@@ -395,6 +413,7 @@ public class GUIMainController implements Initializable {
         for(int i = 0; i < tabPane.getTabs().size(); i++) {
             tabPane.getTabs().get(i).setId(Integer.toString(i));
             //tabPane.getTabs().get(exam.idx).setGraphic(new Label("Zadanie " + (i+1))); //todo powoduje błędy przy przenoszeniu, ale tekst zmienia - sprawdzic dlaczego
+            //tabPane.getTabs().set(i, new DraggableTab("Zadanie " + (i+1)));
             //tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
             //tabPane.getTabs().get(i).setText(new javafx.scene.text.Text("Zadanie " + (i+1)));
         }

@@ -123,6 +123,7 @@ public class DraggableTab extends Tab {
                         if(oldTabPane == insertData.getInsertPane() && oldTabPane.getTabs().size() == 1) {
                             return;
                         }
+                        GUIMainController.getInstance().setStatus(GUIMainController.Status.DRAG);
                         oldTabPane.getTabs().remove(DraggableTab.this);
                         if(oldIndex < addIndex && oldTabPane == insertData.getInsertPane()) {
                             addIndex--;
@@ -132,9 +133,10 @@ public class DraggableTab extends Tab {
                         }
                         Exam.getInstance().changeTasksOrder(oldIndex, addIndex);
                         insertData.getInsertPane().getTabs().add(addIndex, DraggableTab.this);
-
-                        GUIMainController.getInstance().updateTabPaneTabIndexes();
                         insertData.getInsertPane().selectionModelProperty().get().select(addIndex);
+                        GUIMainController.getInstance().updateTabPaneTabIndexes();
+                        GUIMainController.getInstance().setStatus(GUIMainController.Status.SWITCH);
+
                         return;
                     }
                 }
@@ -142,7 +144,6 @@ public class DraggableTab extends Tab {
 
         });
     }
-
 
 
     private InsertData getInsertData(Point2D screenPoint) {
