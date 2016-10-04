@@ -66,7 +66,7 @@ public class GUIMainController implements Initializable {
     private static GUIMainController instance = null;
     private static Exam exam = null;
     public enum Status {
-        ADD, DELETE, SWITCH, DRAG
+        ADD, DELETE, SWITCH, RENAME, DRAG
     }
 
     public Status getStatus() {
@@ -102,8 +102,8 @@ public class GUIMainController implements Initializable {
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (status) {
+                case RENAME:
                 case DRAG:
-
                     break;
                 case DELETE:
                     if(Integer.parseInt(oldValue.getId()) == 0) { // usuwana jest pierwsza pozycja
@@ -131,7 +131,9 @@ public class GUIMainController implements Initializable {
                     break;
             }
         });
-        
+
+
+
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
         
@@ -202,12 +204,6 @@ public class GUIMainController implements Initializable {
                 saveContent(exam.idx);
                 saveResult(exam.idx);
                 PdfSavingController.show();
-                status = Status.DRAG;
-                DraggableTab tab = new DraggableTab("Zadanie x"); // todo zmiana nazwy dziala, teraz nalezy tylko zmieniac nazwe przy zmianie kolejnosci zakladek i usuwaniu ich
-                tab.setId(Integer.toString(exam.idx));
-                tabPane.getTabs().set(exam.idx, tab);
-                tabPane.selectionModelProperty().get().select(exam.idx);
-                status = Status.SWITCH;
             } catch (EmptyExamException ex) {
                 Alerts.emptyExamAlert();
             }
@@ -269,6 +265,26 @@ public class GUIMainController implements Initializable {
         else {
             deleteCurrentTabPaneTab();
         }
+    }
+
+    /**
+     * Zmienia nazwę aktualnie aktywnej zakładki.
+     * @param event
+     * @throws Exception
+     */
+    public void changeTaskName(ActionEvent event) throws Exception {
+        status = Status.RENAME;
+        TextInputDialog textInputDialog = new TextInputDialog();
+        textInputDialog.setTitle("Edycja nazwy zadania");
+        textInputDialog.setHeaderText("Wpisz nową nazwę");
+        Optional<String> result = textInputDialog.showAndWait();
+        if(result.isPresent() && result.get().length() > 0) {
+            DraggableTab tab = new DraggableTab(result.get());
+            tab.setId(Integer.toString(exam.idx));
+            tabPane.getTabs().set(exam.idx, tab);
+            tabPane.selectionModelProperty().get().select(exam.idx);
+        }
+        status = Status.SWITCH;
     }
 
     /**
@@ -391,7 +407,7 @@ public class GUIMainController implements Initializable {
      */
     public void addNewTabPaneTab() {
         status = Status.ADD;
-        DraggableTab newTab = new DraggableTab("Zadanie " + (exam.idx + 1));
+        DraggableTab newTab = new DraggableTab("Zadanie " + (exam.maxIdx));
         newTab.setId(Integer.toString(exam.idx));
         tabPane.getTabs().add(newTab);
         tabPane.getSelectionModel().select(newTab);
@@ -412,10 +428,6 @@ public class GUIMainController implements Initializable {
     public void updateTabPaneTabIndexes() {
         for(int i = 0; i < tabPane.getTabs().size(); i++) {
             tabPane.getTabs().get(i).setId(Integer.toString(i));
-            //tabPane.getTabs().get(exam.idx).setGraphic(new Label("Zadanie " + (i+1))); //todo powoduje błędy przy przenoszeniu, ale tekst zmienia - sprawdzic dlaczego
-            //tabPane.getTabs().set(i, new DraggableTab("Zadanie " + (i+1)));
-            //tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
-            //tabPane.getTabs().get(i).setText(new javafx.scene.text.Text("Zadanie " + (i+1)));
         }
     }
 
@@ -462,7 +474,7 @@ public class GUIMainController implements Initializable {
     /**
      * Laduje egzamin do programu ze z góry określonego pliku.
      */
-    public void loadXMLToCodeArea() {
+    public void loadXMLToCodeArea() { // todo dodac mozliwosc zapisu do arkusza z uwzglednieniem nazw zakladek, rozszerzyc ladowanie o dodanie menu kontekstowego
 
         Exam.getInstance().load();
         Text text = Exam.getInstance().getTaskAtIndex(0).getText();
@@ -479,5 +491,4 @@ public class GUIMainController implements Initializable {
             }
         }
     }
-     
 }

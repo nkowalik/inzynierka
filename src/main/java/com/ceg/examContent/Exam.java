@@ -24,6 +24,11 @@ public class Exam extends Observable {
      */
     public int idx;
 
+    /**
+     * Aktualny indeks dodawanego zadania.
+     */
+    public int maxIdx = 0;
+
     public Exam() {
     }
     public static Exam getInstance() {
@@ -47,6 +52,7 @@ public class Exam extends Observable {
     public void addTask(Task t){
         tasks.add(t);
         idx = tasks.size() - 1;
+        maxIdx++;
     }
 
     /**

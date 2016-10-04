@@ -1,16 +1,16 @@
 package com.ceg.gui;
 
 import com.ceg.examContent.Exam;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Point2D;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Scene;
-import javafx.scene.control.Control;
-import javafx.scene.control.Label;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
+import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
@@ -62,6 +62,8 @@ public class DraggableTab extends Tab {
         StackPane.setAlignment(dragText, Pos.CENTER);
         sp.getChildren().add(dragText);
         dragStage.setScene(new Scene(sp));
+
+        addContextMenu();
 
         /**
          * Definiuje sposób zachowania zakładki w trakcie jej przeciągania.
@@ -123,7 +125,8 @@ public class DraggableTab extends Tab {
                         if(oldTabPane == insertData.getInsertPane() && oldTabPane.getTabs().size() == 1) {
                             return;
                         }
-                        GUIMainController.getInstance().setStatus(GUIMainController.Status.DRAG);
+                        GUIMainController mainInstance = GUIMainController.getInstance();
+                        mainInstance.setStatus(GUIMainController.Status.DRAG);
                         oldTabPane.getTabs().remove(DraggableTab.this);
                         if(oldIndex < addIndex && oldTabPane == insertData.getInsertPane()) {
                             addIndex--;
@@ -134,8 +137,8 @@ public class DraggableTab extends Tab {
                         Exam.getInstance().changeTasksOrder(oldIndex, addIndex);
                         insertData.getInsertPane().getTabs().add(addIndex, DraggableTab.this);
                         insertData.getInsertPane().selectionModelProperty().get().select(addIndex);
-                        GUIMainController.getInstance().updateTabPaneTabIndexes();
-                        GUIMainController.getInstance().setStatus(GUIMainController.Status.SWITCH);
+                        mainInstance.updateTabPaneTabIndexes();
+                        mainInstance.setStatus(GUIMainController.Status.SWITCH);
 
                         return;
                     }
@@ -241,6 +244,50 @@ public class DraggableTab extends Tab {
             return insertPane;
         }
 
+    }
+
+    public void addContextMenu() {
+        MenuItem addItem = new MenuItem("Dodaj zadanie");
+        MenuItem deleteItem = new MenuItem("Usuń zadanie");
+        MenuItem changeItem = new MenuItem("Zmień nazwę");
+
+        GUIMainController instance = GUIMainController.getInstance();
+
+        addItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    instance.addTask(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        deleteItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    instance.deleteTask(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+        changeItem.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    instance.changeTaskName(event);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        ContextMenu menu = new ContextMenu();
+        menu.getItems().addAll(addItem, deleteItem, changeItem);
+
+        this.setContextMenu(menu);
     }
 
 }

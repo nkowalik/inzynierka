@@ -79,6 +79,7 @@
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
                     <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Usun"/>
+                    <MenuItem mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę"/>
                     <MenuItem fx:id="changeAnswersNum" visible="false" mnemonicParsing="false" onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi"/>
                   </items>
                 </Menu>
