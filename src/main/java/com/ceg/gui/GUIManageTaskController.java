@@ -77,16 +77,15 @@ public class GUIManageTaskController implements Initializable {
         clearFields();
         if (action.equals("add")) {
             stage.setTitle("Dodaj nowe zadanie");
+            GUIManageTaskController.getInstance().loadCode.setDisable(false);
         }
         else if (action.equals("edit")) {
             stage.setTitle("Edycja zadania");
+            GUIManageTaskController.getInstance().loadCode.setDisable(true);
         }
         stage.show();
         stage.toFront();
         GUIManageTaskController.getInstance().finish.setDisable(true);
-        if (action.equals("edit")) {
-            GUIManageTaskController.getInstance().loadCode.setDisable(true);
-        }
     }
 
     @Override
