@@ -12,6 +12,6 @@ import java.util.List;
 public class PDFTeachersGapsCode extends PDFGapsCode {
     PDFTeachersGapsCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
         super(lines);
-        answer = new PDFGapsTeachersAnswer(lines, textWidth, pdfLine.getFont(), pdfLine.getFontSize(), leftMargin);
+        answer = new PDFGapsTeachersAnswer(lines, textWidth, defaultFontType, fontSize, leftMargin);
     }
 }

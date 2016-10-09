@@ -1,5 +1,6 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Content;
 import java.util.*;
 import com.ceg.examContent.Text;
 import javafx.application.Platform;
@@ -25,9 +26,12 @@ import javafx.scene.control.TabPane;
 import javafx.scene.control.TextInputDialog;
 import javafx.scene.layout.Pane;
 import com.ceg.exceptions.EmptyExamException;
+import static com.ceg.utils.ContentCssClass.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import org.fxmisc.richtext.StyleClassedTextArea;
 
 /**
  * Klasa reprezentująca kontroler głównego okna programu.
@@ -35,7 +39,7 @@ import javafx.scene.input.MouseEvent;
 public class GUIMainController implements Initializable {
 
     @FXML
-    TextArea text;
+    StyleClassedTextArea text;
     @FXML
     CodeArea code;
     @FXML
@@ -56,6 +60,8 @@ public class GUIMainController implements Initializable {
     Button gapsMarkerBtn;
     @FXML
     MenuItem changeAnswersNum;
+    @FXML
+    HBox textOptions;
     @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
@@ -214,7 +220,35 @@ public class GUIMainController implements Initializable {
     public void gapsMarker(ActionEvent actionEvent) {
         changeStyle("gap");
     }
-
+    public void boldTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
+            text.setStyleClass(i, i+1, BOLD.changeClass(text.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void italicTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            text.setStyleClass(i, i+1, ITALIC.changeClass(text.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void underlineTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            text.setStyleClass(i, i+1, UNDERLINE.changeClass(text.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void undoTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        text.setStyleClass(ir.getStart(), ir.getEnd(), UNDO.getClassName());
+    }
+    public void monospaceTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            text.setStyleClass(i, i+1, MONOSPACE.changeClass(text.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    
     /**
      * Ustawia typ dla kodu zawartego w polu CodeArea.
      * @param className Nazwa typu do przypisania.
@@ -289,6 +323,7 @@ public class GUIMainController implements Initializable {
      */
     public void showTask(boolean visibility) {
         text.setVisible(visibility);
+        textOptions.setVisible(visibility);
         code.setVisible(visibility);
         result.setVisible(visibility);
         executeBtn.setVisible(visibility);
@@ -328,7 +363,7 @@ public class GUIMainController implements Initializable {
             exam.idx = idx;
 
             showTask(true);
-            updateText(t.getContents());
+            updateText(t.getContent());
             updateCode(t.getText());
             updateResult(t.getResult());
         }
@@ -336,10 +371,11 @@ public class GUIMainController implements Initializable {
 
     /**
      * Aktualizuje tekst polecenia.
-     * @param text Lista linii zawierająca nową zawartość pola z poleceniem.
+     * @param content Obiekt klasy Text zawierający informacje o tekście i stanie znaczników.
      */
-    public void updateText(List<String> text) {
-        this.text.clear();
+    public void updateText(Content content) {
+        content.creatStyleClassedTextAreaText(text);
+        /*this.text.clear();
         if(!text.isEmpty()) {
             int i = 0;
             String line;
@@ -350,7 +386,7 @@ public class GUIMainController implements Initializable {
                 if(i>=text.size()) break;
                 line = text.get(i);
             }
-        }
+        }*/
     }
 
     /**
@@ -405,7 +441,14 @@ public class GUIMainController implements Initializable {
      * @param idx Indeks zadania, dla którego ma zostać uaktualnione pole z poleceniem.
      */
     public void saveContent(int idx) {
-        Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));
+        Task task = Exam.getInstance().getTaskAtIndex(idx);
+        task.getContent().extractContent(text);
+       /* String res = "";
+        res += text.getText().charAt(0);
+        for (int i = 1; i < text.getText().length(); i++) {
+            if (text.getStyleOfChar())
+        }
+        Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));*/
     }
 
     /**

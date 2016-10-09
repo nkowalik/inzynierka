@@ -45,10 +45,10 @@ public class PDFGenerator {
         
         Integer taskNumber = 1;
         for (Task i : taskList) {
-            if (i.getText().getPDFCode().isEmpty() || i.getContents().isEmpty() || i.getAnswers().size() < i.getPdfAnswers().size())
+            if (i.getText().getPDFCode().isEmpty() || i.getContent().getContentParts().size() <= 0 || i.getAnswers().size() < i.getPdfAnswers().size())
                 throw new EmptyPartOfTaskException();
             
-            comm = new PDFCommand(i.getContents(), taskNumber++);
+            comm = new PDFCommand(i.getContent(), taskNumber++);
             createCodeAndAnswer(i);
 
             answer.setAnswers(i.getAnswers());
@@ -68,7 +68,7 @@ public class PDFGenerator {
         Desktop desktop = Desktop.getDesktop();
         EventQueue EQ = new EventQueue();
         if(desktop.isSupported(Desktop.Action.OPEN)){
-             EQ.invokeLater(() -> {
+             EventQueue.invokeLater(() -> {
                  try {
                      desktop.open(pdfFile);
                  } catch (IOException ex) {
