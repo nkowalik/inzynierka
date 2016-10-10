@@ -183,13 +183,26 @@ public class GUIMainController implements Initializable {
     public void execute(ActionEvent actionEvent) {
         result.clear();
         saveText(exam.idx);
-        List<String> outcome = new ArrayList<String>();
+        List<String> outcome = new ArrayList<>();
 
         exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
         for(String s : outcome) {
             result.appendText(s + "\n");
         }
         exam.getCurrentTask().setResult(result.getText());
+    }
+
+    public void testExecute(ActionEvent actionEvent) {
+        result.clear();
+        saveText(exam.idx);
+        List<String> outcome = new ArrayList<>();
+
+        exam.getCurrentTask().getType().callTestExecute(exam.getCurrentTask(), outcome);
+        for(String s : outcome) {
+            result.appendText(s + "\n");
+        }
+        exam.getCurrentTask().setResult(result.getText());
+
     }
 
     /**

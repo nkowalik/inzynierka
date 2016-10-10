@@ -55,7 +55,7 @@
                   <HBox alignment="CENTER" spacing="10.0">
                      <children>
                         <Button fx:id="executeBtn" mnemonicParsing="false" onAction="#execute" prefWidth="120.0" text="Wykonaj" />
-                        <Button fx:id="testExecuteBtn" disable="true" alignment="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefWidth="120.0" text="Wykonaj testowo" />
+                        <Button fx:id="testExecuteBtn" alignment="CENTER" mnemonicParsing="false" onAction="#testExecute" nodeOrientation="LEFT_TO_RIGHT" prefWidth="120.0" text="Wykonaj testowo" />
                      </children></HBox>
                </children>
                <BorderPane.margin>

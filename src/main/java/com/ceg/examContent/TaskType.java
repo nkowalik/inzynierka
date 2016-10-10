@@ -1,6 +1,7 @@
 package com.ceg.examContent;
 
 import javax.xml.bind.annotation.XmlSeeAlso;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -38,6 +39,17 @@ abstract public class TaskType {
      * @param output Lista linii w których zostanie zapisane wyjście kompilatora.
      */
     public abstract void callExecute(Task task, List<String> output);
+
+    /**
+     * Wykonuje testową kompilację kodu zawartego w zadaniu oraz wyznacza do niego odpowiedzi.
+     * Dla każdej instrukcji wypisania generuje dodatkowy znak nowej linii.
+     * @param task Zadanie które ma zostać wykonane.
+     * @param output Lista linii w których zostanie zapisane wyjście kompilatora.
+     */
+    public void callTestExecute(Task task, List<String> output) {
+        List<String> code = new ArrayList<>(task.getText().getGUIText());
+        task.compiler.execute(code, "test.cpp", output);
+    }
 
     /**
      * Przygotowuje odpowiedzi, które znajdą się w pliku .pdf dla danego zadania.
