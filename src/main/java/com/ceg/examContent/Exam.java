@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import javafx.scene.control.TabPane;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * Klasa Exam stanowi kontekst dla modelu danych aplikacji, dla każdego wywołania aplikacji istnieje jedna statyczna instancja.
@@ -17,6 +19,8 @@ import java.util.Observable;
 @XmlRootElement
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
+    @XmlElement
+    private ArrayList<String> names;
     private final static Exam instance = new Exam();
 
     /**
@@ -36,6 +40,7 @@ public class Exam extends Observable {
     }
     public void init(){
          tasks = new ArrayList<>();
+         names = new ArrayList<>();
          idx = 0;
     }
     public List<Task> getTasks(){
@@ -44,7 +49,12 @@ public class Exam extends Observable {
     public void setTasks(List<Task> newTasks){
         tasks = (ArrayList<Task>) newTasks;
     }
-
+    public List<String> getNames() {
+        return names;
+    }
+    public void setNames(ArrayList<String> tabsNames) {
+        this.names = tabsNames;
+    }
     /**
      * Dodaje nowe zadanie do egzaminu.
      * @param t Zadanie które ma zostać dodane do egzaminu.
@@ -53,6 +63,7 @@ public class Exam extends Observable {
         tasks.add(t);
         idx = tasks.size() - 1;
         maxIdx++;
+        names.add("Zadanie " + maxIdx);
     }
 
     /**
@@ -117,6 +128,7 @@ public class Exam extends Observable {
             Exam exam = (Exam)un.unmarshal(new File("arkusz.xml"));
             this.setTasks(exam.tasks);
             this.idx = exam.idx;
+            this.names = exam.names;
         } catch (JAXBException e) {
             e.printStackTrace();
         }

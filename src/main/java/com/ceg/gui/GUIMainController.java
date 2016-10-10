@@ -280,6 +280,7 @@ public class GUIMainController implements Initializable {
         Optional<String> result = textInputDialog.showAndWait();
         if(result.isPresent() && result.get().length() > 0) {
             DraggableTab tab = new DraggableTab(result.get());
+            Exam.getInstance().getNames().set(exam.idx, result.get());
             tab.setId(Integer.toString(exam.idx));
             tabPane.getTabs().set(exam.idx, tab);
             tabPane.selectionModelProperty().get().select(exam.idx);
@@ -460,7 +461,7 @@ public class GUIMainController implements Initializable {
             task.getType().getParams().setNoOfAnswers(task.getAnswers().size());
         }
     }
-
+    
     /**
      * Zapisuje stan bieżącego zadania i generuje plik .xml z egzaminem.
      */
@@ -480,15 +481,17 @@ public class GUIMainController implements Initializable {
         Text text = Exam.getInstance().getTaskAtIndex(0).getText();
         text.createCodeAreaText(code);
 
+        
         int tabsNumber = tabPane.getTabs().size();
         int difference = Exam.getInstance().getTasks().size() - tabsNumber;
 
         if(difference != 0) {
             for(int i = 0; i < difference; i++) {
-                Tab newTab = new Tab("Zadanie " + (tabsNumber + i + 1));
+                DraggableTab newTab = new DraggableTab(Exam.getInstance().getNames().get(i));
                 newTab.setId(Integer.toString(tabsNumber + i));
                 tabPane.getTabs().add(newTab);
             }
         }
+        
     }
 }
