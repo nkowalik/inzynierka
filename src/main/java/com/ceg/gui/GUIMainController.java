@@ -54,6 +54,8 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem changeAnswersNum;
     @FXML
+    MenuItem changeNameItem;
+    @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
             AdvancedOptionsController.show();
@@ -329,6 +331,7 @@ public class GUIMainController implements Initializable {
         normalMarkerBtn.setVisible(visibility);
         testMarkerBtn.setVisible(visibility);
         hideMarkerBtn.setVisible(visibility);
+        changeNameItem.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
@@ -475,7 +478,7 @@ public class GUIMainController implements Initializable {
     /**
      * Laduje egzamin do programu ze z góry określonego pliku.
      */
-    public void loadXMLToCodeArea() { // todo dodac mozliwosc zapisu do arkusza z uwzglednieniem nazw zakladek, rozszerzyc ladowanie o dodanie menu kontekstowego
+    public void loadXMLToCodeArea() {
 
         Exam.getInstance().load();
         Text text = Exam.getInstance().getTaskAtIndex(0).getText();
