@@ -30,8 +30,8 @@ public class Exam extends Observable {
         return instance;
     }
     public void init(){
-         tasks = new ArrayList<>();
-         idx = 0;
+        tasks = new ArrayList<>();
+        idx = 0;
     }
     public List<Task> getTasks(){
         return tasks;
@@ -47,6 +47,16 @@ public class Exam extends Observable {
     public void addTask(Task t){
         tasks.add(t);
         idx = tasks.size() - 1;
+    }
+
+    /**
+     * Edytuje zadanie z egzaminu.
+     * @param t Zadanie które jest edytowane w egzaminie.
+     */
+    public void editTask(Task t){
+        int idx = tasks.indexOf(t);
+        Task task = tasks.get(idx);
+        task.setType(t.getType());
     }
 
     /**

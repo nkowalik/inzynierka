@@ -57,6 +57,8 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem changeAnswersNum;
     @FXML
+    MenuItem taskEdition;
+    @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
             AdvancedOptionsController.show();
@@ -64,7 +66,7 @@ public class GUIMainController implements Initializable {
             Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
         }
     }
-     
+
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
@@ -122,14 +124,14 @@ public class GUIMainController implements Initializable {
                     break;
             }
         });
-        
+
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
-        
+
         hideMarkerBtn.getStyleClass().add("hiddenButton");
         testMarkerBtn.getStyleClass().add("testButton");
         gapsMarkerBtn.getStyleClass().add("gapsButton");
-        
+
         updateWindow(0);
     }
 
@@ -142,9 +144,9 @@ public class GUIMainController implements Initializable {
             URL location = GUIMainController.class.getResource("/fxml/mainPage.fxml");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
-            
+
             Scene scene = new Scene((Pane)loader.load(location.openStream()));
-            boolean result;          
+            boolean result;
             result = scene.getStylesheets().add("/styles/Styles.css");
             if(false == result){
                 //TODO: report error
@@ -154,7 +156,7 @@ public class GUIMainController implements Initializable {
             stage.setTitle("CEG");
             stage.setResizable(false);
         }
-        
+
         stage.show();
         stage.toFront();
         stage.setOnCloseRequest(e -> Platform.exit());
@@ -185,17 +187,17 @@ public class GUIMainController implements Initializable {
      * @throws IOException
      */
     public void createPDF(ActionEvent actionEvent) throws IOException {
-            try {
-                if (exam.getTasks().isEmpty()) {
-                    throw new EmptyExamException();
-                }
-                saveText(exam.idx);
-                saveContent(exam.idx);
-                saveResult(exam.idx);
-                PdfSavingController.show();
-            } catch (EmptyExamException ex) {
-                Alerts.emptyExamAlert();
+        try {
+            if (exam.getTasks().isEmpty()) {
+                throw new EmptyExamException();
             }
+            saveText(exam.idx);
+            saveContent(exam.idx);
+            saveResult(exam.idx);
+            PdfSavingController.show();
+        } catch (EmptyExamException ex) {
+            Alerts.emptyExamAlert();
+        }
     }
 
     /**
@@ -204,13 +206,13 @@ public class GUIMainController implements Initializable {
      */
     public void testMarker(ActionEvent actionEvent) {
         changeStyle("test");
-    }    
+    }
     public void hideMarker(ActionEvent actionEvent) {
         changeStyle("hidden");
-    }    
+    }
     public void normalMarker(ActionEvent actionEvent) {
         changeStyle("normal");
-    }  
+    }
     public void gapsMarker(ActionEvent actionEvent) {
         changeStyle("gap");
     }
@@ -220,7 +222,7 @@ public class GUIMainController implements Initializable {
      * @param className Nazwa typu do przypisania.
      */
     private void changeStyle(String className) {
-        IndexRange ir = code.getSelection(); 
+        IndexRange ir = code.getSelection();
         int end = ir.getEnd();
         String c = code.getText();
         while (end < code.getLength()) {
@@ -238,7 +240,7 @@ public class GUIMainController implements Initializable {
      * @throws Exception
      */
     public void addTask(ActionEvent event) throws Exception {
-        GUIAddTaskController.show();
+        GUIManageTaskController.show("add");
     }
 
     /**
@@ -256,6 +258,17 @@ public class GUIMainController implements Initializable {
     }
 
     /**
+     * Wyświetla okno edycji zadania.
+     * @param event
+     * @throws Exception
+     */
+    public void editTask(ActionEvent event) throws Exception {
+        GUIManageTaskController.show("edit");
+        Task task = Exam.getInstance().getCurrentTask();
+        GUIManageTaskController.getInstance().editTask(task);
+    }
+
+    /**
      * Wyświetla okno dialogowe umożliwiające zmianę odpowiedzi w zadaniu.
      * @param event
      * @throws Exception
@@ -264,14 +277,14 @@ public class GUIMainController implements Initializable {
         int answNum = Integer.MAX_VALUE-1;
         Dialog dialog;
         dialog = new TextInputDialog("MAX");
-	dialog.setTitle("Liczba odpowiedzi");
-	dialog.setHeaderText("Ile odpowiedzi będzie miało zadanie?");
-	
-	Optional<String> result = dialog.showAndWait();
-	String entered = "MAX";
-	 
-	if (result.isPresent()) {	 
-	    entered = result.get();
+        dialog.setTitle("Liczba odpowiedzi");
+        dialog.setHeaderText("Ile odpowiedzi będzie miało zadanie?");
+
+        Optional<String> result = dialog.showAndWait();
+        String entered = "MAX";
+
+        if (result.isPresent()) {
+            entered = result.get();
             if(!entered.contentEquals("MAX"))
                 try{
                     answNum= Integer.valueOf(entered);
@@ -296,7 +309,8 @@ public class GUIMainController implements Initializable {
         normalMarkerBtn.setVisible(visibility);
         testMarkerBtn.setVisible(visibility);
         hideMarkerBtn.setVisible(visibility);
-       
+        taskEdition.setVisible(visibility);
+
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
                 changeAnswersNum.setVisible(visibility);
@@ -323,7 +337,7 @@ public class GUIMainController implements Initializable {
         if(exam.getTasks().isEmpty()) {  // gdy egzamin nie zawiera żadnych zadań
             showTask(false); // ukryj elementy związane z Taskiem
         }
-        else {         
+        else {
             Task t = exam.getTaskAtIndex(idx);
             exam.idx = idx;
 
@@ -460,5 +474,5 @@ public class GUIMainController implements Initializable {
             }
         }
     }
-     
+
 }
