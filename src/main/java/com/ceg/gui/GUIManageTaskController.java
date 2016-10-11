@@ -13,6 +13,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.fxml.FXMLLoader;
@@ -100,12 +101,11 @@ public class GUIManageTaskController implements Initializable {
 
     /**
      * Wpisuje do okna edycji zadania kod i polecenie z okna głównego.
-     * @param text Kod pobrany z okna głównego.
+     * @param task Zadanie pobrane z okna głównego.
      */
-    public void editTask(Text text, TaskType taskType) {
-        code.clear();
-        code.appendText(text.getTextParts().get(0).getText());
-
+    public void editTask(Task task) {
+        task.getText().createCodeAreaText(code);
+        updateText(task.getContents());
     }
 
     /**
@@ -166,6 +166,25 @@ public class GUIManageTaskController implements Initializable {
     }
 
     /**
+     * Aktualizuje tekst polecenia.
+     * @param text Lista linii zawierająca nową zawartość pola z poleceniem.
+     */
+    public void updateText(List<String> text) {
+        this.text.clear();
+        if(!text.isEmpty()) {
+            int i = 0;
+            String line;
+            line = text.get(i);
+            while (i<text.size()) {
+                this.text.appendText(line + "\n");
+                i++;
+                if(i>=text.size()) break;
+                line = text.get(i);
+            }
+        }
+    }
+
+    /**
      * Kończy tworzenie zadania w GUI. Tworzy nowy obiekt zadania, uzupełnia jego dane i zapisuje w egzaminie.
      * Dodaje nową zakładkę z zadaniem i przełącza sie na nią.
      * @param event
@@ -181,27 +200,7 @@ public class GUIManageTaskController implements Initializable {
         }
         else {
             Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
-            TaskType taskType = Exam.getInstance().getCurrentTask().getType();
-            switch (taskType.name) {
-                case "SimpleOutput":
-                    addTypeSimpleOutput();
-                    break;
-                case "ReturnedValue":
-                    addTypeReturnedValue();
-                    break;
-                case "ComplexOutput":
-                    addTypeComplexOutput();
-                    break;
-                case "Gaps":
-                    addTypeGaps();
-                    break;
-                case "VarValue":
-                    addTypeVarValue();
-                    break;
-                case "LineNumbers":
-                    addTypeLineNumbers();
-                    break;
-            }
+            mainInstance.updateText(t.getContents());
         }
         stage.hide();
         chooseType.setText("Typ zadania");
