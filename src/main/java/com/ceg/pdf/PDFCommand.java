@@ -6,6 +6,7 @@ import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.ContentCssClass;
 import com.ceg.utils.FontType;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PDFCommand extends PDFAbstractTaskPart {
@@ -28,7 +29,8 @@ public class PDFCommand extends PDFAbstractTaskPart {
         Dzieli wyrazy po spacji i układa jak najwięcej w jednej linii. Wrażliwa na znaki entera:
         każdy enter w poleceniu będzie widoczny w dokumencie pdf. Brak możliwości używania innych
         białych znaków poza spacją i enterem. */    
-    public void contentSplitting (List<ContentPart> command) throws IOException, EmptyPartOfTaskException {
+    public void contentSplitting (List<ContentPart> contentParts) throws IOException, EmptyPartOfTaskException {
+        List<ContentPart> command = new ArrayList<ContentPart>(contentParts);
         //sprawdzić czy niepusty
         actualWidth = 0;       
        // String line = "";
