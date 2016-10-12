@@ -95,6 +95,10 @@ public class Exam extends Observable {
         Task task = tasks.get(oldIndex);
         tasks.remove(oldIndex);
         tasks.add(newIndex, task);
+
+        String name = names.get(oldIndex);
+        names.remove(oldIndex);
+        names.add(newIndex, name);
     }
 
     // todo zmienić tak, aby kompilowany był cały egzamin*/
