@@ -22,10 +22,11 @@ public class Content {
         int length = text.getLength();
         String currentStyle = "[]";
         StringBuilder sb = new StringBuilder();
+        String withoutEndOfLine = text.getText().replaceAll("\n", " ");
 
         for(int i = 0; i < length; i++) {
             if(text.getStyleOfChar(i).toString().equals(currentStyle)) {
-                sb.append(text.getText().charAt(i));
+                sb.append(withoutEndOfLine.charAt(i));
             }
             else {
                 if(i != 0) {
@@ -33,7 +34,7 @@ public class Content {
                     sb.setLength(0);
                     contentParts.add(part);
                 }
-                sb.append(text.getText().charAt(i));
+                sb.append(withoutEndOfLine.charAt(i));
                 currentStyle = text.getStyleOfChar(i).toString();
             }
         }
