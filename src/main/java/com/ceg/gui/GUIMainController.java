@@ -265,6 +265,9 @@ public class GUIMainController implements Initializable {
     public void editTask(ActionEvent event) throws Exception {
         GUIManageTaskController.show("edit");
         Task task = Exam.getInstance().getCurrentTask();
+        Text tempText = new Text();
+        tempText.extractText(code);
+        task.setText(tempText);
         GUIManageTaskController.getInstance().editTask(task);
     }
 

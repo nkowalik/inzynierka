@@ -104,8 +104,8 @@ public class GUIManageTaskController implements Initializable {
      * @param task Zadanie pobrane z okna głównego.
      */
     public void editTask(Task task) {
-        task.getText().createCodeAreaText(code);
         updateText(task.getContents());
+        task.getText().createCodeAreaText(code);
     }
 
     /**
