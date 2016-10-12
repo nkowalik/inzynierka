@@ -29,7 +29,8 @@ public class PDFCode extends PDFAbstractTaskPart {
         PDFSettings pdfSettings = PDFSettings.getInstance();
         textWidth = pdfSettings.codeWidth;
         leftMargin = pdfSettings.leftCodeMargin;
-        pdfLine = new PDFLine(pdfSettings.getCodeFont(), pdfSettings.getCodeFontSize());
+        defaultFontType = pdfSettings.getCodeFont();
+        fontSize = pdfSettings.getCodeFontSize();
         textSplitting(lines);
     }
     
@@ -43,10 +44,14 @@ public class PDFCode extends PDFAbstractTaskPart {
         for (String codeLine : codeLines) { 
             line = codeLine;
             line = ifTabDoTab(line);
-            actualLineWidth = getWidth(line); 
+            actualLineWidth = getWidth(line, defaultFontType, fontSize); 
             
             if (actualLineWidth <= textWidth) {
-                actualTaskLines.add(line);
+                PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
+                PDFLinePart lp = new PDFLinePart(defaultFontType);
+                lp.setText(line);
+                pdfLine.setLineParts(Arrays.asList(lp));
+                pdfLines.add(pdfLine);
             }
             
             else {
@@ -75,12 +80,20 @@ public class PDFCode extends PDFAbstractTaskPart {
                     return false;
                 String end;
                 end = line.substring(0, i+1);
-                if (getWidth(end) <= textWidth) {
-                    actualTaskLines.add(end);
+                if (getWidth(end, defaultFontType, fontSize) <= textWidth) {
+                    PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
+                    PDFLinePart lp = new PDFLinePart(defaultFontType);
+                    lp.setText(end);
+                    pdfLine.setLineParts(Arrays.asList(lp));
+                    pdfLines.add(pdfLine);
                     line = line.substring(i+1);
                     i = line.length();
-                    if (getWidth(line) <= textWidth) {
-                        actualTaskLines.add(line);
+                    if (getWidth(line, defaultFontType, fontSize) <= textWidth) {
+                        pdfLine = new PDFLine(fontSize, leftMargin);
+                        lp = new PDFLinePart(defaultFontType);
+                        lp.setText(line);
+                        pdfLine.setLineParts(Arrays.asList(lp));
+                        pdfLines.add(pdfLine);
                         return true;
                     }
                 }

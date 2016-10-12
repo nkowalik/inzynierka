@@ -1,5 +1,7 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Content;
+import com.ceg.examContent.ContentPart;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.examContent.TaskType;
@@ -9,6 +11,7 @@ import com.ceg.examContent.TaskTypeLineNumbers;
 import com.ceg.examContent.TaskTypeReturnedValue;
 import com.ceg.examContent.TaskTypeSimpleOutput;
 import com.ceg.examContent.TaskTypeVarValue;
+import com.ceg.utils.ContentCssClass;
 import com.ceg.xml.TaskData;
 import com.ceg.xml.Tasks;
 import com.ceg.xml.TasksLoading;
@@ -42,7 +45,7 @@ import javax.xml.bind.Unmarshaller;
  */
 public class GUIAddTaskController implements Initializable {
 
-    ArrayList<String> contentList = new ArrayList<>();
+    Content content = new Content();
     ArrayList<String> codeList = new ArrayList<>();
     TaskType type;
     @FXML
@@ -111,10 +114,11 @@ public class GUIAddTaskController implements Initializable {
     public void addType(int index) {
         TaskData tasks = TasksLoading.loadFromXml();
 
-        contentList.clear();
+        content.setContentParts(new ArrayList<>());
         text.clear();
         if (tasks != null) {
-            contentList.add(tasks.getTaskData().get(index).getText());
+            content.getContentParts().add(new ContentPart(ContentCssClass.EMPTY, tasks.getTaskData().get(index).getText()));
+            //contentList.add(tasks.getTaskData().get(index).getText());
             text.appendText(tasks.getTaskData().get(index).getText());
         }
 
@@ -169,7 +173,7 @@ public class GUIAddTaskController implements Initializable {
      */
     public void finishEdition(ActionEvent event) throws Exception {
         Task t = new Task(type);
-        t.setContents(contentList);
+        t.setContent(content);
         t.getText().extractText(code);
         Exam.getInstance().addTask(t);
         stage.hide();
@@ -186,7 +190,7 @@ public class GUIAddTaskController implements Initializable {
         addTaskInstance.text.clear();
         addTaskInstance.code.clear();
         addTaskInstance.codeList = new ArrayList<>();
-        addTaskInstance.contentList = new ArrayList<>();
+        addTaskInstance.content = new Content();
         addTaskInstance.finish.setDisable(true);
     }
 

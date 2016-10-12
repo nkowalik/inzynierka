@@ -1,8 +1,8 @@
 package com.ceg.pdf;
 
+import com.ceg.utils.FontType;
 import java.io.IOException;
 import java.util.List;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 /**
  *
@@ -10,7 +10,7 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
  */
 public class PDFGapsTeachersAnswer extends PDFTeachersAnswer {
 
-    public PDFGapsTeachersAnswer(List<String> lines, int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
+    public PDFGapsTeachersAnswer(List<String> lines, int textWidth, FontType font, int fontSize, int leftMargin) throws IOException {
         super(lines, textWidth, font, fontSize, leftMargin);
     }
 

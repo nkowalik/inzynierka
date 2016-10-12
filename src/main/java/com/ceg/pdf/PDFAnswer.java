@@ -1,10 +1,11 @@
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
+import com.ceg.utils.FontType;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -21,16 +22,17 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
         textWidth = PDFSettings.commandWidth;
-        pdfLine = new PDFLine(pdfSettings.getCommandFont(), pdfSettings.getCommandFontSize());
         leftMargin = pdfSettings.leftMargin;
         lineHeight+=2;
+        defaultFontType = pdfSettings.getCommandFont();
+        fontSize = pdfSettings.getCommandFontSize();
         textSplitting(lines);
     }
 
-    public PDFAnswer(List<String> lines, int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
+    public PDFAnswer(List<String> lines, int textWidth, FontType font, int fontSize, int leftMargin) throws IOException {
         super();
         this.textWidth = textWidth;
-        pdfLine = new PDFLine(font, fontSize);
+        this.defaultFontType = font;
         this.leftMargin = leftMargin;
         lineHeight+=2;
     }
@@ -40,22 +42,30 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         float actualLineWidth;
         
         for (String line : lines) {
-            actualLineWidth = getWidth(line);
+            actualLineWidth = getWidth(line, defaultFontType, fontSize);
             
             if (actualLineWidth <= textWidth) {
-                actualTaskLines.add(line);
+                PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
+                PDFLinePart lp = new PDFLinePart(defaultFontType);
+                lp.setText(line);
+                pdfLine.setLineParts(Arrays.asList(lp));
+                pdfLines.add(pdfLine);
             }
             else {
                 String[] words = line.split(" ");        
                 float actualWordWidth;
-                float spaceWidth = getWidth(" ");
+                float spaceWidth = getWidth(" ", defaultFontType, fontSize);
                 
                 for (String word : words) {
-                    actualWordWidth = getWidth(word);
+                    actualWordWidth = getWidth(word, defaultFontType, fontSize);
             
                     //linia wystarczająco długa, żaden wyraz więcej się nie zmieści
                     if (actualWidth + actualWordWidth + spaceWidth  >= textWidth) {
-                        actualTaskLines.add(line);
+                        PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
+                        PDFLinePart lp = new PDFLinePart(defaultFontType);
+                        lp.setText(line);
+                        pdfLine.setLineParts(Arrays.asList(lp));
+                        pdfLines.add(pdfLine);
                         line = word;
                         actualWidth = actualWordWidth;
                     }
@@ -72,7 +82,11 @@ public class PDFAnswer extends PDFAbstractTaskPart {
                 }
                 //jeśli linia nie jest pusta, wypisujemy ją
                 if (!line.isEmpty()) {
-                    actualTaskLines.add(line);
+                    PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
+                    PDFLinePart lp = new PDFLinePart(defaultFontType);
+                    lp.setText(line);
+                    pdfLine.setLineParts(Arrays.asList(lp));
+                    pdfLines.add(pdfLine);
                 }
             }
         }
@@ -87,16 +101,16 @@ public class PDFAnswer extends PDFAbstractTaskPart {
     @Override
     public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
         int answerIndex = 0;
-        for (int i=0; i<actualTaskLines.size(); i++) {
-            if (actualTaskLines.get(i).contains("#placeForAnswer")) {
-                actualTaskLines.set(i, actualTaskLines.get(i) + ' ');
-                String[] list = actualTaskLines.get(i).split("#placeForAnswer");
+        for (int i = 0; i < pdfLines.size(); i++) {
+            if (pdfLines.get(i).getLineParts().get(0).getText().contains("#placeForAnswer")) {
+                pdfLines.get(i).getLineParts().get(0).setText(pdfLines.get(i).getLineParts().get(0).getText() + ' ');
+                String[] list = pdfLines.get(i).getLineParts().get(0).getText().split("#placeForAnswer");
                 String line = "";
                 
                 for (int j = 0; j < list.length - 1; j++) {
                     line += list[j] + placesForAnswers.get(answerIndex++);
                 }
-            actualTaskLines.set(i, line + list[list.length - 1]);
+            pdfLines.get(i).getLineParts().get(0).setText(line + list[list.length - 1]);
             }
         }
         return super.writeToPDF(y);
