@@ -7,9 +7,13 @@ import com.ceg.utils.ContentCssClass;
  * @author Martyna
  */
 public class ContentPart {
-    private final ContentCssClass cssClassName;
-    private final String text;
-    
+    private ContentCssClass cssClassName;
+    private String text;
+
+    public ContentPart() {
+
+    }
+
     public ContentPart(ContentCssClass fontType, String text) {
         this.cssClassName = fontType;
         this.text = text;
@@ -21,5 +25,13 @@ public class ContentPart {
     
     public ContentCssClass getCssClassName() {
         return cssClassName;
+    }
+
+    public void setText(String text) {
+        this.text = text;
+    }
+
+    public void setCssClassName(ContentCssClass cssClassName) {
+        this.cssClassName = cssClassName;
     }
 }
