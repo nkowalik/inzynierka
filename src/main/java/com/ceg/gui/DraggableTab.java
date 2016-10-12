@@ -139,7 +139,7 @@ public class DraggableTab extends Tab {
                         insertData.getInsertPane().selectionModelProperty().get().select(addIndex);
                         mainInstance.updateTabPaneTabIndexes();
                         mainInstance.setStatus(GUIMainController.Status.SWITCH);
-
+                        Exam.getInstance().idx = addIndex;
                         return;
                     }
                 }
