@@ -1,6 +1,7 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.GCC;
+import com.ceg.compiler.GccWin;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,7 +22,7 @@ public class Task {
     private String result;
     private TaskType type;
     private Text text;
-    public GCC compiler;
+    public GccWin compiler;
 
     /**
      * Tworzy zadanie, dokonuje inicjalizacji zmiennych.
@@ -29,7 +30,7 @@ public class Task {
     public Task() {
         this.answers = new ArrayList<>();
         pdfAnswers = new ArrayList<>();
-        compiler = new GCC();
+        compiler = GccWin.getInstance();
         contents = new ArrayList<>();
         text = new Text();
     }

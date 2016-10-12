@@ -168,6 +168,8 @@ public class GUIMainController implements Initializable {
      * @param actionEvent
      */
     public void execute(ActionEvent actionEvent) {
+        long startTime = System.currentTimeMillis();
+        
         result.clear();
         saveText(exam.idx);
         List<String> outcome = new ArrayList<String>();
@@ -177,6 +179,10 @@ public class GUIMainController implements Initializable {
             result.appendText(s + "\n");
         }
         exam.getCurrentTask().setResult(result.getText());
+        
+        long stopTime = System.currentTimeMillis();
+        long elapsedTime = stopTime - startTime;
+        System.out.println(elapsedTime);
     }
 
     /**

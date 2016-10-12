@@ -17,15 +17,11 @@ import org.apache.commons.lang.SystemUtils;
 public class GCC {
 
     private String path;
-    private File file = null;
+    protected File file = null;
     public String osName;
-    private String cppName;
-    private String executableName;
-    private final static GCC instance = new GCC();
+    protected String cppName;
+    protected String executableName;
     
-    public static GCC getInstance() {
-        return instance;
-    }
 
     /**
      * Tworzy obiekt kompilatora.
@@ -78,11 +74,10 @@ public class GCC {
         if (file.exists()) {
             try {
                 ProcessBuilder builder = null;
-                if (SystemUtils.IS_OS_WINDOWS) {
-                    builder = new ProcessBuilder(new String[]{"cmd.exe", "/c", "g++", "-o", this.executableName, this.cppName});
-                } else if (SystemUtils.IS_OS_LINUX) {
+                if (SystemUtils.IS_OS_WINDOWS || SystemUtils.IS_OS_LINUX) {       
                     builder = new ProcessBuilder(new String[]{"g++", "-o", this.executableName, this.cppName});
-                } else {
+                } 
+                else {
                     System.out.println("Nieobsługiwany system operacyjny");
                     return false;
                 }
