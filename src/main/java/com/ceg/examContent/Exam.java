@@ -72,8 +72,16 @@ public class Exam extends Observable {
      * @param idx Liczba określająca numer zadania które ma zostać pobrane z egzaminu.
      * @return Odczytane zadanie.
      */
-    public Task getTaskAtIndex(int idx){
+    public Task getTaskAtIndex(int idx) {
         return tasks.get(idx);
+    }
+
+    /**
+     * Uaktualnia zadanie, które jest obecnie aktywne
+     * @param task Zadanie, pobierane z okna edycji zadania
+     */
+    public void setCurrentTask(Task task) {
+        tasks.set(idx, task);
     }
 
     /**

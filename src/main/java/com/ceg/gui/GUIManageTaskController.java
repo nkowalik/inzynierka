@@ -106,6 +106,7 @@ public class GUIManageTaskController implements Initializable {
     public void editTask(Task task) {
         updateText(task.getContents());
         task.getText().createCodeAreaText(code);
+        finish.setDisable(false);
     }
 
     /**
@@ -200,7 +201,12 @@ public class GUIManageTaskController implements Initializable {
         }
         else {
             Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
-            mainInstance.updateText(t.getContents());
+            Exam.getInstance().setCurrentTask(t);
+            if (!t.getContents().isEmpty()) {
+                mainInstance.updateText(t.getContents());
+            }
+            mainInstance.updateCode(t.getText());
+            mainInstance.showTask(true);
         }
         stage.hide();
         chooseType.setText("Typ zadania");
