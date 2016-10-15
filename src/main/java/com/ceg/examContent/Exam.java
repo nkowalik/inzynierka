@@ -31,7 +31,7 @@ public class Exam extends Observable {
     /**
      * Aktualny indeks dodawanego zadania.
      */
-    public int maxIdx = 0;
+    public int maxIdx;
 
     public Exam() {
     }
@@ -39,9 +39,10 @@ public class Exam extends Observable {
         return instance;
     }
     public void init(){
-         tasks = new ArrayList<>();
-         names = new ArrayList<>();
-         idx = 0;
+        tasks = new ArrayList<>();
+        names = new ArrayList<>();
+        idx = 0;
+        maxIdx = 0;
     }
     public List<Task> getTasks(){
         return tasks;
@@ -132,6 +133,7 @@ public class Exam extends Observable {
             Exam exam = (Exam)un.unmarshal(new File("arkusz.xml"));
             this.setTasks(exam.tasks);
             this.idx = exam.idx;
+            this.maxIdx = exam.maxIdx;
             this.names = exam.names;
         } catch (JAXBException e) {
             e.printStackTrace();

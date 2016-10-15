@@ -537,11 +537,6 @@ public class GUIMainController implements Initializable {
     public void loadXMLToCodeArea() {
 
         Exam.getInstance().load();
-        Text text = Exam.getInstance().getTaskAtIndex(0).getText();
-        text.createCodeAreaText(code);
-
-        Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
-        content.creatStyleClassedTextAreaText(this.text);
 
         int tabsNumber = tabPane.getTabs().size();
         int difference = Exam.getInstance().getTasks().size() - tabsNumber;
@@ -553,6 +548,13 @@ public class GUIMainController implements Initializable {
                 tabPane.getTabs().add(newTab);
             }
         }
-        
+
+        tabPane.getSelectionModel().select(0);
+
+        Text text = Exam.getInstance().getTaskAtIndex(0).getText();
+        text.createCodeAreaText(code);
+
+        Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
+        content.creatStyleClassedTextAreaText(this.text);
     }
 }
