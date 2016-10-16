@@ -39,6 +39,9 @@ public class GccWin extends GCC{
     public boolean startConsole(){
         try {
             console = builder.start();
+            BufferedReader reader = new BufferedReader(new InputStreamReader(console.getInputStream()));
+            reader.readLine();
+            reader.readLine();
             return true;
         } catch (IOException ex) {
             Logger.getLogger(GccWin.class.getName()).log(Level.SEVERE, null, ex);
@@ -95,16 +98,21 @@ public class GccWin extends GCC{
                     output.add("Kompilacja przebiegła pomyślnie.");
                     BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(console.getOutputStream()));
                     BufferedReader reader = new BufferedReader(new InputStreamReader(console.getInputStream()));
-                    while(reader.ready()){
-                        reader.readLine();
-                    }
-                    writer.write(super.executableName);
+                    writer.write("echo #startOfExecution && echo. && " + super.executableName + " && echo. && echo #endOfExecution");
                     writer.newLine();
                     writer.flush();                    
 
                     String line = null;
+                    boolean start = false;
                     while(reader.ready() && (line = reader.readLine()) != null) {
-                        output.add(line);
+                        if("#startOfExecution ".equals(line)){                    // w następnej linii zacznie się wyjście programu
+                            start = true;
+                            continue;
+                        }
+                        if("#endOfExecution".equals(line))                      // koniec wyjścia programu
+                            break;
+                        if(start && !line.equals(" ") && !line.equals(""))
+                            output.add(line);
                     }
                 } catch (IOException ex) {
                     Logger.getLogger(GccWin.class.getName()).log(Level.SEVERE, null, ex);
