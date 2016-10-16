@@ -90,6 +90,7 @@ public class Exam extends Observable {
      */
     public void deleteTaskAtIndex(int idx) {
         tasks.remove(idx);
+        names.remove(idx);
     }
 
     public void changeTasksOrder(int oldIndex, int newIndex) {

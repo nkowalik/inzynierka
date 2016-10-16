@@ -537,16 +537,16 @@ public class GUIMainController implements Initializable {
     public void loadXMLToCodeArea() {
 
         Exam.getInstance().load();
+        status = Status.DRAG;
+        tabPane.getTabs().clear();
+        status = Status.SWITCH;
+//        int tabsNumber = tabPane.getTabs().size();
+        int size = Exam.getInstance().getTasks().size();
 
-        int tabsNumber = tabPane.getTabs().size();
-        int difference = Exam.getInstance().getTasks().size() - tabsNumber;
-
-        if(difference != 0) {
-            for(int i = 0; i < difference; i++) {
-                DraggableTab newTab = new DraggableTab(Exam.getInstance().getNames().get(i));
-                newTab.setId(Integer.toString(tabsNumber + i));
-                tabPane.getTabs().add(newTab);
-            }
+        for(int i = 0; i < size; i++) {
+            DraggableTab newTab = new DraggableTab(Exam.getInstance().getNames().get(i));
+            newTab.setId(Integer.toString(i));
+            tabPane.getTabs().add(newTab);
         }
 
         tabPane.getSelectionModel().select(0);
