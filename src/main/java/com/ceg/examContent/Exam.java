@@ -80,7 +80,7 @@ public class Exam extends Observable {
      * Uaktualnia zadanie, które jest obecnie aktywne
      * @param task Zadanie, pobierane z okna edycji zadania
      */
-    public void setCurrentTask(Task task) {
+    public void setCurTask(Task task) {
         tasks.set(idx, task);
     }
 
