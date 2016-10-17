@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceg.compiler;
 
 import java.io.BufferedReader;
@@ -19,22 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import org.apache.commons.lang.SystemUtils;
 
-/**
- *
- * @author Pawel
- */
-
-/*
-
-obsluga:
-createFile(lista linii, nazwa pliku wyjsciowego z rozszerzeniem)
-addNewLine itp. z klasy CodeParser - modyfikacja utworzonego pliku
-compile(lista linii wyjsciowych) - kompilacja wczesniej utworzonego pliku, wazne! - jego sciezka pozostaje taka sama, nalezy operowac na tym wygenerowanym pliku
-execute(lista linii wyjsciowych)
-
-*/
-
-
 public class GCC {
 
     private String path;
@@ -43,6 +22,10 @@ public class GCC {
     private String executableName;
     public String osName;
 
+    /**
+     * Tworzy obiekt kompilatora.
+     * Przypisuje nazwę systemu operacyjnego, oraz ścieżkę programu.
+     */
     public GCC() {
         osName = System.getProperty("os.name").toLowerCase();
 
@@ -57,6 +40,12 @@ public class GCC {
 
     }
 
+    /**
+     * Tworzy nowy plik, ustawia nazwę pliku z kodem oraz pliku wykonywalnego w obiekcie GCC.
+     * @param lines Lista linii które mają znaleźć się w pliku.
+     * @param name Nazwa pliku do utworzenia.
+     * @return Wartość logiczna określająca powodzenie operacji utworzenia pliku.
+     */
     public boolean createFile(List<String> lines, String name) {
         if (!lines.isEmpty() && !(lines.get(0).equals("") && lines.size() == 1)) {
             try {
@@ -74,6 +63,12 @@ public class GCC {
             return false;
         }
     }
+
+    /**
+     * Wykonuje kompilację pliku, którego nazwa zapisana jest w GCC.
+     * @param output Lista linii wygenerowanych przez kompilator.
+     * @return Wartość logiczna określająca powodzenie operacji kompilacji pliku.
+     */
     public boolean compile(List<String> output) {
         if (file.exists()) {
             try {
@@ -107,6 +102,13 @@ public class GCC {
         } else
             return false;
     }
+
+    /**
+     * Tworzy, kompiluje i uruchamia plik wykonywalny.
+     * @param lines Lista linii które mają znaleźć się w pliku.
+     * @param name Nazwa pliku do utworzenia.
+     * @param output Lista linii wygenerowanych podczas kompilacji lub wykonania programu.
+     */
     public void execute(List<String> lines, String name, List<String> output) {
         if(createFile(lines, name)) {
             if(compile(output)) {
@@ -127,7 +129,7 @@ public class GCC {
                 } catch (InterruptedException ex) {
                     Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
                 }
-            } // jeśli kompilacja się nie powiedzie, output i tak zostanie już zapisany
+            }
         }
         else {
             output.add("Błąd. Pusty plik wejściowy.");

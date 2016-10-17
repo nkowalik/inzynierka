@@ -11,20 +11,14 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
- * FXML Controller class
- *
- * @author Martyna
+ * Klasa reprezentująca kontroler okna do nadpisywania pliku.
  */
 public class PdfOverwritingController implements Initializable {
     public static Stage appStage;
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }   
-    
+    }
+
     public static synchronized void show() throws IOException {
         if(appStage == null) {
             URL location = GUIMainController.class.getResource("/fxml/pdfOverwriting.fxml");
@@ -49,7 +43,11 @@ public class PdfOverwritingController implements Initializable {
         appStage.hide();
         GUIExamCompilationController.show();
     }
-    
+
+    /**
+     * Zamyka okno nadpisywania pliku.
+     * @param event
+     */
     public void cancel(ActionEvent event) {
         appStage.hide();
     }

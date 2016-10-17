@@ -1,92 +1,101 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package com.ceg.examContent;
 
 import com.ceg.compiler.GCC;
-
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 /**
- *
- * @author marta
+ * Klasa Task zawiera dane opisujące pojedyncze zadanie:
+ * contents - treść polecenia
+ * answers - odpowiedzi do zadania
+ * pdfAnswers - odpowiedzi do zadania, które pojawią się w pliku .pdf
+ * result - wynik kompilacji
+ * type - typ zadania
+ * text - kod zadania
+ * compiler - kompilator przypisany do danego zadania
  */
-
-/* Klasa zawierająca dane pojedynczego zadania: typ (type), wykonywany kod (code), 
-   kod z częścią zamarkowaną jako testowa (testCode), kod, widoczny dla studenta na arkuszu (PDFCode), 
-   treść polecenia (contents) */
 public class Task {
-    private List<String> code;
-    private List<String> testCode;
-    private List<String> PDFCode;
-    private List<String> contents;
+    private Content content;
     private List<String> answers;
-    private List<String> PDFAnswers;
+    private List<String> pdfAnswers;
     private String result;
     private TaskType type;
+    private Text text;
     public GCC compiler;
-    
-    
-    public Task(TaskType tt){  
-        this.type = tt;
-        code = new ArrayList<>();
-        testCode = new ArrayList<>();
+
+    /**
+     * Tworzy zadanie, dokonuje inicjalizacji zmiennych.
+     */
+    public Task() {
         this.answers = new ArrayList<>();
-        /* to tylko na razie */
-        PDFAnswers = new ArrayList<>();
-       // type.preparePdfAnswers(this);
+        pdfAnswers = new ArrayList<>();
         compiler = new GCC();
-        PDFCode = new ArrayList<>();
-        contents = new ArrayList<>();
+        content = new Content();
+        text = new Text();
     }
-    public List<String> getCode(){
-        return code;
+
+    /**
+     * Tworzy zadanie ze zdefiniowanym typem.
+     * @param tt Typ który ma zostać przypisany do zadania.
+     */
+    public Task(TaskType tt){
+        this();
+        this.type = tt;
     }
-    public List<String> getTestCode(){
-        return testCode;
+    public Content getContent(){
+        return content;
     }
-    public List<String> getPDFCode(){
-        return PDFCode;
-    }
-    public void setCode(List<String> newCode){
-        code = newCode;
-    }
-    public void setTestCode(List<String> newCode) {
-        testCode = newCode;
-    }
-    public void setPDFCode(List<String> newCode) {
-        PDFCode = newCode;
-    }
-    public List<String> getContents(){
-        return contents;
-    }
-    public void setContents(List<String> newContents){
-        contents = newContents;
+    public void setContent(Content content){
+        this.content = content;
     }
     public List<String> getAnswers(){
         return answers;
     }
-    public List<String> getPDFAnswers() {
-        return PDFAnswers;
+    public void setAnswers(List<String> answers) { this.answers = answers; }
+    public List<String> getPdfAnswers() {
+        return pdfAnswers;
     }
-    public void setAnswers(List<String> newAnswers){
-        answers = newAnswers;
-    }
+    public void setPdfAnswers(List<String> pdfAnswers) { this.pdfAnswers = pdfAnswers; }
     public TaskType getType(){
         return type;
     }
-    public void setType(TaskType newType){
-        type = newType;
+    public void setType(TaskType type){
+        this.type = type;
     }
     public String getResult() {
         return result;
     }
-    public void setResult(String newResult) {
-        result = newResult;
+    public void setResult(String result) {
+        this.result = result;
     }
-    
+    public Text getText() {
+        return text;
+    }
+    public void setText(Text text) {
+        this.text = text;
+    }
+
+    /**
+     * Wyznacza odpowiedzi do zadania z lukami i zapisuje je w klasie Task.
+     * @param textParts Lista części kodu reprezentująca kod przypisany do zadania, podzielony ze względu na typ.
+     */
+    public void calculateGapsAnswers(List<TextPart> textParts) {
+        List<TextPart> code = new ArrayList(textParts);
+
+        for(int i = 0; i < code.size(); i++) {
+            if(!code.get(i).getType().equals("[gap]")) {
+                code.remove(i);
+                i--;
+            }
+        }
+
+        List<String> output = new ArrayList();
+        for (TextPart part : code) {
+            String[] list = part.toString().split("\n");
+            for (String element : list) {
+                output.add(element);
+            }
+        }
+        answers = output;
+    }
 }

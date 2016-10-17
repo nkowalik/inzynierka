@@ -12,12 +12,12 @@ public class PDFGapsCode extends PDFCode {
 
     PDFGapsCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
         super(lines);
-        answer = new PDFGapsAnswer(lines, textWidth, pdfLine.getFont(), pdfLine.getFontSize(), leftMargin);
+        answer = new PDFGapsAnswer(lines, textWidth, defaultFontType, fontSize, leftMargin);
     }
 
     @Override
     public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
-        answer.actualTaskLines = this.actualTaskLines;
+        answer.pdfLines = this.pdfLines;
         return answer.writeToPDF(y);
     }
 }

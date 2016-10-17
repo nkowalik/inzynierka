@@ -1,39 +1,48 @@
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.utils.FontType;
+import java.io.File;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 public abstract class PDFAbstractTaskPart {
-    protected PDFLine pdfLine;
     protected int lineHeight;
     protected static PDPageContentStream cs;
     protected int textWidth;
     protected float actualWidth = 0;  
-    protected ArrayList<String> actualTaskLines;
     protected int leftMargin = 0;
+    protected List<PDFLine> pdfLines;
+    protected int fontSize;
+    protected FontType defaultFontType;
     
     PDFAbstractTaskPart() throws IOException{
         PDFSettings pdfSettings = PDFSettings.getInstance();
         cs = PDFGenerator.cs;
-        actualTaskLines = new ArrayList<>();
-        //pdfLine = new PDFLine(pdfSettings.getCodeFont(), pdfSettings.getCodeFontSize());
+        pdfLines = new ArrayList<>();
         this.textWidth = 0;
-        lineHeight = pdfSettings.getCodeFontSize();
+        lineHeight = pdfSettings.getCodeFontSize() + 1;
     }
     public int getNumberOfLines() {
-        return actualTaskLines.size();
+        return pdfLines.size();
     }
     public int getLineHeight() {
        return lineHeight; 
     }
-    
-    /*  Wyrzuca szerokość tekstu napisanego daną czcionką o konkretnym rozmiarze    */
-    protected float getWidth(String text) throws IOException {
-        return pdfLine.getFont().getStringWidth(text) / 1000 * pdfLine.getFontSize();
+
+    /**
+     * Oblicza szerokość tekstu napisanego czcionką o konkretnym rozmiarze.
+     * @param text Tekst dla którego jest obliczana szerokość.
+     * @param fontType Rodzaj czcionki, dla której obliczana jest szerokość tekstu.
+     * @param fontSize Rozmiar czcionki, dla której obliczana jest szerokość tekstu.
+     * @return
+     * @throws IOException
+     */
+    protected float getWidth(String text, FontType fontType, int fontSize) throws IOException {
+        return PDType0Font.load(PDFGenerator.document, new File(fontType.getFileName())).getStringWidth(text) / 1000 * fontSize;
     }
     
     public void textSplitting (List<String> command) throws IOException, EmptyPartOfTaskException {
@@ -42,15 +51,14 @@ public abstract class PDFAbstractTaskPart {
     }
     
     public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
-        if (actualTaskLines.isEmpty())
+        if (pdfLines.isEmpty())
             throw new EmptyPartOfTaskException();
         
-        for (String i : actualTaskLines) {
-            pdfLine.setText(i);
-            pdfLine.writeLine(leftMargin, y);
+        for (PDFLine i : pdfLines) {
+            i.writeLine(y);
             y -= lineHeight;
         }
-        actualTaskLines.clear();
+        pdfLines.clear();
         return y;
     }
 }

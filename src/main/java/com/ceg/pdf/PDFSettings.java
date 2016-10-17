@@ -3,6 +3,8 @@ package com.ceg.pdf;
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
 import com.ceg.gui.PdfSavingController;
+import com.ceg.utils.FontType;
+import com.ceg.utils.FontTypeUtil;
 import javafx.stage.Stage;
 
 import java.io.File;
@@ -21,8 +23,8 @@ import java.util.logging.Logger;
 public class PDFSettings {
     private final Properties defaultSettings = new Properties();
     
-    private String commandFont;
-    private String codeFont;
+    private FontType commandFont;
+    private FontType codeFont;
     private Integer commandFontSize;
     private Integer codeFontSize;
     private String testType;
@@ -58,8 +60,8 @@ public class PDFSettings {
         
         leftCodeMargin = leftMargin + commandWidth + leftMargin/2;
         
-        this.commandFont = defaultSettings.getProperty("command.font");
-        this.codeFont = defaultSettings.getProperty("code.font");
+        this.commandFont = FontTypeUtil.change(defaultSettings.getProperty("command.font"));
+        this.codeFont = FontTypeUtil.change(defaultSettings.getProperty("code.font"));
         this.commandFontSize = Integer.parseInt(defaultSettings.getProperty("command.font.size"));
         this.codeFontSize = Integer.parseInt(defaultSettings.getProperty("code.font.size"));
         this.testType = defaultSettings.getProperty("test.type");
@@ -91,10 +93,10 @@ public class PDFSettings {
         }
     }
     
-    public void setCommandFont(String commandFont) {
+    public void setCommandFont(FontType commandFont) {
         this.commandFont = commandFont;
     }
-    public void setCodeFont(String codeFont) {
+    public void setCodeFont(FontType codeFont) {
         this.codeFont = codeFont;
     }
     public void setCommandFontSize(Integer commandFontSize) {
@@ -123,10 +125,10 @@ public class PDFSettings {
         this.day = day;
     }
     
-    public String getCommandFont() {
+    public FontType getCommandFont() {
         return commandFont;
     }
-    public String getCodeFont() {
+    public FontType getCodeFont() {
         return codeFont;
     }
     public Integer getCommandFontSize() {
