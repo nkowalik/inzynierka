@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+import javafx.scene.control.TabPane;
+import javax.xml.bind.annotation.XmlElement;
 
 /**
  * Klasa Exam stanowi kontekst dla modelu danych aplikacji, dla każdego wywołania aplikacji istnieje jedna statyczna instancja.
@@ -17,6 +19,8 @@ import java.util.Observable;
 @XmlRootElement
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
+    @XmlElement
+    private ArrayList<String> names;
     private final static Exam instance = new Exam();
 
     /**
@@ -24,14 +28,21 @@ public class Exam extends Observable {
      */
     public int idx;
 
+    /**
+     * Aktualny indeks dodawanego zadania.
+     */
+    public int maxIdx;
+
     public Exam() {
     }
     public static Exam getInstance() {
         return instance;
     }
     public void init(){
-         tasks = new ArrayList<>();
-         idx = 0;
+        tasks = new ArrayList<>();
+        names = new ArrayList<>();
+        idx = 0;
+        maxIdx = 0;
     }
     public List<Task> getTasks(){
         return tasks;
@@ -39,7 +50,12 @@ public class Exam extends Observable {
     public void setTasks(List<Task> newTasks){
         tasks = (ArrayList<Task>) newTasks;
     }
-
+    public List<String> getNames() {
+        return names;
+    }
+    public void setNames(ArrayList<String> tabsNames) {
+        this.names = tabsNames;
+    }
     /**
      * Dodaje nowe zadanie do egzaminu.
      * @param t Zadanie które ma zostać dodane do egzaminu.
@@ -47,6 +63,8 @@ public class Exam extends Observable {
     public void addTask(Task t){
         tasks.add(t);
         idx = tasks.size() - 1;
+        maxIdx++;
+        names.add("Zadanie " + maxIdx);
     }
 
     /**
@@ -72,6 +90,17 @@ public class Exam extends Observable {
      */
     public void deleteTaskAtIndex(int idx) {
         tasks.remove(idx);
+        names.remove(idx);
+    }
+
+    public void changeTasksOrder(int oldIndex, int newIndex) {
+        Task task = tasks.get(oldIndex);
+        tasks.remove(oldIndex);
+        tasks.add(newIndex, task);
+
+        String name = names.get(oldIndex);
+        names.remove(oldIndex);
+        names.add(newIndex, name);
     }
 
     // todo zmienić tak, aby kompilowany był cały egzamin*/
@@ -105,6 +134,8 @@ public class Exam extends Observable {
             Exam exam = (Exam)un.unmarshal(new File("arkusz.xml"));
             this.setTasks(exam.tasks);
             this.idx = exam.idx;
+            this.maxIdx = exam.maxIdx;
+            this.names = exam.names;
         } catch (JAXBException e) {
             e.printStackTrace();
         }

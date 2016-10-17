@@ -1,11 +1,12 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Content;
 import java.util.*;
 import com.ceg.examContent.Text;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import javafx.scene.control.IndexRange;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -14,20 +15,18 @@ import com.ceg.examContent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextArea;
+
 import java.io.IOException;
 import java.net.URL;
-import javafx.scene.control.Button;
-import javafx.scene.control.Dialog;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.Tab;
-import javafx.scene.control.TabPane;
-import javafx.scene.control.TextInputDialog;
+
 import javafx.scene.layout.Pane;
 import com.ceg.exceptions.EmptyExamException;
+import static com.ceg.utils.ContentCssClass.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.HBox;
+import org.fxmisc.richtext.StyleClassedTextArea;
 
 /**
  * Klasa reprezentująca kontroler głównego okna programu.
@@ -35,7 +34,9 @@ import javafx.scene.input.MouseEvent;
 public class GUIMainController implements Initializable {
 
     @FXML
-    TextArea text;
+    MenuBar menu;
+    @FXML
+    StyleClassedTextArea text;
     @FXML
     CodeArea code;
     @FXML
@@ -57,6 +58,10 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem changeAnswersNum;
     @FXML
+    MenuItem changeNameItem;
+    @FXML
+    HBox textOptions;
+    @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
             AdvancedOptionsController.show();
@@ -68,9 +73,18 @@ public class GUIMainController implements Initializable {
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
-    private enum Status {
-        ADD, DELETE, SWITCH
+    public enum Status {
+        ADD, DELETE, SWITCH, RENAME, DRAG
     }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
     private Status status = Status.SWITCH;
 
     public static void setStageName (String str){
@@ -96,6 +110,9 @@ public class GUIMainController implements Initializable {
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (status) {
+                case RENAME:
+                case DRAG:
+                    break;
                 case DELETE:
                     if(Integer.parseInt(oldValue.getId()) == 0) { // usuwana jest pierwsza pozycja
                         updateTabPaneTabIndexes();
@@ -122,7 +139,9 @@ public class GUIMainController implements Initializable {
                     break;
             }
         });
-        
+
+
+
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
         
@@ -170,13 +189,26 @@ public class GUIMainController implements Initializable {
     public void execute(ActionEvent actionEvent) {
         result.clear();
         saveText(exam.idx);
-        List<String> outcome = new ArrayList<String>();
+        List<String> outcome = new ArrayList<>();
 
         exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
         for(String s : outcome) {
             result.appendText(s + "\n");
         }
         exam.getCurrentTask().setResult(result.getText());
+    }
+
+    public void testExecute(ActionEvent actionEvent) {
+        result.clear();
+        saveText(exam.idx);
+        List<String> outcome = new ArrayList<>();
+
+        exam.getCurrentTask().getType().callTestExecute(exam.getCurrentTask(), outcome);
+        for(String s : outcome) {
+            result.appendText(s + "\n");
+        }
+        exam.getCurrentTask().setResult(result.getText());
+
     }
 
     /**
@@ -214,7 +246,35 @@ public class GUIMainController implements Initializable {
     public void gapsMarker(ActionEvent actionEvent) {
         changeStyle("gap");
     }
-
+    public void boldTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
+            text.setStyleClass(i, i+1, BOLD.changeClass(text.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void italicTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            text.setStyleClass(i, i+1, ITALIC.changeClass(text.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void underlineTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            text.setStyleClass(i, i+1, UNDERLINE.changeClass(text.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void undoTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        text.setStyleClass(ir.getStart(), ir.getEnd(), UNDO.getClassName());
+    }
+    public void monospaceTextMarker(ActionEvent actionEvent) {
+        IndexRange ir = text.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            text.setStyleClass(i, i+1, MONOSPACE.changeClass(text.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    
     /**
      * Ustawia typ dla kodu zawartego w polu CodeArea.
      * @param className Nazwa typu do przypisania.
@@ -238,6 +298,7 @@ public class GUIMainController implements Initializable {
      * @throws Exception
      */
     public void addTask(ActionEvent event) throws Exception {
+        Text text = new Text();
         GUIAddTaskController.show();
     }
 
@@ -253,6 +314,27 @@ public class GUIMainController implements Initializable {
         else {
             deleteCurrentTabPaneTab();
         }
+    }
+
+    /**
+     * Zmienia nazwę aktualnie aktywnej zakładki.
+     * @param event
+     * @throws Exception
+     */
+    public void changeTaskName(ActionEvent event) throws Exception {
+        status = Status.RENAME;
+        TextInputDialog textInputDialog = new TextInputDialog();
+        textInputDialog.setTitle("Edycja nazwy zadania");
+        textInputDialog.setHeaderText("Wpisz nową nazwę");
+        Optional<String> result = textInputDialog.showAndWait();
+        if(result.isPresent() && result.get().length() > 0) {
+            DraggableTab tab = new DraggableTab(result.get());
+            Exam.getInstance().getNames().set(exam.idx, result.get());
+            tab.setId(Integer.toString(exam.idx));
+            tabPane.getTabs().set(exam.idx, tab);
+            tabPane.selectionModelProperty().get().select(exam.idx);
+        }
+        status = Status.SWITCH;
     }
 
     /**
@@ -289,6 +371,7 @@ public class GUIMainController implements Initializable {
      */
     public void showTask(boolean visibility) {
         text.setVisible(visibility);
+        textOptions.setVisible(visibility);
         code.setVisible(visibility);
         result.setVisible(visibility);
         executeBtn.setVisible(visibility);
@@ -296,6 +379,7 @@ public class GUIMainController implements Initializable {
         normalMarkerBtn.setVisible(visibility);
         testMarkerBtn.setVisible(visibility);
         hideMarkerBtn.setVisible(visibility);
+        changeNameItem.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
@@ -328,7 +412,7 @@ public class GUIMainController implements Initializable {
             exam.idx = idx;
 
             showTask(true);
-            updateText(t.getContents());
+            updateText(t.getContent());
             updateCode(t.getText());
             updateResult(t.getResult());
         }
@@ -336,10 +420,11 @@ public class GUIMainController implements Initializable {
 
     /**
      * Aktualizuje tekst polecenia.
-     * @param text Lista linii zawierająca nową zawartość pola z poleceniem.
+     * @param content Obiekt klasy Text zawierający informacje o tekście i stanie znaczników.
      */
-    public void updateText(List<String> text) {
-        this.text.clear();
+    public void updateText(Content content) {
+        content.creatStyleClassedTextAreaText(text);
+        /*this.text.clear();
         if(!text.isEmpty()) {
             int i = 0;
             String line;
@@ -350,7 +435,7 @@ public class GUIMainController implements Initializable {
                 if(i>=text.size()) break;
                 line = text.get(i);
             }
-        }
+        }*/
     }
 
     /**
@@ -375,7 +460,7 @@ public class GUIMainController implements Initializable {
      */
     public void addNewTabPaneTab() {
         status = Status.ADD;
-        Tab newTab = new Tab("Zadanie " + (exam.idx + 1));
+        DraggableTab newTab = new DraggableTab("Zadanie " + (exam.maxIdx));
         newTab.setId(Integer.toString(exam.idx));
         tabPane.getTabs().add(newTab);
         tabPane.getSelectionModel().select(newTab);
@@ -396,7 +481,6 @@ public class GUIMainController implements Initializable {
     public void updateTabPaneTabIndexes() {
         for(int i = 0; i < tabPane.getTabs().size(); i++) {
             tabPane.getTabs().get(i).setId(Integer.toString(i));
-            tabPane.getTabs().get(i).setText("Zadanie " + (i+1));
         }
     }
 
@@ -405,7 +489,14 @@ public class GUIMainController implements Initializable {
      * @param idx Indeks zadania, dla którego ma zostać uaktualnione pole z poleceniem.
      */
     public void saveContent(int idx) {
-        Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));
+        Task task = Exam.getInstance().getTaskAtIndex(idx);
+        task.getContent().extractContent(text);
+       /* String res = "";
+        res += text.getText().charAt(0);
+        for (int i = 1; i < text.getText().length(); i++) {
+            if (text.getStyleOfChar())
+        }
+        Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));*/
     }
 
     /**
@@ -429,7 +520,7 @@ public class GUIMainController implements Initializable {
             task.getType().getParams().setNoOfAnswers(task.getAnswers().size());
         }
     }
-
+    
     /**
      * Zapisuje stan bieżącego zadania i generuje plik .xml z egzaminem.
      */
@@ -446,19 +537,24 @@ public class GUIMainController implements Initializable {
     public void loadXMLToCodeArea() {
 
         Exam.getInstance().load();
+        status = Status.DRAG;
+        tabPane.getTabs().clear();
+        status = Status.SWITCH;
+//        int tabsNumber = tabPane.getTabs().size();
+        int size = Exam.getInstance().getTasks().size();
+
+        for(int i = 0; i < size; i++) {
+            DraggableTab newTab = new DraggableTab(Exam.getInstance().getNames().get(i));
+            newTab.setId(Integer.toString(i));
+            tabPane.getTabs().add(newTab);
+        }
+
+        tabPane.getSelectionModel().select(0);
+
         Text text = Exam.getInstance().getTaskAtIndex(0).getText();
         text.createCodeAreaText(code);
 
-        int tabsNumber = tabPane.getTabs().size();
-        int difference = Exam.getInstance().getTasks().size() - tabsNumber;
-
-        if(difference != 0) {
-            for(int i = 0; i < difference; i++) {
-                Tab newTab = new Tab("Zadanie " + (tabsNumber + i + 1));
-                newTab.setId(Integer.toString(tabsNumber + i));
-                tabPane.getTabs().add(newTab);
-            }
-        }
+        Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
+        content.creatStyleClassedTextAreaText(this.text);
     }
-     
 }

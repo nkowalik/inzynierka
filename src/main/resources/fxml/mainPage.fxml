@@ -2,8 +2,10 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
@@ -12,11 +14,10 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import javafx.scene.layout.VBox?>
 <?import org.fxmisc.richtext.*?>
-<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
 
-<GridPane  alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -32,16 +33,16 @@
          <center>
             <VBox prefHeight="292.0" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
                 <children>
-                <CodeArea fx:id="code" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="440.0"  BorderPane.alignment="TOP_RIGHT">
+                <CodeArea fx:id="code" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="440.0" BorderPane.alignment="TOP_RIGHT">
                     <BorderPane.margin>
 
                    </BorderPane.margin></CodeArea>
-                <HBox alignment="BOTTOM_CENTER" spacing="10.0" >
+                <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                       <children>
                             <Button fx:id="hideMarkerBtn" mnemonicParsing="false" onAction="#hideMarker" text="Ukryj" />
-                            <Button fx:id="testMarkerBtn" mnemonicParsing="false"  onAction="#testMarker" text="Usuń" />
-                            <Button fx:id="normalMarkerBtn" mnemonicParsing="false"  onAction="#normalMarker" text="Cofnij" />
-                            <Button fx:id="gapsMarkerBtn" visible="false" mnemonicParsing="false"  onAction="#gapsMarker" text="Luka" />
+                            <Button fx:id="testMarkerBtn" mnemonicParsing="false" onAction="#testMarker" text="Usuń" />
+                            <Button fx:id="normalMarkerBtn" mnemonicParsing="false" onAction="#normalMarker" text="Cofnij" />
+                            <Button fx:id="gapsMarkerBtn" mnemonicParsing="false" onAction="#gapsMarker" text="Luka" visible="false" />
                       </children>
                 </HBox>
                 </children>
@@ -50,12 +51,22 @@
          <left>
             <VBox prefHeight="292.0" prefWidth="440.0" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                  <TextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="440.0" promptText="Miejsce na polecenie" />
+                  <HBox fx:id="textOptions" prefHeight="22.0" prefWidth="440.0">
+                     <children>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#undoTextMarker" prefHeight="25.0" prefWidth="97.0" text="Cofnij format" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" text="Pogrubienie" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" prefHeight="25.0" prefWidth="91.0" text="Podkreślenie" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" prefHeight="25.0" prefWidth="78.0" text="Kursywa" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" prefHeight="25.0" prefWidth="96.0" text="Maszynowo" />
+                     </children>
+                  </HBox>
+                   
+                  <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="440.0" />
                   <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="440.0" />
                   <HBox alignment="CENTER" spacing="10.0">
                      <children>
                         <Button fx:id="executeBtn" mnemonicParsing="false" onAction="#execute" prefWidth="120.0" text="Wykonaj" />
-                        <Button fx:id="testExecuteBtn" disable="true" alignment="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" prefWidth="120.0" text="Wykonaj testowo" />
+                        <Button fx:id="testExecuteBtn" alignment="CENTER" mnemonicParsing="false" onAction="#testExecute" nodeOrientation="LEFT_TO_RIGHT" prefWidth="120.0" text="Wykonaj testowo" />
                      </children></HBox>
                </children>
                <BorderPane.margin>
@@ -66,7 +77,7 @@
          </BorderPane>
       <VBox prefHeight="58.0" prefWidth="950.0">
          <children>
-            <MenuBar>
+            <MenuBar fx:id="menu">
               <menus>
                 <Menu mnemonicParsing="false" text="Arkusz">
                   <items>
@@ -79,12 +90,13 @@
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
                     <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Usun"/>
+                    <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę"/>
                     <MenuItem fx:id="changeAnswersNum" visible="false" mnemonicParsing="false" onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi"/>
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false">
                     <graphic>
-                        <Label  onMouseClicked="#advancedOptionsClicked"  mnemonicParsing="false" text="Ustawienia">
+                        <Label mnemonicParsing="false" onMouseClicked="#advancedOptionsClicked" text="Ustawienia">
                         </Label>
                     </graphic>
                 </Menu>

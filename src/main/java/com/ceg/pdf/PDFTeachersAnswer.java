@@ -1,9 +1,11 @@
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.utils.FontType;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -23,7 +25,7 @@ public class PDFTeachersAnswer extends PDFAnswer {
         answersIndex = 0;
     }
 
-    public PDFTeachersAnswer(List<String> lines, int textWidth, PDType0Font font, int fontSize, int leftMargin) throws IOException {
+    public PDFTeachersAnswer(List<String> lines, int textWidth, FontType font, int fontSize, int leftMargin) throws IOException {
         super(lines, textWidth, font, fontSize, leftMargin);
         answersIndex = 0;
     }
@@ -38,16 +40,19 @@ public class PDFTeachersAnswer extends PDFAnswer {
         if (answers != null) {
             float answerWidth;
             int myY = y;
-            for (String i : actualTaskLines) {
+            for (PDFLine i : pdfLines) {
                 String[] answersPlaces;
-                if (i.contains("#placeForAnswer")) {
-                    i += ' ';
-                    answersPlaces = i.split("#placeForAnswer");               
+                if (i.getLineParts().get(0).getText().contains("#placeForAnswer")) {
+                    i.getLineParts().get(0).setText(i.getLineParts().get(0).getText() + ' ');
+                    answersPlaces = i.getLineParts().get(0).getText().split("#placeForAnswer");               
 
                     for (int j = 0; j < answersPlaces.length - 1; j++) {
-                        answerWidth = getWidth(answersPlaces[j]);
-                        pdfLine.setText(answers.get(answersIndex++));
-                        pdfLine.writeLine(leftMargin + (int)answerWidth + 2, myY);
+                        answerWidth = getWidth(answersPlaces[j], defaultFontType, fontSize);
+                        PDFLine pdfLine = new PDFLine(fontSize, leftMargin + (int)answerWidth + 2);
+                        PDFLinePart linePart = new PDFLinePart(defaultFontType);
+                        linePart.setText(answers.get(answersIndex++));
+                        pdfLine.setLineParts(Arrays.asList(linePart));
+                        pdfLine.writeLine(myY);
                     }
                 }
                 myY -= lineHeight;
