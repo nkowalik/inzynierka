@@ -30,39 +30,54 @@ public class PDFCommand extends PDFAbstractTaskPart {
         każdy enter w poleceniu będzie widoczny w dokumencie pdf. Brak możliwości używania innych
         białych znaków poza spacją i enterem. */    
     public void contentSplitting (List<ContentPart> contentParts) throws IOException, EmptyPartOfTaskException {
-        List<ContentPart> command = new ArrayList<ContentPart>(contentParts);
-        //sprawdzić czy niepusty
+        List<ContentPart> command = new ArrayList<>(contentParts);
         actualWidth = 0;       
-       // String line = "";
         command.add(0, new ContentPart(ContentCssClass.EMPTY, taskNumber.toString() + ". "));
-        //string = string.replace("\n", " ");
         float actualWordWidth;
         
         PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
         
         for (ContentPart cp : command) {
             FontType ft = defaultFontType.contentCssClassToFontType(cp.getCssClassName());
-            PDFLinePart lp = new PDFLinePart(ft);
+            PDFLinePart lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
             spaceWidth = getWidth(" ", ft, fontSize);
             words = cp.getText().split(" ");
+            
+            if (cp.getText().charAt(0) == ' ') {
+                lp.setText(" ");
+            }            
             
             for (String word : words) {
                 actualWordWidth = getWidth(word, ft, fontSize);
                 
                  //linia wystarczająco długa, żaden wyraz więcej się nie zmieści
                 if (actualWidth + actualWordWidth + spaceWidth  >= textWidth) {
+                    //jeśli ostatnim znakiem w linii jest spacja to usuwamy ją
+                    
+                    //jeśli spacja występuje w zakończonym PDFLinePart, zaktualizujemy poprzedni
+                    if (lp.getText().length() == 0) {
+                        PDFLinePart lp2 = pdfLine.getLineParts().get(pdfLine.getLineParts().size() - 1);
+                        if (lp2.getText().charAt(lp2.getText().length() - 1) == ' ') {
+                            lp2.setText(lp2.getText().substring(0, lp2.getText().length() - 2));
+                            pdfLine.getLineParts().set(pdfLine.getLineParts().size() - 1, lp2);
+                        }
+                    }
+                    //jeśli spacja występuje w aktualnym PDFLinePart to usuwamy na bieżąco                
+                    else if (lp.getText().charAt(lp.getText().length() - 1) == ' ') {
+                        lp.setText(lp.getText().substring(0, lp.getText().length() - 1));
+                    }
                     pdfLine.getLineParts().add(lp);
                     pdfLines.add(pdfLine);
-                    lp = new PDFLinePart(ft);
+                    lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
                     pdfLine = new PDFLine(fontSize, leftMargin);
-                    lp.setText(word);
+                    lp.setText(lp.getText() + word);
                     
                     actualWidth = actualWordWidth;
                 }
                 //do linii dopisujemy wyraz
                 else {
                     //jeśli linia nie jest pusta to dodajemy spację po poprzednim wyrazie
-                    if (!lp.getText().equals("")) {
+                    if (!lp.getText().equals("") && !lp.getText().equals(" ")) {
                         lp.setText(lp.getText() + ' ');
                         actualWidth += spaceWidth;
                     }
@@ -70,9 +85,12 @@ public class PDFCommand extends PDFAbstractTaskPart {
                     actualWidth += actualWordWidth;
                 }
             }
+            if (cp.getText().charAt(cp.getText().length() - 1) == ' ' && 
+                    lp.getText().charAt(lp.getText().length() - 1) != ' ') {
+                lp.setText(lp.getText() + ' ');
+            }
             //jeśli linia nie jest pusta, wypisujemy ją
             if (!lp.getText().equals("")) {
-                lp.setText(lp.getText() + ' ');
                 pdfLine.getLineParts().add(lp);
             }
         }
