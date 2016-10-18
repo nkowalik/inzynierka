@@ -23,7 +23,7 @@
     </columnConstraints>
     <rowConstraints>
         <RowConstraints />
-      <RowConstraints />
+        <RowConstraints />
     </rowConstraints>
     <children>
         <BorderPane prefHeight="551.0" prefWidth="950.0" GridPane.rowIndex="1">
@@ -89,7 +89,8 @@
                 <Menu mnemonicParsing="false" text="Zadanie">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
-                    <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Usun"/>
+                    <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Usuń"/>
+                      <MenuItem fx:id="taskEdition" mnemonicParsing="false" onAction="#editTask" text="Edytuj" visible="false" />
                     <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę"/>
                     <MenuItem fx:id="changeAnswersNum" visible="false" mnemonicParsing="false" onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi"/>
                   </items>
