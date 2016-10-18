@@ -23,7 +23,7 @@ public class Exam extends Observable {
     private List<String> outputList = new ArrayList<>();
     @XmlElement
     private ArrayList<String> names;
-    private final static Exam instance = new Exam();
+    private static Exam instance;
 
     /**
      * Indeks aktualnego zadania (wskazywanego przez zakładkę).
@@ -35,9 +35,15 @@ public class Exam extends Observable {
      */
     public int maxIdx;
 
-    public Exam() {
+    private Exam() {
     }
     public static Exam getInstance() {
+        if (instance == null){
+            synchronized(Exam.class){
+                if(instance == null)
+                    instance = new Exam();
+            }
+        }
         return instance;
     }
     public void init(){
@@ -49,22 +55,23 @@ public class Exam extends Observable {
     
     public boolean compile() {
         List<String> output = new ArrayList<>();
-        compilationProgress = -1;
-        outputList.clear();
+        clearCompilationProgress();
+        clearOutputList();
         for (Task i : tasks) {
             output.clear();
             i.getType().callExecute(i, output);
-            compilationProgress++;
-            outputList.add("Zadanie " + (compilationProgress+1) + " : " + output.get(0) + "\n");
+            i.setResult(String.join("\n", output));
+            this.incCompilationProgress();
+            addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
             if (!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")) {
                 output.remove(0);
                 output.stream().forEach((s) -> {
-                    outputList.add(s + "\n");
+                    addToOutputList(s + "\n");
                 });
-                return false;
+               // return false;
             }            
         }
-        compilationProgress++;
+        this.incCompilationProgress();
         return true;
     }
         
@@ -116,12 +123,31 @@ public class Exam extends Observable {
         tasks.remove(idx);
         names.remove(idx);
     }
-    public int getCompilationProgress() {
+    
+    public synchronized void incCompilationProgress(){
+        compilationProgress++;
+    }
+    
+    public synchronized int getCompilationProgress() {
         return compilationProgress;
     }
-    public List<String> getOutputList() {
+    
+    public synchronized void clearCompilationProgress(){
+        compilationProgress = -1;
+    }
+    
+    public synchronized List<String> getOutputList() {
         return outputList;
-
+    }
+    
+    private synchronized void addToOutputList(String str){
+        outputList.add(str);
+    }
+    
+    private synchronized void clearOutputList(){
+        outputList.clear();
+    }
+    
     public void changeTasksOrder(int oldIndex, int newIndex) {
         Task task = tasks.get(oldIndex);
         tasks.remove(oldIndex);
@@ -130,9 +156,6 @@ public class Exam extends Observable {
         String name = names.get(oldIndex);
         names.remove(oldIndex);
         names.add(newIndex, name);
-    }
-
-    // todo zmienić tak, aby kompilowany był cały egzamin*/
     }
 
     /**
