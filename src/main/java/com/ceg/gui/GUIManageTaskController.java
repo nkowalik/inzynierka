@@ -1,6 +1,7 @@
 package com.ceg.gui;
 
 import com.ceg.examContent.*;
+import com.ceg.utils.ContentCssClass;
 import com.ceg.xml.TaskData;
 import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
@@ -13,7 +14,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Scanner;
 import javafx.fxml.FXMLLoader;
@@ -28,7 +28,7 @@ import org.fxmisc.richtext.CodeArea;
  */
 public class GUIManageTaskController implements Initializable {
 
-    ArrayList<String> contentList = new ArrayList<>();
+    Content content = new Content();
     ArrayList<String> codeList = new ArrayList<>();
     TaskType type;
     @FXML
@@ -104,7 +104,7 @@ public class GUIManageTaskController implements Initializable {
      * @param task Zadanie pobrane z okna głównego.
      */
     public void editTask(Task task) {
-        updateText(task.getContents());
+        updateText(task.getContent());
         task.getText().createCodeAreaText(code);
         finish.setDisable(false);
     }
@@ -116,10 +116,11 @@ public class GUIManageTaskController implements Initializable {
     public void addType(int index) {
         TaskData tasks = TasksLoading.loadFromXml();
 
-        contentList.clear();
+        content.setContentParts(new ArrayList<>());
         text.clear();
         if (tasks != null) {
-            contentList.add(tasks.getTaskData().get(index).getText());
+            content.getContentParts().add(new ContentPart(ContentCssClass.EMPTY, tasks.getTaskData().get(index).getText()));
+            //contentList.add(tasks.getTaskData().get(index).getText());
             text.appendText(tasks.getTaskData().get(index).getText());
         }
 
@@ -168,21 +169,10 @@ public class GUIManageTaskController implements Initializable {
 
     /**
      * Aktualizuje tekst polecenia.
-     * @param text Lista linii zawierająca nową zawartość pola z poleceniem.
+     * @param content Obiekt klasy Text zawierający informacje o tekście i stanie znaczników.
      */
-    public void updateText(List<String> text) {
-        this.text.clear();
-        if(!text.isEmpty()) {
-            int i = 0;
-            String line;
-            line = text.get(i);
-            while (i<text.size()) {
-                this.text.appendText(line + "\n");
-                i++;
-                if(i>=text.size()) break;
-                line = text.get(i);
-            }
-        }
+    public void updateText(Content content) {
+        //content.creatStyleClassedTextAreaText(text);
     }
 
     /**
@@ -193,7 +183,7 @@ public class GUIManageTaskController implements Initializable {
      */
     public void finishEdition(ActionEvent event) throws Exception {
         Task t = new Task(type);
-        t.setContents(contentList);
+        t.setContent(content);
         t.getText().extractText(code);
         if (stage.getTitle().equals("Dodaj nowe zadanie")) {
             Exam.getInstance().addTask(t);
@@ -202,8 +192,8 @@ public class GUIManageTaskController implements Initializable {
         else if (stage.getTitle().equals("Edycja zadania")) {
             Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
             Exam.getInstance().setCurTask(t);
-            if (!t.getContents().isEmpty()) {
-                mainInstance.updateText(t.getContents());
+            if (!t.getContent().getContentParts().isEmpty()) {
+                mainInstance.updateText(t.getContent());
             }
             mainInstance.updateCode(t.getText());
             mainInstance.showTask(true);
@@ -219,7 +209,7 @@ public class GUIManageTaskController implements Initializable {
         manageTaskInstance.text.clear();
         manageTaskInstance.code.clear();
         manageTaskInstance.codeList = new ArrayList<>();
-        manageTaskInstance.contentList = new ArrayList<>();
+        manageTaskInstance.content = new Content();
         manageTaskInstance.finish.setDisable(true);
     }
 

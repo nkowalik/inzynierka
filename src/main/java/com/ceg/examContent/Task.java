@@ -15,7 +15,7 @@ import java.util.List;
  * compiler - kompilator przypisany do danego zadania
  */
 public class Task {
-    private List<String> contents;
+    private Content content;
     private List<String> answers;
     private List<String> pdfAnswers;
     private String result;
@@ -30,7 +30,7 @@ public class Task {
         this.answers = new ArrayList<>();
         pdfAnswers = new ArrayList<>();
         compiler = new GCC();
-        contents = new ArrayList<>();
+        content = new Content();
         text = new Text();
     }
 
@@ -42,11 +42,11 @@ public class Task {
         this();
         this.type = tt;
     }
-    public List<String> getContents(){
-        return contents;
+    public Content getContent(){
+        return content;
     }
-    public void setContents(List<String> contents){
-        this.contents = contents;
+    public void setContent(Content content){
+        this.content = content;
     }
     public List<String> getAnswers(){
         return answers;
