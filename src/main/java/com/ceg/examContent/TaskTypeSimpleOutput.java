@@ -6,7 +6,7 @@ public class TaskTypeSimpleOutput extends TaskType{
 
     public TaskTypeSimpleOutput() {
         super();
-        super.params = new TaskParametersSimpleOutput();
+        super.setNoOfAnswers(1);
         name = "SimpleOutput";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku wykonania programu.";
     }
@@ -15,9 +15,8 @@ public class TaskTypeSimpleOutput extends TaskType{
     public void generateAnswers(Task task, List<String> output, List<String> answers){
         answers.clear();
         try{
-            for(int i=1;i<super.getParams().getNoOfAnswers()+1;i++){
-                answers.add(output.get(i));
-            }
+            answers.add(output.get(1));
+            
         }
         catch (IndexOutOfBoundsException e) {
             answers.clear();

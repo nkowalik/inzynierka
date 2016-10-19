@@ -8,17 +8,17 @@ public class TaskTypeLineNumbers extends TaskType{
     
     public TaskTypeLineNumbers() {
         super();
-        super.params = new TaskParametersLineNumbers();
         name="LineNumbers";
     }
 
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers) {
         answers.clear();
+        setNoOfAnswers(Integer.MAX_VALUE-1);
         // jeśli nie nastąpił błąd kompilacji, nie dodaj jedną odpowiedź
         if(output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
             answers.add("Brak błędów kompilacji.");
-            this.params.setNoOfAnswers(1);
+            this.setNoOfAnswers(1);
         }
         else{
             try{
@@ -28,24 +28,50 @@ public class TaskTypeLineNumbers extends TaskType{
                         String[] substr = line.split(":");
                         int lineNumber;
                         if(task.compiler.osName.indexOf("win") >= 0) // windows uzywa dodatkowego znaku ':' po nazwie dysku
-                            lineNumber = Integer.parseInt(substr[2])-1;
+                            lineNumber = Integer.parseInt(substr[2]);
                         else
-                            lineNumber = Integer.parseInt(substr[1])-1;
-                        String[] codeLine = task.getText().getStandardCompilationCode().get(lineNumber).split("//");
-                        answers.add(codeLine[1]);
+                            lineNumber = Integer.parseInt(substr[1]);
+                        answers.add(String.valueOf(getPdfLineNumber(task.getText(), lineNumber)));
                         answersCnt++;
                     }               
                 }
-                this.params.setNoOfAnswers(answersCnt);
+                this.setNoOfAnswers(answersCnt);
             }
            catch (IndexOutOfBoundsException e) {
                 answers.clear();
-                this.params.setNoOfAnswers(0);
+                this.setNoOfAnswers(0);
                 System.err.println("IndexOutOfBoundsException: " + e.getMessage());
                 Alerts.generatingAnswersErrorAlert();
             }
         }
         preparePdfAnswers(task);
+    }
+    
+    int getPdfLineNumber(Text code, int lineNumber){
+        int PdfLineCount=0;
+        int StandardLineCount=0;
+        boolean found = false;
+        for(TextPart tp : code.getTextParts()){
+            if(found) break;
+            if(tp.getType().equals("[test]")) continue;
+            int textPartLines = tp.lineCount();
+            if(textPartLines + StandardLineCount >= lineNumber){
+                if(tp.getType().equals("[hidden]")) return -1;         // błąd kompilacji w ukrytym kodzie???
+                else {
+                    PdfLineCount += (lineNumber - StandardLineCount);
+                    found = true;
+                }
+            }
+            if(!found && !tp.getType().equals("[hidden]")){
+                PdfLineCount += textPartLines;
+            }
+            StandardLineCount += textPartLines;
+        }
+        if(lineNumber >= StandardLineCount){
+            PdfLineCount = -1;                 // numer linii z blędem jest większy niż liczba linii kodu
+        }
+            
+        return PdfLineCount;
     }
 
     @Override
@@ -58,7 +84,7 @@ public class TaskTypeLineNumbers extends TaskType{
     @Override
     public void preparePdfAnswers(Task task) {
         task.getPdfAnswers().clear();
-        for(int i=0;i<this.params.getNoOfAnswers();i++){
+        for(int i=0;i<this.getNoOfAnswers();i++){
             task.getPdfAnswers().add(" #placeForAnswer");
         }
     }
