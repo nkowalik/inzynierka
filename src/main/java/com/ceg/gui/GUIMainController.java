@@ -1,6 +1,7 @@
 package com.ceg.gui;
 
 import com.ceg.examContent.Content;
+
 import java.util.*;
 import com.ceg.examContent.Text;
 import javafx.application.Platform;
@@ -567,11 +568,20 @@ public class GUIMainController implements Initializable {
     }
 
     public void saveTask(ActionEvent event) throws Exception {
-
+        String defaultTaskName = "task.xml";
+        saveText(exam.idx);
+        saveContent(exam.idx);
+        saveResult(exam.idx);
+        Task task = Exam.getInstance().getCurrentTask();
+        task.save(defaultTaskName);
 
     }
 
     public void loadTask(ActionEvent event) throws Exception {
-
+        String defaultTaskName = "task.xml";
+        Task task = new Task();
+        task.load(defaultTaskName);
+        Exam.getInstance().addTask(task);
+        addNewTabPaneTab();
     }
 }
