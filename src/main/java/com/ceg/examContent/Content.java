@@ -24,16 +24,6 @@ public class Content {
         int length = text.getLength();
         String currentStyle = "[]";
         StringBuilder sb = new StringBuilder();
-        //String withoutEndOfLine = text.getText().replaceAll("\n", " ");
-
-        if(text.getText().contains("\n")) {
-            Alert alert = new Alert(Alert.AlertType.WARNING);
-            alert.setTitle("Niezaimplementowana funkcjonalność!");
-            alert.setHeaderText(null);
-            alert.setContentText("Uwaga, znak nowej linii w poleceniu nie jest jeszcze obsłużony");
-
-            alert.showAndWait();
-        }
 
         for(int i = 0; i < length; i++) {
             if(text.getStyleOfChar(i).toString().equals(currentStyle)) {
