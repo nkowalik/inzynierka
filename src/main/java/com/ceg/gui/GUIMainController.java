@@ -62,6 +62,10 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem deleteTaskItem;
     @FXML
+    MenuItem saveTaskItem;
+    @FXML
+    MenuItem loadTaskItem;
+    @FXML
     HBox textOptions;
     @FXML
     private void advancedOptionsClicked(MouseEvent event){
@@ -383,6 +387,7 @@ public class GUIMainController implements Initializable {
         hideMarkerBtn.setVisible(visibility);
         changeNameItem.setVisible(visibility);
         deleteTaskItem.setVisible(visibility);
+        saveTaskItem.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
@@ -559,5 +564,14 @@ public class GUIMainController implements Initializable {
 
         Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
         content.creatStyleClassedTextAreaText(this.text);
+    }
+
+    public void saveTask(ActionEvent event) throws Exception {
+
+
+    }
+
+    public void loadTask(ActionEvent event) throws Exception {
+
     }
 }

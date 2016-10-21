@@ -123,7 +123,7 @@
                               onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi"/>
                     <MenuItem fx:id="saveTaskItem" visible="false" mnemonicParsing="false"
                               onAction="#saveTask" text="Zapisz zadanie"/>
-                    <MenuItem fx:id="loadTaskItem" visible="false" mnemonicParsing="false"
+                    <MenuItem fx:id="loadTaskItem" visible="true" mnemonicParsing="false"
                               onAction="#loadTask" text="Wczytaj zadanie"/>
                   </items>
                 </Menu>
