@@ -1,6 +1,7 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.GCC;
+import com.ceg.gui.Alerts;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -119,7 +120,7 @@ public class Task {
         }
     }
 
-    public void load(String filename) {
+    public boolean load(String filename) {
         try {
             JAXBContext context = JAXBContext.newInstance(Task.class);
             Unmarshaller un = context.createUnmarshaller();
@@ -131,7 +132,9 @@ public class Task {
             this.setText(task.text);
             this.setType(task.type);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            Alerts.wrongFileContentAlert();
+            return false;
         }
+        return true;
     }
 }

@@ -12,8 +12,8 @@ import com.ceg.examContent.TaskTypeReturnedValue;
 import com.ceg.examContent.TaskTypeSimpleOutput;
 import com.ceg.examContent.TaskTypeVarValue;
 import com.ceg.utils.ContentCssClass;
+import com.ceg.utils.FileChooserCreator;
 import com.ceg.xml.TaskData;
-import com.ceg.xml.Tasks;
 import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -22,7 +22,6 @@ import javafx.stage.Stage;
 
 import javafx.scene.control.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -34,11 +33,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.fxmisc.richtext.CodeArea;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 /**
  * Klasa reprezentująca kontroler okna dodawania zadania.
@@ -209,9 +203,8 @@ public class GUIAddTaskController implements Initializable {
      */
     public void selectCodeFile() throws IOException {
 
-        File file = fileChooser.showOpenDialog(stage);
+        File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.CODE);
         if(file != null) {
-            fileChooser.setInitialDirectory(new File(file.getParent()));
             loadFile(file);
         }
     }

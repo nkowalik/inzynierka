@@ -11,9 +11,10 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+
+import com.ceg.utils.FileChooserCreator;
 import javafx.beans.value.ChangeListener;
 import java.util.logging.Logger;
-import java.util.prefs.Preferences;
 
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -24,9 +25,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -166,16 +165,12 @@ public class PdfSavingController implements Initializable {
      * @throws IOException
      */
     public void saveFile(ActionEvent event) throws IOException {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty
-                ("user.home")) : new File(initialDirectory));
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("PDF file (*.pdf)", "*.pdf");
-        fileChooser.getExtensionFilters().add(filter);
-        File file = fileChooser.showSaveDialog(stage);
+        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.PDF);
         if(file != null) {
-            initialDirectory = file.getParent();
+            FileChooserCreator.getInstance().setInitialDirectory(file.getParent());
             PDFSettings.getInstance().setTestType(testType.getValue().toString());
-            PDFSettings.getInstance().saveFile(file);
+            PDFSettings.getInstance().setPdfFile(file);
+            PDFSettings.getInstance().formatDate();
             PDFSettings.getInstance().pdfGenerate(stage);
             stage.hide();
         }

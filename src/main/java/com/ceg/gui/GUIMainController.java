@@ -5,11 +5,13 @@ import com.ceg.examContent.Content;
 import java.io.File;
 import java.util.*;
 import com.ceg.examContent.Text;
+import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -73,6 +75,8 @@ public class GUIMainController implements Initializable {
     @FXML
     HBox textOptions;
     @FXML
+    MenuItem saveExamItem;
+    @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
             AdvancedOptionsController.show();
@@ -87,7 +91,6 @@ public class GUIMainController implements Initializable {
     public enum Status {
         ADD, DELETE, SWITCH, RENAME, DRAG
     }
-    private String initialDirectory;
 
     public Status getStatus() {
         return status;
@@ -394,6 +397,7 @@ public class GUIMainController implements Initializable {
         changeNameItem.setVisible(visibility);
         deleteTaskItem.setVisible(visibility);
         saveTaskItem.setVisible(visibility);
+        saveExamItem.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
@@ -505,12 +509,6 @@ public class GUIMainController implements Initializable {
     public void saveContent(int idx) {
         Task task = Exam.getInstance().getTaskAtIndex(idx);
         task.getContent().extractContent(text);
-       /* String res = "";
-        res += text.getText().charAt(0);
-        for (int i = 1; i < text.getText().length(); i++) {
-            if (text.getStyleOfChar())
-        }
-        Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));*/
     }
 
     /**
@@ -542,7 +540,13 @@ public class GUIMainController implements Initializable {
         saveText(exam.idx);
         saveContent(exam.idx);
         saveResult(exam.idx);
-        Exam.getInstance().save();
+
+        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML);
+        if(file != null) {
+            Exam.getInstance().save(file);
+        }  else {
+            return;
+        }
     }
 
     /**
@@ -550,11 +554,17 @@ public class GUIMainController implements Initializable {
      */
     public void loadXMLToCodeArea() {
 
-        Exam.getInstance().load();
+        File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
+        if(file != null) {
+            if(!Exam.getInstance().load(file)) {
+                return;
+            }
+        } else {
+            return;
+        }
         status = Status.DRAG;
         tabPane.getTabs().clear();
         status = Status.SWITCH;
-//        int tabsNumber = tabPane.getTabs().size();
         int size = Exam.getInstance().getTasks().size();
 
         for(int i = 0; i < size; i++) {
@@ -578,35 +588,21 @@ public class GUIMainController implements Initializable {
         saveResult(exam.idx);
         Task task = Exam.getInstance().getCurrentTask();
 
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty
-                ("user.home")) : new File(initialDirectory));
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
-        fileChooser.getExtensionFilters().add(filter);
-        File file = fileChooser.showSaveDialog(stage);
+        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML);
         if(file != null) {
-            initialDirectory = file.getParent();
             task.save(file.getAbsolutePath());
-        } else {
-            return;
         }
     }
 
     public void loadTask(ActionEvent event) throws Exception {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty
-                ("user.home")) : new File(initialDirectory));
-        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
-        fileChooser.getExtensionFilters().add(filter);
-        File file = fileChooser.showOpenDialog(stage);
+        File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
         if(file != null) {
-            initialDirectory = file.getParent();
             Task task = new Task();
-            task.load(file.getAbsolutePath());
+            if(!task.load(file.getAbsolutePath())) {
+                return;
+            }
             Exam.getInstance().addTask(task);
             addNewTabPaneTab();
-        } else {
-            return;
         }
     }
 }
