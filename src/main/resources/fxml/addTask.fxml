@@ -40,6 +40,7 @@
                               <MenuItem fx:id="taskTypeGaps" mnemonicParsing="false" onAction="#addTypeGaps" text="Uzupełnianie pól" />
                               <MenuItem fx:id="taskTypeVarValue" mnemonicParsing="false" onAction="#addTypeVarValue" text="Wartości zmiennych" />
                               <MenuItem fx:id="taskTypeLineNumbers" mnemonicParsing="false" onAction="#addTypeLineNumbers" text="Numery linii" />
+                            <MenuItem fx:id="taskTypeOwn" mnemonicParsing="false" onAction="#addOwnType" text="Własne zadanie" />
                         </items>
                       </Menu>
                     </menus>

@@ -24,4 +24,8 @@
         <name>Line numbers</name>
         <text>Podaj numery linii, które powodują błąd kompilacji programu.</text>
     </task-data>
+    <task-data>
+        <name>Own type</name>
+        <text></text>
+    </task-data>
 </tasks>

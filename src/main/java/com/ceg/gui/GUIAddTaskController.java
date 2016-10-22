@@ -1,16 +1,6 @@
 package com.ceg.gui;
 
-import com.ceg.examContent.Content;
-import com.ceg.examContent.ContentPart;
-import com.ceg.examContent.Exam;
-import com.ceg.examContent.Task;
-import com.ceg.examContent.TaskType;
-import com.ceg.examContent.TaskTypeComplexOutput;
-import com.ceg.examContent.TaskTypeGaps;
-import com.ceg.examContent.TaskTypeLineNumbers;
-import com.ceg.examContent.TaskTypeReturnedValue;
-import com.ceg.examContent.TaskTypeSimpleOutput;
-import com.ceg.examContent.TaskTypeVarValue;
+import com.ceg.examContent.*;
 import com.ceg.utils.ContentCssClass;
 import com.ceg.xml.TaskData;
 import com.ceg.xml.Tasks;
@@ -68,6 +58,8 @@ public class GUIAddTaskController implements Initializable {
     MenuItem taskTypeVarValue;
     @FXML
     MenuItem taskTypeLineNumbers;
+    @FXML
+    MenuItem taskTypeOwn;
 
     private static Stage stage = null;
     private static GUIAddTaskController addTaskInstance = null;
@@ -165,6 +157,14 @@ public class GUIAddTaskController implements Initializable {
         type = new TaskTypeLineNumbers();
     }
 
+    public void addOwnType() {
+        mainInstance.setStageName("CEG - " + taskTypeOwn.getText());
+        text.setVisible(false);
+        code.setPrefHeight(code.getPrefHeight()*3);
+        addType(6);
+        type = new TaskTypeOwn();
+    }
+
     /**
      * Kończy tworzenie zadania w GUI. Tworzy nowy obiekt zadania, uzupełnia jego dane i zapisuje w egzaminie.
      * Dodaje nową zakładkę z zadaniem i przełącza sie na nią.
@@ -181,6 +181,8 @@ public class GUIAddTaskController implements Initializable {
         mainInstance.getInstance().addNewTabPaneTab();
 
         chooseType.setText("Typ zadania");
+        text.setVisible(true);
+        code.setPrefHeight(200.0);
     }
 
     /**

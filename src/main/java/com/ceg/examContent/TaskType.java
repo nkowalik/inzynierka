@@ -17,7 +17,8 @@ import java.util.List;
         TaskTypeLineNumbers.class,
         TaskTypeReturnedValue.class,
         TaskTypeSimpleOutput.class,
-        TaskTypeVarValue.class
+        TaskTypeVarValue.class,
+        TaskTypeOwn.class
 })
 abstract public class TaskType {
     String defaultContents;
