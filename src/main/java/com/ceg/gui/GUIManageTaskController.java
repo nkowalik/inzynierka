@@ -118,25 +118,18 @@ public class GUIManageTaskController implements Initializable {
      * @param content Obiekt klasy Text zawierający informacje o tekście i stanie znaczników.
      */
     public void updateText(Content content) {
-        /*List<String> text = new ArrayList<>();
-        for (ContentPart contentPart : content.getContentParts()) {
-            text.add(contentPart.getText());
-        }
-        this.text.clear();
-        if(!text.isEmpty()) {
+        if(!content.getContentParts().isEmpty()) {
+            this.text.clear();
             int i = 0;
             String line;
-            line = text.get(i);
-            while (i<text.size()) {
+            line = content.getContentParts().get(i).getText();
+            while (i < content.getContentParts().size()) {
                 this.text.appendText(line + "\n");
                 i++;
-                if(i>=text.size()) break;
-                line = text.get(i);
+                if (i >= content.getContentParts().size()) break;
+                line = content.getContentParts().get(i).getText();
             }
         }
-        for (ContentPart contentPart : content.getContentParts()) {
-            contentPart.setText()
-        }*/
     }
 
     /**
@@ -212,11 +205,11 @@ public class GUIManageTaskController implements Initializable {
             Exam.getInstance().addTask(t);
             mainInstance.getInstance().addNewTabPaneTab();
         }
-        else {
+        else if (stage.getTitle().equals("Edycja zadania")) {
             Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
             Exam.getInstance().setCurrentTask(t);
-            if (!t.getContents().isEmpty()) {
-                mainInstance.updateText(t.getContents());
+            if (!t.getContent().getContentParts().isEmpty()) {
+                mainInstance.updateText(t.getContent());
             }
             mainInstance.updateCode(t.getText());
             mainInstance.showTask(true);

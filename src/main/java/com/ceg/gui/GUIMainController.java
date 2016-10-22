@@ -301,7 +301,7 @@ public class GUIMainController implements Initializable {
      */
     public void addTask(ActionEvent event) throws Exception {
         Text text = new Text();
-        GUIAddTaskController.show("add");
+        GUIManageTaskController.show("add");
     }
 
     /**
@@ -310,7 +310,7 @@ public class GUIMainController implements Initializable {
      * @throws Exception
      */
     public void editTask(ActionEvent event) throws Exception {
-        GUIAddTaskController.show("edit");
+        GUIManageTaskController.show("edit");
         Task task = Exam.getInstance().getCurrentTask();
         Text tempText = new Text();
         tempText.extractText(code);
