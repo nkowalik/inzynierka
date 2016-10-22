@@ -378,7 +378,7 @@ public class GUIMainController implements Initializable {
                     answNum=Integer.MAX_VALUE-1;
                 }
         }
-        exam.getTaskAtIndex(exam.idx).getType().getParams().setNoOfAnswers(answNum);
+        exam.getTaskAtIndex(exam.idx).getType().setNoOfAnswers(answNum);
     }
 
     /**
@@ -534,7 +534,7 @@ public class GUIMainController implements Initializable {
         task.getText().extractText(code);
         if(task.getType().name.equals("Gaps")) {
             task.calculateGapsAnswers(task.getText().getTextParts());
-            task.getType().getParams().setNoOfAnswers(task.getAnswers().size());
+            task.getType().setNoOfAnswers(task.getAnswers().size());
         }
     }
     

@@ -112,6 +112,10 @@ public class PDFGenerator {
                     code = new PDFTeachersGapsCode(task.getText().getPDFCode());
                     answer = code.answer;
                 }
+                else if (task.getType().name.equals("LineNumbers")) {
+                    code = new PDFLineNumbersCode(task.getText().getPDFCode());
+                    answer = new PDFTeachersAnswer(task.getPdfAnswers());
+                }
                 else {
                     code = new PDFCode(task.getText().getPDFCode());
                     answer = new PDFTeachersAnswer(task.getPdfAnswers());

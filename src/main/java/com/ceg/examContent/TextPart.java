@@ -28,6 +28,9 @@ public class TextPart {
         this.type = type;
     }
 
+    public int lineCount(){
+        return this.getText().split("\n").length;
+    }
     /**
      * Wydobywa z obiektu klasy TextPart tekst, który przechowuje.
      * @return Tekst zawarty w obiekcie klasy TextPart, określony dla danego typu.

@@ -22,7 +22,11 @@ import java.util.List;
 abstract public class TaskType {
     String defaultContents;
     public String name;
-    protected TaskParameters params;
+    protected int noOfAnswers;
+    
+    TaskType(){
+        noOfAnswers = Integer.MAX_VALUE-1;
+    }
 
     /**
      * Generuje odpowiedzi do zadania.
@@ -63,11 +67,11 @@ abstract public class TaskType {
     public void setDefaultContents(String defaultContents) {
         this.defaultContents = defaultContents;
     }
-    public TaskParameters getParams() {
-        return params;
+     public int getNoOfAnswers() {
+        return noOfAnswers;
     }
-    public void setParams(TaskParameters params) {
-        this.params = params;
+    public void setNoOfAnswers(int noOfAnswers) {
+        this.noOfAnswers = noOfAnswers;
     }
        
 }
