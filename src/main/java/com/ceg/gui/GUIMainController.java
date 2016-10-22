@@ -2,12 +2,14 @@ package com.ceg.gui;
 
 import com.ceg.examContent.Content;
 
+import java.io.File;
 import java.util.*;
 import com.ceg.examContent.Text;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
@@ -28,6 +30,8 @@ import java.util.logging.Logger;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.fxmisc.richtext.StyleClassedTextArea;
+
+import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Klasa reprezentująca kontroler głównego okna programu.
@@ -83,6 +87,7 @@ public class GUIMainController implements Initializable {
     public enum Status {
         ADD, DELETE, SWITCH, RENAME, DRAG
     }
+    private String initialDirectory;
 
     public Status getStatus() {
         return status;
@@ -568,20 +573,40 @@ public class GUIMainController implements Initializable {
     }
 
     public void saveTask(ActionEvent event) throws Exception {
-        String defaultTaskName = "task.xml";
         saveText(exam.idx);
         saveContent(exam.idx);
         saveResult(exam.idx);
         Task task = Exam.getInstance().getCurrentTask();
-        task.save(defaultTaskName);
 
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty
+                ("user.home")) : new File(initialDirectory));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(filter);
+        File file = fileChooser.showSaveDialog(stage);
+        if(file != null) {
+            initialDirectory = file.getParent();
+            task.save(file.getAbsolutePath());
+        } else {
+            return;
+        }
     }
 
     public void loadTask(ActionEvent event) throws Exception {
-        String defaultTaskName = "task.xml";
-        Task task = new Task();
-        task.load(defaultTaskName);
-        Exam.getInstance().addTask(task);
-        addNewTabPaneTab();
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty
+                ("user.home")) : new File(initialDirectory));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("XML file (*.xml)", "*.xml");
+        fileChooser.getExtensionFilters().add(filter);
+        File file = fileChooser.showOpenDialog(stage);
+        if(file != null) {
+            initialDirectory = file.getParent();
+            Task task = new Task();
+            task.load(file.getAbsolutePath());
+            Exam.getInstance().addTask(task);
+            addNewTabPaneTab();
+        } else {
+            return;
+        }
     }
 }

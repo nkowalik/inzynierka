@@ -13,6 +13,8 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import javafx.beans.value.ChangeListener;
 import java.util.logging.Logger;
+import java.util.prefs.Preferences;
+
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -20,12 +22,11 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
-import javafx.stage.DirectoryChooser;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 /**
@@ -36,15 +37,11 @@ public class PdfSavingController implements Initializable {
     @FXML
     ChoiceBox testType;
     @FXML
-    TextField filePath;
-    @FXML
     ChoiceBox dateDay;
     @FXML
     ChoiceBox dateMonth;
     @FXML
     ChoiceBox dateYear;
-    @FXML
-    TextField fileName;
 
     private final List<String> testTypeList = Arrays.asList("student", "nauczyciel");
     private final List<String> monthList = new ArrayList<>();
@@ -52,8 +49,9 @@ public class PdfSavingController implements Initializable {
     
     private final ObservableList<String> daysList = FXCollections.observableList(new ArrayList<String>());
     
-    public static Stage appStage;
+    public static Stage stage;
     private PDFSettings pdfSettings;
+    private String initialDirectory;
 
     /**
      * Dokonuje inicjalizacji głównego okna generacji pliku .pdf.
@@ -101,9 +99,6 @@ public class PdfSavingController implements Initializable {
         dateDay.setItems(daysList);
         dateDay.setValue(pdfSettings.getDay().toString());
 
-        filePath.setText(pdfSettings.getPdfFilePath());
-        fileName.setText(pdfSettings.getPdfFileName());
-
         // todo zamienić listenery na zapis przy nacisnięciu przycisku 'zapisz' (aktualizacja ustawień przy każdej zmianie jest zbyteczna)
         dateMonth.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -149,56 +144,40 @@ public class PdfSavingController implements Initializable {
      * @throws IOException
      */
     public static synchronized void show() throws IOException {
-        if(appStage == null) {
+        if(stage == null) {
             URL location = GUIMainController.class.getResource("/fxml/pdfSaving.fxml");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
             
             Scene scene = new Scene((Pane)loader.load(location.openStream()));
-            appStage = new Stage();
-            appStage.setScene(scene);
-            appStage.setTitle("Zapisz plik");
-            appStage.setResizable(false);
+            stage = new Stage();
+            stage.setScene(scene);
+            stage.setTitle("Zapisz plik");
+            stage.setResizable(false);
         }
         
-        appStage.show();
-        appStage.toFront();
+        stage.show();
+        stage.toFront();
     }
 
     /**
      * Zapisuje egzamin w formie pliku .pdf.
-     * W przypadku istnienia pliku o podanej nazwie wyświetla komunikat z odpowiednią informacją.
      * @param event
      * @throws IOException
      */
-    public void saveFile(ActionEvent event) throws IOException {   
-        
-        PDFSettings.getInstance().setTestType(testType.getValue().toString());
-        PDFSettings.getInstance().setPdfFilePath(filePath.getText());
-        String extension = fileName.getText().substring(fileName.getText().length() - 4, fileName.getText().length());
-        if (!extension.equals(".pdf")) {
-            PDFSettings.getInstance().setPdfFileName(fileName.getText() + ".pdf");
-        }
-        else {
-            PDFSettings.getInstance().setPdfFileName(fileName.getText());
-        }
-        PDFSettings.getInstance().saveFile();
-        File pdfFile = PDFSettings.getInstance().getPdfFile();
-
-        if (pdfFile.exists() && !pdfFile.isDirectory()) {
-            Stage ifPdfExistStage = new Stage();
-            Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfOverwriting.fxml"));
-            ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
-            ifPdfExistStage.setScene(new Scene(scene, 430, 125));
-            ifPdfExistStage.setResizable(false);
-            ifPdfExistStage.setAlwaysOnTop(true);
-            ifPdfExistStage.show();
-            ifPdfExistStage.setResizable(false);
-        }
-
-        else {
-            PDFSettings.getInstance().pdfGenerate(appStage);           
-            appStage.hide();
+    public void saveFile(ActionEvent event) throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty
+                ("user.home")) : new File(initialDirectory));
+        FileChooser.ExtensionFilter filter = new FileChooser.ExtensionFilter("PDF file (*.pdf)", "*.pdf");
+        fileChooser.getExtensionFilters().add(filter);
+        File file = fileChooser.showSaveDialog(stage);
+        if(file != null) {
+            initialDirectory = file.getParent();
+            PDFSettings.getInstance().setTestType(testType.getValue().toString());
+            PDFSettings.getInstance().saveFile(file);
+            PDFSettings.getInstance().pdfGenerate(stage);
+            stage.hide();
         }
     }
 
@@ -207,21 +186,7 @@ public class PdfSavingController implements Initializable {
      * @param event
      */
     public void cancel(ActionEvent event) {
-        appStage.hide();
-    }
-
-    /**
-     * Otwiera okno wyboru lokalizacji zapisu pliku.
-     * @param event
-     */
-    public void browse(ActionEvent event) {        
-        DirectoryChooser dirChooser = new DirectoryChooser () ;
-        dirChooser.setTitle("Wybierz lokalizację pliku");
-        File dir = dirChooser.showDialog(appStage);
-        
-        if (dir != null) {
-            filePath.setText(dir.getAbsolutePath());
-        }
+        stage.hide();
     }
 
     /**
