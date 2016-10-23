@@ -10,27 +10,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane prefHeight="157.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/null"
-            xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.PdfSavingController">
+<BorderPane prefHeight="157.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.PdfSavingController">
     <center>         
         <GridPane>
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0"
-                                   prefWidth="159.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="439.0" minWidth="10.0"
-                                   prefWidth="419.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="283.0" minWidth="10.0" prefWidth="159.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="439.0" minWidth="10.0" prefWidth="419.0" />
             </columnConstraints>
             <rowConstraints>
-                <RowConstraints maxHeight="102.0" minHeight="10.0" prefHeight="60.0"
-                                vgrow="SOMETIMES" />
-                <RowConstraints maxHeight="201.0" minHeight="10.0" prefHeight="57.0"
-                                vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="102.0" minHeight="10.0" prefHeight="60.0" vgrow="SOMETIMES" />
+                <RowConstraints maxHeight="201.0" minHeight="10.0" prefHeight="57.0" vgrow="SOMETIMES" />
             </rowConstraints>
             <children>
-                <Label alignment="CENTER" prefHeight="17.0" prefWidth="292.0" text="Typ testu:"
-                       GridPane.rowIndex="1" />
-                <ChoiceBox fx:id="testType" prefHeight="25.0" prefWidth="179.0"
-                           GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <Label alignment="CENTER" prefHeight="17.0" prefWidth="292.0" text="Typ testu:" GridPane.rowIndex="1" />
+                <ChoiceBox fx:id="testType" prefHeight="25.0" prefWidth="179.0" GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <GridPane.margin>
                         <Insets />
                     </GridPane.margin>
@@ -38,8 +31,7 @@
                 <Label alignment="CENTER" prefHeight="17.0" prefWidth="169.0" text="Data testu:" />
                 <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1">
                     <children>
-                        <ChoiceBox fx:id="dateDay" maxHeight="-Infinity" maxWidth="-Infinity"
-                                   prefHeight="25.0" prefWidth="47.0">
+                        <ChoiceBox fx:id="dateDay" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="47.0">
                             <HBox.margin>
                                 <Insets top="15.0" />
                             </HBox.margin>
@@ -49,8 +41,7 @@
                                 <Insets left="10.0" top="15.0" />
                             </HBox.margin>
                         </ChoiceBox>
-                        <ChoiceBox fx:id="dateYear" maxHeight="-Infinity" maxWidth="-Infinity"
-                                   prefHeight="25.0" prefWidth="105.0">
+                        <ChoiceBox fx:id="dateYear" maxHeight="-Infinity" maxWidth="-Infinity" prefHeight="25.0" prefWidth="105.0">
                             <HBox.margin>
                                 <Insets left="10.0" top="15.0" />
                             </HBox.margin>
@@ -63,24 +54,16 @@
     <bottom>
         <GridPane prefHeight="35.0" prefWidth="445.0">            
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="394.0" minWidth="101.0"
-                                   prefWidth="106.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="394.0" minWidth="101.0" prefWidth="106.0" />
             <ColumnConstraints maxWidth="372.0" minWidth="98.0" prefWidth="339.0" />
             </columnConstraints>
             <rowConstraints>
             <RowConstraints />
             </rowConstraints>
             <children>
-                <Button layoutX="475.0" onAction="#advancedOptions" prefHeight="25.0"
-                        prefWidth="146.0" text="Opcje zaawansowane"
-                        BorderPane.alignment="TOP_RIGHT" GridPane.columnIndex="1"
-                        GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
-                <Button minHeight="22.0" minWidth="77.0" mnemonicParsing="false"
-                        onAction="#saveFile" prefHeight="25.0" prefWidth="96.0"
-                        text="Zapisz arkusz" GridPane.halignment="LEFT" />
-                <Button contentDisplay="RIGHT" minHeight="22.0" minWidth="77.0"
-                        mnemonicParsing="false" onAction="#cancel" text="Anuluj"
-                        GridPane.columnIndex="1" GridPane.halignment="LEFT">
+                <Button layoutX="475.0" onAction="#advancedOptions" prefHeight="25.0" prefWidth="146.0" text="Opcje zaawansowane" BorderPane.alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
+                <Button minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#saveFile" prefHeight="25.0" prefWidth="96.0" text="Zapisz arkusz" GridPane.halignment="LEFT" />
+                <Button contentDisplay="RIGHT" minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#cancel" text="Anuluj" GridPane.columnIndex="1" GridPane.halignment="LEFT">
                 </Button> 
             </children>
             <BorderPane.margin>

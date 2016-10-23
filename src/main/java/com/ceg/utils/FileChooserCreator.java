@@ -35,6 +35,12 @@ public class FileChooserCreator {
 
     public static FileChooserCreator getInstance() { return fileChooserCreator; }
 
+    /**
+     * Wyświetla okno zapisu pliku.
+     * @param stage Stage nad którym okno ma zostać wyświetlone.
+     * @param type Typ pliku.
+     * @return Zapisany plik (lub null, jeśli sie nie powiedzie).
+     */
     public File createSaveDialog(Stage stage, FileType type) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty
@@ -46,6 +52,12 @@ public class FileChooserCreator {
         return file;
     }
 
+    /**
+     * Wyświetla okno odczytu pliku.
+     * @param stage Stage nad którym okno ma zostać wyświetlone.
+     * @param type Typ pliku.
+     * @return Odczytany plik (lub null, jesli się nie powiedzie).
+     */
     public File createLoadDialog(Stage stage, FileType type) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty

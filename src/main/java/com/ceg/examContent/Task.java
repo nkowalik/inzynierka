@@ -109,6 +109,10 @@ public class Task {
         answers = output;
     }
 
+    /**
+     * Zapisuje zawartość obiektu klasy Task w pliku.
+     * @param filename Nazwa pliku w którym będą zapisane dane.
+     */
     public void save(String filename) {
         try {
             JAXBContext jc = JAXBContext.newInstance(Task.class);
@@ -120,6 +124,12 @@ public class Task {
         }
     }
 
+    /**
+     * Wczytuje zawartość pliku do obiektu klasy Task.
+     * W przypadku niepowodzenia wyświetla odpowiedni alert.
+     * @param filename Nazwa pliku z którego mają zostać odczytane dane.
+     * @return Wartość określająca powodzenie operacji.
+     */
     public boolean load(String filename) {
         try {
             JAXBContext context = JAXBContext.newInstance(Task.class);
