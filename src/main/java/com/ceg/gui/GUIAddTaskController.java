@@ -121,36 +121,42 @@ public class GUIAddTaskController implements Initializable {
      * Ustawia typ wybranego zadania, zmienia nagłówek okna dodawania zadania na odpowiadający wybranemu typowi.
      */
     public void addTypeSimpleOutput() {
+        resetFields();
         chooseType.setText(taskTypeSimpleOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
         addType(0);
         type = new TaskTypeSimpleOutput();
     }
     public void addTypeReturnedValue() {
+        resetFields();
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
         addType(1);
         type = new TaskTypeReturnedValue();
     }
     public void addTypeComplexOutput() {
+        resetFields();
         chooseType.setText(taskTypeComplexOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeComplexOutput.getText());
         addType(2);
         type = new TaskTypeComplexOutput();
     }
     public void addTypeGaps() {
+        resetFields();
         chooseType.setText(taskTypeGaps.getText());
         mainInstance.setStageName("CEG - " + taskTypeGaps.getText());
         addType(3);
         type = new TaskTypeGaps();
     }
     public void addTypeVarValue() {
+        resetFields();
         chooseType.setText(taskTypeVarValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
         addType(4);
         type = new TaskTypeVarValue();
     }
     public void addTypeLineNumbers() {
+        resetFields();
         chooseType.setText(taskTypeLineNumbers.getText());
         mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
         addType(5);
@@ -177,12 +183,16 @@ public class GUIAddTaskController implements Initializable {
         t.getText().extractText(code);
         Exam.getInstance().addTask(t);
         stage.hide();
-
         mainInstance.getInstance().addNewTabPaneTab();
-
         chooseType.setText("Typ zadania");
-        text.setVisible(true);
-        code.setPrefHeight(200.0);
+    }
+
+    /**
+     * Przywraca pole polecenia po dodawaniu własnego typu zadania
+     */
+    public static void resetFields() {
+        addTaskInstance.text.setVisible(true);
+        addTaskInstance.code.setPrefHeight(200.0);
     }
 
     /**
@@ -194,6 +204,7 @@ public class GUIAddTaskController implements Initializable {
         addTaskInstance.codeList = new ArrayList<>();
         addTaskInstance.content = new Content();
         addTaskInstance.finish.setDisable(true);
+        resetFields();
     }
 
     /**
