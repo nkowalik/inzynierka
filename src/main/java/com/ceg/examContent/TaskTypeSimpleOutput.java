@@ -29,7 +29,7 @@ public class TaskTypeSimpleOutput extends TaskType{
     @Override
     public void callExecute(Task task, List<String> output) {
         List<String> code = task.getText().getStandardCompilationCode();
-        task.compiler.execute(code, "simple.cpp", output);
+        task.compiler.execute(code, "simple", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
     

@@ -49,15 +49,18 @@ public class GCC {
     public boolean createFile(List<String> lines, String name) {
         if (!lines.isEmpty() && !(lines.get(0).equals("") && lines.size() == 1)) {
             try {
-                Files.write(Paths.get(this.path + "/" + name), lines, Charset.forName("UTF-8"));
-                file = new File(this.path + "/" + name);
+                //Files.write(Paths.get(this.path + "/" + name), lines, Charset.forName("UTF-8"));
+               // file = new File(this.path + "/" + name);
+                file = File.createTempFile(name,".cpp" ,new File(path));
+                file.deleteOnExit();
+                Files.write(file.toPath(), lines, Charset.forName("UTF-8"));
 
             } catch (IOException ex) {
                 Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
             }
 
             this.cppName = this.file.getAbsolutePath();
-            this.executableName = this.path.toString() + "/" + this.file.getName().substring(0, this.file.getName().lastIndexOf("."));
+            this.executableName = this.file.getAbsolutePath().substring(0, this.file.getAbsolutePath().lastIndexOf("."));
             return true;
         } else {
             return false;
@@ -73,9 +76,7 @@ public class GCC {
         if (file.exists()) {
             try {
                 ProcessBuilder builder = null;
-                if (SystemUtils.IS_OS_WINDOWS) {
-                    builder = new ProcessBuilder(new String[]{"cmd.exe", "/c", "g++", "-o", this.executableName, this.cppName});
-                } else if (SystemUtils.IS_OS_LINUX) {
+                if (SystemUtils.IS_OS_WINDOWS || SystemUtils.IS_OS_LINUX) {                  
                     builder = new ProcessBuilder(new String[]{"g++", "-o", this.executableName, this.cppName});
                 } else {
                     System.out.println("Nieobsługiwany system operacyjny");
@@ -124,6 +125,15 @@ public class GCC {
                     }
                     p.waitFor();
                     p.destroy();
+                    reader.close();
+                    String tmpFileName = null;
+                    if(SystemUtils.IS_OS_WINDOWS)
+                        tmpFileName = this.executableName + ".exe";
+                    else if(SystemUtils.IS_OS_LINUX)
+                        tmpFileName = this.executableName;
+                    File tmp = new File(tmpFileName);
+                    if(tmp.exists())
+                        tmp.delete();
                 } catch (IOException ex) {
                     Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {

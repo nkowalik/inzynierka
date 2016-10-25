@@ -49,7 +49,7 @@ public class TaskTypeComplexOutput extends TaskType{
     public void callExecute(Task task, List<String> output) {
         List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.execute(code, "multiple.cpp", output);
+        task.compiler.execute(code, "multiple", output);
         task.getType().generateAnswers(task, output, task.getAnswers());
     }
 
