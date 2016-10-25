@@ -39,15 +39,19 @@ public class GUIExamCompilationController implements Initializable {
     Button saveButton;
 
     public static Stage appStage;
-    private boolean cancelled = false;
+    private static boolean cancelled = false;
     private int taskIdx;
+    private static GUIExamCompilationController compilationInstance = null;
     
     @Override
-    public void initialize(URL url, ResourceBundle rb) { 
+    public void initialize(URL url, ResourceBundle rb) 
+    {
         saveButton.setDisable(true);
-        progressUpdate();
-     //   detailsUpdate();
-        examCompile();
+        compilationInstance = this;
+    }
+    
+    public static GUIExamCompilationController getInstance() {
+        return compilationInstance;
     }
     
     public static synchronized void show() throws IOException {
@@ -63,10 +67,15 @@ public class GUIExamCompilationController implements Initializable {
             appStage.setResizable(false);
             appStage.setOnHidden(new EventHandler<WindowEvent>() {
                 public void handle(WindowEvent we) {
+                    compilationInstance.clearControls();
                     GUIMainController.getInstance().updateWindow(Exam.getInstance().idx);
                 }
             });
-        }        
+        } 
+       
+        compilationInstance.progressUpdate();
+     //   detailsUpdate();
+        compilationInstance.examCompile();         
         appStage.show();
         appStage.toFront();
     }
@@ -106,10 +115,23 @@ public class GUIExamCompilationController implements Initializable {
                 return null;
             }
         };
+        Exam.getInstance().clearCompilationProgress();
+        clearControls();
         taskNumberLabel.textProperty().bind(task.titleProperty());
         compilationDetails.textProperty().bind(task.messageProperty());
         progressBar.progressProperty().bind(task.progressProperty());
         new Thread(task).start();
+    }
+    
+    // czyści kontrolki związane  z wyświetlaniem postępu kompilacji
+    private void clearControls(){
+        cancelled = false;
+        taskNumberLabel.textProperty().unbind();
+        compilationDetails.textProperty().unbind();
+        progressBar.progressProperty().unbind();
+        taskNumberLabel.textProperty().set("");
+        compilationDetails.textProperty().set("");
+        progressBar.progressProperty().set(0);
     }
     
     private void examCompile() {

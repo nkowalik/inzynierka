@@ -55,7 +55,7 @@ public class Exam extends Observable {
     
     public boolean compile() {
         List<String> output = new ArrayList<>();
-        clearCompilationProgress();
+        
         clearOutputList();
         for (Task i : tasks) {
             output.clear();
