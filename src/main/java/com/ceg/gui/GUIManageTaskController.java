@@ -3,7 +3,6 @@ package com.ceg.gui;
 import com.ceg.examContent.*;
 import com.ceg.utils.ContentCssClass;
 import com.ceg.xml.TaskData;
-import com.ceg.xml.Tasks;
 import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -12,7 +11,6 @@ import javafx.stage.Stage;
 
 import javafx.scene.control.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -25,15 +23,10 @@ import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.fxmisc.richtext.CodeArea;
 
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
-
 /**
  * Klasa reprezentująca kontroler okna dodawania zadania.
  */
-public class GUIAddTaskController implements Initializable {
+public class GUIManageTaskController implements Initializable {
 
     Content content = new Content();
     ArrayList<String> codeList = new ArrayList<>();
@@ -62,7 +55,7 @@ public class GUIAddTaskController implements Initializable {
     MenuItem taskTypeOwn;
 
     private static Stage stage = null;
-    private static GUIAddTaskController addTaskInstance = null;
+    private static GUIManageTaskController manageTaskInstance = null;
     private static GUIMainController mainInstance = null;
     private FileChooser fileChooser;
 
@@ -70,9 +63,9 @@ public class GUIAddTaskController implements Initializable {
      * Wyświetla okno dodawania zadania.
      * @throws IOException
      */
-    public static synchronized void show() throws IOException {
+    public static synchronized void show(String action) throws IOException {
         if(stage == null) {
-            URL location = GUIAddTaskController.class.getResource("/fxml/addTask.fxml");
+            URL location = GUIManageTaskController.class.getResource("/fxml/manageTask.fxml");
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
 
@@ -80,23 +73,62 @@ public class GUIAddTaskController implements Initializable {
 
             stage = new Stage();
             stage.setScene(scene);
-            stage.setTitle("Dodaj nowe zadanie");
             stage.setResizable(false);
         }
         clearFields();
+        if (action.equals("add")) {
+            stage.setTitle("Dodaj nowe zadanie");
+        }
+        else if (action.equals("edit")) {
+            stage.setTitle("Edycja zadania");
+        }
+
         stage.show();
         stage.toFront();
-        GUIAddTaskController.getInstance().finish.setDisable(true);
+        GUIManageTaskController.getInstance().finish.setDisable(true);
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        addTaskInstance = this;
+        manageTaskInstance = this;
         fileChooser = new FileChooser();
         mainInstance = GUIMainController.getInstance();
     }
-    public static GUIAddTaskController getInstance() {
-        return addTaskInstance;
+    public static GUIManageTaskController getInstance() {
+        return manageTaskInstance;
+    }
+
+    /**
+     * Wpisuje do okna edycji zadania kod i polecenie z okna głównego.
+     * @param task Zadanie pobrane z okna głównego.
+     */
+    public void editTask(Task task) {
+        if (task.getType().name == "OwnType") {
+            text.setVisible(false);
+            code.setPrefHeight(code.getPrefHeight()*3);
+        }
+        else updateText(task.getContent());
+        task.getText().createCodeAreaText(code);
+        finish.setDisable(false);
+    }
+
+    /**
+     * Aktualizuje tekst polecenia.
+     * @param content Obiekt klasy Text zawierający informacje o tekście i stanie znaczników.
+     */
+    public void updateText(Content content) {
+        if(!content.getContentParts().isEmpty()) {
+            this.text.clear();
+            int i = 0;
+            String line;
+            line = content.getContentParts().get(i).getText();
+            while (i < content.getContentParts().size()) {
+                this.text.appendText(line + "\n");
+                i++;
+                if (i >= content.getContentParts().size()) break;
+                line = content.getContentParts().get(i).getText();
+            }
+        }
     }
 
     /**
@@ -181,9 +213,22 @@ public class GUIAddTaskController implements Initializable {
         Task t = new Task(type);
         t.setContent(content);
         t.getText().extractText(code);
-        Exam.getInstance().addTask(t);
+
+        if (stage.getTitle().equals("Dodaj nowe zadanie")) {
+            Exam.getInstance().addTask(t);
+            mainInstance.getInstance().addNewTabPaneTab();
+        }
+        else if (stage.getTitle().equals("Edycja zadania")) {
+            Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
+            Exam.getInstance().setCurrentTask(t);
+            if (!t.getContent().getContentParts().isEmpty()) {
+                mainInstance.updateText(t.getContent());
+            }
+            mainInstance.updateCode(t.getText());
+            mainInstance.showTask(true);
+        }
+
         stage.hide();
-        mainInstance.getInstance().addNewTabPaneTab();
         chooseType.setText("Typ zadania");
     }
 
@@ -191,19 +236,19 @@ public class GUIAddTaskController implements Initializable {
      * Przywraca pole polecenia po dodawaniu własnego typu zadania
      */
     public static void resetFields() {
-        addTaskInstance.text.setVisible(true);
-        addTaskInstance.code.setPrefHeight(200.0);
+        manageTaskInstance.text.setVisible(true);
+        manageTaskInstance.code.setPrefHeight(200.0);
     }
 
     /**
      * Czyści pola znajdujące się w oknie dodawania zadania.
      */
     public static void clearFields() {
-        addTaskInstance.text.clear();
-        addTaskInstance.code.clear();
-        addTaskInstance.codeList = new ArrayList<>();
-        addTaskInstance.content = new Content();
-        addTaskInstance.finish.setDisable(true);
+        manageTaskInstance.text.clear();
+        manageTaskInstance.code.clear();
+        manageTaskInstance.codeList = new ArrayList<>();
+        manageTaskInstance.content = new Content();
+        manageTaskInstance.finish.setDisable(true);
         resetFields();
     }
 
