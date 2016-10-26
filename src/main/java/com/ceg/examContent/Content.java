@@ -3,8 +3,6 @@ package com.ceg.examContent;
 import com.ceg.utils.FontTypeUtil;
 import java.util.ArrayList;
 import java.util.List;
-
-import javafx.scene.control.Alert;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 /**
@@ -14,9 +12,11 @@ import org.fxmisc.richtext.StyleClassedTextArea;
 
 public class Content {
     private List<ContentPart> contentParts;
+    private float pdfWidthPercentage;
     
     public Content() {
         contentParts = new ArrayList<>();
+        pdfWidthPercentage = 0.5f;
     }
     
     public void extractContent(StyleClassedTextArea text) {
@@ -65,5 +65,13 @@ public class Content {
     
     public void setContentParts(List<ContentPart> contentParts) {
         this.contentParts = contentParts;
+    }
+    
+    public void setPdfWidthPercentage(float pdfWidthPercentage) {
+        this.pdfWidthPercentage = pdfWidthPercentage;
+    }
+    
+    public float getPdfWidthPercentage() {
+        return pdfWidthPercentage;
     }
 }

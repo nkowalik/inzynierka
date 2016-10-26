@@ -18,7 +18,7 @@ public class PDFCommand extends PDFAbstractTaskPart {
         super();
         this.taskNumber = taskNumber;
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = pdfSettings.commandWidth;
+        textWidth = (int)Math.floor(content.getPdfWidthPercentage() * PDFSettings.pdfContentWidth);
         fontSize = pdfSettings.getCommandFontSize();
         defaultFontType = pdfSettings.getCommandFont();
         leftMargin = pdfSettings.leftMargin;

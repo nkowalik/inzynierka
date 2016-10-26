@@ -18,10 +18,10 @@ public class PDFAnswer extends PDFAbstractTaskPart {
     protected List<String> placesForAnswers = new ArrayList<>();
     private final String placeForAnswer = "_________";
 
-    public PDFAnswer(List<String> lines) throws IOException {
+    public PDFAnswer(List<String> lines, float pdfContentWidthPercentage) throws IOException {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = PDFSettings.commandWidth;
+        textWidth = (int)Math.floor(pdfContentWidthPercentage * PDFSettings.pdfContentWidth);;
         leftMargin = pdfSettings.leftMargin;
         lineHeight+=2;
         defaultFontType = pdfSettings.getCommandFont();

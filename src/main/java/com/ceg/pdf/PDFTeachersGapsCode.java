@@ -10,8 +10,8 @@ import java.util.List;
  * @author Martyna
  */
 public class PDFTeachersGapsCode extends PDFGapsCode {
-    PDFTeachersGapsCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
-        super(lines);
+    PDFTeachersGapsCode(List<String> lines, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {
+        super(lines, pdfContentWidthPercentage);
         answer = new PDFGapsTeachersAnswer(lines, textWidth, defaultFontType, fontSize, leftMargin);
     }
 }
