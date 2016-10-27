@@ -68,7 +68,8 @@ public class Exam extends Observable {
                 output.stream().forEach((s) -> {
                     addToOutputList(s + "\n");
                 });
-               // return false;
+               if (!i.getType().name.equals("LineNumbers"))
+                   return false;
             }            
         }
         this.incCompilationProgress();
