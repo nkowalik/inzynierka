@@ -152,6 +152,7 @@ public class GUIExamCompilationController implements Initializable {
         final Task<Void> task = new Task<Void>() {
             @Override 
             public Void call() throws Exception {
+                saveButton.setDisable(true);
                 boolean compilationOk = Exam.getInstance().compile();
                 saveButton.setDisable(!compilationOk);
                 if(!compilationOk){ 

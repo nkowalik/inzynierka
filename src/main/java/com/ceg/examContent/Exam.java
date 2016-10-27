@@ -62,14 +62,20 @@ public class Exam extends Observable {
             i.getType().callExecute(i, output);
             i.setResult(String.join("\n", output));
             this.incCompilationProgress();
-            addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
-            if (!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")) {
-                output.remove(0);
-                output.stream().forEach((s) -> {
-                    addToOutputList(s + "\n");
-                });
-               if (!i.getType().name.equals("LineNumbers"))
+            if (output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
+                addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
+            }
+            else {                
+               if (!i.getType().name.equals("LineNumbers")){
+                    output.remove(0);
+                    output.stream().forEach((s) -> {
+                        addToOutputList(s + "\n");
+                    });
                    return false;
+               }
+               else{                  
+                   addToOutputList("Zadanie " + (getCompilationProgress()+1) + ": Błąd kompilacji w zadaniu \"Numery linii\".\n");
+               }
             }            
         }
         this.incCompilationProgress();
