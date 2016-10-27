@@ -12,23 +12,40 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
  */
 public class PDFLinePart {
     private final FontType font;
+    private static final float underlineWidth = 0.1f;
     private String text;
+    private boolean underlined;
     
     public PDFLinePart(FontType font) {
         this.font = font;
         text = "";
+        underlined = false;
+    }
+    
+    public PDFLinePart(FontType font, boolean underlined) {
+        this.font = font;
+        text="";
+        this.underlined = underlined;
     }
     
     public float writeLinePart(float x, int y, int fontSize) throws IOException {
+        float result = x;
         if (!text.equals("")) {
+            result = x + getWidth(fontSize);
             cs.beginText();
             cs.newLineAtOffset(x, y);
             cs.setFont(PDType0Font.load(PDFGenerator.document, new File(font.getFileName())), fontSize);
             cs.showText(text);
             cs.endText();
+            if (underlined) {
+                cs.moveTo(x, y - 1);
+                cs.lineTo(result, y - 1);
+                cs.setLineWidth(underlineWidth);
+                cs.stroke();
+            }
         }
         
-        return x + getWidth(fontSize);
+        return result;
     }
     
     /**
@@ -47,5 +64,9 @@ public class PDFLinePart {
     
     public void setText(String text) {
         this.text = text;
+    }
+    
+    public void setUnderline(boolean underlined) {
+        this.underlined = underlined;
     }
 }

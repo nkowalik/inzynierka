@@ -62,13 +62,20 @@ public class Exam extends Observable {
             i.getType().callExecute(i, output);
             i.setResult(String.join("\n", output));
             this.incCompilationProgress();
-            addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
-            if (!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")) {
-                output.remove(0);
-                output.stream().forEach((s) -> {
-                    addToOutputList(s + "\n");
-                });
-               // return false;
+            if (output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
+                addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
+            }
+            else {                
+               if (!i.getType().name.equals("LineNumbers")){
+                    output.remove(0);
+                    output.stream().forEach((s) -> {
+                        addToOutputList(s + "\n");
+                    });
+                   return false;
+               }
+               else{                  
+                   addToOutputList("Zadanie " + (getCompilationProgress()+1) + ": Błąd kompilacji w zadaniu \"Numery linii\".\n");
+               }
             }            
         }
         this.incCompilationProgress();
@@ -99,11 +106,29 @@ public class Exam extends Observable {
     }
 
     /**
+     * Edytuje zadanie z egzaminu.
+     * @param t Zadanie które jest edytowane.
+     */
+    public void editTask(Task t){
+        int idx = tasks.indexOf(t);
+        Task task = tasks.get(idx);
+        task.setType(t.getType());
+    }
+
+    /**
      * Pobiera z egzaminu zadanie wskazywane przez aktualną zakładkę.
      * @return Odczytane zadanie.
      */
     public Task getCurrentTask(){
         return tasks.get(idx);
+    }
+
+    /**
+     * Uaktualnia zadanie, które jest obecnie aktywne
+     * @param task Zadanie, pobierane z okna edycji zadania
+     */
+    public void setCurrentTask(Task task) {
+        tasks.set(idx, task);
     }
 
     /**

@@ -2,6 +2,7 @@ package com.ceg.gui;
 
 import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
+import com.ceg.utils.Alerts;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -19,6 +20,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.application.Platform;
 
 /**
  * FXML Controller class
@@ -87,9 +89,21 @@ public class GUIExamCompilationController implements Initializable {
     }
     
     public void cancel(ActionEvent event) {
-        cancelled = true;
+        cancelAndQuit();
+    }
+    
+    private void cancelAndQuit(){
+        setCancelled(true);
         appStage.hide();
         PdfSavingController.appStage.hide();
+    }
+    
+     public synchronized static boolean getCancelled() {
+        return cancelled;
+    }
+
+    public synchronized static void setCancelled(boolean cancelled) {
+        GUIExamCompilationController.cancelled = cancelled;
     }
     
     private void progressUpdate() {
@@ -101,7 +115,7 @@ public class GUIExamCompilationController implements Initializable {
                 int prevProgress = -2;       // progress i prevProgress na poczatku nie mogą być takie same, bo na starcie
                                              // nie zaktualizuje się progressBar
                 while ((progress = exam.getCompilationProgress()) + 1 < exam.getTasks().size()) {   
-                    if (cancelled == true) {
+                    if (getCancelled()) {
                         return null;
                     }
                     if(prevProgress == progress) continue;
@@ -125,7 +139,7 @@ public class GUIExamCompilationController implements Initializable {
     
     // czyści kontrolki związane  z wyświetlaniem postępu kompilacji
     private void clearControls(){
-        cancelled = false;
+        setCancelled(false);
         taskNumberLabel.textProperty().unbind();
         compilationDetails.textProperty().unbind();
         progressBar.progressProperty().unbind();
@@ -138,7 +152,18 @@ public class GUIExamCompilationController implements Initializable {
         final Task<Void> task = new Task<Void>() {
             @Override 
             public Void call() throws Exception {
-                saveButton.setDisable(!Exam.getInstance().compile());
+                saveButton.setDisable(true);
+                boolean compilationOk = Exam.getInstance().compile();
+                saveButton.setDisable(!compilationOk);
+                if(!compilationOk){ 
+                    setCancelled(true);
+                    Platform.runLater(new Runnable(){
+                         @Override public void run() {
+                            Alerts.compileErrorAlert();
+                            cancelAndQuit();
+                         }
+                    });
+                }
                 return null;
             }
         };
