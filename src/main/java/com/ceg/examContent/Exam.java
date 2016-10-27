@@ -70,6 +70,16 @@ public class Exam extends Observable {
     }
 
     /**
+     * Edytuje zadanie z egzaminu.
+     * @param t Zadanie które jest edytowane.
+     */
+    public void editTask(Task t){
+        int idx = tasks.indexOf(t);
+        Task task = tasks.get(idx);
+        task.setType(t.getType());
+    }
+
+    /**
      * Pobiera z egzaminu zadanie wskazywane przez aktualną zakładkę.
      * @return Odczytane zadanie.
      */

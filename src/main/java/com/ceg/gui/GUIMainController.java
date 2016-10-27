@@ -67,6 +67,10 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem saveExamItem;
     @FXML
+    MenuItem taskEdition;
+    @FXML
+    HBox textOptions;
+    @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
             AdvancedOptionsController.show();
@@ -308,7 +312,21 @@ public class GUIMainController implements Initializable {
      */
     public void addTask(ActionEvent event) throws Exception {
         Text text = new Text();
-        GUIAddTaskController.show();
+        GUIManageTaskController.show("add");
+    }
+
+    /**
+     * Wyświetla okno edycji zadania.
+     * @param event
+     * @throws Exception
+     */
+    public void editTask(ActionEvent event) throws Exception {
+        GUIManageTaskController.show("edit");
+        Task task = Exam.getInstance().getCurrentTask();
+        Text tempText = new Text();
+        tempText.extractText(code);
+        task.setText(tempText);
+        GUIManageTaskController.getInstance().editTask(task);
     }
 
     /**
@@ -387,6 +405,7 @@ public class GUIMainController implements Initializable {
         deleteTaskItem.setVisible(visibility);
         saveTaskItem.setVisible(visibility);
         saveExamItem.setVisible(visibility);
+        taskEdition.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
