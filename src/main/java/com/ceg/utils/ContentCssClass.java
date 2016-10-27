@@ -57,6 +57,13 @@ public enum ContentCssClass {
         }
     }
     
+    public final boolean isUnderlined() {
+        return this == UNDERLINE || this == BOLD_UNDERLINE || this == ITALIC_UNDERLINE || 
+                this == BOLD_ITALIC_UNDERLINE || this == MONOSPACE_UNDERLINE ||
+                this == MONOSPACE_BOLD_UNDERLINE || this == MONOSPACE_ITALIC_UNDERLINE ||
+                this == MONOSPACE_BOLD_ITALIC_UNDERLINE;
+    }
+    
     private ContentCssClass boldNewClass(ContentCssClass oldClass) {
         switch (oldClass) {
             case ITALIC:

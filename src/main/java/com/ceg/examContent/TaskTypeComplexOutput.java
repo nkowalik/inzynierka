@@ -9,7 +9,6 @@ public class TaskTypeComplexOutput extends TaskType{
     
     public TaskTypeComplexOutput() {
         super();
-        super.params = new TaskParametersComplexOutput();
         name = "ComplexOutput";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
     }
@@ -17,26 +16,27 @@ public class TaskTypeComplexOutput extends TaskType{
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers){
         answers.clear();
+        setNoOfAnswers(Integer.MAX_VALUE-1);
         // jeśli nastąpił błąd kompilacji, wygeneruj odpowiedź: "Błąd"
         if(!output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
             answers.add("Błąd");
-            this.params.setNoOfAnswers(1);
+            this.setNoOfAnswers(1);
         }
         else{          
             try{
                 int i=0;
                 for(String line: output){
-                    if(i<super.getParams().getNoOfAnswers()+1){
+                    if(i<super.getNoOfAnswers()+1){
                         if(i>0)
                             answers.add(line);
                         i++;
                     }
                 }
-                this.params.setNoOfAnswers(i-1);
+                this.setNoOfAnswers(i-1);
             }
             catch (IndexOutOfBoundsException e) {
                 answers.clear();
-                this.params.setNoOfAnswers(0);
+                this.setNoOfAnswers(0);
                 System.err.println("IndexOutOfBoundsException: " + e.getMessage());
 
                 Alerts.generatingAnswersErrorAlert();
@@ -56,7 +56,7 @@ public class TaskTypeComplexOutput extends TaskType{
     @Override
     public void preparePdfAnswers(Task task){
         task.getPdfAnswers().clear();
-        for(int i=0;i<this.params.getNoOfAnswers();i++){
+        for(int i=0;i<this.getNoOfAnswers();i++){
             task.getPdfAnswers().add(" #placeForAnswer");
         }
     }
