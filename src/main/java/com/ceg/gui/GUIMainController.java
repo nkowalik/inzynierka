@@ -538,7 +538,7 @@ public class GUIMainController implements Initializable {
         saveContent(exam.idx);
         saveResult(exam.idx);
 
-        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML);
+        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
         if(file != null) {
             Exam.getInstance().save(file);
         }  else {
@@ -592,7 +592,7 @@ public class GUIMainController implements Initializable {
         saveResult(exam.idx);
         Task task = Exam.getInstance().getCurrentTask();
 
-        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML);
+        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, Exam.getInstance().getNames().get(exam.idx).replace(" ", "") + ".xml");
         if(file != null) {
             task.save(file.getAbsolutePath());
         }

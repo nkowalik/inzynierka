@@ -41,11 +41,12 @@ public class FileChooserCreator {
      * @param type Typ pliku.
      * @return Zapisany plik (lub null, jeśli sie nie powiedzie).
      */
-    public File createSaveDialog(Stage stage, FileType type) {
+    public File createSaveDialog(Stage stage, FileType type, String defaultName) {
         FileChooser fileChooser = new FileChooser();
         fileChooser.setInitialDirectory(initialDirectory == null ? new File(System.getProperty
                 ("user.home")) : new File(initialDirectory));
         fileChooser.getExtensionFilters().add(createExtensionFilter(type));
+        fileChooser.setInitialFileName(defaultName);
         File file = fileChooser.showSaveDialog(stage);
         if(file != null)
             initialDirectory = file.getParent();

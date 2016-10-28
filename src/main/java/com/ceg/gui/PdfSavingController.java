@@ -165,7 +165,7 @@ public class PdfSavingController implements Initializable {
      * @throws IOException
      */
     public void saveFile(ActionEvent event) throws IOException {
-        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.PDF);
+        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.PDF, "egzamin.pdf");
         if(file != null) {
             FileChooserCreator.getInstance().setInitialDirectory(file.getParent());
             PDFSettings.getInstance().setTestType(testType.getValue().toString());
