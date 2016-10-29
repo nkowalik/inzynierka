@@ -1,5 +1,8 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Exam;
+import com.ceg.examContent.Task;
+import com.ceg.examContent.Text;
 import com.ceg.pdf.PDFSettings;
 import java.io.File;
 import java.io.IOException;
@@ -12,6 +15,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import com.ceg.utils.Alerts;
 import com.ceg.utils.FileChooserCreator;
 import javafx.beans.value.ChangeListener;
 import java.util.logging.Logger;
@@ -165,13 +169,18 @@ public class PdfSavingController implements Initializable {
 
     public void saveFile(ActionEvent event) throws IOException {
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.PDF, "egzamin.pdf");
-        if (file != null) {
-            FileChooserCreator.getInstance().setInitialDirectory(file.getParent());
-            PDFSettings.getInstance().setTestType(testType.getValue().toString());
-            PDFSettings.getInstance().setPdfFile(file);
-            PDFSettings.getInstance().formatDate();
-            GUIExamCompilationController.show();
-            stage.hide();
+        if(file != null) {
+            if(validateExam()) {
+                FileChooserCreator.getInstance().setInitialDirectory(file.getParent());
+                PDFSettings.getInstance().setTestType(testType.getValue().toString());
+                PDFSettings.getInstance().setPdfFile(file);
+                PDFSettings.getInstance().formatDate();
+                PDFSettings.getInstance().pdfGenerate(stage);
+                stage.hide();
+            } else {
+                Alerts.emptyPartOfTaskAlert();
+                stage.hide();
+            }
         }
     }
 
@@ -194,4 +203,17 @@ public class PdfSavingController implements Initializable {
             Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
         }
     }
+
+    public boolean validateExam() {
+        Exam exam = Exam.getInstance();
+        for(Task task : exam.getTasks()) {
+            if(task.getText().getTextParts().get(0).getText().length() == 0 ||
+                    task.getContent().getContentParts().get(0).getText().length() == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+
 }
