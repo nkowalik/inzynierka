@@ -199,6 +199,7 @@ public class GUIManageTaskController implements Initializable {
     }
 
     public void addOwnType() {
+        chooseType.setText(taskTypeOwn.getText());
         mainInstance.setStageName("CEG - " + taskTypeOwn.getText());
         text.setVisible(false);
         code.setPrefHeight(bPane.computeAreaInScreen());
