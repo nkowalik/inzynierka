@@ -72,7 +72,7 @@ public class PDFGenerator {
                  try {
                      desktop.open(pdfFile);
                  } catch (IOException ex) {
-                     Logger.getLogger(PDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
+
                  }
              });
         }
