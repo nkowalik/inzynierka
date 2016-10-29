@@ -7,6 +7,7 @@ import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import javafx.scene.control.*;
@@ -53,6 +54,8 @@ public class GUIManageTaskController implements Initializable {
     MenuItem taskTypeLineNumbers;
     @FXML
     MenuItem taskTypeOwn;
+    @FXML
+    BorderPane bPane;
 
     private static Stage stage = null;
     private static GUIManageTaskController manageTaskInstance = null;
@@ -198,7 +201,7 @@ public class GUIManageTaskController implements Initializable {
     public void addOwnType() {
         mainInstance.setStageName("CEG - " + taskTypeOwn.getText());
         text.setVisible(false);
-        code.setPrefHeight(code.getPrefHeight()*3);
+        code.setPrefHeight(bPane.computeAreaInScreen());
         addType(6);
         type = new TaskTypeOwn();
     }
