@@ -115,14 +115,17 @@ public class GCC {
                 output.add("Kompilacja przebiegła pomyślnie.");
                 try {
                     ProcessBuilder builder = new ProcessBuilder(this.executableName);
+                    builder.redirectErrorStream(true);
                     Process p = builder.start();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
                     String line = null;
                     while((line = reader.readLine()) != null) {
                         output.add(line);
                     }
                     p.waitFor();
+                    if(p.exitValue() != 0){
+                        output.add("Błąd wykonania.");                    
+                    }
                     p.destroy();
                 } catch (IOException ex) {
                     Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
