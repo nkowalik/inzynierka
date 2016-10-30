@@ -65,8 +65,6 @@ public class PdfSavingController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) { 
         pdfSettings = PDFSettings.getInstance();
         
-        Calendar calendar = Calendar.getInstance();
-        
         for (Integer i = 1; i <= 12; i++) {
             if (i < 10) {
                 monthList.add('0' + i.toString());
@@ -186,19 +184,11 @@ public class PdfSavingController implements Initializable {
         File pdfFile = PDFSettings.getInstance().getPdfFile();
 
         if (pdfFile.exists() && !pdfFile.isDirectory()) {
-            Stage ifPdfExistStage = new Stage();
-            Parent scene = FXMLLoader.load(getClass().getResource("/fxml/pdfOverwriting.fxml"));
-            ifPdfExistStage.setTitle("Czy chcesz nadpisać?");
-            ifPdfExistStage.setScene(new Scene(scene, 430, 125));
-            ifPdfExistStage.setResizable(false);
-            ifPdfExistStage.setAlwaysOnTop(true);
-            ifPdfExistStage.show();
-            ifPdfExistStage.setResizable(false);
+            PdfOverwritingController.show();
         }
 
         else {
-            PDFSettings.getInstance().pdfGenerate(appStage);           
-            appStage.hide();
+            GUIExamCompilationController.show();
         }
     }
 

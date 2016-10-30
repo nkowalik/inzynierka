@@ -1,6 +1,6 @@
 package com.ceg.compiler;
 
-import com.ceg.gui.Alerts;
+import com.ceg.utils.Alerts;
 import java.util.List;
 import java.util.ListIterator;
 

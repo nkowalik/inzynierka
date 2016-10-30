@@ -1,4 +1,4 @@
-package com.ceg.gui;
+package com.ceg.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -34,6 +34,13 @@ public final class Alerts {
      */
     public static void emptyExamAlert() {
         showAlert(AlertType.ERROR, "Błąd", "Egzamin jest pusty", "Nie można wygenerować pustego arkusza, dodaj zadania.");
+    }
+    
+    /**
+    * Wyświetla okno z informacją o błędzie kompilacji podczas automatyczbej kompilacji egzaminu
+    */
+    public static void compileErrorAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Nastąpił błąd kompilacji", "Popraw błędy w kodzie dolączonym do zadania.");
     }
 
     /**

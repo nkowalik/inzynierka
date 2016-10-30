@@ -1,6 +1,6 @@
 package com.ceg.examContent;
 
-import com.ceg.gui.Alerts;
+import com.ceg.utils.Alerts;
 
 import java.util.List;
 

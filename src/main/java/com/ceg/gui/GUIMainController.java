@@ -1,6 +1,7 @@
 package com.ceg.gui;
 
 import com.ceg.examContent.Content;
+import com.ceg.utils.Alerts;
 import java.util.*;
 import com.ceg.examContent.Text;
 import javafx.application.Platform;
@@ -24,8 +25,10 @@ import com.ceg.exceptions.EmptyExamException;
 import static com.ceg.utils.ContentCssClass.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
+import javafx.stage.WindowEvent;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 /**
@@ -141,8 +144,6 @@ public class GUIMainController implements Initializable {
                     break;
             }
         });
-
-
 
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
