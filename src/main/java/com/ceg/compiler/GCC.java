@@ -49,8 +49,6 @@ public class GCC {
     public boolean createFile(List<String> lines, String name) {
         if (!lines.isEmpty() && !(lines.get(0).equals("") && lines.size() == 1)) {
             try {
-                //Files.write(Paths.get(this.path + "/" + name), lines, Charset.forName("UTF-8"));
-               // file = new File(this.path + "/" + name);
                 file = File.createTempFile(name,".cpp" ,new File(path));
                 file.deleteOnExit();
                 Files.write(file.toPath(), lines, Charset.forName("UTF-8"));
