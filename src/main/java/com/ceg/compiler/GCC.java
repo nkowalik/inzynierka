@@ -5,13 +5,16 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
+import java.lang.IllegalThreadStateException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.concurrent.Task;
 import org.apache.commons.lang.SystemUtils;
 
 public class GCC {
@@ -103,6 +106,17 @@ public class GCC {
             return false;
     }
 
+    
+    private static Task readOutput(BufferedReader reader, List<String> output) {
+        return new Task() {
+            @Override protected call() throws Exception {
+                String line = null;
+                    while((line = reader.readLine()) != null) {
+                        output.add(line);
+                    }
+            }
+        };
+}
     /**
      * Tworzy, kompiluje i uruchamia plik wykonywalny.
      * @param lines Lista linii które mają znaleźć się w pliku.
@@ -122,10 +136,15 @@ public class GCC {
                     while((line = reader.readLine()) != null) {
                         output.add(line);
                     }
-                    p.waitFor();
-                    if(p.exitValue() != 0){
-                        output.add("Błąd wykonania.");                    
+                    p.waitFor(10,TimeUnit.SECONDS);
+                    try{
+                       if(p.exitValue() != 0){
+                           output.add("Błąd wykonania.");                    
+                       } 
                     }
+                    catch(IllegalThreadStateException ex){
+                        output.add("Upłynięcie limitu czasu wykonania."); 
+                    }                 
                     p.destroy();
                 } catch (IOException ex) {
                     Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
