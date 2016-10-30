@@ -71,9 +71,15 @@ public enum FontType {
         switch (cssClass) {
             case BOLD:
                 return MONO_BOLD;
+            case BOLD_UNDERLINE:
+                return MONO_BOLD;
             case ITALIC:
                 return MONO_ITALIC;
+            case ITALIC_UNDERLINE:
+                return MONO_ITALIC;
             case BOLD_ITALIC:
+                return MONO_BOLD_ITALIC;
+            case BOLD_ITALIC_UNDERLINE:
                 return MONO_BOLD_ITALIC;
             default:
                 return this;
@@ -84,17 +90,31 @@ public enum FontType {
         switch (cssClass) {
             case BOLD:
                 return SANS_BOLD;
+            case BOLD_UNDERLINE:
+                return SANS_BOLD;
             case ITALIC:
+                return SANS_ITALIC;
+            case ITALIC_UNDERLINE:
                 return SANS_ITALIC;
             case BOLD_ITALIC:
                 return SANS_BOLD_ITALIC;
+            case BOLD_ITALIC_UNDERLINE:
+                return SANS_BOLD_ITALIC;
             case MONOSPACE:
+                return MONO_REGULAR;
+            case MONOSPACE_UNDERLINE:
                 return MONO_REGULAR;
             case MONOSPACE_BOLD:
                 return MONO_BOLD;
+            case MONOSPACE_BOLD_UNDERLINE:
+                return MONO_BOLD;
             case MONOSPACE_ITALIC:
                 return MONO_ITALIC;
+            case MONOSPACE_ITALIC_UNDERLINE:
+                return MONO_ITALIC;
             case MONOSPACE_BOLD_ITALIC:
+                return MONO_BOLD_ITALIC;
+            case MONOSPACE_BOLD_ITALIC_UNDERLINE:
                 return MONO_BOLD_ITALIC;
             default:
                 return this;
@@ -105,17 +125,31 @@ public enum FontType {
         switch (cssClass) {
             case BOLD:
                 return SANS_NARROW_BOLD;
+            case BOLD_UNDERLINE:
+                return SANS_NARROW_BOLD;
             case ITALIC:
+                return SANS_NARROW_ITALIC;
+            case ITALIC_UNDERLINE:
                 return SANS_NARROW_ITALIC;
             case BOLD_ITALIC:
                 return SANS_NARROW_BOLD_ITALIC;
+            case BOLD_ITALIC_UNDERLINE:
+                return SANS_NARROW_BOLD_ITALIC;
             case MONOSPACE:
+                return MONO_REGULAR;
+            case MONOSPACE_UNDERLINE:
                 return MONO_REGULAR;
             case MONOSPACE_BOLD:
                 return MONO_BOLD;
+            case MONOSPACE_BOLD_UNDERLINE:
+                return MONO_BOLD;
             case MONOSPACE_ITALIC:
                 return MONO_ITALIC;
+            case MONOSPACE_ITALIC_UNDERLINE:
+                return MONO_ITALIC;
             case MONOSPACE_BOLD_ITALIC:
+                return MONO_BOLD_ITALIC;
+            case MONOSPACE_BOLD_ITALIC_UNDERLINE:
                 return MONO_BOLD_ITALIC;
             default:
                 return this;
@@ -126,17 +160,31 @@ public enum FontType {
         switch (cssClass) {
             case BOLD:
                 return SERIF_BOLD;
+            case BOLD_UNDERLINE:
+                return SERIF_BOLD;
             case ITALIC:
+                return SERIF_ITALIC;
+            case ITALIC_UNDERLINE:
                 return SERIF_ITALIC;
             case BOLD_ITALIC:
                 return SERIF_BOLD_ITALIC;
+            case BOLD_ITALIC_UNDERLINE:
+                return SERIF_BOLD_ITALIC;
             case MONOSPACE:
+                return MONO_REGULAR;
+            case MONOSPACE_UNDERLINE:
                 return MONO_REGULAR;
             case MONOSPACE_BOLD:
                 return MONO_BOLD;
+            case MONOSPACE_BOLD_UNDERLINE:
+                return MONO_BOLD;
             case MONOSPACE_ITALIC:
                 return MONO_ITALIC;
+            case MONOSPACE_ITALIC_UNDERLINE:
+                return MONO_ITALIC;
             case MONOSPACE_BOLD_ITALIC:
+                return MONO_BOLD_ITALIC;
+            case MONOSPACE_BOLD_ITALIC_UNDERLINE:
                 return MONO_BOLD_ITALIC;
             default:
                 return this;
