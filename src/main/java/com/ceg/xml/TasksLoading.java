@@ -1,6 +1,6 @@
 package com.ceg.xml;
 
-import com.ceg.gui.Alerts;
+import com.ceg.utils.Alerts;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;

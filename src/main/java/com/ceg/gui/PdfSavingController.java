@@ -62,8 +62,6 @@ public class PdfSavingController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) { 
         pdfSettings = PDFSettings.getInstance();
         
-        Calendar calendar = Calendar.getInstance();
-        
         for (Integer i = 1; i <= 12; i++) {
             if (i < 10) {
                 monthList.add('0' + i.toString());
@@ -164,14 +162,15 @@ public class PdfSavingController implements Initializable {
      * @param event
      * @throws IOException
      */
+
     public void saveFile(ActionEvent event) throws IOException {
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.PDF, "egzamin.pdf");
-        if(file != null) {
+        if (file != null) {
             FileChooserCreator.getInstance().setInitialDirectory(file.getParent());
             PDFSettings.getInstance().setTestType(testType.getValue().toString());
             PDFSettings.getInstance().setPdfFile(file);
             PDFSettings.getInstance().formatDate();
-            PDFSettings.getInstance().pdfGenerate(stage);
+            GUIExamCompilationController.show();
             stage.hide();
         }
     }

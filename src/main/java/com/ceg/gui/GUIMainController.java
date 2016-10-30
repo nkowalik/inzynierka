@@ -1,22 +1,19 @@
 package com.ceg.gui;
 
-import com.ceg.examContent.Content;
-
 import java.io.File;
+import com.ceg.utils.Alerts;
 import java.util.*;
 import com.ceg.examContent.Text;
 import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import com.ceg.examContent.Content;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import javafx.event.ActionEvent;
@@ -34,8 +31,6 @@ import java.util.logging.Logger;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.fxmisc.richtext.StyleClassedTextArea;
-
-import javax.swing.filechooser.FileNameExtensionFilter;
 
 /**
  * Klasa reprezentująca kontroler głównego okna programu.
@@ -148,8 +143,6 @@ public class GUIMainController implements Initializable {
                     break;
             }
         });
-
-
 
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
