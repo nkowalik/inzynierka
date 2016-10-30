@@ -3,16 +3,15 @@ package com.ceg.gui;
 import com.ceg.examContent.*;
 import com.ceg.utils.ContentCssClass;
 import com.ceg.xml.TaskData;
-import com.ceg.xml.Tasks;
 import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextArea;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import javafx.scene.control.*;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
@@ -24,11 +23,6 @@ import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.FileChooser;
 import org.fxmisc.richtext.CodeArea;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 /**
  * Klasa reprezentująca kontroler okna dodawania zadania.
@@ -58,6 +52,10 @@ public class GUIManageTaskController implements Initializable {
     MenuItem taskTypeVarValue;
     @FXML
     MenuItem taskTypeLineNumbers;
+    @FXML
+    MenuItem taskTypeOwn;
+    @FXML
+    BorderPane bPane;
 
     private static Stage stage = null;
     private static GUIManageTaskController manageTaskInstance = null;
@@ -108,7 +106,11 @@ public class GUIManageTaskController implements Initializable {
      * @param task Zadanie pobrane z okna głównego.
      */
     public void editTask(Task task) {
-        updateText(task.getContent());
+        if (task.getType().name == "OwnType") {
+            text.setVisible(false);
+            code.setPrefHeight(code.getPrefHeight()*3);
+        }
+        else updateText(task.getContent());
         task.getText().createCodeAreaText(code);
         finish.setDisable(false);
     }
@@ -154,40 +156,55 @@ public class GUIManageTaskController implements Initializable {
      * Ustawia typ wybranego zadania, zmienia nagłówek okna dodawania zadania na odpowiadający wybranemu typowi.
      */
     public void addTypeSimpleOutput() {
+        resetFields();
         chooseType.setText(taskTypeSimpleOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
         addType(0);
         type = new TaskTypeSimpleOutput();
     }
     public void addTypeReturnedValue() {
+        resetFields();
         chooseType.setText(taskTypeReturnedValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
         addType(1);
         type = new TaskTypeReturnedValue();
     }
     public void addTypeComplexOutput() {
+        resetFields();
         chooseType.setText(taskTypeComplexOutput.getText());
         mainInstance.setStageName("CEG - " + taskTypeComplexOutput.getText());
         addType(2);
         type = new TaskTypeComplexOutput();
     }
     public void addTypeGaps() {
+        resetFields();
         chooseType.setText(taskTypeGaps.getText());
         mainInstance.setStageName("CEG - " + taskTypeGaps.getText());
         addType(3);
         type = new TaskTypeGaps();
     }
     public void addTypeVarValue() {
+        resetFields();
         chooseType.setText(taskTypeVarValue.getText());
         mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
         addType(4);
         type = new TaskTypeVarValue();
     }
     public void addTypeLineNumbers() {
+        resetFields();
         chooseType.setText(taskTypeLineNumbers.getText());
         mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
         addType(5);
         type = new TaskTypeLineNumbers();
+    }
+
+    public void addOwnType() {
+        chooseType.setText(taskTypeOwn.getText());
+        mainInstance.setStageName("CEG - " + taskTypeOwn.getText());
+        text.setVisible(false);
+        code.setPrefHeight(bPane.computeAreaInScreen());
+        addType(6);
+        type = new TaskTypeOwn();
     }
 
     /**
@@ -220,6 +237,14 @@ public class GUIManageTaskController implements Initializable {
     }
 
     /**
+     * Przywraca pole polecenia po dodawaniu własnego typu zadania
+     */
+    public static void resetFields() {
+        manageTaskInstance.text.setVisible(true);
+        manageTaskInstance.code.setPrefHeight(200.0);
+    }
+
+    /**
      * Czyści pola znajdujące się w oknie dodawania zadania.
      */
     public static void clearFields() {
@@ -228,6 +253,7 @@ public class GUIManageTaskController implements Initializable {
         manageTaskInstance.codeList = new ArrayList<>();
         manageTaskInstance.content = new Content();
         manageTaskInstance.finish.setDisable(true);
+        resetFields();
     }
 
     /**
