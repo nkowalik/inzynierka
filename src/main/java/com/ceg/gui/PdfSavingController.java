@@ -197,8 +197,12 @@ public class PdfSavingController implements Initializable {
         }
 
         else {
-            PDFSettings.getInstance().pdfGenerate(appStage);           
-            appStage.hide();
+            try {
+                PDFSettings.getInstance().pdfGenerate(appStage);
+                appStage.hide();
+            } catch (StringIndexOutOfBoundsException ex) {
+                Alerts.emptyPartOfTaskAlert();
+            }
         }
     }
 

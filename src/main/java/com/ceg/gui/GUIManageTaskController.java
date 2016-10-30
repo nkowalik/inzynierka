@@ -224,7 +224,7 @@ public class GUIManageTaskController implements Initializable {
         }
         else if (stage.getTitle().equals("Edycja zadania")) {
             Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
-            Exam.getInstance().setCurrentTask(t);
+            Exam.getInstance().setCurrTask(t);
             if (!t.getContent().getContentParts().isEmpty()) {
                 mainInstance.updateText(t.getContent());
             }

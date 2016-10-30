@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<exam>
+    <names>Zadanie 2</names>
+    <names>Zadanie 3</names>
+    <idx>1</idx>
+    <maxIdx>3</maxIdx>
+    <tasks>
+        <compiler>
+            <osName>windows 7</osName>
+        </compiler>
+        <content>
+            <contentParts>
+                <cssClassName>EMPTY</cssClassName>
+                <text>Uzupełnij pola, aby program się kompilował.</text>
+            </contentParts>
+        </content>
+        <text>
+            <textParts>
+                <textPart>
+                    <text></text>
+                    <type>[]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeGaps">
+            <name>Gaps</name>
+            <noOfAnswers>0</noOfAnswers>
+        </type>
+    </tasks>
+    <tasks>
+        <compiler>
+            <osName>windows 7</osName>
+        </compiler>
+        <content>
+            <contentParts>
+                <cssClassName>EMPTY</cssClassName>
+                <text>Podaj wartości podanych zmiennych tuż po zakończeniu realizacji funkcji:</text>
+            </contentParts>
+        </content>
+        <text>
+            <textParts>
+                <textPart>
+                    <text></text>
+                    <type>[]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeVarValue">
+            <name>VarValue</name>
+            <noOfAnswers>2147483646</noOfAnswers>
+        </type>
+    </tasks>
+</exam>

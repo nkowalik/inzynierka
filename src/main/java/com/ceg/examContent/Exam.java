@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+
+import com.ceg.gui.Alerts;
 import javafx.scene.control.TabPane;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -89,7 +91,7 @@ public class Exam extends Observable {
      * Uaktualnia zadanie, które jest obecnie aktywne
      * @param task Zadanie, pobierane z okna edycji zadania
      */
-    public void setCurrentTask(Task task) {
+    public void setCurrTask(Task task) {
         tasks.set(idx, task);
     }
 
@@ -155,7 +157,7 @@ public class Exam extends Observable {
             this.maxIdx = exam.maxIdx;
             this.names = exam.names;
         } catch (JAXBException e) {
-            e.printStackTrace();
+            Alerts.examNotFoundAlert();
         }
     }
 }

@@ -24,8 +24,11 @@ public class PdfOverwritingController implements Initializable {
     public void save(ActionEvent event) {
         Stage appStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         appStage.hide();
-        
-        PDFSettings.getInstance().pdfGenerate(PdfSavingController.appStage);
+        try {
+            PDFSettings.getInstance().pdfGenerate(PdfSavingController.appStage);
+        } catch (StringIndexOutOfBoundsException ex) {
+            Alerts.emptyPartOfTaskAlert();
+        }
     }
 
     /**

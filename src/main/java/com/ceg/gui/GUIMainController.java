@@ -542,36 +542,43 @@ public class GUIMainController implements Initializable {
      * Zapisuje stan bieżącego zadania i generuje plik .xml z egzaminem.
      */
     public void saveCodeAreaToXML() {
-        saveText(exam.idx);
-        saveContent(exam.idx);
-        saveResult(exam.idx);
-        Exam.getInstance().save();
+        try {
+            saveText(exam.idx);
+            saveContent(exam.idx);
+            saveResult(exam.idx);
+            Exam.getInstance().save();
+        } catch (Exception ex) {
+            Alerts.tasksNotFoundAlert();
+        }
     }
 
     /**
      * Laduje egzamin do programu ze z góry określonego pliku.
      */
     public void loadXMLToCodeArea() {
-
-        Exam.getInstance().load();
-        status = Status.DRAG;
-        tabPane.getTabs().clear();
-        status = Status.SWITCH;
+        try {
+            Exam.getInstance().load();
+            status = Status.DRAG;
+            tabPane.getTabs().clear();
+            status = Status.SWITCH;
 //        int tabsNumber = tabPane.getTabs().size();
-        int size = Exam.getInstance().getTasks().size();
+            int size = Exam.getInstance().getTasks().size();
 
-        for(int i = 0; i < size; i++) {
-            DraggableTab newTab = new DraggableTab(Exam.getInstance().getNames().get(i));
-            newTab.setId(Integer.toString(i));
-            tabPane.getTabs().add(newTab);
+            for (int i = 0; i < size; i++) {
+                DraggableTab newTab = new DraggableTab(Exam.getInstance().getNames().get(i));
+                newTab.setId(Integer.toString(i));
+                tabPane.getTabs().add(newTab);
+            }
+
+            tabPane.getSelectionModel().select(0);
+
+            Text text = Exam.getInstance().getTaskAtIndex(0).getText();
+            text.createCodeAreaText(code);
+
+            Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
+            content.creatStyleClassedTextAreaText(this.text);
+        } catch (IndexOutOfBoundsException ex) {
+            // łapany w Exam
         }
-
-        tabPane.getSelectionModel().select(0);
-
-        Text text = Exam.getInstance().getTaskAtIndex(0).getText();
-        text.createCodeAreaText(code);
-
-        Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
-        content.creatStyleClassedTextAreaText(this.text);
     }
 }

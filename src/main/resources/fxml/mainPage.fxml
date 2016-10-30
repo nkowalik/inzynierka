@@ -60,7 +60,7 @@
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" prefHeight="25.0" prefWidth="96.0" text="Maszynowo" />
                      </children>
                   </HBox>
-                   
+
                   <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="312.0" prefWidth="440.0" />
                   <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="440.0" />
                   <HBox alignment="CENTER" spacing="10.0">

@@ -37,6 +37,20 @@ public final class Alerts {
     }
 
     /**
+     * Wyświetla okno z błędem dot. wczytywania egzaminu z nieistniejącego xmla.
+     */
+    public static void examNotFoundAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Plik xml z egzaminem nie istnieje", "Nie można odczytać egzaminu, zapisz arkusz do pliku xml.");
+    }
+
+    /**
+     * Wyświetla okno z błędem dot. wczytywania egzaminu z nieistniejącego xmla.
+     */
+    public static void tasksNotFoundAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Egzamin jest pusty", "Nie można zapisać pustego egzaminu, dodaj zadania.");
+    }
+
+    /**
      * Wyświetla okno z alertem.
      * @param alertType Typ alertu.
      * @param title Tytuł okna.
