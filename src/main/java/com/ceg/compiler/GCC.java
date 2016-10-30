@@ -107,7 +107,7 @@ public class GCC {
     }
 
     
-    private static Task readOutput(BufferedReader reader, List<String> output) {
+   /* private static Task readOutput(BufferedReader reader, List<String> output) {
         return new Task() {
             @Override protected call() throws Exception {
                 String line = null;
@@ -117,6 +117,8 @@ public class GCC {
             }
         };
 }
+    */
+    
     /**
      * Tworzy, kompiluje i uruchamia plik wykonywalny.
      * @param lines Lista linii które mają znaleźć się w pliku.
@@ -133,16 +135,33 @@ public class GCC {
                     Process p = builder.start();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
                     String line = null;
-                    while((line = reader.readLine()) != null) {
-                        output.add(line);
+                    boolean timeout = false;
+                    long elapsedTimeMillis = 0;
+                    float elapsedTimeSec = 0;
+                    long start = System.currentTimeMillis();
+                    while(elapsedTimeSec < 5 ) {                      
+                        elapsedTimeMillis = System.currentTimeMillis()-start;
+                        elapsedTimeSec = elapsedTimeMillis/1000F;
+                        if(reader.ready()){
+                            line = reader.readLine();
+                            if(line!=null){
+                                output.add(line);
+                            }
+                            else{
+                                 break;
+                            }
+                        }
+
                     }
-                    p.waitFor(10,TimeUnit.SECONDS);
+                    p.waitFor(1,TimeUnit.SECONDS);
                     try{
                        if(p.exitValue() != 0){
                            output.add("Błąd wykonania.");                    
                        } 
                     }
                     catch(IllegalThreadStateException ex){
+                        output.clear();
+                        output.add("Kompilacja przebiegła pomyślnie.");
                         output.add("Upłynięcie limitu czasu wykonania."); 
                     }                 
                     p.destroy();
