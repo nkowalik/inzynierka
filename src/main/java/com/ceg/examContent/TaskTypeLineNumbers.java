@@ -9,6 +9,12 @@ public class TaskTypeLineNumbers extends TaskType{
     public TaskTypeLineNumbers() {
         super();
         name="LineNumbers";
+        text = "Numery linii";
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
 
     @Override

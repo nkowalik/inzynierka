@@ -9,7 +9,13 @@ public class TaskTypeGaps extends TaskType{
     public TaskTypeGaps() {
         super();
         name="Gaps";
+        text = "Uzupełnianie pól";
         this.setNoOfAnswers(0);
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
 
     @Override

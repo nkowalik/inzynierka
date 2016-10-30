@@ -105,6 +105,7 @@ public class GUIManageTaskController implements Initializable {
         updateText(task.getContent());
         task.getText().createCodeAreaText(code);
         type = task.getType();
+        chooseType.setText(type.getText());
         finish.setDisable(false);
     }
 
