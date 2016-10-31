@@ -19,9 +19,11 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlRootElement
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
+    private int compilationProgress = -1;
+    private List<String> outputList = new ArrayList<>();
     @XmlElement
     private ArrayList<String> names;
-    private final static Exam instance = new Exam();
+    private static Exam instance;
 
     /**
      * Indeks aktualnego zadania (wskazywanego przez zakładkę).
@@ -33,9 +35,15 @@ public class Exam extends Observable {
      */
     public int maxIdx;
 
-    public Exam() {
+    private Exam() {
     }
     public static Exam getInstance() {
+        if (instance == null){
+            synchronized(Exam.class){
+                if(instance == null)
+                    instance = new Exam();
+            }
+        }
         return instance;
     }
     public void init(){
@@ -44,6 +52,36 @@ public class Exam extends Observable {
         idx = 0;
         maxIdx = 0;
     }
+    
+    public boolean compile() {
+        List<String> output = new ArrayList<>();
+        
+        clearOutputList();
+        for (Task i : tasks) {
+            output.clear();
+            i.getType().callExecute(i, output);
+            i.setResult(String.join("\n", output));
+            this.incCompilationProgress();
+            if (output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
+                addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
+            }
+            else {                
+               if (!i.getType().name.equals("LineNumbers")){
+                    output.remove(0);
+                    output.stream().forEach((s) -> {
+                        addToOutputList(s + "\n");
+                    });
+                   return false;
+               }
+               else{                  
+                   addToOutputList("Zadanie " + (getCompilationProgress()+1) + ": Błąd kompilacji w zadaniu \"Numery linii\".\n");
+               }
+            }            
+        }
+        this.incCompilationProgress();
+        return true;
+    }
+        
     public List<Task> getTasks(){
         return tasks;
     }
@@ -110,7 +148,31 @@ public class Exam extends Observable {
         tasks.remove(idx);
         names.remove(idx);
     }
-
+    
+    public synchronized void incCompilationProgress(){
+        compilationProgress++;
+    }
+    
+    public synchronized int getCompilationProgress() {
+        return compilationProgress;
+    }
+    
+    public synchronized void clearCompilationProgress(){
+        compilationProgress = -1;
+    }
+    
+    public synchronized List<String> getOutputList() {
+        return outputList;
+    }
+    
+    private synchronized void addToOutputList(String str){
+        outputList.add(str);
+    }
+    
+    private synchronized void clearOutputList(){
+        outputList.clear();
+    }
+    
     public void changeTasksOrder(int oldIndex, int newIndex) {
         Task task = tasks.get(oldIndex);
         tasks.remove(oldIndex);
@@ -119,11 +181,6 @@ public class Exam extends Observable {
         String name = names.get(oldIndex);
         names.remove(oldIndex);
         names.add(newIndex, name);
-    }
-
-    // todo zmienić tak, aby kompilowany był cały egzamin*/
-    public boolean compileExam() {
-        return true;
     }
 
     /**

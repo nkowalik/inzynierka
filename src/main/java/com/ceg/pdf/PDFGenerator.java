@@ -21,8 +21,8 @@ public class PDFGenerator {
     public static PDDocument document;
     private PDPage actualPage = null;
     public static PDPageContentStream cs;
-    private static final int topMargin = PDFSettings.getInstance().topMargin;
-    private static final int bottomMargin = PDFSettings.getInstance().bottomMargin;
+    private static final int topMargin = PDFSettings.topMargin;
+    private static final int bottomMargin = PDFSettings.bottomMargin;
 
     private PDFCommand comm;
     private PDFCode code;
