@@ -7,7 +7,6 @@ import java.io.InputStreamReader;
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.security.CodeSource;
 import java.util.List;
 import java.util.logging.Level;
@@ -50,7 +49,6 @@ public class GCC {
         if (!lines.isEmpty() && !(lines.get(0).equals("") && lines.size() == 1)) {
             try {
                 file = File.createTempFile(name,".cpp" ,new File(path));
-                file.deleteOnExit();
                 Files.write(file.toPath(), lines, Charset.forName("UTF-8"));
 
             } catch (IOException ex) {
@@ -89,6 +87,7 @@ public class GCC {
                 }
                 p.waitFor();
                 p.destroy();
+                reader.close();
                 if (output.isEmpty())
                     return true;
                 else
@@ -130,8 +129,17 @@ public class GCC {
                     else if(SystemUtils.IS_OS_LINUX)
                         tmpFileName = this.executableName;
                     File tmp = new File(tmpFileName);
-                    if(tmp.exists())
+                    if(tmp.exists()){
                         tmp.delete();
+                    }
+                    if(file.exists()){
+                        if(file.delete()){
+                           file = null; 
+                        }
+                        else{
+                            file.deleteOnExit();
+                        }
+                    }
                 } catch (IOException ex) {
                     Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
                 } catch (InterruptedException ex) {
