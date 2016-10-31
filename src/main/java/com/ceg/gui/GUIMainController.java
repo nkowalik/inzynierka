@@ -16,6 +16,7 @@ import com.ceg.examContent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 
 import java.io.IOException;
 import java.net.URL;
@@ -74,7 +75,7 @@ public class GUIMainController implements Initializable {
             Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
         }
     }
-     
+    public static Scene scene = null; 
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
@@ -165,7 +166,7 @@ public class GUIMainController implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
             
-            Scene scene = new Scene((Pane)loader.load(location.openStream()));
+            scene = new Scene((Pane)loader.load(location.openStream()));
             boolean result;          
             result = scene.getStylesheets().add("/styles/Styles.css");
             if(false == result){

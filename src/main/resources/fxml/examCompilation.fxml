@@ -18,8 +18,10 @@
                <children>
                   <Button layoutX="320.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Anuluj" onAction="#cancel" />
                   <Button fx:id="saveButton" layoutX="398.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="OK" onAction="#save" />
-               </children></AnchorPane>
-         </children></AnchorPane>
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
     </header>
     <expandableContent>
       <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />

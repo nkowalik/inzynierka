@@ -6,6 +6,8 @@ import com.ceg.utils.Alerts;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.application.Platform;
+import javafx.scene.Cursor;
 
 /**
  * FXML Controller class
@@ -85,7 +88,17 @@ public class GUIExamCompilationController implements Initializable {
     public void save(ActionEvent event) throws IOException {
         appStage.hide();
         PdfSavingController.appStage.hide();
-        PDFSettings.getInstance().pdfGenerate(PdfSavingController.appStage);
+        GUIMainController.scene.setCursor(Cursor.WAIT);
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() {
+                PDFSettings.getInstance().pdfGenerate(PdfSavingController.appStage);
+                return null ;
+            }
+        };
+        task.setOnSucceeded(e -> GUIMainController.scene.setCursor(Cursor.DEFAULT));
+        Thread th = new Thread(task);
+        th.start();
     }
     
     public void cancel(ActionEvent event) {
@@ -125,7 +138,7 @@ public class GUIExamCompilationController implements Initializable {
                     prevProgress = progress;
                 }
                 updateProgress(1, 1);
-                updateMessage("Kompilacja zakończona pomyślnie.");
+                updateMessage(String.join("", exam.getOutputList())+"Kompilacja zakończona pomyślnie.");
                 return null;
             }
         };
