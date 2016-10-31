@@ -5,6 +5,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Region;
 
 public final class Alerts {
+    
+    /**
+     * Alert z informacją, że pole z miejscem na odpowiedź w pdf jest zbyt wąskie
+     */
+    public static void tooNarrowPlaceForAnswer() {
+        showAlert(AlertType.WARNING, "Uwaga", "Szerokość pola odpowiedzi.", "Pole z miejscem na odpowiedź w dokumencie \n"
+                +  "jest zbyt wąskie.");
+    }
 
     /**
      * Wyświetla okno z informacją o braku części zadania.
