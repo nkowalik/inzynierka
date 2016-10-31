@@ -164,8 +164,9 @@ public class PDFSettings {
     public File getPdfFile() {
         return pdfFile;
     }
-    
-    public void saveFile() {
+    public void setPdfFile(File pdfFile) { this.pdfFile = pdfFile; }
+
+    public void formatDate() {
         date = "";
         
         if (day < 10)
@@ -174,8 +175,6 @@ public class PDFSettings {
         if (month < 10)
             date += '0';
         date += month.toString() + '.' + year.toString();
-        
-        pdfFile = new File(pdfFilePath + '/' + pdfFileName);
     }
     
     public void pdfGenerate(Stage stage) {
