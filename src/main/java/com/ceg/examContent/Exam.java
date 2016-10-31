@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+
+import com.ceg.utils.Alerts;
 import javafx.scene.control.TabPane;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -124,14 +126,6 @@ public class Exam extends Observable {
     }
 
     /**
-     * Uaktualnia zadanie, które jest obecnie aktywne
-     * @param task Zadanie, pobierane z okna edycji zadania
-     */
-    public void setCurrentTask(Task task) {
-        tasks.set(idx, task);
-    }
-
-    /**
      * Pobiera zadanie znajdujące się na podanej pozycji w egzaminie.
      * @param idx Liczba określająca numer zadania które ma zostać pobrane z egzaminu.
      * @return Odczytane zadanie.
@@ -185,34 +179,41 @@ public class Exam extends Observable {
 
     /**
      * Zapisuje egzamin ze z góry zdefiniowaną nazwą.
+     * Uruchamia okno wyboru pliku do zapisu.
      */
-    // todo umożliwić ustalenie nazwy na etapie tworzenia egzaminu
-    public void save() {
+    public void save(File file) {
         try {
             JAXBContext jc = JAXBContext.newInstance(Exam.class);
             Marshaller marshaller = jc.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(this, new File("arkusz.xml"));
+            marshaller.marshal(this, file);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Odczytuje egzamin ze z góry zdefiniowaną nazwą.
+     * Wczytuje zawartość pliku do obiektu klasy Exam.
+     * W przypadku niepowodzenia wyświetla odpowiedni alert.
+     * @param file Plik który ma zostać odczytany.
+     * @return Wartość określająca powodzenie operacji.
      */
-    // todo umożliwić wybór konkretnego arkusz oraz obsłużyć wyjątek braku arkusza o podanej nazwie
-    public void load() {
+    public boolean load(File file) {
         try {
             JAXBContext context = JAXBContext.newInstance(Exam.class);
             Unmarshaller un = context.createUnmarshaller();
-            Exam exam = (Exam)un.unmarshal(new File("arkusz.xml"));
+            Exam exam = (Exam)un.unmarshal(file);
             this.setTasks(exam.tasks);
             this.idx = exam.idx;
             this.maxIdx = exam.maxIdx;
             this.names = exam.names;
         } catch (JAXBException e) {
-            e.printStackTrace();
+            Alerts.wrongFileContentAlert();
+            return false;
+        } catch (ClassCastException e) {
+            Alerts.wrongFileContentAlert();
+            return false;
         }
+        return true;
     }
 }

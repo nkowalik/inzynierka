@@ -2,6 +2,7 @@ package com.ceg.gui;
 
 import com.ceg.examContent.*;
 import com.ceg.utils.ContentCssClass;
+import com.ceg.utils.FileChooserCreator;
 import com.ceg.xml.TaskData;
 import com.ceg.xml.TasksLoading;
 import javafx.event.ActionEvent;
@@ -112,6 +113,7 @@ public class GUIManageTaskController implements Initializable {
         }
         else updateText(task.getContent());
         task.getText().createCodeAreaText(code);
+        type = task.getType();
         finish.setDisable(false);
     }
 
@@ -224,11 +226,14 @@ public class GUIManageTaskController implements Initializable {
         }
         else if (stage.getTitle().equals("Edycja zadania")) {
             Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
-            Exam.getInstance().setCurrentTask(t);
-            if (!t.getContent().getContentParts().isEmpty()) {
-                mainInstance.updateText(t.getContent());
+            Task task = Exam.getInstance().getCurrentTask();
+            task.setType(type);
+            task.setContent(content);
+            task.getText().extractText(code);
+            if (!task.getContent().getContentParts().isEmpty()) {
+                mainInstance.updateText(task.getContent());
             }
-            mainInstance.updateCode(t.getText());
+            mainInstance.updateCode(task.getText());
             mainInstance.showTask(true);
         }
 
@@ -271,9 +276,8 @@ public class GUIManageTaskController implements Initializable {
      */
     public void selectCodeFile() throws IOException {
 
-        File file = fileChooser.showOpenDialog(stage);
+        File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.CODE);
         if(file != null) {
-            fileChooser.setInitialDirectory(new File(file.getParent()));
             loadFile(file);
         }
     }
