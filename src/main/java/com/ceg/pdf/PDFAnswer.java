@@ -8,10 +8,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author Martyna
- */
 
 /* klasa odpowiedzialna za wyglad pola odpowiedzi w arkuszu pdf */
 public class PDFAnswer extends PDFAbstractTaskPart {
@@ -101,16 +97,16 @@ public class PDFAnswer extends PDFAbstractTaskPart {
     @Override
     public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
         int answerIndex = 0;
-        for (int i = 0; i < pdfLines.size(); i++) {
-            if (pdfLines.get(i).getLineParts().get(0).getText().contains("#placeForAnswer")) {
-                pdfLines.get(i).getLineParts().get(0).setText(pdfLines.get(i).getLineParts().get(0).getText() + ' ');
-                String[] list = pdfLines.get(i).getLineParts().get(0).getText().split("#placeForAnswer");
+        for (PDFLine pdfLine : pdfLines) {
+            if (pdfLine.getLineParts().get(0).getText().contains("#placeForAnswer")) {
+                pdfLine.getLineParts().get(0).setText(pdfLine.getLineParts().get(0).getText() + ' ');
+                String[] list = pdfLine.getLineParts().get(0).getText().split("#placeForAnswer");
                 String line = "";
-                
+
                 for (int j = 0; j < list.length - 1; j++) {
                     line += list[j] + placesForAnswers.get(answerIndex++);
                 }
-            pdfLines.get(i).getLineParts().get(0).setText(line + list[list.length - 1]);
+                pdfLine.getLineParts().get(0).setText(line + list[list.length - 1]);
             }
         }
         return super.writeToPDF(y);

@@ -3,6 +3,7 @@ package com.ceg.pdf;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.utils.Alerts;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -72,7 +73,8 @@ public class PDFGenerator {
                  try {
                      desktop.open(pdfFile);
                  } catch (IOException ex) {
-                     Logger.getLogger(PDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
+                     Alerts.examSavingErrorAlert();
+                     System.out.println("Cannot save exam. Error caused by: " + ex.toString());
                  }
              });
         }

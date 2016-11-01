@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 
+import com.ceg.utils.Alerts;
 import com.ceg.utils.FileChooserCreator;
 import javafx.beans.value.ChangeListener;
 import java.util.logging.Logger;
@@ -165,13 +166,16 @@ public class PdfSavingController implements Initializable {
 
     public void saveFile(ActionEvent event) throws IOException {
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.PDF, "egzamin.pdf");
-        if (file != null) {
+        try {
             FileChooserCreator.getInstance().setInitialDirectory(file.getParent());
             PDFSettings.getInstance().setTestType(testType.getValue().toString());
             PDFSettings.getInstance().setPdfFile(file);
             PDFSettings.getInstance().formatDate();
             GUIExamCompilationController.show();
             stage.hide();
+        } catch (NullPointerException e) {
+            Alerts.examSavingErrorAlert();
+            System.out.println("Cannot save exam. Error caused by: " + e.toString());
         }
     }
 
@@ -191,7 +195,8 @@ public class PdfSavingController implements Initializable {
         try {
             AdvancedOptionsController.show();
         } catch (IOException ex) {
-            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
+            Alerts.advancedOptionsErrorAlert();
+            System.out.println("Cannot open window: advanced options. Error caused by: " + ex.toString());
         }
     }
 }

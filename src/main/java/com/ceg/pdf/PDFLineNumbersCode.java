@@ -4,10 +4,7 @@ import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.io.IOException;
 import java.util.List;
 
-/**
- *
- * @author Martyna
- */
+
 public class PDFLineNumbersCode extends PDFCode {
     private final float linePosition = leftMargin + getWidth("   ", defaultFontType, fontSize);
     private final float lineWidth = (float) 0.1;

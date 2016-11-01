@@ -2,6 +2,10 @@ package com.ceg.gui;
 
 import java.io.File;
 import com.ceg.utils.Alerts;
+
+import java.io.FileNotFoundException;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.FileSystemException;
 import java.util.*;
 import com.ceg.examContent.Text;
 import com.ceg.utils.FileChooserCreator;
@@ -163,8 +167,8 @@ public class GUIMainController implements Initializable {
             Scene scene = new Scene((Pane)loader.load(location.openStream()));
             boolean result;          
             result = scene.getStylesheets().add("/styles/Styles.css");
-            if(false == result){
-                //TODO: report error
+            if(!result){
+                Alerts.stylesLoadingErrorAlert();
             }
             stage = new Stage();
             stage.setScene(scene);
@@ -222,17 +226,17 @@ public class GUIMainController implements Initializable {
      * @throws IOException
      */
     public void createPDF(ActionEvent actionEvent) throws IOException {
-            try {
-                if (exam.getTasks().isEmpty()) {
-                    throw new EmptyExamException();
-                }
-                saveText(exam.idx);
-                saveContent(exam.idx);
-                saveResult(exam.idx);
-                PdfSavingController.show();
-            } catch (EmptyExamException ex) {
-                Alerts.emptyExamAlert();
+        try {
+            if (exam.getTasks().isEmpty()) {
+                throw new EmptyExamException();
             }
+            saveText(exam.idx);
+            saveContent(exam.idx);
+            saveResult(exam.idx);
+            PdfSavingController.show();
+        } catch (EmptyExamException ex) {
+            Alerts.emptyExamAlert();
+        }
     }
 
     /**
@@ -252,9 +256,8 @@ public class GUIMainController implements Initializable {
         changeStyle("gap");
     }
     public void boldTextMarker(ActionEvent actionEvent) {
-
         IndexRange ir = text.getSelection(); 
-        for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
             text.setStyleClass(i, i+1, BOLD.changeClass(text.getStyleOfChar(i).toString()).getClassName());
         }
     }
@@ -532,10 +535,11 @@ public class GUIMainController implements Initializable {
         saveResult(exam.idx);
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
-        if(file != null) {
+        try {
             Exam.getInstance().save(file);
-        }  else {
-            return;
+        } catch (NullPointerException e) {
+            Alerts.taskSavingErrorAlert();
+            System.out.println("Cannot save task. Error caused by: " + e.toString());
         }
     }
 
@@ -544,15 +548,18 @@ public class GUIMainController implements Initializable {
      * Uruchamia okno wyboru pliku do odczytu.
      */
     public void loadXMLToCodeArea() {
-
-        File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
-        if(file != null) {
-            if(!Exam.getInstance().load(file)) {
-                return;
-            }
-        } else {
+        try {
+            File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
+            Exam.getInstance().load(file);
+        } catch (NullPointerException e) {
+            Alerts.examLoadingErrorAlert();
+            System.out.println("Cannot load exam. Error caused by: " + e.toString());
             return;
+        } catch (IllegalArgumentException e) {
+            Alerts.examLoadingErrorAlert();
+            System.out.println("Cannot load exam. Error caused by: " + e.toString());
         }
+
         status = Status.DRAG;
         tabPane.getTabs().clear();
         status = Status.SWITCH;
@@ -586,8 +593,11 @@ public class GUIMainController implements Initializable {
         Task task = Exam.getInstance().getCurrentTask();
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, Exam.getInstance().getNames().get(exam.idx).replace(" ", "") + ".xml");
-        if(file != null) {
+        try {
             task.save(file.getAbsolutePath());
+        } catch (NullPointerException e) {
+            Alerts.taskSavingErrorAlert();
+            System.out.println("Cannot save task. Error caused by: " + e.toString());
         }
     }
 
@@ -599,13 +609,14 @@ public class GUIMainController implements Initializable {
      */
     public void loadTask(ActionEvent event) throws Exception {
         File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
-        if(file != null) {
+        try {
             Task task = new Task();
-            if(!task.load(file.getAbsolutePath())) {
-                return;
-            }
+            task.load(file.getAbsolutePath());
             Exam.getInstance().addTask(task);
             addNewTabPaneTab();
+        } catch (NullPointerException e) {
+            Alerts.taskLoadingErrorAlert();
+            System.out.println("Cannot load task. Error caused by: " + e.toString());
         }
     }
 }

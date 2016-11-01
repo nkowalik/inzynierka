@@ -65,8 +65,11 @@ public class FileChooserCreator {
                 ("user.home")) : new File(initialDirectory));
         fileChooser.getExtensionFilters().add(createExtensionFilter(type));
         File file = fileChooser.showOpenDialog(stage);
-        if(file != null)
+        try {
             initialDirectory = file.getParent();
+        } catch (NullPointerException e) {
+            System.out.println("Cannot open load dialog. Error caused by: " + e.toString());
+        }
         return file;
     }
 

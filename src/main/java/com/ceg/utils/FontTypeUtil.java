@@ -4,10 +4,7 @@ import static com.ceg.utils.ContentCssClass.*;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Martyna
- */
+
 public final class FontTypeUtil {
     public static final FontType change(String fontName) {
         for (FontType ft : FontType.values()) {

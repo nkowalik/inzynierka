@@ -27,8 +27,8 @@ public class PDFCode extends PDFAbstractTaskPart {
     PDFCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = pdfSettings.codeWidth;
-        leftMargin = pdfSettings.leftCodeMargin;
+        textWidth = PDFSettings.codeWidth;
+        leftMargin = PDFSettings.leftCodeMargin;
         defaultFontType = pdfSettings.getCodeFont();
         fontSize = pdfSettings.getCodeFontSize();
         textSplitting(lines);

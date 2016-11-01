@@ -6,10 +6,7 @@ import java.io.File;
 import java.io.IOException;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
-/**
- *
- * @author Martyna
- */
+
 public class PDFLinePart {
     private final FontType font;
     private static final float underlineWidth = 0.1f;
