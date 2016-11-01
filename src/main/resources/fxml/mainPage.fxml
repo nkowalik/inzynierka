@@ -93,6 +93,7 @@
                     <MenuItem fx:id="saveTaskItem" mnemonicParsing="false" onAction="#saveTask" text="Zapisz zadanie" visible="false" />
                     <MenuItem mnemonicParsing="false" onAction="#loadTask" text="Wczytaj zadanie" visible="true" />
                     <MenuItem fx:id="taskEdition" mnemonicParsing="false" onAction="#editTask" text="Edytuj" visible="false" />
+                    <MenuItem fx:id="pdfContentWidth" mnemonicParsing="false" onAction="#changePdfContentWidth" text="Zmień szerokość w dokumencie" visible="false" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false">
