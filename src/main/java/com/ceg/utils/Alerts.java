@@ -58,6 +58,13 @@ public final class Alerts {
     }
 
     /**
+     * Wyświetla okno z błędem dot. próby zapisu do otwartego pliku.
+     */
+    public static void fileAlreadyOpened() {
+        showAlert(AlertType.ERROR, "Błąd", "Nie można zapisać pliku", "Plik jest już otwarty, zamknij go i spróbuj ponownie.");
+    }
+
+    /**
      * Wyświetla okno z alertem.
      * @param alertType Typ alertu.
      * @param title Tytuł okna.
