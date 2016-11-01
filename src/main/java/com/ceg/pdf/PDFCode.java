@@ -24,11 +24,11 @@ public class PDFCode extends PDFAbstractTaskPart {
                                                             "<",
                                                             " " );
     
-    PDFCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
+    PDFCode(List<String> lines, float codeWidthPercentage) throws IOException, EmptyPartOfTaskException {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = pdfSettings.codeWidth;
-        leftMargin = pdfSettings.leftCodeMargin;
+        textWidth = (int)Math.ceil(pdfSettings.pdfContentWidth * codeWidthPercentage);
+        leftMargin = pdfSettings.rightMargin - textWidth;
         defaultFontType = pdfSettings.getCodeFont();
         fontSize = pdfSettings.getCodeFontSize();
         textSplitting(lines);

@@ -64,6 +64,8 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem taskEdition;
     @FXML
+    MenuItem pdfContentWidth;
+    @FXML
     HBox textOptions;
     @FXML
     private void advancedOptionsClicked(MouseEvent event){
@@ -321,6 +323,15 @@ public class GUIMainController implements Initializable {
         task.setText(tempText);
         GUIManageTaskController.getInstance().editTask(task);
     }
+    
+    /**
+     * Wyświetla okno edycji szerokości zadania w dokumencie
+     * @param event
+     * @throws Exception 
+     */
+    public void changePdfContentWidth(ActionEvent event) throws Exception {
+        PdfWidthChangingController.show();
+    }
 
     /**
      * Usuwa zadanie wskazywane przez aktywną zakładkę.
@@ -399,6 +410,7 @@ public class GUIMainController implements Initializable {
         saveTaskItem.setVisible(visibility);
         saveExamItem.setVisible(visibility);
         taskEdition.setVisible(visibility);
+        pdfContentWidth.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
