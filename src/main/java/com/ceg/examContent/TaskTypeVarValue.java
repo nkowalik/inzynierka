@@ -54,14 +54,26 @@ public class TaskTypeVarValue extends TaskType{
         List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
         task.compiler.execute(code, "varvalue.cpp", output);
-        task.getType().generateAnswers(task, output, task.getAnswers());
+        //task.getType().generateAnswers(task, output, task.getAnswers());
+        if (task.getUpdateAnswers()) {
+            task.getType().generateAnswers(task, output, task.getAnswers());
+        }
+        else {
+            task.getType().preparePdfAnswers(task);
+        }
     }
 
     @Override
     public void preparePdfAnswers(Task task) {
         task.getPdfAnswers().clear();
         for(int i=0;i<this.getNoOfAnswers();i++){
-            task.getPdfAnswers().add(" #placeForAnswer");
+            String label;
+            if (i < task.getLabels().size()) {
+                label = task.getLabels().get(i);
+            } else {
+                label = "";
+            }
+            task.getPdfAnswers().add(label + " #placeForAnswer");
         }
     }
 }

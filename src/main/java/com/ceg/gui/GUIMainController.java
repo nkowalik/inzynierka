@@ -25,10 +25,10 @@ import com.ceg.exceptions.EmptyExamException;
 import static com.ceg.utils.ContentCssClass.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.EventHandler;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import javafx.stage.WindowEvent;
 import org.fxmisc.richtext.StyleClassedTextArea;
 
 /**
@@ -47,6 +47,8 @@ public class GUIMainController implements Initializable {
     @FXML
     TextArea result;
     @FXML
+    StyleClassedTextArea answer;
+    @FXML
     Button executeBtn;
     @FXML
     Button testExecuteBtn;
@@ -59,6 +61,10 @@ public class GUIMainController implements Initializable {
     @FXML
     Button gapsMarkerBtn;
     @FXML
+    Button labelBtn;
+    @FXML
+    Button answerBtn;
+    @FXML
     MenuItem changeAnswersNum;
     @FXML
     MenuItem changeNameItem;
@@ -66,6 +72,8 @@ public class GUIMainController implements Initializable {
     MenuItem taskEdition;
     @FXML
     HBox textOptions;
+    @FXML
+    CheckBox rememberCheckBox;
     @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
@@ -111,7 +119,19 @@ public class GUIMainController implements Initializable {
 
         code.textProperty().addListener((observableValue, oldValue, newValue) -> {
             result.setText("");
+            if (!rememberCheckBox.isSelected()) { 
+                for (int i = 0; i < answer.getText().length(); i++) {
+                    if (answer.getStyleOfChar(i).toString().equals(EMPTY) || answer.getStyleOfChar(i).isEmpty()) {
+                        answer.deleteText(i, i+1);
+                        i--;
+                    }
+                }
+            }
         });
+        
+        rememberCheckBox.selectedProperty().addListener((observable, oldValue, newValue) ->  {
+            exam.getCurrentTask().setUpdateAnswers(newValue);
+        }); 
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (status) {
@@ -139,6 +159,10 @@ public class GUIMainController implements Initializable {
                         saveText(id);
                         saveContent(id);
                         saveResult(id);
+                        saveLabels(id);
+                        if (!exam.getTaskAtIndex(id).getUpdateAnswers()) {
+                            saveAnswers(id);
+                        }
                     }
                     updateWindow(Integer.parseInt(newValue.getId()));
                     break;
@@ -199,6 +223,11 @@ public class GUIMainController implements Initializable {
             result.appendText(s + "\n");
         }
         exam.getCurrentTask().setResult(result.getText());
+        saveLabels(exam.idx);
+        
+        if (!rememberCheckBox.isSelected()) {
+            updateAnswer(exam.getCurrentTask().getLabels(), exam.getCurrentTask().getAnswers(), exam.getCurrentTask().getUpdateAnswers());           
+        }
     }
 
     public void testExecute(ActionEvent actionEvent) {
@@ -212,6 +241,20 @@ public class GUIMainController implements Initializable {
         }
         exam.getCurrentTask().setResult(result.getText());
 
+    }
+    
+    public void changeToLabel(ActionEvent actionEvent) {
+        IndexRange ir = answer.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
+            answer.setStyleClass(i, i+1, BOLD.changeClass(answer.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    
+    public void changeToAnswer(ActionEvent actionEvent) {
+        IndexRange ir = answer.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
+            answer.setStyleClass(i, i+1, EMPTY.changeClass(answer.getStyleOfChar(i).toString()).getClassName());
+        }
     }
 
     /**
@@ -396,8 +439,12 @@ public class GUIMainController implements Initializable {
         normalMarkerBtn.setVisible(visibility);
         testMarkerBtn.setVisible(visibility);
         hideMarkerBtn.setVisible(visibility);
+        labelBtn.setVisible(visibility);
+        answerBtn.setVisible(visibility);
+        rememberCheckBox.setVisible(visibility);
         changeNameItem.setVisible(visibility);
         taskEdition.setVisible(visibility);
+        answer.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
@@ -433,6 +480,7 @@ public class GUIMainController implements Initializable {
             updateText(t.getContent());
             updateCode(t.getText());
             updateResult(t.getResult());
+            updateAnswer(t.getLabels(), t.getAnswers(), t.getUpdateAnswers());
         }
     }
 
@@ -442,18 +490,6 @@ public class GUIMainController implements Initializable {
      */
     public void updateText(Content content) {
         content.creatStyleClassedTextAreaText(text);
-        /*this.text.clear();
-        if(!text.isEmpty()) {
-            int i = 0;
-            String line;
-            line = text.get(i);
-            while (i<text.size()) {
-                this.text.appendText(line + "\n");
-                i++;
-                if(i>=text.size()) break;
-                line = text.get(i);
-            }
-        }*/
     }
 
     /**
@@ -471,6 +507,31 @@ public class GUIMainController implements Initializable {
     public void updateResult(String text) {
         this.result.clear();
         this.result.setText(text);
+    }
+    
+    /**
+     * Aktualizuje tekst pola odpowiedzi.
+     * @param labels
+     * @param answers
+     * @param updateAnswer
+     */
+    public void updateAnswer(List<String> labels, List<String> answers, boolean updateAnswer) {
+        answer.clear();
+        for (int i = 0; i < answers.size(); i++) {
+            String label;
+            if (i < labels.size()) {
+                label = labels.get(i);
+            } else {
+                label = "";
+            }
+            int start = answer.getText().length();
+            answer.appendText(label);
+            answer.setStyleClass(start, answer.getText().length(), BOLD.getClassName());
+            start = answer.getText().length();
+            answer.appendText(answers.get(i) + "\n");
+            answer.setStyleClass(start, answer.getText().length(), EMPTY.getClassName());
+        }
+        rememberCheckBox.setSelected(updateAnswer);
     }
 
     /**
@@ -509,12 +570,6 @@ public class GUIMainController implements Initializable {
     public void saveContent(int idx) {
         Task task = Exam.getInstance().getTaskAtIndex(idx);
         task.getContent().extractContent(text);
-       /* String res = "";
-        res += text.getText().charAt(0);
-        for (int i = 1; i < text.getText().length(); i++) {
-            if (text.getStyleOfChar())
-        }
-        Exam.getInstance().getTaskAtIndex(idx).setContents(Arrays.asList(text.getText().split("\n")));*/
     }
 
     /**
@@ -574,5 +629,44 @@ public class GUIMainController implements Initializable {
 
         Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
         content.creatStyleClassedTextAreaText(this.text);
+    }
+    
+    /**
+     * Zapisuje etykiety odpowiedzi
+     */
+    private void saveLabels(int id) {
+        exam.getTaskAtIndex(id).getLabels().clear();
+        String label = "";
+        
+        for (int i = 0; i < answer.getText().length(); i++) {
+            if (answer.getText().charAt(i) == '\n') {
+                exam.getTaskAtIndex(id).getLabels().add(label);
+                label = "";
+            }
+            else if (answer.getStyleOfChar(i).toString().equals(BOLD.getClassList())) {
+                label += answer.getText().charAt(i);
+            }
+        }
+        if (!label.equals("")) {
+            exam.getTaskAtIndex(id).getLabels().add(label);
+        }
+    }
+    
+    private void saveAnswers(int id) {
+        exam.getTaskAtIndex(id).getAnswers().clear();
+        String ans = "";
+        
+        for (int i = 0; i < answer.getText().length(); i++) {
+            if (answer.getText().charAt(i) == '\n') {
+                exam.getTaskAtIndex(id).getAnswers().add(ans);
+                ans = "";
+            }
+            else if (answer.getStyleOfChar(i).toString().equals(EMPTY.getClassList()) || answer.getStyleOfChar(i).isEmpty()) {
+                ans += answer.getText().charAt(i);
+            }
+        }
+        if (!ans.equals("")) {
+            exam.getTaskAtIndex(id).getAnswers().add(ans);
+        }
     }
 }

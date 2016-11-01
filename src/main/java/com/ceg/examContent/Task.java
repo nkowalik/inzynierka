@@ -17,10 +17,12 @@ import java.util.List;
 public class Task {
     private Content content;
     private List<String> answers;
+    private List<String> labels;
     private List<String> pdfAnswers;
     private String result;
     private TaskType type;
     private Text text;
+    private boolean updateAnswers;
     public GCC compiler;
 
     /**
@@ -29,9 +31,11 @@ public class Task {
     public Task() {
         this.answers = new ArrayList<>();
         pdfAnswers = new ArrayList<>();
+        labels = new ArrayList<>();
         compiler = new GCC();
         content = new Content();
         text = new Text();
+        updateAnswers = false;
     }
 
     /**
@@ -59,6 +63,22 @@ public class Task {
     public TaskType getType(){
         return type;
     }
+    public void setLabels(List<String> labels) {
+        this.labels = labels;
+    }
+    
+    public List<String> getLabels() {
+        return this.labels;
+    }
+    
+    public void setUpdateAnswers(boolean updateAnswers) {
+        this.updateAnswers = updateAnswers;
+    }
+    
+    public boolean getUpdateAnswers() {
+        return this.updateAnswers;
+    }
+    
     public void setType(TaskType type){
         this.type = type;
     }
