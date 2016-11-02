@@ -25,8 +25,6 @@ import com.ceg.exceptions.EmptyExamException;
 import static com.ceg.utils.ContentCssClass.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.fxmisc.richtext.StyleClassedTextArea;
@@ -128,10 +126,6 @@ public class GUIMainController implements Initializable {
                 }
             }
         });
-        
-        rememberCheckBox.selectedProperty().addListener((observable, oldValue, newValue) ->  {
-            exam.getCurrentTask().setUpdateAnswers(newValue);
-        }); 
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             switch (status) {
@@ -160,7 +154,9 @@ public class GUIMainController implements Initializable {
                         saveContent(id);
                         saveResult(id);
                         saveLabels(id);
-                        if (!exam.getTaskAtIndex(id).getUpdateAnswers()) {
+                        exam.getTaskAtIndex(id).setUpdateAnswers(true);
+                        if (rememberCheckBox.isSelected()) {
+                            exam.getTaskAtIndex(id).setUpdateAnswers(false);
                             saveAnswers(id);
                         }
                     }
@@ -217,6 +213,11 @@ public class GUIMainController implements Initializable {
         result.clear();
         saveText(exam.idx);
         List<String> outcome = new ArrayList<>();
+        exam.getCurrentTask().setUpdateAnswers(true);
+        
+        if (rememberCheckBox.isSelected()) {
+            exam.getCurrentTask().setUpdateAnswers(false);
+        }
 
         exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
         for(String s : outcome) {
@@ -270,6 +271,11 @@ public class GUIMainController implements Initializable {
                 saveText(exam.idx);
                 saveContent(exam.idx);
                 saveResult(exam.idx);
+                saveLabels(exam.idx);
+                if (rememberCheckBox.isSelected()) {
+                    exam.getTaskAtIndex(exam.idx).setUpdateAnswers(false);
+                    saveAnswers(exam.idx);
+                }
                 PdfSavingController.show();
             } catch (EmptyExamException ex) {
                 Alerts.emptyExamAlert();
@@ -531,7 +537,7 @@ public class GUIMainController implements Initializable {
             answer.appendText(answers.get(i) + "\n");
             answer.setStyleClass(start, answer.getText().length(), EMPTY.getClassName());
         }
-        rememberCheckBox.setSelected(updateAnswer);
+        rememberCheckBox.setSelected(!updateAnswer);
     }
 
     /**
@@ -601,6 +607,10 @@ public class GUIMainController implements Initializable {
         saveText(exam.idx);
         saveContent(exam.idx);
         saveResult(exam.idx);
+        saveLabels(exam.idx);
+        if (rememberCheckBox.isSelected()) {
+            saveAnswers(exam.idx);
+        }
         Exam.getInstance().save();
     }
 

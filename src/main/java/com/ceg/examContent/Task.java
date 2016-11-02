@@ -35,7 +35,7 @@ public class Task {
         compiler = new GCC();
         content = new Content();
         text = new Text();
-        updateAnswers = false;
+        updateAnswers = true;
     }
 
     /**

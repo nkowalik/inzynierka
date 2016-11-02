@@ -34,6 +34,7 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         this.textWidth = textWidth;
         this.defaultFontType = font;
         this.leftMargin = leftMargin;
+        this.fontSize = fontSize;
         lineHeight+=2;
     }
     
