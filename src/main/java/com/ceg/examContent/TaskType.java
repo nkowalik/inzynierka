@@ -24,9 +24,11 @@ abstract public class TaskType {
     String defaultContents;
     public String name;
     protected int noOfAnswers;
+    private boolean updateAnswers;
     
     TaskType(){
         noOfAnswers = Integer.MAX_VALUE-1;
+        updateAnswers = true;
     }
 
     /**
@@ -74,5 +76,10 @@ abstract public class TaskType {
     public void setNoOfAnswers(int noOfAnswers) {
         this.noOfAnswers = noOfAnswers;
     }
-       
+    public void setUpdateAnswers(boolean updateAnswers) {
+        this.updateAnswers = updateAnswers;
+    } 
+    public boolean getUpdateAnswers() {
+        return this.updateAnswers;
+    }      
 }

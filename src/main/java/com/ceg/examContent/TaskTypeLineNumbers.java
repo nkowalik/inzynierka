@@ -78,8 +78,7 @@ public class TaskTypeLineNumbers extends TaskType{
     public void callExecute(Task task, List<String> output) {
         List<String> code = task.getText().getStandardCompilationCode();
         task.compiler.execute(code, "linenumbers.cpp", output);
-        //task.getType().generateAnswers(task, output, task.getAnswers());
-        if (task.getUpdateAnswers()) {
+        if (getUpdateAnswers()) {
             task.getType().generateAnswers(task, output, task.getAnswers());
         }
         else {

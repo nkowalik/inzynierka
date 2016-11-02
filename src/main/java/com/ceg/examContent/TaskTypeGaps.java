@@ -28,8 +28,7 @@ public class TaskTypeGaps extends TaskType{
     public void callExecute(Task task, List<String> output) {
         List<String> code = new ArrayList<>(task.getText().getStandardCompilationCode());
         task.compiler.execute(code, "gaps.cpp", output);
-        //task.getType().generateAnswers(task, output, task.getAnswers());
-        if (task.getUpdateAnswers()) {
+        if (getUpdateAnswers()) {
             task.getType().generateAnswers(task, output, task.getAnswers());
         }
         else {

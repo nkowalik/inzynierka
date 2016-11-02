@@ -22,7 +22,6 @@ public class Task {
     private String result;
     private TaskType type;
     private Text text;
-    private boolean updateAnswers;
     public GCC compiler;
 
     /**
@@ -35,7 +34,6 @@ public class Task {
         compiler = new GCC();
         content = new Content();
         text = new Text();
-        updateAnswers = true;
     }
 
     /**
@@ -69,14 +67,6 @@ public class Task {
     
     public List<String> getLabels() {
         return this.labels;
-    }
-    
-    public void setUpdateAnswers(boolean updateAnswers) {
-        this.updateAnswers = updateAnswers;
-    }
-    
-    public boolean getUpdateAnswers() {
-        return this.updateAnswers;
     }
     
     public void setType(TaskType type){

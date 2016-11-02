@@ -54,8 +54,7 @@ public class TaskTypeReturnedValue extends TaskType{
         List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
         task.compiler.execute(code, "retvalue.cpp", output);
-        //task.getType().generateAnswers(task, output, task.getAnswers());
-        if (task.getUpdateAnswers()) {
+        if (getUpdateAnswers()) {
             task.getType().generateAnswers(task, output, task.getAnswers());
         }
         else {

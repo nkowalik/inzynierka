@@ -154,9 +154,9 @@ public class GUIMainController implements Initializable {
                         saveContent(id);
                         saveResult(id);
                         saveLabels(id);
-                        exam.getTaskAtIndex(id).setUpdateAnswers(true);
+                        exam.getTaskAtIndex(id).getType().setUpdateAnswers(true);
                         if (rememberCheckBox.isSelected()) {
-                            exam.getTaskAtIndex(id).setUpdateAnswers(false);
+                            exam.getTaskAtIndex(id).getType().setUpdateAnswers(false);
                             saveAnswers(id);
                         }
                     }
@@ -213,10 +213,11 @@ public class GUIMainController implements Initializable {
         result.clear();
         saveText(exam.idx);
         List<String> outcome = new ArrayList<>();
-        exam.getCurrentTask().setUpdateAnswers(true);
+        exam.getCurrentTask().getType().setUpdateAnswers(true);
         
         if (rememberCheckBox.isSelected()) {
-            exam.getCurrentTask().setUpdateAnswers(false);
+            exam.getCurrentTask().getType().setUpdateAnswers(false);
+            saveAnswers(exam.idx);
         }
 
         exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
@@ -227,7 +228,7 @@ public class GUIMainController implements Initializable {
         saveLabels(exam.idx);
         
         if (!rememberCheckBox.isSelected()) {
-            updateAnswer(exam.getCurrentTask().getLabels(), exam.getCurrentTask().getAnswers(), exam.getCurrentTask().getUpdateAnswers());           
+            updateAnswer(exam.getCurrentTask().getLabels(), exam.getCurrentTask().getAnswers(), exam.getCurrentTask().getType().getUpdateAnswers());           
         }
     }
 
@@ -273,7 +274,7 @@ public class GUIMainController implements Initializable {
                 saveResult(exam.idx);
                 saveLabels(exam.idx);
                 if (rememberCheckBox.isSelected()) {
-                    exam.getTaskAtIndex(exam.idx).setUpdateAnswers(false);
+                    exam.getTaskAtIndex(exam.idx).getType().setUpdateAnswers(false);
                     saveAnswers(exam.idx);
                 }
                 PdfSavingController.show();
@@ -486,7 +487,7 @@ public class GUIMainController implements Initializable {
             updateText(t.getContent());
             updateCode(t.getText());
             updateResult(t.getResult());
-            updateAnswer(t.getLabels(), t.getAnswers(), t.getUpdateAnswers());
+            updateAnswer(t.getLabels(), t.getAnswers(), t.getType().getUpdateAnswers());
         }
     }
 
