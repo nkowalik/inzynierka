@@ -1,16 +1,19 @@
 package com.ceg.gui;
 
-import com.ceg.examContent.Content;
+import java.io.File;
 import com.ceg.utils.Alerts;
 import java.util.*;
 import com.ceg.examContent.Text;
+import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
 import org.fxmisc.richtext.LineNumberFactory;
+import com.ceg.examContent.Content;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import javafx.event.ActionEvent;
@@ -37,6 +40,8 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuBar menu;
     @FXML
+    BorderPane borderPane;
+    @FXML
     StyleClassedTextArea text;
     @FXML
     CodeArea code;
@@ -47,16 +52,6 @@ public class GUIMainController implements Initializable {
     @FXML
     StyleClassedTextArea answer;
     @FXML
-    Button executeBtn;
-    @FXML
-    Button testExecuteBtn;
-    @FXML
-    Button normalMarkerBtn;
-    @FXML
-    Button testMarkerBtn;
-    @FXML
-    Button hideMarkerBtn;
-    @FXML
     Button gapsMarkerBtn;
     @FXML
     Button labelBtn;
@@ -66,6 +61,12 @@ public class GUIMainController implements Initializable {
     MenuItem changeAnswersNum;
     @FXML
     MenuItem changeNameItem;
+    @FXML
+    MenuItem deleteTaskItem;
+    @FXML
+    MenuItem saveTaskItem;
+    @FXML
+    MenuItem saveExamItem;
     @FXML
     MenuItem taskEdition;
     @FXML
@@ -168,10 +169,6 @@ public class GUIMainController implements Initializable {
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
         
-        hideMarkerBtn.getStyleClass().add("hiddenButton");
-        testMarkerBtn.getStyleClass().add("testButton");
-        gapsMarkerBtn.getStyleClass().add("gapsButton");
-        
         updateWindow(0);
     }
 
@@ -206,7 +203,9 @@ public class GUIMainController implements Initializable {
     }
 
     /**
-     * Wykonuje kod zawarty w polu CodeArea. Rezultat zapisuje w odpowiednim obiekcie klasy Task i wyświetla w oknie programu.
+     * Wykonuje kod zawarty w polu CodeArea z uwzględnieniem markerów.
+     * Rezultat zapisuje w odpowiednim obiekcie klasy Task i wyświetla w oknie programu.
+     * Aktualnie wykonuje w sposób określony w Tasku, tj. dodaje entery do wyjścia.
      * @param actionEvent
      */
     public void execute(ActionEvent actionEvent) {
@@ -232,6 +231,11 @@ public class GUIMainController implements Initializable {
         }
     }
 
+    /**
+     * Wykonuje kod zawarty w polu CodeArea bez uwzględnienia markerów.
+     * Rezultat zapisuje w odpowiednim obiekcie klasy Task i wyświetla w oknie programu.
+     * @param actionEvent
+     */
     public void testExecute(ActionEvent actionEvent) {
         result.clear();
         saveText(exam.idx);
@@ -284,7 +288,7 @@ public class GUIMainController implements Initializable {
     }
 
     /**
-     * Ustawia typ dla zaznaczonego kodu w polu CodeArea po naciśnięciu przycisku 'usuń'.
+     * Ustawia typ dla zaznaczonego kodu w polu CodeArea po naciśnięciu odpowiedniego przycisku.
      * @param actionEvent
      */
     public void testMarker(ActionEvent actionEvent) {
@@ -300,6 +304,7 @@ public class GUIMainController implements Initializable {
         changeStyle("gap");
     }
     public void boldTextMarker(ActionEvent actionEvent) {
+
         IndexRange ir = text.getSelection(); 
         for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
             text.setStyleClass(i, i+1, BOLD.changeClass(text.getStyleOfChar(i).toString()).getClassName());
@@ -437,19 +442,17 @@ public class GUIMainController implements Initializable {
      * @param visibility Określa żądaną widoczność elementów okna.
      */
     public void showTask(boolean visibility) {
+        borderPane.setVisible(visibility);
         text.setVisible(visibility);
-        textOptions.setVisible(visibility);
         code.setVisible(visibility);
         result.setVisible(visibility);
-        executeBtn.setVisible(visibility);
-        testExecuteBtn.setVisible(visibility);
-        normalMarkerBtn.setVisible(visibility);
-        testMarkerBtn.setVisible(visibility);
-        hideMarkerBtn.setVisible(visibility);
         labelBtn.setVisible(visibility);
         answerBtn.setVisible(visibility);
         rememberCheckBox.setVisible(visibility);
         changeNameItem.setVisible(visibility);
+        deleteTaskItem.setVisible(visibility);
+        saveTaskItem.setVisible(visibility);
+        saveExamItem.setVisible(visibility);
         taskEdition.setVisible(visibility);
         answer.setVisible(visibility);
        
@@ -493,7 +496,7 @@ public class GUIMainController implements Initializable {
 
     /**
      * Aktualizuje tekst polecenia.
-     * @param content Obiekt klasy Text zawierający informacje o tekście i stanie znaczników.
+     * @param content Obiekt klasy Content zawierający informacje o tekście i stanie znaczników.
      */
     public void updateText(Content content) {
         content.creatStyleClassedTextAreaText(text);
@@ -603,6 +606,7 @@ public class GUIMainController implements Initializable {
     
     /**
      * Zapisuje stan bieżącego zadania i generuje plik .xml z egzaminem.
+     * Uruchamia okno wyboru pliku do zapisu.
      */
     public void saveCodeAreaToXML() {
         saveText(exam.idx);
@@ -612,19 +616,32 @@ public class GUIMainController implements Initializable {
         if (rememberCheckBox.isSelected()) {
             saveAnswers(exam.idx);
         }
-        Exam.getInstance().save();
+
+        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
+        if(file != null) {
+            Exam.getInstance().save(file);
+        }  else {
+            return;
+        }
     }
 
     /**
      * Laduje egzamin do programu ze z góry określonego pliku.
+     * Uruchamia okno wyboru pliku do odczytu.
      */
     public void loadXMLToCodeArea() {
 
-        Exam.getInstance().load();
+        File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
+        if(file != null) {
+            if(!Exam.getInstance().load(file)) {
+                return;
+            }
+        } else {
+            return;
+        }
         status = Status.DRAG;
         tabPane.getTabs().clear();
         status = Status.SWITCH;
-//        int tabsNumber = tabPane.getTabs().size();
         int size = Exam.getInstance().getTasks().size();
 
         for(int i = 0; i < size; i++) {
@@ -678,6 +695,42 @@ public class GUIMainController implements Initializable {
         }
         if (!ans.equals("")) {
             exam.getTaskAtIndex(id).getAnswers().add(ans);
+        }
+    }
+
+    /**
+     * Zapisuje stan bieżącego zadania w pliku (i egzaminie).
+     * Uruchamia okno wyboru pliku do zapisu.
+     * @param event
+     * @throws Exception
+     */
+    public void saveTask(ActionEvent event) throws Exception {
+        saveText(exam.idx);
+        saveContent(exam.idx);
+        saveResult(exam.idx);
+        Task task = Exam.getInstance().getCurrentTask();
+
+        File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, Exam.getInstance().getNames().get(exam.idx).replace(" ", "") + ".xml");
+        if(file != null) {
+            task.save(file.getAbsolutePath());
+        }
+    }
+
+    /**
+     * Odczytuje zadanie z pliku i otwiera je w nowej zakładce programu.
+     * Uruchamia okno wyboru pliku do odczytu.
+     * @param event
+     * @throws Exception
+     */
+    public void loadTask(ActionEvent event) throws Exception {
+        File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
+        if(file != null) {
+            Task task = new Task();
+            if(!task.load(file.getAbsolutePath())) {
+                return;
+            }
+            Exam.getInstance().addTask(task);
+            addNewTabPaneTab();
         }
     }
 }

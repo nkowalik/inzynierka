@@ -84,8 +84,8 @@ public class GUIExamCompilationController implements Initializable {
     
     public void save(ActionEvent event) throws IOException {
         appStage.hide();
-        PdfSavingController.appStage.hide();
-        PDFSettings.getInstance().pdfGenerate(PdfSavingController.appStage);
+        PdfSavingController.stage.hide();
+        PDFSettings.getInstance().pdfGenerate(PdfSavingController.stage);
     }
     
     public void cancel(ActionEvent event) {
@@ -95,7 +95,7 @@ public class GUIExamCompilationController implements Initializable {
     private void cancelAndQuit(){
         setCancelled(true);
         appStage.hide();
-        PdfSavingController.appStage.hide();
+        PdfSavingController.stage.hide();
     }
     
      public synchronized static boolean getCancelled() {

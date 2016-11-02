@@ -9,7 +9,6 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuButton?>
 <?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TabPane?>
 <?import javafx.scene.control.TextArea?>
@@ -18,10 +17,10 @@
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
-<?import org.fxmisc.richtext.*?>
 <?import javafx.scene.layout.VBox?>
+<?import org.fxmisc.richtext.*?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -30,27 +29,27 @@
       <RowConstraints />
     </rowConstraints>
     <children>
-        <BorderPane prefHeight="551.0" prefWidth="950.0" GridPane.rowIndex="1">
+        <BorderPane fx:id="borderPane" prefHeight="551.0" prefWidth="950.0" GridPane.rowIndex="1">
          <padding>
             <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
          </padding>
          <center>
-            <VBox prefHeight="292.0" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
-                <children>
-                <CodeArea fx:id="code" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="440.0" BorderPane.alignment="TOP_RIGHT">
-                    <BorderPane.margin>
-
-                   </BorderPane.margin></CodeArea>
-                <HBox alignment="BOTTOM_CENTER" spacing="10.0">
-                      <children>
-                            <Button fx:id="hideMarkerBtn" mnemonicParsing="false" onAction="#hideMarker" text="Ukryj" />
-                            <Button fx:id="testMarkerBtn" mnemonicParsing="false" onAction="#testMarker" text="Usuń" />
-                            <Button fx:id="normalMarkerBtn" mnemonicParsing="false" onAction="#normalMarker" text="Cofnij" />
-                            <Button fx:id="gapsMarkerBtn" mnemonicParsing="false" onAction="#gapsMarker" text="Luka" visible="false" />
-                      </children>
-                </HBox>
-                </children>
-            </VBox>
+             <VBox prefHeight="292.0" spacing="10.0" BorderPane.alignment="CENTER_RIGHT">
+                 <children>
+                     <CodeArea fx:id="code" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="483.0" prefWidth="440.0" BorderPane.alignment="TOP_RIGHT">
+                         <BorderPane.margin>
+                         </BorderPane.margin>
+                     </CodeArea>
+                     <HBox alignment="BOTTOM_CENTER" spacing="10.0">
+                         <children>
+                             <Button styleClass="hiddenButton" mnemonicParsing="false" onAction="#hideMarker" text="Ukryj" />
+                             <Button styleClass="testButton" mnemonicParsing="false" onAction="#testMarker" text="Usuń" />
+                             <Button mnemonicParsing="false" onAction="#normalMarker" text="Cofnij" />
+                             <Button fx:id="gapsMarkerBtn" styleClass="gapsButton" mnemonicParsing="false" onAction="#gapsMarker" text="Luka" visible="false" />
+                         </children>
+                     </HBox>
+                 </children>
+             </VBox>
          </center>
          <left>
             <VBox prefHeight="292.0" prefWidth="440.0" spacing="10.0" BorderPane.alignment="CENTER">
@@ -94,23 +93,25 @@
                 <Menu mnemonicParsing="false" text="Arkusz">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#createPDF" text="Generuj PDF" />
-                      <MenuItem mnemonicParsing="false" onAction="#saveCodeAreaToXML" text="Zapisz arkusz" />
-                      <MenuItem mnemonicParsing="false" onAction="#loadXMLToCodeArea" text="Wczytaj arkusz" />
+                    <MenuItem fx:id="saveExamItem" mnemonicParsing="false" onAction="#saveCodeAreaToXML" text="Zapisz arkusz" />
+                    <MenuItem mnemonicParsing="false" onAction="#loadXMLToCodeArea" text="Wczytaj arkusz" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Zadanie">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
-                    <MenuItem mnemonicParsing="false" onAction="#deleteTask" text="Usuń" />
-                      <MenuItem fx:id="taskEdition" mnemonicParsing="false" onAction="#editTask" text="Edytuj" visible="false" />
+
+                    <MenuItem fx:id="deleteTaskItem" mnemonicParsing="false" onAction="#deleteTask" text="Usun" />
                     <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę" />
                     <MenuItem fx:id="changeAnswersNum" mnemonicParsing="false" onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi" visible="false" />
+                    <MenuItem fx:id="saveTaskItem" mnemonicParsing="false" onAction="#saveTask" text="Zapisz zadanie" visible="false" />
+                    <MenuItem mnemonicParsing="false" onAction="#loadTask" text="Wczytaj zadanie" visible="true" />
+                    <MenuItem fx:id="taskEdition" mnemonicParsing="false" onAction="#editTask" text="Edytuj" visible="false" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false">
                     <graphic>
-                        <Label mnemonicParsing="false" onMouseClicked="#advancedOptionsClicked" text="Ustawienia">
-                        </Label>
+                        <Label mnemonicParsing="false" onMouseClicked="#advancedOptionsClicked" text="Ustawienia"/>
                     </graphic>
                 </Menu>
               </menus>

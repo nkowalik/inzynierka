@@ -33,7 +33,14 @@ public final class Alerts {
      * Wyświetla okno z błędem dot. generowania pdf'a dla pustego arkusza.
      */
     public static void emptyExamAlert() {
-        showAlert(AlertType.ERROR, "Błąd", "Egzamin jest pusty", "Nie można wygenerować pustego arkusza, dodaj zadania.");
+        showAlert(AlertType.ERROR, "Błąd", "Egzamin jest pusty.", "Nie można wygenerować pustego arkusza, dodaj zadania.");
+    }
+
+    /**
+     * Wyświetla okno z błędem dot. niepoprawnych danych w pliku.
+     */
+    public static void wrongFileContentAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Nieprawidłowa zawartość pliku.", "Plik zawiera nieodpowiednie znaczniki.");
     }
     
     /**
