@@ -174,11 +174,12 @@ public class PDFSettings {
         date += month.toString() + '.' + year.toString();
     }
     
-    public void pdfGenerate(Stage stage) {
+    public void pdfGenerate(Stage stage) throws IOException {
         try {
             PDFGenerator gen = new PDFGenerator();
         } catch (IOException ex) {
-            System.out.println("Cannot generate pdf object. Error caused by: " + ex.toString());
+            Alerts.fileAlreadyOpened();
+            PDFGenerator.document.close();
         } catch (EmptyPartOfTaskException ex) {
             Alerts.emptyPartOfTaskAlert();
         }

@@ -1,5 +1,7 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Exam;
+import com.ceg.examContent.Task;
 import com.ceg.pdf.PDFSettings;
 import java.io.File;
 import java.io.IOException;
@@ -167,12 +169,18 @@ public class PdfSavingController implements Initializable {
     public void saveFile(ActionEvent event) throws IOException {
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.PDF, "egzamin.pdf");
         try {
-            FileChooserCreator.getInstance().setInitialDirectory(file.getParent());
-            PDFSettings.getInstance().setTestType(testType.getValue().toString());
-            PDFSettings.getInstance().setPdfFile(file);
-            PDFSettings.getInstance().formatDate();
-            GUIExamCompilationController.show();
-            stage.hide();
+            if(validateExam()) {
+                FileChooserCreator.getInstance().setInitialDirectory(file.getParent());
+                PDFSettings.getInstance().setTestType(testType.getValue().toString());
+                PDFSettings.getInstance().setPdfFile(file);
+                PDFSettings.getInstance().formatDate();
+                GUIExamCompilationController.show();
+                stage.hide();
+            }
+            else {
+                Alerts.emptyPartOfTaskAlert();
+                stage.hide();
+            }
         } catch (NullPointerException e) {
             Alerts.examSavingErrorAlert();
             System.out.println("Cannot save exam. Error caused by: " + e.toString());
@@ -198,5 +206,16 @@ public class PdfSavingController implements Initializable {
             Alerts.advancedOptionsErrorAlert();
             System.out.println("Cannot open window: advanced options. Error caused by: " + ex.toString());
         }
+    }
+
+    public boolean validateExam() {
+        Exam exam = Exam.getInstance();
+        for(Task task : exam.getTasks()) {
+            if(task.getText().getTextParts().get(0).getText().length() == 0 ||
+                    task.getContent().getContentParts().get(0).getText().length() == 0) {
+                return false;
+            }
+        }
+        return true;
     }
 }

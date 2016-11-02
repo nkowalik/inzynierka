@@ -72,10 +72,7 @@ public class PDFGenerator {
              EventQueue.invokeLater(() -> {
                  try {
                      desktop.open(pdfFile);
-                 } catch (IOException ex) {
-                     Alerts.examSavingErrorAlert();
-                     System.out.println("Cannot save exam. Error caused by: " + ex.toString());
-                 }
+                 } catch (IOException ex) {}
              });
         }
     }

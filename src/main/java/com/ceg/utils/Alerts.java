@@ -155,6 +155,13 @@ public final class Alerts {
         showAlert(AlertType.ERROR, "Błąd", "Nastąpił błąd przy otwieraniu okna",  "Nie udało się otworzyć okna ustawień zaawansowanych.");
     }
 
+    /**
+     * Wyświetla okno z błędem dot. próby zapisu do otwartego pliku.
+     */
+    public static void fileAlreadyOpened() {
+        showAlert(AlertType.ERROR, "Błąd", "Nie można zapisać pliku", "Plik jest już otwarty, zamknij go i spróbuj ponownie.");
+    }
+
 
     /**
      * Wyświetla okno z alertem.
