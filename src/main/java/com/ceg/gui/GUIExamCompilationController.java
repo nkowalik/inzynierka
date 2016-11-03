@@ -23,6 +23,7 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.application.Platform;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.scene.Cursor;
 
 /**
@@ -89,6 +90,7 @@ public class GUIExamCompilationController implements Initializable {
         appStage.hide();
         PdfSavingController.stage.hide();
         GUIMainController.scene.setCursor(Cursor.WAIT);
+        PdfLoadingController.show();
         Task<Void> task = new Task<Void>() {
             @Override
             public Void call() {
@@ -96,7 +98,13 @@ public class GUIExamCompilationController implements Initializable {
                 return null ;
             }
         };
-        task.setOnSucceeded(e -> GUIMainController.scene.setCursor(Cursor.DEFAULT));
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent e) {
+                GUIMainController.scene.setCursor(Cursor.DEFAULT);
+                PdfLoadingController.getInstance().stage.hide();
+            }
+        });
         Thread th = new Thread(task);
         th.start();
     }
