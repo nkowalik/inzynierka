@@ -605,13 +605,14 @@ public class GUIMainController implements Initializable {
      * Odczytuje zadanie z pliku i otwiera je w nowej zakładce programu.
      * Uruchamia okno wyboru pliku do odczytu.
      * @param event
-     * @throws Exception
      */
-    public void loadTask(ActionEvent event) throws Exception {
+    public void loadTask(ActionEvent event) {
         File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
         try {
             Task task = new Task();
-            task.load(file.getAbsolutePath());
+            if (!task.load(file.getAbsolutePath())) {
+                return;
+            }
             Exam.getInstance().addTask(task);
             addNewTabPaneTab();
         } catch (NullPointerException e) {
