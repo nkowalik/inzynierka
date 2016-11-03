@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.DialogPane?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.effect.SepiaTone?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<DialogPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIExamCompilationController">
+    <header>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="102.0" prefWidth="480.0">
+         <children>
+            <ProgressBar fx:id="progressBar" layoutX="37.0" layoutY="60.0" prefHeight="18.0" prefWidth="407.0" progress="0.0" />
+            <Label fx:id="taskNumberLabel" layoutX="158.0" layoutY="34.0" text="Trwa kompilacja zadania 1 z 1..." />
+            <AnchorPane layoutX="-2.0" layoutY="214.0" minHeight="0.0" minWidth="0.0" prefHeight="91.0" prefWidth="480.0">
+               <children>
+                  <Button layoutX="320.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="Anuluj" onAction="#cancel" />
+                  <Button fx:id="saveButton" layoutX="398.0" layoutY="44.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="69.0" text="OK" onAction="#save" />
+               </children></AnchorPane>
+         </children></AnchorPane>
+    </header>
+    <expandableContent>
+      <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="200.0" prefWidth="320.0" />
+    </expandableContent>
+   <content>
+      <AnchorPane prefHeight="192.0" prefWidth="480.0">
+         <effect>
+            <SepiaTone />
+         </effect>
+         <children>
+            <TextArea fx:id="compilationDetails" editable="false" layoutX="38.0" layoutY="-6.0" prefHeight="143.0" prefWidth="404.0" />
+         </children>
+      </AnchorPane>
+   </content>
+</DialogPane>

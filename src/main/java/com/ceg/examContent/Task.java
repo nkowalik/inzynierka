@@ -1,8 +1,17 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.GCC;
+import com.ceg.utils.Alerts;
+
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * Klasa Task zawiera dane opisujące pojedyncze zadanie:
@@ -14,6 +23,7 @@ import java.util.List;
  * text - kod zadania
  * compiler - kompilator przypisany do danego zadania
  */
+@XmlRootElement
 public class Task {
     private Content content;
     private List<String> answers;
@@ -97,5 +107,44 @@ public class Task {
             }
         }
         answers = output;
+    }
+
+    /**
+     * Zapisuje zawartość obiektu klasy Task w pliku.
+     * @param filename Nazwa pliku w którym będą zapisane dane.
+     */
+    public void save(String filename) {
+        try {
+            JAXBContext jc = JAXBContext.newInstance(Task.class);
+            Marshaller marshaller = jc.createMarshaller();
+            marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            marshaller.marshal(this, new File(filename));
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Wczytuje zawartość pliku do obiektu klasy Task.
+     * W przypadku niepowodzenia wyświetla odpowiedni alert.
+     * @param filename Nazwa pliku z którego mają zostać odczytane dane.
+     * @return Wartość określająca powodzenie operacji.
+     */
+    public boolean load(String filename) {
+        try {
+            JAXBContext context = JAXBContext.newInstance(Task.class);
+            Unmarshaller un = context.createUnmarshaller();
+            Task task = (Task)un.unmarshal(new File(filename));
+            this.setAnswers(task.answers);
+            this.setContent(task.content);
+            this.setPdfAnswers(task.pdfAnswers);
+            this.setResult(task.result);
+            this.setText(task.text);
+            this.setType(task.type);
+        } catch (JAXBException e) {
+            Alerts.wrongFileContentAlert();
+            return false;
+        }
+        return true;
     }
 }

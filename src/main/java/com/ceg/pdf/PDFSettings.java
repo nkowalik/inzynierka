@@ -1,7 +1,7 @@
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
-import com.ceg.gui.Alerts;
+import com.ceg.utils.Alerts;
 import com.ceg.gui.PdfSavingController;
 import com.ceg.utils.FontType;
 import com.ceg.utils.FontTypeUtil;
@@ -162,8 +162,9 @@ public class PDFSettings {
     public File getPdfFile() {
         return pdfFile;
     }
-    
-    public void saveFile() {
+    public void setPdfFile(File pdfFile) { this.pdfFile = pdfFile; }
+
+    public void formatDate() {
         date = "";
         
         if (day < 10)
@@ -172,8 +173,6 @@ public class PDFSettings {
         if (month < 10)
             date += '0';
         date += month.toString() + '.' + year.toString();
-        
-        pdfFile = new File(pdfFilePath + '/' + pdfFileName);
     }
     
     public void pdfGenerate(Stage stage) {

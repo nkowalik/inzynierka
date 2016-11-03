@@ -1,4 +1,4 @@
-package com.ceg.gui;
+package com.ceg.utils;
 
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
@@ -12,6 +12,13 @@ public final class Alerts {
     public static void codeLineIsTooLong() {
         showAlert(AlertType.WARNING, "Ostrzeżenie", "Kod nie mieści się w wyznaczonym polu." , 
                 "Zmień kod, zmniejsz czcionkę lub zmień szerokość pola kodu.");
+    }
+    /**
+     * Alert z informacją, że pole z miejscem na odpowiedź w pdf jest zbyt wąskie
+     */
+    public static void tooNarrowPlaceForAnswer() {
+        showAlert(AlertType.WARNING, "Uwaga", "Szerokość pola odpowiedzi.", "Pole z miejscem na odpowiedź w dokumencie \n"
+                +  "jest zbyt wąskie.");
     }
 
     /**
@@ -41,7 +48,21 @@ public final class Alerts {
      * Wyświetla okno z błędem dot. generowania pdf'a dla pustego arkusza.
      */
     public static void emptyExamAlert() {
-        showAlert(AlertType.ERROR, "Błąd", "Egzamin jest pusty", "Nie można wygenerować pustego arkusza, dodaj zadania.");
+        showAlert(AlertType.ERROR, "Błąd", "Egzamin jest pusty.", "Nie można wygenerować pustego arkusza, dodaj zadania.");
+    }
+
+    /**
+     * Wyświetla okno z błędem dot. niepoprawnych danych w pliku.
+     */
+    public static void wrongFileContentAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Nieprawidłowa zawartość pliku.", "Plik zawiera nieodpowiednie znaczniki.");
+    }
+    
+    /**
+    * Wyświetla okno z informacją o błędzie kompilacji podczas automatyczbej kompilacji egzaminu
+    */
+    public static void compileErrorAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Nastąpił błąd kompilacji", "Popraw błędy w kodzie dolączonym do zadania.");
     }
 
     /**

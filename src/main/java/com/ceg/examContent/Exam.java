@@ -9,6 +9,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
+
+import com.ceg.utils.Alerts;
 import javafx.scene.control.TabPane;
 import javax.xml.bind.annotation.XmlElement;
 
@@ -19,9 +21,11 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlRootElement
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
+    private int compilationProgress = -1;
+    private List<String> outputList = new ArrayList<>();
     @XmlElement
     private ArrayList<String> names;
-    private final static Exam instance = new Exam();
+    private static Exam instance;
 
     /**
      * Indeks aktualnego zadania (wskazywanego przez zakładkę).
@@ -33,9 +37,15 @@ public class Exam extends Observable {
      */
     public int maxIdx;
 
-    public Exam() {
+    private Exam() {
     }
     public static Exam getInstance() {
+        if (instance == null){
+            synchronized(Exam.class){
+                if(instance == null)
+                    instance = new Exam();
+            }
+        }
         return instance;
     }
     public void init(){
@@ -44,6 +54,36 @@ public class Exam extends Observable {
         idx = 0;
         maxIdx = 0;
     }
+    
+    public boolean compile() {
+        List<String> output = new ArrayList<>();
+        
+        clearOutputList();
+        for (Task i : tasks) {
+            output.clear();
+            i.getType().callExecute(i, output);
+            i.setResult(String.join("\n", output));
+            this.incCompilationProgress();
+            if (output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
+                addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
+            }
+            else {                
+               if (!i.getType().name.equals("LineNumbers")){
+                    output.remove(0);
+                    output.stream().forEach((s) -> {
+                        addToOutputList(s + "\n");
+                    });
+                   return false;
+               }
+               else{                  
+                   addToOutputList("Zadanie " + (getCompilationProgress()+1) + ": Błąd kompilacji w zadaniu \"Numery linii\".\n");
+               }
+            }            
+        }
+        this.incCompilationProgress();
+        return true;
+    }
+        
     public List<Task> getTasks(){
         return tasks;
     }
@@ -86,14 +126,6 @@ public class Exam extends Observable {
     }
 
     /**
-     * Uaktualnia zadanie, które jest obecnie aktywne
-     * @param task Zadanie, pobierane z okna edycji zadania
-     */
-    public void setCurrentTask(Task task) {
-        tasks.set(idx, task);
-    }
-
-    /**
      * Pobiera zadanie znajdujące się na podanej pozycji w egzaminie.
      * @param idx Liczba określająca numer zadania które ma zostać pobrane z egzaminu.
      * @return Odczytane zadanie.
@@ -110,7 +142,31 @@ public class Exam extends Observable {
         tasks.remove(idx);
         names.remove(idx);
     }
-
+    
+    public synchronized void incCompilationProgress(){
+        compilationProgress++;
+    }
+    
+    public synchronized int getCompilationProgress() {
+        return compilationProgress;
+    }
+    
+    public synchronized void clearCompilationProgress(){
+        compilationProgress = -1;
+    }
+    
+    public synchronized List<String> getOutputList() {
+        return outputList;
+    }
+    
+    private synchronized void addToOutputList(String str){
+        outputList.add(str);
+    }
+    
+    private synchronized void clearOutputList(){
+        outputList.clear();
+    }
+    
     public void changeTasksOrder(int oldIndex, int newIndex) {
         Task task = tasks.get(oldIndex);
         tasks.remove(oldIndex);
@@ -121,41 +177,43 @@ public class Exam extends Observable {
         names.add(newIndex, name);
     }
 
-    // todo zmienić tak, aby kompilowany był cały egzamin*/
-    public boolean compileExam() {
-        return true;
-    }
-
     /**
      * Zapisuje egzamin ze z góry zdefiniowaną nazwą.
+     * Uruchamia okno wyboru pliku do zapisu.
      */
-    // todo umożliwić ustalenie nazwy na etapie tworzenia egzaminu
-    public void save() {
+    public void save(File file) {
         try {
             JAXBContext jc = JAXBContext.newInstance(Exam.class);
             Marshaller marshaller = jc.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(this, new File("arkusz.xml"));
+            marshaller.marshal(this, file);
         } catch (JAXBException e) {
             e.printStackTrace();
         }
     }
 
     /**
-     * Odczytuje egzamin ze z góry zdefiniowaną nazwą.
+     * Wczytuje zawartość pliku do obiektu klasy Exam.
+     * W przypadku niepowodzenia wyświetla odpowiedni alert.
+     * @param file Plik który ma zostać odczytany.
+     * @return Wartość określająca powodzenie operacji.
      */
-    // todo umożliwić wybór konkretnego arkusz oraz obsłużyć wyjątek braku arkusza o podanej nazwie
-    public void load() {
+    public boolean load(File file) {
         try {
             JAXBContext context = JAXBContext.newInstance(Exam.class);
             Unmarshaller un = context.createUnmarshaller();
-            Exam exam = (Exam)un.unmarshal(new File("arkusz.xml"));
+            Exam exam = (Exam)un.unmarshal(file);
             this.setTasks(exam.tasks);
             this.idx = exam.idx;
             this.maxIdx = exam.maxIdx;
             this.names = exam.names;
         } catch (JAXBException e) {
-            e.printStackTrace();
+            Alerts.wrongFileContentAlert();
+            return false;
+        } catch (ClassCastException e) {
+            Alerts.wrongFileContentAlert();
+            return false;
         }
+        return true;
     }
 }

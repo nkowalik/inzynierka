@@ -41,7 +41,8 @@ public class PDFCommand extends PDFAbstractTaskPart {
             FontType ft = defaultFontType.contentCssClassToFontType(cp.getCssClassName());
             PDFLinePart lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
             spaceWidth = getWidth(" ", ft, fontSize);
-            words = cp.getText().split("\n");
+            String withSpaces = " " + cp.getText()+ " ";
+            words = withSpaces.split("\n");
             
             if (cp.getText().charAt(0) == ' ') {
                 lp.setText(" ");
