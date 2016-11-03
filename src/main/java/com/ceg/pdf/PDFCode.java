@@ -1,7 +1,7 @@
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
-import com.ceg.gui.Alerts;
+import com.ceg.utils.Alerts;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
