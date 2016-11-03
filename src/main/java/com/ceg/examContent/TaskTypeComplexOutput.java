@@ -2,15 +2,26 @@ package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
 import com.ceg.utils.Alerts;
+import javafx.fxml.FXML;
+import javafx.scene.control.MenuItem;
 
 import java.util.List;
 
 public class TaskTypeComplexOutput extends TaskType{
-    
+
+    @FXML
+    MenuItem taskTypeComplexOutput;
+
     public TaskTypeComplexOutput() {
         super();
         name = "ComplexOutput";
+        text = "Wyjście funkcji";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
 
     @Override
