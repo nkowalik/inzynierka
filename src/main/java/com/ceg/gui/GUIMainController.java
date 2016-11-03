@@ -550,14 +550,13 @@ public class GUIMainController implements Initializable {
     public void loadXMLToCodeArea() {
         try {
             File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
-            Exam.getInstance().load(file);
-        } catch (NullPointerException e) {
+            if (file == null || !Exam.getInstance().load(file)) {
+                return;
+            }
+        } catch (Exception e) {
             Alerts.examLoadingErrorAlert();
             System.out.println("Cannot load exam. Error caused by: " + e.toString());
             return;
-        } catch (IllegalArgumentException e) {
-            Alerts.examLoadingErrorAlert();
-            System.out.println("Cannot load exam. Error caused by: " + e.toString());
         }
 
         status = Status.DRAG;
@@ -608,6 +607,7 @@ public class GUIMainController implements Initializable {
      */
     public void loadTask(ActionEvent event) {
         File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
+        if (file == null) return;
         try {
             Task task = new Task();
             if (!task.load(file.getAbsolutePath())) {
