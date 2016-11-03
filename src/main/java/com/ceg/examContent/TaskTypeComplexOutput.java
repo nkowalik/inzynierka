@@ -10,7 +10,13 @@ public class TaskTypeComplexOutput extends TaskType{
     public TaskTypeComplexOutput() {
         super();
         name = "ComplexOutput";
+        text = "Wyjście funkcji";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
 
     @Override

@@ -7,6 +7,12 @@ public class TaskTypeOwn extends TaskType{
     public TaskTypeOwn() {
         super();
         name = "OwnType";
+        text = "Własne zadanie";
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
 
     @Override

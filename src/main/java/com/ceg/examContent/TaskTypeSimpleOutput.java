@@ -8,7 +8,13 @@ public class TaskTypeSimpleOutput extends TaskType{
         super();
         super.setNoOfAnswers(1);
         name = "SimpleOutput";
+        text = "Wyjście programu";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku wykonania programu.";
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
     
     @Override

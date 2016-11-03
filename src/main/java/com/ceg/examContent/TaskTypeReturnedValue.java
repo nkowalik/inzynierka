@@ -10,6 +10,12 @@ public class TaskTypeReturnedValue extends TaskType{
     public TaskTypeReturnedValue() {
         super();
         name = "ReturnedValue";
+        text = "Zwrócona liczba";
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
     
     @Override

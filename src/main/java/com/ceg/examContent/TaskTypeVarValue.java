@@ -10,6 +10,12 @@ public class TaskTypeVarValue extends TaskType{
     public TaskTypeVarValue() {
         super();
         name = "VarValue";
+        text = "Wartości zmiennych";
+    }
+
+    @Override
+    public String getText() {
+        return text;
     }
 
     @Override
