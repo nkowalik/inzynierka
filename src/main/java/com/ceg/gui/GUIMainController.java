@@ -120,7 +120,7 @@ public class GUIMainController implements Initializable {
             result.setText("");
             if (!rememberCheckBox.isSelected()) { 
                 for (int i = 0; i < answer.getText().length(); i++) {
-                    if (answer.getStyleOfChar(i).toString().equals(EMPTY) || answer.getStyleOfChar(i).isEmpty()) {
+                    if (answer.getStyleOfChar(i).isEmpty() || answer.getStyleOfChar(i).toString().equals(EMPTY)) {
                         answer.deleteText(i, i+1);
                         i--;
                     }
@@ -689,7 +689,7 @@ public class GUIMainController implements Initializable {
                 exam.getTaskAtIndex(id).getAnswers().add(ans);
                 ans = "";
             }
-            else if (answer.getStyleOfChar(i).toString().equals(EMPTY.getClassList()) || answer.getStyleOfChar(i).isEmpty()) {
+            else if (answer.getStyleOfChar(i).isEmpty() || answer.getStyleOfChar(i).toString().equals(EMPTY.getClassList())) {
                 ans += answer.getText().charAt(i);
             }
         }
