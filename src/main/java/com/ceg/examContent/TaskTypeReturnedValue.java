@@ -10,14 +10,9 @@ public class TaskTypeReturnedValue extends TaskType{
     public TaskTypeReturnedValue() {
         super();
         name = "ReturnedValue";
-        text = "Zwrócona liczba";
+        command = "Zwrócona liczba";
     }
 
-    @Override
-    public String getText() {
-        return text;
-    }
-    
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers) {
         answers.clear();

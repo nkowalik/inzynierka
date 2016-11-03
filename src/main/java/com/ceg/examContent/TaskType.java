@@ -23,7 +23,7 @@ import java.util.List;
 abstract public class TaskType {
     String defaultContents;
     public String name;
-    public String text;
+    public String command;
     protected int noOfAnswers;
     
     TaskType(){
@@ -69,8 +69,8 @@ abstract public class TaskType {
     public void setDefaultContents(String defaultContents) {
         this.defaultContents = defaultContents;
     }
-    public String getText() { return text; }
-    public void setText(String text) { this.text = text; }
+    public String getCommand() { return command; }
+    public void setCommand(String command) { this.command = command; }
      public int getNoOfAnswers() {
         return noOfAnswers;
     }
