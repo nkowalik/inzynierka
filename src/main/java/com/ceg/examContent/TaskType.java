@@ -21,7 +21,6 @@ import java.util.List;
         TaskTypeVarValue.class,
         TaskTypeOwn.class
 })
-@XmlRootElement(name = "TaskType")
 abstract public class TaskType {
     String defaultContents;
     public String name;
