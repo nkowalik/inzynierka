@@ -67,7 +67,7 @@ public class FileChooserCreator {
         File file = fileChooser.showOpenDialog(stage);
         if (file != null) {
             initialDirectory = file.getParent();
-        } 
+        }
         return file;
     }
 

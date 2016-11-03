@@ -1,5 +1,7 @@
 package com.ceg.examContent;
 
+import com.ceg.utils.Alerts;
+
 import java.util.List;
 
 public class TaskTypeSimpleOutput extends TaskType{
@@ -20,6 +22,7 @@ public class TaskTypeSimpleOutput extends TaskType{
         }
         catch (IndexOutOfBoundsException e) {
             answers.clear();
+            Alerts.generatingAnswersErrorAlert();
             System.err.println("IndexOutOfBoundsException: " + e.getMessage());
         }
          preparePdfAnswers(task);
