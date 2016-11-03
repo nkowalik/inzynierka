@@ -1,5 +1,6 @@
 package com.ceg.examContent;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ import java.util.List;
         TaskTypeVarValue.class,
         TaskTypeOwn.class
 })
+@XmlRootElement(name = "TaskType")
 abstract public class TaskType {
     String defaultContents;
     public String name;
@@ -69,9 +71,7 @@ abstract public class TaskType {
     public void setDefaultContents(String defaultContents) {
         this.defaultContents = defaultContents;
     }
-    public String getCommand() { return command; }
-    public void setCommand(String command) { this.command = command; }
-     public int getNoOfAnswers() {
+    public int getNoOfAnswers() {
         return noOfAnswers;
     }
     public void setNoOfAnswers(int noOfAnswers) {
