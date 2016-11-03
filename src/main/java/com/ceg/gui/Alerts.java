@@ -5,6 +5,14 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Region;
 
 public final class Alerts {
+    
+    /**
+     * Wyświetla alert o niemieszczeniu się kodu w części kodu
+     */
+    public static void codeLineIsTooLong() {
+        showAlert(AlertType.WARNING, "Ostrzeżenie", "Kod nie mieści się w wyznaczonym polu." , 
+                "Zmień kod, zmniejsz czcionkę lub zmień szerokość pola kodu.");
+    }
 
     /**
      * Wyświetla okno z informacją o braku części zadania.
