@@ -12,8 +12,8 @@ public class PDFLineNumbersCode extends PDFCode {
     private final float linePosition = leftMargin + getWidth("   ", defaultFontType, fontSize);
     private final float lineWidth = (float) 0.1;
     
-    public PDFLineNumbersCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
-        super(lines);
+    public PDFLineNumbersCode(List<String> lines, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {
+        super(lines, pdfContentWidthPercentage);
     }
     
     @Override

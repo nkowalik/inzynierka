@@ -18,7 +18,7 @@ public class PDFCommand extends PDFAbstractTaskPart {
         super();
         this.taskNumber = taskNumber;
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = pdfSettings.commandWidth;
+        textWidth = (int)Math.floor(content.getPdfWidthPercentage() * PDFSettings.pdfContentWidth);
         fontSize = pdfSettings.getCommandFontSize();
         defaultFontType = pdfSettings.getCommandFont();
         leftMargin = pdfSettings.leftMargin;
@@ -41,57 +41,69 @@ public class PDFCommand extends PDFAbstractTaskPart {
             FontType ft = defaultFontType.contentCssClassToFontType(cp.getCssClassName());
             PDFLinePart lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
             spaceWidth = getWidth(" ", ft, fontSize);
-            words = cp.getText().split(" ");
+            String withSpaces = " " + cp.getText()+ " ";
+            words = withSpaces.split("\n");
             
             if (cp.getText().charAt(0) == ' ') {
                 lp.setText(" ");
-            }            
-            
-            for (String word : words) {
-                actualWordWidth = getWidth(word, ft, fontSize);
-                
-                 //linia wystarczająco długa, żaden wyraz więcej się nie zmieści
-                if (actualWidth + actualWordWidth + spaceWidth  >= textWidth) {
-                    //jeśli ostatnim znakiem w linii jest spacja to usuwamy ją
-                    
-                    //jeśli spacja występuje w zakończonym PDFLinePart, zaktualizujemy poprzedni
-                    if (lp.getText().length() == 0) {
-                        PDFLinePart lp2 = pdfLine.getLineParts().get(pdfLine.getLineParts().size() - 1);
-                        if (lp2.getText().charAt(lp2.getText().length() - 1) == ' ') {
-                            lp2.setText(lp2.getText().substring(0, lp2.getText().length() - 2));
-                            pdfLine.getLineParts().set(pdfLine.getLineParts().size() - 1, lp2);
+            }    
+            for (int i = 0; i < words.length; i++) {
+                String[] spaceSplit = words[i].split(" ");
+                for (String word : spaceSplit) {
+                    actualWordWidth = getWidth(word, ft, fontSize);
+                    word = word.replaceAll("\r", "");
+
+                     //linia wystarczająco długa, żaden wyraz więcej się nie zmieści
+                    if (actualWidth + actualWordWidth + spaceWidth  >= textWidth) {
+                        //jeśli ostatnim znakiem w linii jest spacja to usuwamy ją
+
+                        //jeśli spacja występuje w zakończonym PDFLinePart, zaktualizujemy poprzedni
+                        if (lp.getText().length() == 0) {
+                            PDFLinePart lp2 = pdfLine.getLineParts().get(pdfLine.getLineParts().size() - 1);
+                            if (lp2.getText().charAt(lp2.getText().length() - 1) == ' ') {
+                                lp2.setText(lp2.getText().substring(0, lp2.getText().length() - 2));
+                                pdfLine.getLineParts().set(pdfLine.getLineParts().size() - 1, lp2);
+                            }
                         }
+                        //jeśli spacja występuje w aktualnym PDFLinePart to usuwamy na bieżąco                
+                        else if (lp.getText().charAt(lp.getText().length() - 1) == ' ') {
+                            lp.setText(lp.getText().substring(0, lp.getText().length() - 1));
+                        }
+                        pdfLine.getLineParts().add(lp);
+                        pdfLines.add(pdfLine);
+                        lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
+                        pdfLine = new PDFLine(fontSize, leftMargin);
+                        lp.setText(lp.getText() + word);
+
+                        actualWidth = actualWordWidth;
                     }
-                    //jeśli spacja występuje w aktualnym PDFLinePart to usuwamy na bieżąco                
-                    else if (lp.getText().charAt(lp.getText().length() - 1) == ' ') {
-                        lp.setText(lp.getText().substring(0, lp.getText().length() - 1));
+                    //do linii dopisujemy wyraz
+                    else {
+                        //jeśli linia nie jest pusta to dodajemy spację po poprzednim wyrazie
+                        if (!lp.getText().equals("") && !lp.getText().equals(" ")) {
+                            lp.setText(lp.getText() + ' ');
+                            actualWidth += spaceWidth;
+                        }
+                        lp.setText(lp.getText() + word);
+                        actualWidth += actualWordWidth;
                     }
+                }
+                if (cp.getText().charAt(cp.getText().length() - 1) == ' ' && 
+                        lp.getText().charAt(lp.getText().length() - 1) != ' ') {
+                    lp.setText(lp.getText() + ' ');
+                }
+                //jeśli linia nie jest pusta, wypisujemy ją
+                if (!lp.getText().equals("")) {
                     pdfLine.getLineParts().add(lp);
+                }
+                if (i < words.length - 1) {
                     pdfLines.add(pdfLine);
                     lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
                     pdfLine = new PDFLine(fontSize, leftMargin);
-                    lp.setText(lp.getText() + word);
-                    
-                    actualWidth = actualWordWidth;
+                    lp.setText("");
+
+                    actualWidth = 0;
                 }
-                //do linii dopisujemy wyraz
-                else {
-                    //jeśli linia nie jest pusta to dodajemy spację po poprzednim wyrazie
-                    if (!lp.getText().equals("") && !lp.getText().equals(" ")) {
-                        lp.setText(lp.getText() + ' ');
-                        actualWidth += spaceWidth;
-                    }
-                    lp.setText(lp.getText() + word);
-                    actualWidth += actualWordWidth;
-                }
-            }
-            if (cp.getText().charAt(cp.getText().length() - 1) == ' ' && 
-                    lp.getText().charAt(lp.getText().length() - 1) != ' ') {
-                lp.setText(lp.getText() + ' ');
-            }
-            //jeśli linia nie jest pusta, wypisujemy ją
-            if (!lp.getText().equals("")) {
-                pdfLine.getLineParts().add(lp);
             }
         }
         pdfLines.add(pdfLine);

@@ -6,7 +6,6 @@ import java.util.*;
 import com.ceg.examContent.Text;
 import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -73,6 +72,8 @@ public class GUIMainController implements Initializable {
     MenuItem saveExamItem;
     @FXML
     MenuItem taskEdition;
+    @FXML
+    MenuItem pdfContentWidth;
     @FXML
     HBox textOptions;
     @FXML
@@ -393,6 +394,15 @@ public class GUIMainController implements Initializable {
         task.setText(tempText);
         GUIManageTaskController.getInstance().editTask(task);
     }
+    
+    /**
+     * Wyświetla okno edycji szerokości zadania w dokumencie
+     * @param event
+     * @throws Exception 
+     */
+    public void changePdfContentWidth(ActionEvent event) throws Exception {
+        PdfWidthChangingController.show();
+    }
 
     /**
      * Usuwa zadanie wskazywane przez aktywną zakładkę.
@@ -474,6 +484,7 @@ public class GUIMainController implements Initializable {
         saveTaskItem.setVisible(visibility);
         saveExamItem.setVisible(visibility);
         taskEdition.setVisible(visibility);
+        pdfContentWidth.setVisible(visibility);
         answer.setVisible(visibility);
        
         if(visibility){

@@ -1,6 +1,7 @@
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.utils.Alerts;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -24,11 +25,11 @@ public class PDFCode extends PDFAbstractTaskPart {
                                                             "<",
                                                             " " );
     
-    PDFCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
+    PDFCode(List<String> lines, float codeWidthPercentage) throws IOException, EmptyPartOfTaskException {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = pdfSettings.codeWidth;
-        leftMargin = pdfSettings.leftCodeMargin;
+        textWidth = (int)Math.ceil(pdfSettings.pdfContentWidth * codeWidthPercentage);
+        leftMargin = pdfSettings.rightMargin - textWidth;
         defaultFontType = pdfSettings.getCodeFont();
         fontSize = pdfSettings.getCodeFontSize();
         textSplitting(lines);
@@ -41,6 +42,8 @@ public class PDFCode extends PDFAbstractTaskPart {
     public void textSplitting (List<String> codeLines) throws IOException, EmptyPartOfTaskException {
         super.textSplitting(codeLines);
         float actualLineWidth;
+        boolean alert = false;
+        
         for (String codeLine : codeLines) { 
             line = codeLine;
             line = ifTabDoTab(line);
@@ -55,6 +58,10 @@ public class PDFCode extends PDFAbstractTaskPart {
             }
             
             else {
+                if (!alert) {
+                    Alerts.codeLineIsTooLong();
+                    alert = true;
+                }
                 for (String string : operatorList) {
                     if (splittingLine(string))
                         break;
