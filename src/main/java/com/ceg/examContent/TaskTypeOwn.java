@@ -17,7 +17,7 @@ public class TaskTypeOwn extends TaskType{
     @Override
     public void callExecute(Task task, List<String> output) {
         List<String> code = task.getText().getStandardCompilationCode();
-        task.compiler.execute(code, "owntype.cpp", output);
+        task.compiler.execute(code, "owntype", output);
         task.getType().preparePdfAnswers(task);
     }
 
