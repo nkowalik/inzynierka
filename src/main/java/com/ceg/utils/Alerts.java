@@ -5,6 +5,21 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.layout.Region;
 
 public final class Alerts {
+    
+    /**
+     * Wyświetla alert o niemieszczeniu się kodu w części kodu
+     */
+    public static void codeLineIsTooLong() {
+        showAlert(AlertType.WARNING, "Ostrzeżenie", "Kod nie mieści się w wyznaczonym polu." , 
+                "Zmień kod, zmniejsz czcionkę lub zmień szerokość pola kodu.");
+    }
+    /**
+     * Alert z informacją, że pole z miejscem na odpowiedź w pdf jest zbyt wąskie
+     */
+    public static void tooNarrowPlaceForAnswer() {
+        showAlert(AlertType.WARNING, "Uwaga", "Szerokość pola odpowiedzi.", "Pole z miejscem na odpowiedź w dokumencie \n"
+                +  "jest zbyt wąskie.");
+    }
 
     /**
      * Wyświetla okno z informacją o braku części zadania.

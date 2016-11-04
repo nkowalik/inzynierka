@@ -50,7 +50,7 @@ public class PDFGenerator {
                 throw new EmptyPartOfTaskException();
             
             comm = new PDFCommand(i.getContent(), taskNumber++);
-            createCodeAndAnswer(i);
+            createCodeAndAnswer(i, i.getContent().getPdfWidthPercentage());
 
             answer.setAnswers(i.getAnswers());
             code.setAnswer(answer);
@@ -104,20 +104,20 @@ public class PDFGenerator {
         actualY = (commandLines < codeLines) ? commandLines : codeLines;
     }
 
-    private void createCodeAndAnswer(Task task) throws IOException, EmptyPartOfTaskException {
+    private void createCodeAndAnswer(Task task, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {
         switch(PDFSettings.getInstance().getTestType()) {
             case "nauczyciel":
                 if (task.getType().name.equals("Gaps")) {
-                    code = new PDFTeachersGapsCode(task.getText().getPDFCode());
+                    code = new PDFTeachersGapsCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
                     answer = code.answer;
                 }
                 else if (task.getType().name.equals("LineNumbers")) {
-                    code = new PDFLineNumbersCode(task.getText().getPDFCode());
-                    answer = new PDFTeachersAnswer(task.getPdfAnswers());
+                    code = new PDFLineNumbersCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
+                    answer = new PDFTeachersAnswer(task.getPdfAnswers(), pdfContentWidthPercentage);
                 }
                 else {
-                    code = new PDFCode(task.getText().getPDFCode());
-                    answer = new PDFTeachersAnswer(task.getPdfAnswers());
+                    code = new PDFCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
+                    answer = new PDFTeachersAnswer(task.getPdfAnswers(), pdfContentWidthPercentage);
                 }
                 break;
             case "interaktywny":
@@ -128,16 +128,16 @@ public class PDFGenerator {
             default:
                     switch (task.getType().name) {
                         case "Gaps":
-                            code = new PDFGapsCode(task.getText().getPDFCode());
+                            code = new PDFGapsCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
                             answer = code.answer;
                             break;
                         case "LineNumbers":
-                            code = new PDFLineNumbersCode(task.getText().getPDFCode());
-                            answer = new PDFAnswer(task.getPdfAnswers());
+                            code = new PDFLineNumbersCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
+                            answer = new PDFAnswer(task.getPdfAnswers(), pdfContentWidthPercentage);
                             break;
                         default:
-                            code = new PDFCode(task.getText().getPDFCode());
-                            answer = new PDFAnswer(task.getPdfAnswers());
+                            code = new PDFCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
+                            answer = new PDFAnswer(task.getPdfAnswers(), pdfContentWidthPercentage);
                             break;
                     }
                 break;

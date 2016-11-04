@@ -16,8 +16,8 @@ public class PDFTeachersAnswer extends PDFAnswer {
     //następnej luki
     private int answersIndex;
 
-    public PDFTeachersAnswer(List<String> lines) throws IOException {
-        super(lines);
+    public PDFTeachersAnswer(List<String> lines, float codeWidthPercentage) throws IOException {
+        super(lines, codeWidthPercentage);
         answersIndex = 0;
     }
 

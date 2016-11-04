@@ -6,6 +6,8 @@ import com.ceg.utils.Alerts;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -21,6 +23,8 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.application.Platform;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.scene.Cursor;
 
 /**
  * FXML Controller class
@@ -85,7 +89,26 @@ public class GUIExamCompilationController implements Initializable {
     public void save(ActionEvent event) throws IOException {
         appStage.hide();
         PdfSavingController.stage.hide();
-        PDFSettings.getInstance().pdfGenerate(PdfSavingController.stage);
+        GUIMainController.scene.setCursor(Cursor.WAIT);
+        PdfLoadingController.show();
+        Task<Void> task = new Task<Void>() {
+            @Override
+            public Void call() {
+                try {
+                    PDFSettings.getInstance().pdfGenerate(PdfSavingController.stage);
+                } catch (IOException e) {}
+                return null ;
+            }
+        };
+        task.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent e) {
+                GUIMainController.scene.setCursor(Cursor.DEFAULT);
+                PdfLoadingController.getInstance().stage.hide();
+            }
+        });
+        Thread th = new Thread(task);
+        th.start();
     }
     
     public void cancel(ActionEvent event) {
@@ -125,7 +148,7 @@ public class GUIExamCompilationController implements Initializable {
                     prevProgress = progress;
                 }
                 updateProgress(1, 1);
-                updateMessage("Kompilacja zakończona pomyślnie.");
+                updateMessage(String.join("", exam.getOutputList())+"Kompilacja zakończona pomyślnie.");
                 return null;
             }
         };

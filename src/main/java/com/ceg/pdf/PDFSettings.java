@@ -35,27 +35,24 @@ public class PDFSettings {
     private String date;
     private File pdfFile;
 
-    public static int commandWidth;
-    public static int codeWidth;
     public static int leftMargin;
-    public static int leftCodeMargin;
+    public static int rightMargin;
     public static int topMargin;
     public static int bottomMargin;
     public static int breakBetweenTasks;
+    public static int pdfContentWidth;
 
     private static final PDFSettings instance = new PDFSettings();
 
     public PDFSettings() {       
         preparePropertiesInput();
         
-        commandWidth = Integer.parseInt(defaultSettings.getProperty("command.width"));
-        codeWidth = Integer.parseInt(defaultSettings.getProperty("code.width"));
         leftMargin = Integer.parseInt(defaultSettings.getProperty("left.margin"));
         topMargin = Integer.parseInt(defaultSettings.getProperty("top.margin"));
         bottomMargin = Integer.parseInt(defaultSettings.getProperty("bottom.margin"));
-        breakBetweenTasks = Integer.parseInt(defaultSettings.getProperty("break.between.tasks"));
-        
-        leftCodeMargin = leftMargin + commandWidth + leftMargin/2;
+        rightMargin = Integer.parseInt(defaultSettings.getProperty("right.margin"));
+        breakBetweenTasks = Integer.parseInt(defaultSettings.getProperty("break.between.tasks")); 
+        int breakBetweenTaskParts = Integer.parseInt(defaultSettings.getProperty("break.between.task.parts"));
         
         this.commandFont = FontTypeUtil.change(defaultSettings.getProperty("command.font"));
         this.codeFont = FontTypeUtil.change(defaultSettings.getProperty("code.font"));
@@ -70,7 +67,8 @@ public class PDFSettings {
         day = calendar.get(Calendar.DAY_OF_MONTH);
         
         File file = new File(".");
-        pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);       
+        pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);   
+        pdfContentWidth = rightMargin - leftMargin - breakBetweenTaskParts;
     }
     
     private void preparePropertiesInput() {
@@ -183,7 +181,7 @@ public class PDFSettings {
         } catch (EmptyPartOfTaskException ex) {
             Alerts.emptyPartOfTaskAlert();
         }
-        stage.hide();
+       // stage.hide();
     }
 
     public static PDFSettings getInstance() {

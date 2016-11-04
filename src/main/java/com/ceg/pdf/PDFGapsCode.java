@@ -8,8 +8,8 @@ import java.util.List;
 
 public class PDFGapsCode extends PDFCode {
 
-    PDFGapsCode(List<String> lines) throws IOException, EmptyPartOfTaskException {
-        super(lines);
+    PDFGapsCode(List<String> lines, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {
+        super(lines, pdfContentWidthPercentage);
         answer = new PDFGapsAnswer(lines, textWidth, defaultFontType, fontSize, leftMargin);
     }
 

@@ -21,6 +21,7 @@ import com.ceg.examContent.Task;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 
 import java.io.IOException;
 import java.net.URL;
@@ -72,6 +73,8 @@ public class GUIMainController implements Initializable {
     @FXML
     MenuItem taskEdition;
     @FXML
+    MenuItem pdfContentWidth;
+    @FXML
     HBox textOptions;
     @FXML
     CheckBox rememberCheckBox;
@@ -83,7 +86,7 @@ public class GUIMainController implements Initializable {
             Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
         }
     }
-     
+    public static Scene scene = null; 
     private static Stage stage = null;
     private static GUIMainController instance = null;
     private static Exam exam = null;
@@ -200,7 +203,7 @@ public class GUIMainController implements Initializable {
             FXMLLoader loader = new FXMLLoader();
             loader.setLocation(location);
             
-            Scene scene = new Scene((Pane)loader.load(location.openStream()));
+            scene = new Scene((Pane)loader.load(location.openStream()));
             boolean result;          
             result = scene.getStylesheets().add("/styles/Styles.css");
             if(!result){
@@ -394,6 +397,15 @@ public class GUIMainController implements Initializable {
         task.setText(tempText);
         GUIManageTaskController.getInstance().editTask(task);
     }
+    
+    /**
+     * Wyświetla okno edycji szerokości zadania w dokumencie
+     * @param event
+     * @throws Exception 
+     */
+    public void changePdfContentWidth(ActionEvent event) throws Exception {
+        PdfWidthChangingController.show();
+    }
 
     /**
      * Usuwa zadanie wskazywane przez aktywną zakładkę.
@@ -475,6 +487,7 @@ public class GUIMainController implements Initializable {
         saveTaskItem.setVisible(visibility);
         saveExamItem.setVisible(visibility);
         taskEdition.setVisible(visibility);
+        pdfContentWidth.setVisible(visibility);
         answer.setVisible(visibility);
        
         if(visibility){
