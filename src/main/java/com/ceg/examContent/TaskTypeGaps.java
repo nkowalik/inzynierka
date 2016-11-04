@@ -9,6 +9,7 @@ public class TaskTypeGaps extends TaskType{
     public TaskTypeGaps() {
         super();
         name="Gaps";
+        command = "Uzupełnianie pól";
         this.setNoOfAnswers(0);
     }
 

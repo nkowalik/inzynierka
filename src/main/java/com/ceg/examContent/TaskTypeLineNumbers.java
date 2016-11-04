@@ -9,6 +9,7 @@ public class TaskTypeLineNumbers extends TaskType{
     public TaskTypeLineNumbers() {
         super();
         name="LineNumbers";
+        command = "Numery linii";
     }
 
     @Override
