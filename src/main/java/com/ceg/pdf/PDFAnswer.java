@@ -35,12 +35,14 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         this.textWidth = textWidth;
         this.defaultFontType = font;
         this.leftMargin = leftMargin;
+        this.fontSize = fontSize;
         lineHeight+=2;
     }
     
     @Override
     public void textSplitting (List<String> lines) throws IOException {
         float actualLineWidth;
+        boolean alert = false;
         pdfLines.clear();
         
         for (String line : lines) {
@@ -54,7 +56,10 @@ public class PDFAnswer extends PDFAbstractTaskPart {
                 pdfLines.add(pdfLine);
             }
             else {
-                Alerts.tooNarrowPlaceForAnswer();
+                if (!alert) {
+                    Alerts.tooNarrowPlaceForAnswer();
+                    alert = true;
+                }
             }
         }
     }

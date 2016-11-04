@@ -10,6 +10,7 @@ public class TaskTypeComplexOutput extends TaskType{
     public TaskTypeComplexOutput() {
         super();
         name = "ComplexOutput";
+        command = "Wyjście funkcji";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
     }
 
@@ -49,15 +50,26 @@ public class TaskTypeComplexOutput extends TaskType{
     public void callExecute(Task task, List<String> output) {
         List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
-        task.compiler.execute(code, "multiple.cpp", output);
-        task.getType().generateAnswers(task, output, task.getAnswers());
+        task.compiler.execute(code, "multiple", output);
+        if (getUpdateAnswers()) {
+            task.getType().generateAnswers(task, output, task.getAnswers());
+        }
+        else {
+            task.getType().preparePdfAnswers(task);
+        }
     }
 
     @Override
     public void preparePdfAnswers(Task task){
         task.getPdfAnswers().clear();
         for(int i=0;i<this.getNoOfAnswers();i++){
-            task.getPdfAnswers().add(" #placeForAnswer");
+            String label;
+            if (i < task.getLabels().size()) {
+                label = task.getLabels().get(i);
+            } else {
+                label = "";
+            }
+            task.getPdfAnswers().add(label + " #placeForAnswer");
         }
     }
 }
