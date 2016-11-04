@@ -36,7 +36,7 @@ public class TaskTypeVarValue extends TaskType{
             catch (IndexOutOfBoundsException e) {
                 answers.clear();
                 this.setNoOfAnswers(0);
-                System.out.println("Cannot generate answers. Error caused by: " + e.toString());
+                System.out.println("Cannot generate answers. Empty output from .exe file.");
 
             }
         }

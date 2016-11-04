@@ -2,15 +2,10 @@ package com.ceg.gui;
 
 import java.io.File;
 import com.ceg.utils.Alerts;
-
-import java.io.FileNotFoundException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.FileSystemException;
 import java.util.*;
 import com.ceg.examContent.Text;
 import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
-import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -671,8 +666,7 @@ public class GUIMainController implements Initializable {
                 return;
             }
         } catch (Exception e) {
-            Alerts.examLoadingErrorAlert();
-            System.out.println("Cannot load exam. Error caused by: " + e.toString());
+            System.out.println("Cannot load exam from .xml file.");
             return;
         }
 

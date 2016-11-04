@@ -20,7 +20,7 @@ public class TaskTypeSimpleOutput extends TaskType{
         }
         catch (IndexOutOfBoundsException e) {
             answers.clear();
-            System.out.println("Cannot generate answers. Error caused by: " + e.toString());
+            System.out.println("Cannot generate answers. Empty output from .exe file.");
         }
          preparePdfAnswers(task);
     }
