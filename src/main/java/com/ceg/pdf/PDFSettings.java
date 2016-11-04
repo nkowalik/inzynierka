@@ -185,7 +185,7 @@ public class PDFSettings {
         } catch (EmptyPartOfTaskException ex) {
             Alerts.emptyPartOfTaskAlert();
         }
-        stage.hide();
+       // stage.hide();
     }
 
     public static PDFSettings getInstance() {
