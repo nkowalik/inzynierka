@@ -1,5 +1,7 @@
 package com.ceg.examContent;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
+
 import java.util.List;
 
 public class TaskTypeSimpleOutput extends TaskType{
@@ -13,7 +15,7 @@ public class TaskTypeSimpleOutput extends TaskType{
     }
 
     @Override
-    public void generateAnswers(Task task, List<String> output, List<String> answers){
+    public void generateAnswers(Task task, List<String> output, List<String> answers) throws EmptyPartOfTaskException {
         answers.clear();
         try{
             answers.add(output.get(1));
@@ -21,12 +23,13 @@ public class TaskTypeSimpleOutput extends TaskType{
         catch (IndexOutOfBoundsException e) {
             answers.clear();
             System.out.println("Cannot generate answers. Empty output from .exe file.");
+            throw new EmptyPartOfTaskException();
         }
          preparePdfAnswers(task);
     }
 
     @Override
-    public void callExecute(Task task, List<String> output) {
+    public void callExecute(Task task, List<String> output) throws EmptyPartOfTaskException {
         List<String> code = task.getText().getStandardCompilationCode();
         task.compiler.execute(code, "simple", output);
         if (getUpdateAnswers()) {

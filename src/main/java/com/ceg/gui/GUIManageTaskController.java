@@ -285,6 +285,7 @@ public class GUIManageTaskController implements Initializable {
     public void selectCodeFile() throws IOException {
 
         File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.CODE);
+        if (file == null) return;
         try {
             loadFile(file);
         } catch(NullPointerException e) {

@@ -1,6 +1,7 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
 
 import java.util.List;
@@ -47,7 +48,7 @@ public class TaskTypeComplexOutput extends TaskType{
     }
 
     @Override
-    public void callExecute(Task task, List<String> output) {
+    public void callExecute(Task task, List<String> output) throws EmptyPartOfTaskException {
         List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
         task.compiler.execute(code, "multiple", output);

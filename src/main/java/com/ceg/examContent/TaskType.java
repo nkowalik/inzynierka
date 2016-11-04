@@ -1,5 +1,7 @@
 package com.ceg.examContent;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
+
 import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.ArrayList;
 import java.util.List;
@@ -38,7 +40,7 @@ abstract public class TaskType {
      * @param output Lista linii wygenerowanych przez kompilator dla kodu zawartego w zadaniu task.
      * @param answers Lista wyjściowa zawierająca odpowiedzi do zadania.
      */
-    public abstract void generateAnswers(Task task, List<String> output, List<String> answers);
+    public abstract void generateAnswers(Task task, List<String> output, List<String> answers) throws EmptyPartOfTaskException;
 
     /**
      * Wykonuje kompilację kodu zawartego w zadaniu oraz wyznacza do niego odpowiedzi.
@@ -46,7 +48,7 @@ abstract public class TaskType {
      * @param task Zadanie które ma zostać wykonane.
      * @param output Lista linii w których zostanie zapisane wyjście kompilatora.
      */
-    public abstract void callExecute(Task task, List<String> output);
+    public abstract void callExecute(Task task, List<String> output) throws EmptyPartOfTaskException;
 
     /**
      * Wykonuje testową kompilację kodu zawartego w zadaniu oraz wyznacza do niego odpowiedzi.

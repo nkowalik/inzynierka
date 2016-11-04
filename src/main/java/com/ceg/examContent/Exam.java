@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
 
 import javax.xml.bind.annotation.XmlElement;
@@ -64,7 +65,11 @@ public class Exam extends Observable {
         clearOutputList();
         for (Task i : tasks) {
             output.clear();
-            i.getType().callExecute(i, output);
+            try {
+                i.getType().callExecute(i, output);
+            } catch (EmptyPartOfTaskException e) {
+                return false;
+            }
             i.setResult(String.join("\n", output));
             this.incCompilationProgress();
             if (output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){

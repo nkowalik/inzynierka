@@ -1,6 +1,7 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 
 import java.util.List;
 
@@ -43,7 +44,7 @@ public class TaskTypeReturnedValue extends TaskType{
     }
 
     @Override
-    public void callExecute(Task task, List<String> output) {
+    public void callExecute(Task task, List<String> output) throws EmptyPartOfTaskException {
         List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
         task.compiler.execute(code, "retvalue", output);

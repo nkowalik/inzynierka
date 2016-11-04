@@ -1,6 +1,8 @@
 package com.ceg.gui;
 
 import java.io.File;
+
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
 import java.util.*;
 import com.ceg.examContent.Text;
@@ -240,7 +242,11 @@ public class GUIMainController implements Initializable {
             saveAnswers(exam.idx);
         }
 
-        exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
+        try {
+            exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
+        } catch (EmptyPartOfTaskException e) {
+            return;
+        }
         for(String s : outcome) {
             result.appendText(s + "\n");
         }
