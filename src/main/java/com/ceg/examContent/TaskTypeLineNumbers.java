@@ -1,7 +1,5 @@
 package com.ceg.examContent;
 
-import com.ceg.utils.Alerts;
-
 import java.util.List;
 
 public class TaskTypeLineNumbers extends TaskType{
@@ -41,8 +39,7 @@ public class TaskTypeLineNumbers extends TaskType{
            catch (IndexOutOfBoundsException e) {
                 answers.clear();
                 this.setNoOfAnswers(0);
-                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
-                Alerts.generatingAnswersErrorAlert();
+               System.out.println("Cannot generate answers. Error caused by: " + e.toString());
             }
         }
         preparePdfAnswers(task);

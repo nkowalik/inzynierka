@@ -4,9 +4,6 @@ import com.ceg.compiler.CodeParser;
 
 import java.util.List;
 
-import com.ceg.utils.Alerts;
-import javafx.scene.control.Alert;
-
 public class TaskTypeVarValue extends TaskType{
 
     public TaskTypeVarValue() {
@@ -39,8 +36,7 @@ public class TaskTypeVarValue extends TaskType{
             catch (IndexOutOfBoundsException e) {
                 answers.clear();
                 this.setNoOfAnswers(0);
-                Alerts.generatingAnswersErrorAlert();
-                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+                System.out.println("Cannot generate answers. Error caused by: " + e.toString());
 
             }
         }

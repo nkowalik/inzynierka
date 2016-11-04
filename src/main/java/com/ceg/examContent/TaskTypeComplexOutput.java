@@ -38,8 +38,7 @@ public class TaskTypeComplexOutput extends TaskType{
             catch (IndexOutOfBoundsException e) {
                 answers.clear();
                 this.setNoOfAnswers(0);
-                Alerts.generatingAnswersErrorAlert();
-                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+                System.out.println("Cannot generate answers. Error caused by: " + e.toString());
 
                 Alerts.generatingAnswersErrorAlert();
             }
