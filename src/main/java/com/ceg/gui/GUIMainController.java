@@ -259,7 +259,7 @@ public class GUIMainController implements Initializable {
     public void changeToAnswer(ActionEvent actionEvent) {
         IndexRange ir = answer.getSelection(); 
         for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
-            answer.setStyleClass(i, i+1, EMPTY.changeClass(answer.getStyleOfChar(i).toString()).getClassName());
+            answer.setStyleClass(i, i+1, UNDO.getClassName());
         }
     }
 
@@ -470,6 +470,14 @@ public class GUIMainController implements Initializable {
             }
             else{
                 gapsMarkerBtn.setVisible(false);
+            }
+        }
+        if (visibility) {
+            if (exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("OwnType")) {
+                rememberCheckBox.setDisable(true);
+            } 
+            else {
+                rememberCheckBox.setDisable(false);
             }
         }
     }
