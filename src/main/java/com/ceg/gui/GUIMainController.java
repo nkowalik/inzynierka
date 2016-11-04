@@ -53,7 +53,13 @@ public class GUIMainController implements Initializable {
     @FXML
     TextArea result;
     @FXML
+    StyleClassedTextArea answer;
+    @FXML
     Button gapsMarkerBtn;
+    @FXML
+    Button labelBtn;
+    @FXML
+    Button answerBtn;
     @FXML
     MenuItem changeAnswersNum;
     @FXML
@@ -68,6 +74,8 @@ public class GUIMainController implements Initializable {
     MenuItem taskEdition;
     @FXML
     HBox textOptions;
+    @FXML
+    CheckBox rememberCheckBox;
     @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
@@ -113,6 +121,14 @@ public class GUIMainController implements Initializable {
 
         code.textProperty().addListener((observableValue, oldValue, newValue) -> {
             result.setText("");
+            if (!rememberCheckBox.isSelected()) { 
+                for (int i = 0; i < answer.getText().length(); i++) {
+                    if (answer.getStyleOfChar(i).isEmpty() || answer.getStyleOfChar(i).toString().equals(EMPTY)) {
+                        answer.deleteText(i, i+1);
+                        i--;
+                    }
+                }
+            }
         });
 
         tabPane.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
@@ -141,6 +157,12 @@ public class GUIMainController implements Initializable {
                         saveText(id);
                         saveContent(id);
                         saveResult(id);
+                        saveLabels(id);
+                        exam.getTaskAtIndex(id).getType().setUpdateAnswers(true);
+                        if (rememberCheckBox.isSelected()) {
+                            exam.getTaskAtIndex(id).getType().setUpdateAnswers(false);
+                            saveAnswers(id);
+                        }
                     }
                     updateWindow(Integer.parseInt(newValue.getId()));
                     break;
@@ -209,12 +231,23 @@ public class GUIMainController implements Initializable {
         result.clear();
         saveText(exam.idx);
         List<String> outcome = new ArrayList<>();
+        exam.getCurrentTask().getType().setUpdateAnswers(true);
+        
+        if (rememberCheckBox.isSelected()) {
+            exam.getCurrentTask().getType().setUpdateAnswers(false);
+            saveAnswers(exam.idx);
+        }
 
         exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
         for(String s : outcome) {
             result.appendText(s + "\n");
         }
         exam.getCurrentTask().setResult(result.getText());
+        saveLabels(exam.idx);
+        
+        if (!rememberCheckBox.isSelected()) {
+            updateAnswer(exam.getCurrentTask().getLabels(), exam.getCurrentTask().getAnswers(), exam.getCurrentTask().getType().getUpdateAnswers());           
+        }
     }
 
     /**
@@ -234,6 +267,20 @@ public class GUIMainController implements Initializable {
         exam.getCurrentTask().setResult(result.getText());
 
     }
+    
+    public void changeToLabel(ActionEvent actionEvent) {
+        IndexRange ir = answer.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
+            answer.setStyleClass(i, i+1, BOLD.changeClass(answer.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    
+    public void changeToAnswer(ActionEvent actionEvent) {
+        IndexRange ir = answer.getSelection(); 
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
+            answer.setStyleClass(i, i+1, UNDO.getClassName());
+        }
+    }
 
     /**
      * Otwiera okno generowania pliku .pdf na podstawie zadań zawartych w egzaminie.
@@ -248,6 +295,11 @@ public class GUIMainController implements Initializable {
                 saveText(exam.idx);
                 saveContent(exam.idx);
                 saveResult(exam.idx);
+                saveLabels(exam.idx);
+                if (rememberCheckBox.isSelected()) {
+                    exam.getTaskAtIndex(exam.idx).getType().setUpdateAnswers(false);
+                    saveAnswers(exam.idx);
+                }
                 PdfSavingController.show();
             } catch (EmptyExamException ex) {
                 Alerts.emptyExamAlert();
@@ -413,11 +465,15 @@ public class GUIMainController implements Initializable {
         text.setVisible(visibility);
         code.setVisible(visibility);
         result.setVisible(visibility);
+        labelBtn.setVisible(visibility);
+        answerBtn.setVisible(visibility);
+        rememberCheckBox.setVisible(visibility);
         changeNameItem.setVisible(visibility);
         deleteTaskItem.setVisible(visibility);
         saveTaskItem.setVisible(visibility);
         saveExamItem.setVisible(visibility);
         taskEdition.setVisible(visibility);
+        answer.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
@@ -433,6 +489,14 @@ public class GUIMainController implements Initializable {
             }
             else{
                 gapsMarkerBtn.setVisible(false);
+            }
+        }
+        if (visibility) {
+            if (exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("OwnType")) {
+                rememberCheckBox.setDisable(true);
+            } 
+            else {
+                rememberCheckBox.setDisable(false);
             }
         }
     }
@@ -453,6 +517,7 @@ public class GUIMainController implements Initializable {
             updateText(t.getContent());
             updateCode(t.getText());
             updateResult(t.getResult());
+            updateAnswer(t.getLabels(), t.getAnswers(), t.getType().getUpdateAnswers());
         }
     }
 
@@ -479,6 +544,31 @@ public class GUIMainController implements Initializable {
     public void updateResult(String text) {
         this.result.clear();
         this.result.setText(text);
+    }
+    
+    /**
+     * Aktualizuje tekst pola odpowiedzi.
+     * @param labels
+     * @param answers
+     * @param updateAnswer
+     */
+    public void updateAnswer(List<String> labels, List<String> answers, boolean updateAnswer) {
+        answer.clear();
+        for (int i = 0; i < answers.size(); i++) {
+            String label;
+            if (i < labels.size()) {
+                label = labels.get(i);
+            } else {
+                label = "";
+            }
+            int start = answer.getText().length();
+            answer.appendText(label);
+            answer.setStyleClass(start, answer.getText().length(), BOLD.getClassName());
+            start = answer.getText().length();
+            answer.appendText(answers.get(i) + "\n");
+            answer.setStyleClass(start, answer.getText().length(), EMPTY.getClassName());
+        }
+        rememberCheckBox.setSelected(!updateAnswer);
     }
 
     /**
@@ -549,6 +639,10 @@ public class GUIMainController implements Initializable {
         saveText(exam.idx);
         saveContent(exam.idx);
         saveResult(exam.idx);
+        saveLabels(exam.idx);
+        if (rememberCheckBox.isSelected()) {
+            saveAnswers(exam.idx);
+        }
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
         if(file != null) {
@@ -590,6 +684,45 @@ public class GUIMainController implements Initializable {
 
         Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
         content.creatStyleClassedTextAreaText(this.text);
+    }
+    
+    /**
+     * Zapisuje etykiety odpowiedzi
+     */
+    private void saveLabels(int id) {
+        exam.getTaskAtIndex(id).getLabels().clear();
+        String label = "";
+        
+        for (int i = 0; i < answer.getText().length(); i++) {
+            if (answer.getText().charAt(i) == '\n') {
+                exam.getTaskAtIndex(id).getLabels().add(label);
+                label = "";
+            }
+            else if (answer.getStyleOfChar(i).toString().equals(BOLD.getClassList())) {
+                label += answer.getText().charAt(i);
+            }
+        }
+        if (!label.equals("")) {
+            exam.getTaskAtIndex(id).getLabels().add(label);
+        }
+    }
+    
+    private void saveAnswers(int id) {
+        exam.getTaskAtIndex(id).getAnswers().clear();
+        String ans = "";
+        
+        for (int i = 0; i < answer.getText().length(); i++) {
+            if (answer.getText().charAt(i) == '\n') {
+                exam.getTaskAtIndex(id).getAnswers().add(ans);
+                ans = "";
+            }
+            else if (answer.getStyleOfChar(i).isEmpty() || answer.getStyleOfChar(i).toString().equals(EMPTY.getClassList())) {
+                ans += answer.getText().charAt(i);
+            }
+        }
+        if (!ans.equals("")) {
+            exam.getTaskAtIndex(id).getAnswers().add(ans);
+        }
     }
 
     /**
