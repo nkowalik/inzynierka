@@ -65,7 +65,7 @@ public class PDFCode extends PDFAbstractTaskPart {
     
     /*  Zamienia każdy tabulator na odpowiadającą mu ilość spacji   */
     private String ifTabDoTab(String line) {
-        return line.replace("\t", "        ");
+        return line.replace("\t", "    ");
     }
     
     private boolean splittingLine(String operator) throws IOException {

@@ -12,6 +12,7 @@ public class TaskTypeVarValue extends TaskType{
     public TaskTypeVarValue() {
         super();
         name = "VarValue";
+        command = "Wartości zmiennych";
     }
 
     @Override

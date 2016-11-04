@@ -10,6 +10,7 @@ public class TaskTypeComplexOutput extends TaskType{
     public TaskTypeComplexOutput() {
         super();
         name = "ComplexOutput";
+        command = "Wyjście funkcji";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.";
     }
 

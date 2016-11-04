@@ -10,9 +10,12 @@ import java.util.*;
 import com.ceg.examContent.Text;
 import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import org.fxmisc.richtext.CodeArea;
@@ -150,7 +153,23 @@ public class GUIMainController implements Initializable {
 
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
-        
+
+        text.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.TAB) {
+                String s = "    ";
+                text.insertText(text.getCaretPosition(), s);
+                e.consume();
+            }
+        });
+
+        code.addEventFilter(KeyEvent.KEY_PRESSED, e -> {
+            if (e.getCode() == KeyCode.TAB) {
+                String s = "    ";
+                code.insertText(code.getCaretPosition(), s);
+                e.consume();
+            }
+        });
+
         updateWindow(0);
     }
 

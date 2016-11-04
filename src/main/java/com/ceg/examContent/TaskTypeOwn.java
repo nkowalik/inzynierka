@@ -7,6 +7,7 @@ public class TaskTypeOwn extends TaskType{
     public TaskTypeOwn() {
         super();
         name = "OwnType";
+        command = "Własne zadanie";
     }
 
     @Override
