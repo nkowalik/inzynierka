@@ -1,9 +1,6 @@
 package com.ceg.utils;
 
-/**
- *
- * @author Martyna
- */
+
 public enum FontType {
     
     MONO_BOLD("fonts/LiberationMono-Bold.ttf"),

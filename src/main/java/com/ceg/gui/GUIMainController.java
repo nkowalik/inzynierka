@@ -1,6 +1,8 @@
 package com.ceg.gui;
 
 import java.io.File;
+
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
 import java.util.*;
 import com.ceg.examContent.Text;
@@ -206,8 +208,8 @@ public class GUIMainController implements Initializable {
             scene = new Scene((Pane)loader.load(location.openStream()));
             boolean result;          
             result = scene.getStylesheets().add("/styles/Styles.css");
-            if(false == result){
-                //TODO: report error
+            if(!result){
+                Alerts.stylesLoadingErrorAlert();
             }
             stage = new Stage();
             stage.setScene(scene);
@@ -240,7 +242,11 @@ public class GUIMainController implements Initializable {
             saveAnswers(exam.idx);
         }
 
-        exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
+        try {
+            exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
+        } catch (EmptyPartOfTaskException e) {
+            return;
+        }
         for(String s : outcome) {
             result.appendText(s + "\n");
         }
@@ -290,22 +296,26 @@ public class GUIMainController implements Initializable {
      * @throws IOException
      */
     public void createPDF(ActionEvent actionEvent) throws IOException {
-            try {
-                if (exam.getTasks().isEmpty()) {
-                    throw new EmptyExamException();
-                }
-                saveText(exam.idx);
-                saveContent(exam.idx);
-                saveResult(exam.idx);
-                saveLabels(exam.idx);
-                if (rememberCheckBox.isSelected()) {
-                    exam.getTaskAtIndex(exam.idx).getType().setUpdateAnswers(false);
-                    saveAnswers(exam.idx);
-                }
-                PdfSavingController.show();
-            } catch (EmptyExamException ex) {
-                Alerts.emptyExamAlert();
+        try {
+            if (exam.getTasks().isEmpty()) {
+                throw new EmptyExamException();
             }
+            saveText(exam.idx);
+            saveContent(exam.idx);
+            saveResult(exam.idx);
+            saveLabels(exam.idx);
+            if (rememberCheckBox.isSelected()) {
+                exam.getTaskAtIndex(exam.idx).getType().setUpdateAnswers(false);
+                saveAnswers(exam.idx);
+            }
+            PdfSavingController.show();
+        } catch (EmptyExamException ex) {
+            Alerts.emptyExamAlert();
+            saveText(exam.idx);
+            saveContent(exam.idx);
+            saveResult(exam.idx);
+            PdfSavingController.show();
+        }
     }
 
     /**
@@ -325,9 +335,8 @@ public class GUIMainController implements Initializable {
         changeStyle("gap");
     }
     public void boldTextMarker(ActionEvent actionEvent) {
-
         IndexRange ir = text.getSelection(); 
-        for (int i = ir.getStart(); i < ir.getEnd(); i++) {            
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
             text.setStyleClass(i, i+1, BOLD.changeClass(text.getStyleOfChar(i).toString()).getClassName());
         }
     }
@@ -657,10 +666,11 @@ public class GUIMainController implements Initializable {
         }
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
-        if(file != null) {
+        try {
             Exam.getInstance().save(file);
-        }  else {
-            return;
+        } catch (NullPointerException e) {
+            Alerts.taskSavingErrorAlert();
+            System.out.println("Cannot save task. Error caused by: " + e.toString());
         }
     }
 
@@ -669,15 +679,16 @@ public class GUIMainController implements Initializable {
      * Uruchamia okno wyboru pliku do odczytu.
      */
     public void loadXMLToCodeArea() {
-
-        File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
-        if(file != null) {
-            if(!Exam.getInstance().load(file)) {
+        try {
+            File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
+            if (file == null || !Exam.getInstance().load(file)) {
                 return;
             }
-        } else {
+        } catch (Exception e) {
+            System.out.println("Cannot load exam from .xml file. Error caused by: " + e.toString());
             return;
         }
+
         status = Status.DRAG;
         tabPane.getTabs().clear();
         status = Status.SWITCH;
@@ -750,8 +761,11 @@ public class GUIMainController implements Initializable {
         Task task = Exam.getInstance().getCurrentTask();
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, Exam.getInstance().getNames().get(exam.idx).replace(" ", "") + ".xml");
-        if(file != null) {
+        try {
             task.save(file.getAbsolutePath());
+        } catch (NullPointerException e) {
+            Alerts.taskSavingErrorAlert();
+            System.out.println("Cannot save task. Error caused by: " + e.toString());
         }
     }
 
@@ -759,17 +773,20 @@ public class GUIMainController implements Initializable {
      * Odczytuje zadanie z pliku i otwiera je w nowej zakładce programu.
      * Uruchamia okno wyboru pliku do odczytu.
      * @param event
-     * @throws Exception
      */
-    public void loadTask(ActionEvent event) throws Exception {
+    public void loadTask(ActionEvent event) {
         File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
-        if(file != null) {
+        if (file == null) return;
+        try {
             Task task = new Task();
-            if(!task.load(file.getAbsolutePath())) {
+            if (!task.load(file.getAbsolutePath())) {
                 return;
             }
             Exam.getInstance().addTask(task);
             addNewTabPaneTab();
+        } catch (NullPointerException e) {
+            Alerts.taskLoadingErrorAlert();
+            System.out.println("Cannot load task. Error caused by: " + e.toString());
         }
     }
 }

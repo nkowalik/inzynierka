@@ -1,20 +1,19 @@
 package com.ceg.compiler;
 
-import com.ceg.examContent.Exam;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URISyntaxException;
-import java.lang.IllegalThreadStateException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.security.CodeSource;
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.concurrent.Task;
+
+import com.ceg.examContent.Exam;
+import com.ceg.utils.Alerts;
 import org.apache.commons.lang.SystemUtils;
 
 public class GCC {
@@ -38,7 +37,8 @@ public class GCC {
             jarFile = new File(codeSource.getLocation().toURI().getPath());
             path = jarFile.getParentFile().getPath();
         } catch (URISyntaxException ex) {
-            Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
+            Alerts.createCompilerErrorAlert();
+            System.out.println("Cannot get path to create compiler object. Error caused by: " + ex.toString());
         }
 
     }
@@ -56,7 +56,7 @@ public class GCC {
                 Files.write(file.toPath(), lines, Charset.forName("UTF-8"));
 
             } catch (IOException ex) {
-                Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Cannot create file to compile. Error caused by: " + ex.toString());
             }
 
             this.cppName = this.file.getAbsolutePath();
@@ -92,32 +92,18 @@ public class GCC {
                 p.waitFor();
                 p.destroy();
                 reader.close();
-                if (output.isEmpty())
-                    return true;
-                else
-                    return false;
+                return output.isEmpty();
 
             } catch (Exception err) {
-                err.printStackTrace();
+                Alerts.fileCompileErrorAlert();
+                System.out.println("Cannot compile. Error caused by: " + err.toString());
                 return false;
             }
         } else
+            Alerts.emptyFileAlert();
             return false;
     }
 
-    
-   /* private static Task readOutput(BufferedReader reader, List<String> output) {
-        return new Task() {
-            @Override protected call() throws Exception {
-                String line = null;
-                    while((line = reader.readLine()) != null) {
-                        output.add(line);
-                    }
-            }
-        };
-}
-    */
-    
     /**
      * Tworzy, kompiluje i uruchamia plik wykonywalny.
      * @param lines Lista linii które mają znaleźć się w pliku.
@@ -130,40 +116,14 @@ public class GCC {
                 output.add("Kompilacja przebiegła pomyślnie.");
                 try {
                     ProcessBuilder builder = new ProcessBuilder(this.executableName);
-                    builder.redirectErrorStream(true);
                     Process p = builder.start();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-                    String line = null;
-                    boolean timeout = false;
-                    long elapsedTimeMillis = 0;
-                    float elapsedTimeSec = 0;
-                    long start = System.currentTimeMillis();
-                    float timeoutVal = Exam.getInstance().getExecutionTimetout();
-                    while(elapsedTimeSec < timeoutVal ) {                      
-                        elapsedTimeMillis = System.currentTimeMillis()-start;
-                        elapsedTimeSec = elapsedTimeMillis/1000F;
-                        if(reader.ready()){
-                            line = reader.readLine();
-                            if(line!=null){
-                                output.add(line);
-                            }
-                            else{
-                                 break;
-                            }
-                        }
 
+                    String line = null;
+                    while((line = reader.readLine()) != null) {
+                        output.add(line);
                     }
-                    p.waitFor(1,TimeUnit.SECONDS);
-                    try{
-                       if(p.exitValue() != 0){
-                           output.add("Błąd wykonania.");                    
-                       } 
-                    }
-                    catch(IllegalThreadStateException ex){
-                        output.clear();
-                        output.add("Kompilacja przebiegła pomyślnie.");
-                        output.add("Upłynięcie limitu czasu wykonania."); 
-                    }                 
+                    p.waitFor();
                     p.destroy();
                     reader.close();
                     String tmpFileName = null;
@@ -183,10 +143,9 @@ public class GCC {
                             file.deleteOnExit();
                         }
                     }
-                } catch (IOException ex) {
-                    Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Alerts.executeErrorAlert();
+                    System.out.println("Cannot execute. Error caused by: " + ex.toString());
                 }
             }
         }

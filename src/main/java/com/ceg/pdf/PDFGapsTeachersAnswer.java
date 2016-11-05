@@ -4,10 +4,6 @@ import com.ceg.utils.FontType;
 import java.io.IOException;
 import java.util.List;
 
-/**
- *
- * @author Martyna
- */
 public class PDFGapsTeachersAnswer extends PDFTeachersAnswer {
 
     public PDFGapsTeachersAnswer(List<String> lines, int textWidth, FontType font, int fontSize, int leftMargin) throws IOException {
