@@ -5,10 +5,7 @@ import static com.ceg.utils.FontType.SERIF_REGULAR;
 import java.io.IOException;
 import java.util.Arrays;
 
-/**
- *
- * @author Martyna
- */
+
 public class PDFHeader {
     private final FontType fontType = SERIF_REGULAR;
     private final int fontSize = 12;

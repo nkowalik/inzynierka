@@ -1,6 +1,7 @@
 package com.ceg.gui;
 
 import com.ceg.examContent.*;
+import com.ceg.utils.Alerts;
 import com.ceg.utils.ContentCssClass;
 import com.ceg.utils.FileChooserCreator;
 import com.ceg.xml.TaskData;
@@ -107,7 +108,7 @@ public class GUIManageTaskController implements Initializable {
      * @param task Zadanie pobrane z okna głównego.
      */
     public void editTask(Task task) {
-        if (task.getType().name == "OwnType") {
+        if (task.getType().name.equals("OwnType")) {
             text.setVisible(false);
             code.setPrefHeight(code.getPrefHeight()*3);
         }
@@ -135,6 +136,9 @@ public class GUIManageTaskController implements Initializable {
                 line = content.getContentParts().get(i).getText();
             }
         }
+        else {
+            Alerts.updateTextErrorAlert();
+        }
     }
 
     /**
@@ -146,10 +150,13 @@ public class GUIManageTaskController implements Initializable {
 
         content.setContentParts(new ArrayList<>());
         text.clear();
-        if (tasks != null) {
+        try {
             content.getContentParts().add(new ContentPart(ContentCssClass.EMPTY, tasks.getTaskData().get(index).getText()));
             //contentList.add(tasks.getTaskData().get(index).getText());
             text.appendText(tasks.getTaskData().get(index).getText());
+        } catch (NullPointerException e) {
+            Alerts.addTypeErrorAlert();
+            System.out.println("Cannot load command text. Error caused by: " + e.toString());
         }
 
         finish.setDisable(false);
@@ -161,49 +168,49 @@ public class GUIManageTaskController implements Initializable {
     public void addTypeSimpleOutput() {
         resetFields();
         chooseType.setText(taskTypeSimpleOutput.getText());
-        mainInstance.setStageName("CEG - " + taskTypeSimpleOutput.getText());
+        GUIMainController.setStageName("CEG - " + taskTypeSimpleOutput.getText());
         addType(0);
         type = new TaskTypeSimpleOutput();
     }
     public void addTypeReturnedValue() {
         resetFields();
         chooseType.setText(taskTypeReturnedValue.getText());
-        mainInstance.setStageName("CEG - " + taskTypeReturnedValue.getText());
+        GUIMainController.setStageName("CEG - " + taskTypeReturnedValue.getText());
         addType(1);
         type = new TaskTypeReturnedValue();
     }
     public void addTypeComplexOutput() {
         resetFields();
         chooseType.setText(taskTypeComplexOutput.getText());
-        mainInstance.setStageName("CEG - " + taskTypeComplexOutput.getText());
+        GUIMainController.setStageName("CEG - " + taskTypeComplexOutput.getText());
         addType(2);
         type = new TaskTypeComplexOutput();
     }
     public void addTypeGaps() {
         resetFields();
         chooseType.setText(taskTypeGaps.getText());
-        mainInstance.setStageName("CEG - " + taskTypeGaps.getText());
+        GUIMainController.setStageName("CEG - " + taskTypeGaps.getText());
         addType(3);
         type = new TaskTypeGaps();
     }
     public void addTypeVarValue() {
         resetFields();
         chooseType.setText(taskTypeVarValue.getText());
-        mainInstance.setStageName("CEG - " + taskTypeVarValue.getText());
+        GUIMainController.setStageName("CEG - " + taskTypeVarValue.getText());
         addType(4);
         type = new TaskTypeVarValue();
     }
     public void addTypeLineNumbers() {
         resetFields();
         chooseType.setText(taskTypeLineNumbers.getText());
-        mainInstance.setStageName("CEG - " + taskTypeLineNumbers.getText());
+        GUIMainController.setStageName("CEG - " + taskTypeLineNumbers.getText());
         addType(5);
         type = new TaskTypeLineNumbers();
     }
 
     public void addOwnType() {
         chooseType.setText(taskTypeOwn.getText());
-        mainInstance.setStageName("CEG - " + taskTypeOwn.getText());
+        GUIMainController.setStageName("CEG - " + taskTypeOwn.getText());
         text.setVisible(false);
         code.setPrefHeight(bPane.computeAreaInScreen());
         addType(6);
@@ -223,7 +230,7 @@ public class GUIManageTaskController implements Initializable {
 
         if (stage.getTitle().equals("Dodaj nowe zadanie")) {
             Exam.getInstance().addTask(t);
-            mainInstance.getInstance().addNewTabPaneTab();
+            GUIMainController.getInstance().addNewTabPaneTab();
         }
         else if (stage.getTitle().equals("Edycja zadania")) {
             Exam.getInstance().editTask(Exam.getInstance().getCurrentTask());
@@ -268,7 +275,7 @@ public class GUIManageTaskController implements Initializable {
      * @throws Exception
      */
     public void cancelEdition(ActionEvent event) throws Exception {
-        mainInstance.setStageName("CEG");
+        GUIMainController.setStageName("CEG");
         stage.hide();
     }
 
@@ -278,8 +285,12 @@ public class GUIManageTaskController implements Initializable {
     public void selectCodeFile() throws IOException {
 
         File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.CODE);
-        if(file != null) {
+        if (file == null) return;
+        try {
             loadFile(file);
+        } catch(NullPointerException e) {
+            Alerts.codeLoadingErrorAlert();
+            System.out.println("Cannot load code from file. Error caused by: " + e.toString());
         }
     }
 

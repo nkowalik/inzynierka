@@ -4,7 +4,11 @@ import com.ceg.compiler.GCC;
 import com.ceg.utils.Alerts;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.xml.bind.JAXBContext;
@@ -112,9 +116,7 @@ public class Task {
         List<String> output = new ArrayList();
         for (TextPart part : code) {
             String[] list = part.toString().split("\n");
-            for (String element : list) {
-                output.add(element);
-            }
+            Collections.addAll(output, list);
         }
         answers = output;
     }
@@ -130,7 +132,8 @@ public class Task {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(this, new File(filename));
         } catch (JAXBException e) {
-            e.printStackTrace();
+            Alerts.taskSavingErrorAlert();
+            System.out.println("Cannot save task. Error caused by: " + e.toString());
         }
     }
 
@@ -153,6 +156,7 @@ public class Task {
             this.setType(task.type);
         } catch (JAXBException e) {
             Alerts.wrongFileContentAlert();
+            System.out.println("Cannot load task. Error caused by: " + e.toString());
             return false;
         }
         return true;

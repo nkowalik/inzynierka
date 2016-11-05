@@ -7,10 +7,7 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- *
- * @author Martyna
- */
+
 public class PDFTeachersAnswer extends PDFAnswer {
     //pole przechowujace listę odpowiedzi do zadania
     protected List<String> answers;

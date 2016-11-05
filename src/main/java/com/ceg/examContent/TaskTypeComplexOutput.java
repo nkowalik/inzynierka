@@ -1,6 +1,7 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
 
 import java.util.List;
@@ -38,7 +39,7 @@ public class TaskTypeComplexOutput extends TaskType{
             catch (IndexOutOfBoundsException e) {
                 answers.clear();
                 this.setNoOfAnswers(0);
-                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
+                System.out.println("Cannot generate answers. Empty output from .exe file.");
 
                 Alerts.generatingAnswersErrorAlert();
             }
@@ -47,7 +48,7 @@ public class TaskTypeComplexOutput extends TaskType{
     }
 
     @Override
-    public void callExecute(Task task, List<String> output) {
+    public void callExecute(Task task, List<String> output) throws EmptyPartOfTaskException {
         List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
         task.compiler.execute(code, "multiple", output);

@@ -6,12 +6,16 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.AccessDeniedException;
+import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
-import javafx.scene.control.TabPane;
+
 import javax.xml.bind.annotation.XmlElement;
 
 /**
@@ -55,13 +59,17 @@ public class Exam extends Observable {
         maxIdx = 0;
     }
     
-    public boolean compile() {
+    public int compile() {
         List<String> output = new ArrayList<>();
         
         clearOutputList();
         for (Task i : tasks) {
             output.clear();
-            i.getType().callExecute(i, output);
+            try {
+                i.getType().callExecute(i, output);
+            } catch (EmptyPartOfTaskException e) {
+                return -2;
+            }
             i.setResult(String.join("\n", output));
             this.incCompilationProgress();
             if (output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
@@ -73,7 +81,7 @@ public class Exam extends Observable {
                     output.stream().forEach((s) -> {
                         addToOutputList(s + "\n");
                     });
-                   return false;
+                   return -1;
                }
                else{                  
                    addToOutputList("Zadanie " + (getCompilationProgress()+1) + ": Błąd kompilacji w zadaniu \"Numery linii\".\n");
@@ -81,7 +89,7 @@ public class Exam extends Observable {
             }            
         }
         this.incCompilationProgress();
-        return true;
+        return 1;
     }
         
     public List<Task> getTasks(){
@@ -188,7 +196,8 @@ public class Exam extends Observable {
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
             marshaller.marshal(this, file);
         } catch (JAXBException e) {
-            e.printStackTrace();
+            Alerts.examSavingErrorAlert();
+            System.out.println("Cannot save exam. Error caused by: " + e.toString());
         }
     }
 
@@ -209,11 +218,14 @@ public class Exam extends Observable {
             this.names = exam.names;
         } catch (JAXBException e) {
             Alerts.wrongFileContentAlert();
+            System.out.println("Cannot load exam. Error caused by: " + e.getCause().toString());
             return false;
         } catch (ClassCastException e) {
             Alerts.wrongFileContentAlert();
+            System.out.println("Cannot load exam. Error caused by: " + e.toString());
             return false;
         }
+
         return true;
     }
 }

@@ -1,9 +1,6 @@
 package com.ceg.utils;
 
-/**
- *
- * @author Martyna
- */
+
 public enum ContentCssClass {
     EMPTY(""),
     BOLD("bold"),
@@ -38,7 +35,7 @@ public enum ContentCssClass {
     
     public final ContentCssClass changeClass(String oldClass) {
         ContentCssClass old = FontTypeUtil.stringToContentCssClass(oldClass);
-        if (old.getClassName().contains(this.getClassName())) {
+        if (old != null && old.getClassName().contains(this.getClassName())) {
             return old;
         }
         switch (this) {

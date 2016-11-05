@@ -16,10 +16,7 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- *
- * @author Martyna
- */
+
 public class PDFSettings {
     private final Properties defaultSettings = new Properties();
     
@@ -82,12 +79,12 @@ public class PDFSettings {
         try {
             if (inputStream != null) {
                 defaultSettings.load(inputStream);
-            } 
+            }
             else {
                 throw new FileNotFoundException("property file '" + propFileName + "' not found in the classpath");
             }
         } catch (Exception ex) {
-            Logger.getLogger(PDFSettings.class.getName()).log(Level.SEVERE, null, ex);
+            System.out.println("Cannot prepare properties for pdf settings. Error caused by: " + ex.toString());
         }
     }
     
@@ -175,11 +172,12 @@ public class PDFSettings {
         date += month.toString() + '.' + year.toString();
     }
     
-    public void pdfGenerate(Stage stage) {
+    public void pdfGenerate(Stage stage) throws IOException {
         try {
             PDFGenerator gen = new PDFGenerator();
         } catch (IOException ex) {
-            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex);
+            Alerts.fileAlreadyOpened();
+            PDFGenerator.document.close();
         } catch (EmptyPartOfTaskException ex) {
             Alerts.emptyPartOfTaskAlert();
         }

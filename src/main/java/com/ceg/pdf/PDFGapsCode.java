@@ -5,9 +5,7 @@ import com.ceg.exceptions.EmptyPartOfTaskException;
 import java.io.IOException;
 import java.util.List;
 
-/**
- * Created by Martyna.Luczkowska on 2016-07-28.
- */
+
 public class PDFGapsCode extends PDFCode {
 
     PDFGapsCode(List<String> lines, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {

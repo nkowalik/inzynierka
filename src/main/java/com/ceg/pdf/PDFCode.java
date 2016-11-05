@@ -28,6 +28,7 @@ public class PDFCode extends PDFAbstractTaskPart {
     PDFCode(List<String> lines, float codeWidthPercentage) throws IOException, EmptyPartOfTaskException {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
+
         textWidth = (int)Math.ceil(pdfSettings.pdfContentWidth * codeWidthPercentage);
         leftMargin = pdfSettings.rightMargin - textWidth;
         defaultFontType = pdfSettings.getCodeFont();

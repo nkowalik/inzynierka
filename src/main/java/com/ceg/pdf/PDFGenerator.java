@@ -3,6 +3,7 @@ package com.ceg.pdf;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.utils.Alerts;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -71,9 +72,7 @@ public class PDFGenerator {
              EventQueue.invokeLater(() -> {
                  try {
                      desktop.open(pdfFile);
-                 } catch (IOException ex) {
-                     Logger.getLogger(PDFGenerator.class.getName()).log(Level.SEVERE, null, ex);
-                 }
+                 } catch (IOException ex) {}
              });
         }
     }
