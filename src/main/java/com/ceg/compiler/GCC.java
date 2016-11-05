@@ -14,6 +14,7 @@ import java.util.logging.Logger;
 
 import com.ceg.examContent.Exam;
 import com.ceg.utils.Alerts;
+import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang.SystemUtils;
 
 public class GCC {
@@ -118,12 +119,37 @@ public class GCC {
                     ProcessBuilder builder = new ProcessBuilder(this.executableName);
                     Process p = builder.start();
                     BufferedReader reader = new BufferedReader(new InputStreamReader(p.getInputStream()));
-
                     String line = null;
-                    while((line = reader.readLine()) != null) {
-                        output.add(line);
+                    boolean timeout = false;
+                    long elapsedTimeMillis = 0;
+                    float elapsedTimeSec = 0;
+                    long start = System.currentTimeMillis();
+                    float timeoutVal = Exam.getInstance().getExecutionTimetout();
+                    while(elapsedTimeSec < timeoutVal ) {                      
+                        elapsedTimeMillis = System.currentTimeMillis()-start;
+                        elapsedTimeSec = elapsedTimeMillis/1000F;
+                        if(reader.ready()){
+                            line = reader.readLine();
+                            if(line!=null){
+                                output.add(line);
+                            }
+                            else{
+                                 break;
+                            }
+                        }
+
                     }
-                    p.waitFor();
+                    p.waitFor(1,TimeUnit.SECONDS);
+                    try{
+                       if(p.exitValue() != 0){
+                           output.add("Błąd wykonania.");                    
+                       } 
+                    }
+                    catch(IllegalThreadStateException ex){
+                        output.clear();
+                        output.add("Kompilacja przebiegła pomyślnie.");
+                        output.add("Upłynięcie limitu czasu wykonania."); 
+                    }           
                     p.destroy();
                     reader.close();
                     String tmpFileName = null;

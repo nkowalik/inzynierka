@@ -45,6 +45,20 @@ public final class Alerts {
     }
 
     /**
+     * Wyświetla okno z błędem dot. błedu wykonania programu.
+     */
+    public static void executionErrorAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Nastąpił błąd wykonania programu.", "Sprawdź poprawność kodu.");
+    }
+    
+    /**
+     * Wyświetla okno z błędem dot. przekroczenia limitu czasu wykonania programu.
+     */
+    public static void executionTimetoutErrorAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Przekroczenie limitu czasu.", "Nastąpiło przekroczenie limitu czasu wykonania programu.");
+    }
+    
+    /**
      * Wyświetla okno z błędem dot. generowania pdf'a dla pustego arkusza.
      */
     public static void emptyExamAlert() {
