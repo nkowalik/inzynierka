@@ -59,7 +59,7 @@ public class Exam extends Observable {
         maxIdx = 0;
     }
     
-    public boolean compile() {
+    public int compile() {
         List<String> output = new ArrayList<>();
         
         clearOutputList();
@@ -68,7 +68,7 @@ public class Exam extends Observable {
             try {
                 i.getType().callExecute(i, output);
             } catch (EmptyPartOfTaskException e) {
-                return false;
+                return -2;
             }
             i.setResult(String.join("\n", output));
             this.incCompilationProgress();
@@ -81,7 +81,7 @@ public class Exam extends Observable {
                     output.stream().forEach((s) -> {
                         addToOutputList(s + "\n");
                     });
-                   return false;
+                   return -1;
                }
                else{                  
                    addToOutputList("Zadanie " + (getCompilationProgress()+1) + ": Błąd kompilacji w zadaniu \"Numery linii\".\n");
@@ -89,7 +89,7 @@ public class Exam extends Observable {
             }            
         }
         this.incCompilationProgress();
-        return true;
+        return 1;
     }
         
     public List<Task> getTasks(){
