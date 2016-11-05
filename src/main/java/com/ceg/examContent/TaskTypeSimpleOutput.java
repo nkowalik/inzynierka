@@ -8,9 +8,10 @@ public class TaskTypeSimpleOutput extends TaskType{
         super();
         super.setNoOfAnswers(1);
         name = "SimpleOutput";
+        command = "Wyjście programu";
         defaultContents = "Podaj co pojawi się na wyjściu w wyniku wykonania programu.";
     }
-    
+
     @Override
     public void generateAnswers(Task task, List<String> output, List<String> answers){
         answers.clear();
@@ -28,13 +29,24 @@ public class TaskTypeSimpleOutput extends TaskType{
     @Override
     public void callExecute(Task task, List<String> output) {
         List<String> code = task.getText().getStandardCompilationCode();
-        task.compiler.execute(code, "simple.cpp", output);
-        task.getType().generateAnswers(task, output, task.getAnswers());
+        task.compiler.execute(code, "simple", output);
+        if (getUpdateAnswers()) {
+            task.getType().generateAnswers(task, output, task.getAnswers());
+        }
+        else {
+            task.getType().preparePdfAnswers(task);
+        }
     }
     
     @Override
     public void preparePdfAnswers(Task task){
         task.getPdfAnswers().clear();
-        task.getPdfAnswers().add("Wynik = #placeForAnswer");
+        String label;
+        if (0 < task.getLabels().size()) {
+            label = task.getLabels().get(0);
+        } else {
+            label = "";
+        }
+        task.getPdfAnswers().add(label + " #placeForAnswer");
     }
 }

@@ -1,6 +1,7 @@
 package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.utils.Alerts;
 import com.ceg.utils.FontType;
 
 import java.io.IOException;
@@ -18,10 +19,10 @@ public class PDFAnswer extends PDFAbstractTaskPart {
     protected List<String> placesForAnswers = new ArrayList<>();
     private final String placeForAnswer = "_________";
 
-    public PDFAnswer(List<String> lines) throws IOException {
+    public PDFAnswer(List<String> lines, float pdfContentWidthPercentage) throws IOException {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = PDFSettings.commandWidth;
+        textWidth = (int)Math.floor(pdfContentWidthPercentage * PDFSettings.pdfContentWidth);;
         leftMargin = pdfSettings.leftMargin;
         lineHeight+=2;
         defaultFontType = pdfSettings.getCommandFont();
@@ -34,12 +35,15 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         this.textWidth = textWidth;
         this.defaultFontType = font;
         this.leftMargin = leftMargin;
+        this.fontSize = fontSize;
         lineHeight+=2;
     }
     
     @Override
     public void textSplitting (List<String> lines) throws IOException {
         float actualLineWidth;
+        boolean alert = false;
+        pdfLines.clear();
         
         for (String line : lines) {
             actualLineWidth = getWidth(line, defaultFontType, fontSize);
@@ -52,41 +56,9 @@ public class PDFAnswer extends PDFAbstractTaskPart {
                 pdfLines.add(pdfLine);
             }
             else {
-                String[] words = line.split(" ");        
-                float actualWordWidth;
-                float spaceWidth = getWidth(" ", defaultFontType, fontSize);
-                
-                for (String word : words) {
-                    actualWordWidth = getWidth(word, defaultFontType, fontSize);
-            
-                    //linia wystarczająco długa, żaden wyraz więcej się nie zmieści
-                    if (actualWidth + actualWordWidth + spaceWidth  >= textWidth) {
-                        PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
-                        PDFLinePart lp = new PDFLinePart(defaultFontType);
-                        lp.setText(line);
-                        pdfLine.setLineParts(Arrays.asList(lp));
-                        pdfLines.add(pdfLine);
-                        line = word;
-                        actualWidth = actualWordWidth;
-                    }
-                    //do linii dopisujemy wyraz
-                    else {
-                        //jeśli linia nie jest pusta to dodajemy spację po poprzednim wyrazie
-                        if (!line.isEmpty()) {
-                            line += ' ';
-                            actualWidth += spaceWidth;
-                        }
-                        line += word;
-                        actualWidth += actualWordWidth;
-                    }
-                }
-                //jeśli linia nie jest pusta, wypisujemy ją
-                if (!line.isEmpty()) {
-                    PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
-                    PDFLinePart lp = new PDFLinePart(defaultFontType);
-                    lp.setText(line);
-                    pdfLine.setLineParts(Arrays.asList(lp));
-                    pdfLines.add(pdfLine);
+                if (!alert) {
+                    Alerts.tooNarrowPlaceForAnswer();
+                    alert = true;
                 }
             }
         }

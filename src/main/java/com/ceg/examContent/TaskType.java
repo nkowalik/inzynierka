@@ -1,5 +1,6 @@
 package com.ceg.examContent;
 
+import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlSeeAlso;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,15 +18,19 @@ import java.util.List;
         TaskTypeLineNumbers.class,
         TaskTypeReturnedValue.class,
         TaskTypeSimpleOutput.class,
-        TaskTypeVarValue.class
+        TaskTypeVarValue.class,
+        TaskTypeOwn.class
 })
 abstract public class TaskType {
     String defaultContents;
     public String name;
+    public String command;
     protected int noOfAnswers;
+    private boolean updateAnswers;
     
     TaskType(){
         noOfAnswers = Integer.MAX_VALUE-1;
+        updateAnswers = true;
     }
 
     /**
@@ -67,11 +72,16 @@ abstract public class TaskType {
     public void setDefaultContents(String defaultContents) {
         this.defaultContents = defaultContents;
     }
-     public int getNoOfAnswers() {
+    public int getNoOfAnswers() {
         return noOfAnswers;
     }
     public void setNoOfAnswers(int noOfAnswers) {
         this.noOfAnswers = noOfAnswers;
     }
-       
+    public void setUpdateAnswers(boolean updateAnswers) {
+        this.updateAnswers = updateAnswers;
+    } 
+    public boolean getUpdateAnswers() {
+        return this.updateAnswers;
+    }      
 }

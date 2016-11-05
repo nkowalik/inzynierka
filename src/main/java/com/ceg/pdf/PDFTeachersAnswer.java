@@ -2,7 +2,6 @@ package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.FontType;
-import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 import java.io.IOException;
 import java.util.Arrays;
@@ -20,8 +19,8 @@ public class PDFTeachersAnswer extends PDFAnswer {
     //następnej luki
     private int answersIndex;
 
-    public PDFTeachersAnswer(List<String> lines) throws IOException {
-        super(lines);
+    public PDFTeachersAnswer(List<String> lines, float codeWidthPercentage) throws IOException {
+        super(lines, codeWidthPercentage);
         answersIndex = 0;
     }
 
