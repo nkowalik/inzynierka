@@ -65,8 +65,8 @@
             <RowConstraints />
             </rowConstraints>
             <children>
-                <Button layoutX="475.0" onAction="#advancedOptions" prefHeight="25.0" prefWidth="165.0" text="Opcje zaawansowane" BorderPane.alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
-                <Button minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#saveFile" prefHeight="25.0" prefWidth="119.0" text="Zapisz arkusz" GridPane.halignment="LEFT" />
+                <Button layoutX="475.0" minWidth="160.0" onAction="#advancedOptions" text="Opcje zaawansowane" BorderPane.alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
+                <Button minWidth="100.0" mnemonicParsing="false" onAction="#saveFile" text="Zapisz arkusz" GridPane.halignment="LEFT" />
                 <Button contentDisplay="RIGHT" minHeight="22.0" minWidth="61.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="73.0" text="Anuluj" GridPane.columnIndex="1" GridPane.halignment="LEFT">
                 </Button> 
             </children>

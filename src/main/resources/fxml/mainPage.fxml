@@ -52,16 +52,16 @@
              </VBox>
          </center>
          <left>
-            <VBox prefHeight="531.0" prefWidth="499.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="531.0" prefWidth="426.0" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
                   <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="450.0" />
                   <HBox fx:id="textOptions" prefHeight="25.0" prefWidth="451.0">
                      <children>
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#undoTextMarker" prefHeight="25.0" prefWidth="111.0" text="Cofnij format" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#undoTextMarker" prefHeight="25.0" text="Cofnij format" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" text="Pogrubienie" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" prefHeight="25.0" prefWidth="110.0" text="Podkreślenie" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" prefHeight="25.0" prefWidth="78.0" text="Kursywa" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" prefHeight="25.0" prefWidth="101.0" text="Maszynowo" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" prefHeight="25.0" text="Podkreślenie" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" prefHeight="25.0" text="Kursywa" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" prefHeight="25.0" text="Maszynowo" />
                      </children>
                   </HBox>
                   <StyleClassedTextArea fx:id="answer" editable="true" prefHeight="161.0" prefWidth="450.0" />
@@ -72,11 +72,11 @@
                         <CheckBox fx:id="rememberCheckBox" mnemonicParsing="false" text="Zapamiętaj odpowiedzi" />
                      </children>
                   </HBox>
-                  <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="450.0" />
+                  <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="474.0" />
                   <HBox alignment="CENTER" prefHeight="25.0" prefWidth="451.0" spacing="20.0">
                      <children>
-                        <Button fx:id="executeBtn" mnemonicParsing="false" onAction="#execute" prefWidth="120.0" text="Wykonaj" />
-                        <Button fx:id="testExecuteBtn" alignment="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#testExecute" prefHeight="25.0" prefWidth="189.0" text="Wykonaj testowo" />
+                        <Button fx:id="executeBtn" mnemonicParsing="false" onAction="#execute" text="Wykonaj" />
+                        <Button fx:id="testExecuteBtn" alignment="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#testExecute" text="Wykonaj testowo" />
                      </children>
                   </HBox>
                </children>
