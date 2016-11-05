@@ -9,7 +9,7 @@
    <bottom>
       <HBox prefHeight="67.0" prefWidth="540.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="50.0" text="Anuluj">
+            <Button mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="62.0" text="Anuluj">
                <HBox.margin>
                   <Insets left="380.0" top="20.0" />
                </HBox.margin>
