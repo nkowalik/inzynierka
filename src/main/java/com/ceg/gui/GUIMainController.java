@@ -685,7 +685,7 @@ public class GUIMainController implements Initializable {
                 return;
             }
         } catch (Exception e) {
-            System.out.println("Cannot load exam from .xml file.");
+            System.out.println("Cannot load exam from .xml file. Error caused by: " + e.toString());
             return;
         }
 
