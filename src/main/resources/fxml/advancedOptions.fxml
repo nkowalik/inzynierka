@@ -1,14 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
 <?import javafx.scene.text.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
 <AnchorPane prefHeight="400.0" prefWidth="522.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.AdvancedOptionsController">
    <children>
-       <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity"
-                minWidth="-Infinity" prefHeight="400.0" prefWidth="522.0"
-                tabClosingPolicy="UNAVAILABLE">
+       <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="522.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
            <Tab text="Wygląd PDF">
              <content>
@@ -35,8 +34,7 @@
                            </Label>
                         </children>
                      </AnchorPane>
-                    <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="143.0"
-                                prefWidth="359.0" GridPane.rowIndex="1">
+                    <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="143.0" prefWidth="359.0" GridPane.rowIndex="1">
                         <children>
                            <ChoiceBox fx:id="commandFont" layoutX="173.0" layoutY="63.0" prefHeight="25.0" prefWidth="150.0" />
                            <Label alignment="CENTER" contentDisplay="RIGHT" layoutY="67.0" prefHeight="17.0" prefWidth="115.0" text="Czcionka:" />
@@ -59,6 +57,16 @@
              </GridPane> 
              </content>
            </Tab>
+            <Tab text="Czas wykonania">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Label layoutX="20.0" layoutY="46.0" text="Limit czasu wykonania [s]:" />
+                        <Slider fx:id="changeTimeout" blockIncrement="1.0" layoutX="241.0" layoutY="46.0" majorTickUnit="1.0" max="10.0" min="1.0" minorTickCount="1" prefHeight="16.0" prefWidth="182.0" showTickLabels="true" showTickMarks="true" snapToTicks="true" value="4.0" />
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
            <Tab text="Inne">
              <content>
                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />

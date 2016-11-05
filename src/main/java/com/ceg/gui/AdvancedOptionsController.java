@@ -1,18 +1,23 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
 import com.ceg.utils.FontTypeUtil;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -30,6 +35,8 @@ public class AdvancedOptionsController implements Initializable {
     ChoiceBox codeFont;
     @FXML
     TextField codeFontSize;
+    @FXML
+    Slider changeTimeout;
     
     public static Stage appStage;
     private PDFSettings pdfSettings;
@@ -49,6 +56,13 @@ public class AdvancedOptionsController implements Initializable {
         
         commandFontSize.setText(pdfSettings.getCommandFontSize().toString());
         codeFontSize.setText(pdfSettings.getCodeFontSize().toString());
+        
+        changeTimeout.valueProperty().addListener(new ChangeListener<Number>(){
+            public void changed(ObservableValue<? extends Number> ov,
+                Number oldVal, Number newVal){
+                Exam.getInstance().setExecutionTimetout(newVal.floatValue());
+            }
+        });
         
     }
 

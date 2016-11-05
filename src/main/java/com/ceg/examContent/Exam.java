@@ -21,6 +21,7 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlRootElement
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
+    private float executionTimetout = 4F;
     private int compilationProgress = -1;
     private List<String> outputList = new ArrayList<>();
     @XmlElement
@@ -82,6 +83,14 @@ public class Exam extends Observable {
         }
         this.incCompilationProgress();
         return true;
+    }
+
+    public float getExecutionTimetout() {
+        return executionTimetout;
+    }
+
+    public void setExecutionTimetout(float executionTimetout) {
+        this.executionTimetout = executionTimetout;
     }
         
     public List<Task> getTasks(){

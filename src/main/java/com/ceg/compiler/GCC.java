@@ -1,5 +1,6 @@
 package com.ceg.compiler;
 
+import com.ceg.examContent.Exam;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -137,7 +138,8 @@ public class GCC {
                     long elapsedTimeMillis = 0;
                     float elapsedTimeSec = 0;
                     long start = System.currentTimeMillis();
-                    while(elapsedTimeSec < 5 ) {                      
+                    float timeoutVal = Exam.getInstance().getExecutionTimetout();
+                    while(elapsedTimeSec < timeoutVal ) {                      
                         elapsedTimeMillis = System.currentTimeMillis()-start;
                         elapsedTimeSec = elapsedTimeMillis/1000F;
                         if(reader.ready()){
