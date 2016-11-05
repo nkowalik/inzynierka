@@ -186,7 +186,7 @@ public class GUIExamCompilationController implements Initializable {
                              if (retVal != -2) {
                                  Alerts.compileErrorAlert();
                              } else {
-                                 Alerts.emptyPartOfTaskAlert();
+                                 Alerts.generatingAnswersErrorAlert();
                              }
                             cancelAndQuit();
                          }
