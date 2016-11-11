@@ -52,7 +52,7 @@
              </VBox>
          </center>
          <left>
-            <VBox prefHeight="531.0" prefWidth="426.0" spacing="10.0" BorderPane.alignment="CENTER">
+            <VBox prefHeight="531.0" prefWidth="450.0" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
                   <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="450.0" />
                   <HBox fx:id="textOptions" prefHeight="25.0" prefWidth="451.0">
@@ -65,14 +65,14 @@
                      </children>
                   </HBox>
                   <StyleClassedTextArea fx:id="answer" editable="true" prefHeight="161.0" prefWidth="450.0" />
-                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="451.0" spacing="10.0">
+                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="450.0" spacing="10.0">
                      <children>
                         <Button fx:id="labelBtn" mnemonicParsing="false" onAction="#changeToLabel" prefWidth="120.0" text="Etykieta" />
                         <Button fx:id="answerBtn" mnemonicParsing="false" onAction="#changeToAnswer" prefWidth="120.0" text="Odpowiedź" />
                         <CheckBox fx:id="rememberCheckBox" mnemonicParsing="false" text="Zapamiętaj odpowiedzi" />
                      </children>
                   </HBox>
-                  <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="474.0" />
+                  <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="450.0" />
                   <HBox alignment="CENTER" prefHeight="25.0" prefWidth="451.0" spacing="20.0">
                      <children>
                         <Button fx:id="executeBtn" mnemonicParsing="false" onAction="#execute" text="Wykonaj" />
@@ -101,7 +101,7 @@
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
 
-                    <MenuItem fx:id="deleteTaskItem" mnemonicParsing="false" onAction="#deleteTask" text="Usun" />
+                    <MenuItem fx:id="deleteTaskItem" mnemonicParsing="false" onAction="#deleteTask" text="Usuń" />
                     <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę" />
                     <MenuItem fx:id="changeAnswersNum" mnemonicParsing="false" onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi" visible="false" />
                     <MenuItem fx:id="saveTaskItem" mnemonicParsing="false" onAction="#saveTask" text="Zapisz zadanie" visible="false" />
