@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -20,7 +21,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.fxmisc.richtext.*?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -42,10 +43,10 @@
                      </CodeArea>
                      <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                          <children>
-                             <Button styleClass="hiddenButton" mnemonicParsing="false" onAction="#hideMarker" text="Ukryj" />
-                             <Button styleClass="testButton" mnemonicParsing="false" onAction="#testMarker" text="Usuń" />
+                             <Button mnemonicParsing="false" onAction="#hideMarker" styleClass="hiddenButton" text="Ukryj" />
+                             <Button mnemonicParsing="false" onAction="#testMarker" styleClass="testButton" text="Usuń" />
                              <Button mnemonicParsing="false" onAction="#normalMarker" text="Cofnij" />
-                             <Button fx:id="gapsMarkerBtn" styleClass="gapsButton" mnemonicParsing="false" onAction="#gapsMarker" text="Luka" visible="false" />
+                             <Button fx:id="gapsMarkerBtn" mnemonicParsing="false" onAction="#gapsMarker" styleClass="gapsButton" text="Luka" visible="false" />
                          </children>
                      </HBox>
                  </children>
@@ -53,15 +54,15 @@
          </center>
          <left>
             <VBox prefHeight="292.0" prefWidth="440.0" spacing="10.0" BorderPane.alignment="CENTER">
-               <children>
-                  <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="440.0" />
-                  <HBox fx:id="textOptions" prefHeight="22.0" prefWidth="440.0">
+               <children>    
+                  <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="440.0" />             
+                  <HBox fx:id="textOptions" prefHeight="22.0" prefWidth="440.0" spacing="5.0">
                      <children>
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#undoTextMarker" prefHeight="25.0" prefWidth="97.0" text="Cofnij format" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" text="Pogrubienie" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" prefHeight="25.0" prefWidth="91.0" text="Podkreślenie" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" prefHeight="25.0" prefWidth="78.0" text="Kursywa" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" prefHeight="25.0" prefWidth="96.0" text="Maszynowo" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#undoTextMarker" text="Cofnij"/>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" text="B" styleClass="boldButton" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" text="U" styleClass="underlineButton"/>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" text="I" styleClass="italicButton"/>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" text="a" styleClass="typewriterButton"/>
                      </children>
                   </HBox>
                   <StyleClassedTextArea fx:id="answer" editable="true" prefHeight="161.0" prefWidth="440.0" />
@@ -112,7 +113,7 @@
                 </Menu>
                 <Menu mnemonicParsing="false">
                     <graphic>
-                        <Label mnemonicParsing="false" onMouseClicked="#advancedOptionsClicked" text="Ustawienia"/>
+                        <Label mnemonicParsing="false" onMouseClicked="#advancedOptionsClicked" text="Ustawienia" />
                     </graphic>
                 </Menu>
               </menus>
