@@ -54,8 +54,8 @@
          <left>
             <VBox prefHeight="531.0" prefWidth="450.0" spacing="10.0" BorderPane.alignment="CENTER">
                <children>
-                  <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="151.0" prefWidth="450.0" />
-                  <HBox fx:id="textOptions" prefHeight="25.0" prefWidth="451.0">
+                  <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="450.0" prefHeight="151.0" prefWidth="510.0" />
+                  <HBox fx:id="textOptions" prefHeight="25.0" prefWidth="510.0">
                      <children>
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#undoTextMarker" prefHeight="25.0" text="Cofnij format" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" text="Pogrubienie" />
@@ -64,16 +64,16 @@
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" prefHeight="25.0" text="Maszynowo" />
                      </children>
                   </HBox>
-                  <StyleClassedTextArea fx:id="answer" editable="true" prefHeight="161.0" prefWidth="450.0" />
-                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="450.0" spacing="10.0">
+                  <StyleClassedTextArea fx:id="answer" editable="true" prefHeight="161.0" prefWidth="510.0" />
+                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="510.0" spacing="10.0">
                      <children>
                         <Button fx:id="labelBtn" mnemonicParsing="false" onAction="#changeToLabel" prefWidth="120.0" text="Etykieta" />
                         <Button fx:id="answerBtn" mnemonicParsing="false" onAction="#changeToAnswer" prefWidth="120.0" text="Odpowiedź" />
                         <CheckBox fx:id="rememberCheckBox" mnemonicParsing="false" text="Zapamiętaj odpowiedzi" />
                      </children>
                   </HBox>
-                  <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="450.0" />
-                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="451.0" spacing="20.0">
+                  <TextArea fx:id="result" editable="false" prefHeight="161.0" prefWidth="510.0" />
+                  <HBox alignment="CENTER" prefHeight="25.0" prefWidth="510.0" spacing="20.0">
                      <children>
                         <Button fx:id="executeBtn" mnemonicParsing="false" onAction="#execute" text="Wykonaj" />
                         <Button fx:id="testExecuteBtn" alignment="CENTER" mnemonicParsing="false" nodeOrientation="LEFT_TO_RIGHT" onAction="#testExecute" text="Wykonaj testowo" />
