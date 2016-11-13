@@ -11,6 +11,9 @@ import java.security.CodeSource;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import com.ceg.examContent.Exam;
+import com.ceg.utils.Alerts;
 import org.apache.commons.lang.SystemUtils;
 
 public class GCC {
@@ -34,7 +37,8 @@ public class GCC {
             jarFile = new File(codeSource.getLocation().toURI().getPath());
             path = jarFile.getParentFile().getPath();
         } catch (URISyntaxException ex) {
-            Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
+            Alerts.createCompilerErrorAlert();
+            System.out.println("Cannot get path to create compiler object. Error caused by: " + ex.toString());
         }
 
     }
@@ -52,7 +56,7 @@ public class GCC {
                 Files.write(file.toPath(), lines, Charset.forName("UTF-8"));
 
             } catch (IOException ex) {
-                Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
+                System.out.println("Cannot create file to compile. Error caused by: " + ex.toString());
             }
 
             this.cppName = this.file.getAbsolutePath();
@@ -88,16 +92,15 @@ public class GCC {
                 p.waitFor();
                 p.destroy();
                 reader.close();
-                if (output.isEmpty())
-                    return true;
-                else
-                    return false;
+                return output.isEmpty();
 
             } catch (Exception err) {
-                err.printStackTrace();
+                Alerts.fileCompileErrorAlert();
+                System.out.println("Cannot compile. Error caused by: " + err.toString());
                 return false;
             }
         } else
+            Alerts.emptyFileAlert();
             return false;
     }
 
@@ -140,10 +143,9 @@ public class GCC {
                             file.deleteOnExit();
                         }
                     }
-                } catch (IOException ex) {
-                    Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(GCC.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (Exception ex) {
+                    Alerts.executeErrorAlert();
+                    System.out.println("Cannot execute. Error caused by: " + ex.toString());
                 }
             }
         }

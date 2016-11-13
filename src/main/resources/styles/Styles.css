@@ -1,5 +1,5 @@
 .button {
-    -fx-font-weight: bold;
+    -fx-font-weight: normal;
 }
 
 .testButton{
@@ -12,6 +12,27 @@
 
 .gapsButton{
     -fx-background-color: forestgreen;
+}
+
+.boldButton{
+    -fx-font-family: Arial;
+    -fx-font-weight: bolder; 
+}
+
+.italicButton{
+    -fx-font-family: Arial;
+    -fx-font-style: italic;
+    -fx-font-weight: normal;
+}
+
+.underlineButton{
+    -fx-font-family: Arial;
+    -fx-underline: true;
+    -fx-font-weight: normal;
+}
+
+.typewriterButton{
+    -fx-font-family: monospace;
 }
 
 .test {   

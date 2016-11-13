@@ -259,7 +259,7 @@ public class DraggableTab extends Tab {
                 try {
                     instance.addTask(event);
                 } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
             }
         });
@@ -269,7 +269,7 @@ public class DraggableTab extends Tab {
                 try {
                     instance.deleteTask(event);
                 } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
             }
         });
@@ -279,7 +279,7 @@ public class DraggableTab extends Tab {
                 try {
                     instance.changeTaskName(event);
                 } catch (Exception e) {
-                    e.printStackTrace();
+
                 }
             }
         });

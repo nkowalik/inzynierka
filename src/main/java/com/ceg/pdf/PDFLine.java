@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- *
- * @author Martyna
- */
+
 public class PDFLine {
     private List<PDFLinePart> lineParts;
     private final int fontSize;

@@ -1,9 +1,11 @@
 package com.ceg.examContent;
 
+import com.ceg.utils.Alerts;
 import org.fxmisc.richtext.CodeArea;
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlElementWrapper;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -89,7 +91,7 @@ public class Text {
             try {
                 code.add((TextPart)part.clone());
             } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
+                Alerts.getCodeToCompileErrorAlert();
             }
         }
 
@@ -114,7 +116,7 @@ public class Text {
             try {
                 code.add((TextPart)part.clone());
             } catch (CloneNotSupportedException e) {
-                e.printStackTrace();
+                Alerts.getCodeToPdfErrorAlert();
             }
         }
 
@@ -155,9 +157,7 @@ public class Text {
 
         List<String> output = new ArrayList();
         String[] list = sb.toString().split("\n");
-        for (String element : list) {
-            output.add(element);
-        }
+        Collections.addAll(output, list);
 
         return output;
     }

@@ -1,9 +1,9 @@
 package com.ceg.examContent;
 
 import com.ceg.compiler.CodeParser;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 
 import java.util.List;
-import javafx.scene.control.Alert;
 
 public class TaskTypeReturnedValue extends TaskType{
 
@@ -37,21 +37,14 @@ public class TaskTypeReturnedValue extends TaskType{
             catch (IndexOutOfBoundsException e) {
                 answers.clear();
                 this.setNoOfAnswers(0);
-                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
-
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Błąd");
-                alert.setHeaderText("Nastąpił błąd podczas generowania odpowiedzi.");
-                alert.setContentText("Sprawdź poprawność kodu.");
-
-                alert.showAndWait();
+                System.out.println("Cannot generate answers. Empty output from .exe file.");
             }
         }
         preparePdfAnswers(task);
     }
 
     @Override
-    public void callExecute(Task task, List<String> output) {
+    public void callExecute(Task task, List<String> output) throws EmptyPartOfTaskException {
         List<String> code = task.getText().getStandardCompilationCode();
         CodeParser.addNewlineAfterEachCout(code);
         task.compiler.execute(code, "retvalue", output);

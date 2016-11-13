@@ -1,6 +1,6 @@
 package com.ceg.examContent;
 
-import com.ceg.utils.Alerts;
+import com.ceg.exceptions.EmptyPartOfTaskException;
 
 import java.util.List;
 
@@ -41,8 +41,7 @@ public class TaskTypeLineNumbers extends TaskType{
            catch (IndexOutOfBoundsException e) {
                 answers.clear();
                 this.setNoOfAnswers(0);
-                System.err.println("IndexOutOfBoundsException: " + e.getMessage());
-                Alerts.generatingAnswersErrorAlert();
+               System.out.println("Cannot generate answers. Empty output from .exe file.");
             }
         }
         preparePdfAnswers(task);
@@ -76,7 +75,7 @@ public class TaskTypeLineNumbers extends TaskType{
     }
 
     @Override
-    public void callExecute(Task task, List<String> output) {
+    public void callExecute(Task task, List<String> output) throws EmptyPartOfTaskException {
         List<String> code = task.getText().getStandardCompilationCode();
         task.compiler.execute(code, "linenumbers", output);
         if (getUpdateAnswers()) {

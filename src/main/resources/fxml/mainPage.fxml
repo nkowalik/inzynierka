@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.text.*?>
 <?import java.lang.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
@@ -53,15 +54,15 @@
          </center>
          <left>
             <VBox prefHeight="531.0" prefWidth="450.0" spacing="10.0" BorderPane.alignment="CENTER">
-               <children>
+               <children>    
                   <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="450.0" prefHeight="151.0" prefWidth="510.0" />
                   <HBox fx:id="textOptions" prefHeight="25.0" prefWidth="510.0">
                      <children>
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#undoTextMarker" prefHeight="25.0" text="Cofnij format" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" text="Pogrubienie" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" prefHeight="25.0" text="Podkreślenie" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" prefHeight="25.0" text="Kursywa" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" prefHeight="25.0" text="Maszynowo" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" text="B" styleClass="boldButton" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" text="U" styleClass="underlineButton"/>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" text="I" styleClass="italicButton"/>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" text="a" styleClass="typewriterButton"/>
                      </children>
                   </HBox>
                   <StyleClassedTextArea fx:id="answer" editable="true" prefHeight="161.0" prefWidth="510.0" />

@@ -94,7 +94,9 @@ public class GUIExamCompilationController implements Initializable {
         Task<Void> task = new Task<Void>() {
             @Override
             public Void call() {
-                PDFSettings.getInstance().pdfGenerate(PdfSavingController.stage);
+                try {
+                    PDFSettings.getInstance().pdfGenerate(PdfSavingController.stage);
+                } catch (IOException e) {}
                 return null ;
             }
         };
@@ -174,13 +176,18 @@ public class GUIExamCompilationController implements Initializable {
             @Override 
             public Void call() throws Exception {
                 saveButton.setDisable(true);
-                boolean compilationOk = Exam.getInstance().compile();
+                int retVal = Exam.getInstance().compile();
+                boolean compilationOk = (retVal == 1);
                 saveButton.setDisable(!compilationOk);
-                if(!compilationOk){ 
+                if(!compilationOk){
                     setCancelled(true);
                     Platform.runLater(new Runnable(){
                          @Override public void run() {
-                            Alerts.compileErrorAlert();
+                             if (retVal != -2) {
+                                 Alerts.compileErrorAlert();
+                             } else {
+                                 Alerts.generatingAnswersErrorAlert();
+                             }
                             cancelAndQuit();
                          }
                     });
