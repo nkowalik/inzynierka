@@ -56,14 +56,17 @@
             <VBox prefHeight="531.0" prefWidth="450.0" spacing="10.0" BorderPane.alignment="CENTER">
                <children>    
                   <StyleClassedTextArea fx:id="text" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="450.0" prefHeight="151.0" prefWidth="510.0" />
-                  <HBox fx:id="textOptions" prefHeight="25.0" prefWidth="510.0">
+                  <HBox fx:id="textOptions" prefHeight="25.0" prefWidth="510.0" spacing="5.0">
                      <children>
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#undoTextMarker" prefHeight="25.0" text="Cofnij format" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" text="B" styleClass="boldButton" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" text="U" styleClass="underlineButton"/>
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" text="I" styleClass="italicButton"/>
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" text="a" styleClass="typewriterButton"/>
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" styleClass="boldButton" text="B" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" styleClass="underlineButton" text="U" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" styleClass="italicButton" text="I" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" styleClass="typewriterButton" text="a" />
                      </children>
+                     <opaqueInsets>
+                        <Insets />
+                     </opaqueInsets>
                   </HBox>
                   <StyleClassedTextArea fx:id="answer" editable="true" prefHeight="161.0" prefWidth="510.0" />
                   <HBox alignment="CENTER" prefHeight="25.0" prefWidth="510.0" spacing="10.0">
