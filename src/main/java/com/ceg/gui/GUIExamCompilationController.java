@@ -177,7 +177,7 @@ public class GUIExamCompilationController implements Initializable {
             public Void call() throws Exception {
                 saveButton.setDisable(true);
                 int retVal = Exam.getInstance().compile();
-                boolean compilationOk = (retVal == 1);
+                boolean compilationOk = ((retVal == 1) || (retVal == -3) || (retVal == -4));
                 saveButton.setDisable(!compilationOk);
                 if(!compilationOk){
                     setCancelled(true);
@@ -189,6 +189,17 @@ public class GUIExamCompilationController implements Initializable {
                                  Alerts.generatingAnswersErrorAlert();
                              }
                             cancelAndQuit();
+                         }
+                    });
+                }
+                else{
+                    Platform.runLater(new Runnable(){
+                         @Override public void run() {
+                             if (retVal == -3) {
+                                 Alerts.executionErrorAlert();
+                             } else if (retVal == -4){
+                                 Alerts.executionTimetoutErrorAlert();
+                             }
                          }
                     });
                 }

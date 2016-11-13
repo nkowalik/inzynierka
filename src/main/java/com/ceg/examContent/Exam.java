@@ -25,6 +25,7 @@ import javax.xml.bind.annotation.XmlElement;
 @XmlRootElement
 public class Exam extends Observable {
     private ArrayList<Task> tasks;
+    private float executionTimetout = 4F;
     private int compilationProgress = -1;
     private List<String> outputList = new ArrayList<>();
     @XmlElement
@@ -61,7 +62,7 @@ public class Exam extends Observable {
     
     public int compile() {
         List<String> output = new ArrayList<>();
-        
+        int result = 1;
         clearOutputList();
         for (Task i : tasks) {
             output.clear();
@@ -73,7 +74,17 @@ public class Exam extends Observable {
             i.setResult(String.join("\n", output));
             this.incCompilationProgress();
             if (output.get(0).contentEquals("Kompilacja przebiegła pomyślnie.")){
-                addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
+                if(output.get(1).contentEquals("Błąd wykonania.")){
+                    addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + "Błąd wykonania.\n");
+                    result = -3;
+                }
+                else if(output.get(1).contentEquals("Upłynięcie limitu czasu wykonania.")){
+                    addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + "Przekroczenie limitu czasu.\n");
+                    result = -4;
+                }
+                else{
+                    addToOutputList("Zadanie " + (getCompilationProgress()+1) + " : " + output.get(0) + "\n");
+                }
             }
             else {                
                if (!i.getType().name.equals("LineNumbers")){
@@ -89,7 +100,15 @@ public class Exam extends Observable {
             }            
         }
         this.incCompilationProgress();
-        return 1;
+        return result;
+    }
+
+    public float getExecutionTimetout() {
+        return executionTimetout;
+    }
+
+    public void setExecutionTimetout(float executionTimetout) {
+        this.executionTimetout = executionTimetout;
     }
         
     public List<Task> getTasks(){
