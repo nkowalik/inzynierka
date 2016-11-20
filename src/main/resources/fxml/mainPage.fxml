@@ -62,7 +62,7 @@
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#boldTextMarker" styleClass="boldButton" text="B" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#underlineTextMarker" styleClass="underlineButton" text="U" />
                         <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#italicTextMarker" styleClass="italicButton" text="I" />
-                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" styleClass="typewriterButton" text="a" />
+                        <Button minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#monospaceTextMarker" styleClass="typewriterButton" text="A" />
                      </children>
                      <opaqueInsets>
                         <Insets />
