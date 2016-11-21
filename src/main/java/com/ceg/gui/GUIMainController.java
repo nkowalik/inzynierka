@@ -2,7 +2,6 @@ package com.ceg.gui;
 
 import java.io.File;
 
-import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
 import java.util.*;
 import com.ceg.examContent.Text;
@@ -244,7 +243,7 @@ public class GUIMainController implements Initializable {
 
         try {
             exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
-        } catch (EmptyPartOfTaskException e) {
+        } catch (Exception e) {
             return;
         }
         for(String s : outcome) {
@@ -311,10 +310,6 @@ public class GUIMainController implements Initializable {
             PdfSavingController.show();
         } catch (EmptyExamException ex) {
             Alerts.emptyExamAlert();
-            saveText(exam.idx);
-            saveContent(exam.idx);
-            saveResult(exam.idx);
-            PdfSavingController.show();
         }
     }
 
@@ -666,6 +661,7 @@ public class GUIMainController implements Initializable {
         }
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
+        if (file == null) return;
         try {
             Exam.getInstance().save(file);
         } catch (NullPointerException e) {
@@ -761,6 +757,7 @@ public class GUIMainController implements Initializable {
         Task task = Exam.getInstance().getCurrentTask();
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, Exam.getInstance().getNames().get(exam.idx).replace(" ", "") + ".xml");
+        if (file == null) return;
         try {
             task.save(file.getAbsolutePath());
         } catch (NullPointerException e) {
