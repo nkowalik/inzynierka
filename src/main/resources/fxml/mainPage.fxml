@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.CheckMenuItem?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
@@ -20,7 +18,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import org.fxmisc.richtext.*?>
 
-<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
+<GridPane alignment="center" hgap="10" vgap="10" xmlns="http://javafx.com/javafx/8.0.60" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.GUIMainController">
     <columnConstraints>
         <ColumnConstraints />
     </columnConstraints>
@@ -42,10 +40,10 @@
                      </CodeArea>
                      <HBox alignment="BOTTOM_CENTER" spacing="10.0">
                          <children>
-                             <Button styleClass="hiddenButton" mnemonicParsing="false" onAction="#hideMarker" text="Ukryj" />
-                             <Button styleClass="testButton" mnemonicParsing="false" onAction="#testMarker" text="Usuń" />
+                             <Button mnemonicParsing="false" onAction="#hideMarker" styleClass="hiddenButton" text="Ukryj" />
+                             <Button mnemonicParsing="false" onAction="#testMarker" styleClass="testButton" text="Usuń" />
                              <Button mnemonicParsing="false" onAction="#normalMarker" text="Cofnij" />
-                             <Button fx:id="gapsMarkerBtn" styleClass="gapsButton" mnemonicParsing="false" onAction="#gapsMarker" text="Luka" visible="false" />
+                             <Button fx:id="gapsMarkerBtn" mnemonicParsing="false" onAction="#gapsMarker" styleClass="gapsButton" text="Luka" visible="false" />
                          </children>
                      </HBox>
                  </children>
@@ -108,11 +106,12 @@
                     <MenuItem mnemonicParsing="false" onAction="#loadTask" text="Wczytaj zadanie" visible="true" />
                     <MenuItem fx:id="taskEdition" mnemonicParsing="false" onAction="#editTask" text="Edytuj" visible="false" />
                     <MenuItem fx:id="pdfContentWidth" mnemonicParsing="false" onAction="#changePdfContentWidth" text="Zmień szerokość w dokumencie" visible="false" />
+                    <CheckMenuItem fx:id="lineNumbersCheckBox" mnemonicParsing="false" text="Dodaj numerowanie linii" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false">
                     <graphic>
-                        <Label mnemonicParsing="false" onMouseClicked="#advancedOptionsClicked" text="Ustawienia"/>
+                        <Label mnemonicParsing="false" onMouseClicked="#advancedOptionsClicked" text="Ustawienia" />
                     </graphic>
                 </Menu>
               </menus>

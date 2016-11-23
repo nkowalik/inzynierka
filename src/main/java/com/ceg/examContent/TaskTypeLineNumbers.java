@@ -10,6 +10,7 @@ public class TaskTypeLineNumbers extends TaskType{
         super();
         name="LineNumbers";
         command = "Numery linii";
+        lineNumbersVisibility = true;
     }
 
     @Override

@@ -14,8 +14,8 @@ public class PDFGapsCode extends PDFCode {
     }
 
     @Override
-    public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
+    public int writeToPDF(int y, boolean lineNumbersVisibility) throws IOException, EmptyPartOfTaskException {
         answer.pdfLines = this.pdfLines;
-        return answer.writeToPDF(y);
+        return answer.writeToPDF(y, lineNumbersVisibility);
     }
 }
