@@ -3,7 +3,6 @@ package com.ceg.pdf;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.exceptions.EmptyPartOfTaskException;
-import com.ceg.utils.Alerts;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -12,8 +11,6 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  * klasa odpowiedzialna za generowanie pdfa. Aby utworzyć dokument należy utworzyć obiekt tej klasy za pomocą konstruktora
@@ -55,7 +52,7 @@ public class PDFGenerator {
             answer.setAnswers(i.getAnswers());
             code.setAnswer(answer);
 
-            writeTaskToPdf();
+            writeTaskToPdf(i.getType().getLineNumbersVisibility());
             actualY -= breakBetweenTasks;
         }
         cs.close();
@@ -88,18 +85,18 @@ public class PDFGenerator {
         actualY = topMargin;
     }
 
-    private void writeTaskToPdf() throws IOException, EmptyPartOfTaskException {
+    private void writeTaskToPdf(boolean lineNumbersVisibility) throws IOException, EmptyPartOfTaskException {
         if (actualY - comm.getLineHeight()*comm.getNumberOfLines() -
                 answer.getLineHeight()*answer.getNumberOfLines() < bottomMargin  ||
                 actualY - code.getLineHeight()*code.getNumberOfLines() < bottomMargin) {
             createNewPage();
         }
 
-        int commandLines = comm.writeToPDF(actualY);
-        int codeLines = code.writeToPDF(actualY);
+        int commandLines = comm.writeToPDF(actualY, lineNumbersVisibility);
+        int codeLines = code.writeToPDF(actualY, lineNumbersVisibility);
         
         if (answer.getNumberOfLines() > 0)
-            commandLines = answer.writeToPDF(commandLines);
+            commandLines = answer.writeToPDF(commandLines, lineNumbersVisibility);
 
         actualY = (commandLines < codeLines) ? commandLines : codeLines;
     }
@@ -110,10 +107,6 @@ public class PDFGenerator {
                 if (task.getType().name.equals("Gaps")) {
                     code = new PDFTeachersGapsCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
                     answer = code.answer;
-                }
-                else if (task.getType().name.equals("LineNumbers")) {
-                    code = new PDFLineNumbersCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
-                    answer = new PDFTeachersAnswer(task.getPdfAnswers(), pdfContentWidthPercentage);
                 }
                 else {
                     code = new PDFCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
@@ -130,10 +123,6 @@ public class PDFGenerator {
                         case "Gaps":
                             code = new PDFGapsCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
                             answer = code.answer;
-                            break;
-                        case "LineNumbers":
-                            code = new PDFLineNumbersCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
-                            answer = new PDFAnswer(task.getPdfAnswers(), pdfContentWidthPercentage);
                             break;
                         default:
                             code = new PDFCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);

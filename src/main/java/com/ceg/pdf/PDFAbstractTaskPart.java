@@ -50,7 +50,7 @@ public abstract class PDFAbstractTaskPart {
             throw new EmptyPartOfTaskException();
     }
     
-    public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
+    public int writeToPDF(int y, boolean lineNumbersVisibility) throws IOException, EmptyPartOfTaskException {
         if (pdfLines.isEmpty())
             throw new EmptyPartOfTaskException();
         

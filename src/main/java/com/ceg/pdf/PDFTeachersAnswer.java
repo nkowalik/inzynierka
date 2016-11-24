@@ -28,7 +28,7 @@ public class PDFTeachersAnswer extends PDFAnswer {
     
     /* funkcja zapisująca do dokumentu pdf najpierw odpowiedzi dla nauczyciela a następnie całą treść zadania */
     @Override
-    public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
+    public int writeToPDF(int y, boolean lineNumbersVisibility) throws IOException, EmptyPartOfTaskException {
         if (answers.isEmpty())
             throw new EmptyPartOfTaskException();
         answersIndex = 0;
@@ -54,7 +54,7 @@ public class PDFTeachersAnswer extends PDFAnswer {
                 myY -= lineHeight;
             }            
         }
-        return super.writeToPDF(y);
+        return super.writeToPDF(y, lineNumbersVisibility);
     }
     
     @Override

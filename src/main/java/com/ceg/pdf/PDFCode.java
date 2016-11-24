@@ -9,7 +9,7 @@ import java.util.List;
 public class PDFCode extends PDFAbstractTaskPart {
     private String line;
     public PDFAnswer answer = null;
-
+    
     private final List<String> operatorList = Arrays.asList("//", 
                                                             ";", 
                                                             ",", 
@@ -112,5 +112,27 @@ public class PDFCode extends PDFAbstractTaskPart {
     }
 
     protected void setAnswer(PDFAnswer answer) {
+    }
+    
+    @Override
+    public int writeToPDF(int y, boolean lineNumbersVisibility) throws IOException, EmptyPartOfTaskException {
+        if (lineNumbersVisibility) {
+            for (int i = 0; i < pdfLines.size(); i++) {
+                pdfLines.get(i).getLineParts().get(0).setText(i+1 + ":  " + pdfLines.get(i).getLineParts().get(0).getText());
+            }
+        }
+        
+        int tempY = super.writeToPDF(y, lineNumbersVisibility);
+        
+        if (lineNumbersVisibility) {
+            float width = leftMargin + getWidth("   ", defaultFontType, fontSize);
+            
+            PDFGenerator.cs.moveTo(width, tempY);
+            PDFGenerator.cs.lineTo(width, y + lineHeight);
+            PDFGenerator.cs.setLineWidth(PDFSettings.getInstance().getSeparatorWidth());
+            PDFGenerator.cs.stroke();
+        }
+        
+        return tempY;
     }
 }

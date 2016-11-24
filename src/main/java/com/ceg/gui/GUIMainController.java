@@ -2,7 +2,6 @@ package com.ceg.gui;
 
 import java.io.File;
 
-import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
 import java.util.*;
 import com.ceg.examContent.Text;
@@ -80,6 +79,8 @@ public class GUIMainController implements Initializable {
     HBox textOptions;
     @FXML
     CheckBox rememberCheckBox;
+    @FXML
+    CheckMenuItem lineNumbersCheckBox;
     @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
@@ -244,7 +245,7 @@ public class GUIMainController implements Initializable {
 
         try {
             exam.getCurrentTask().getType().callExecute(exam.getCurrentTask(), outcome);
-        } catch (EmptyPartOfTaskException e) {
+        } catch (Exception e) {
             return;
         }
         for(String s : outcome) {
@@ -311,10 +312,6 @@ public class GUIMainController implements Initializable {
             PdfSavingController.show();
         } catch (EmptyExamException ex) {
             Alerts.emptyExamAlert();
-            saveText(exam.idx);
-            saveContent(exam.idx);
-            saveResult(exam.idx);
-            PdfSavingController.show();
         }
     }
 
@@ -495,6 +492,7 @@ public class GUIMainController implements Initializable {
         taskEdition.setVisible(visibility);
         pdfContentWidth.setVisible(visibility);
         answer.setVisible(visibility);
+        lineNumbersCheckBox.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
@@ -539,6 +537,7 @@ public class GUIMainController implements Initializable {
             updateCode(t.getText());
             updateResult(t.getResult());
             updateAnswer(t.getLabels(), t.getAnswers(), t.getType().getUpdateAnswers());
+            lineNumbersCheckBox.setSelected(t.getType().getLineNumbersVisibility());
         }
     }
 
@@ -639,7 +638,8 @@ public class GUIMainController implements Initializable {
     }
 
     /**
-     * Zapisuje kod wraz ze znacznikami w odpowiednie pole obiektu reprezentującego dane zadanie.
+     * Zapisuje informację czy do zadania mają zostać dodane numery linii oraz
+     * kod wraz ze znacznikami w odpowiednie pole obiektu reprezentującego dane zadanie.
      * W przypadku zadania z lukami dodatkowo generuje odpowiedzi do zadania.
      * @param idx Indeks zadania, dla którego ma zostać uaktualnione pole z kodem.
      */
@@ -650,6 +650,7 @@ public class GUIMainController implements Initializable {
             task.calculateGapsAnswers(task.getText().getTextParts());
             task.getType().setNoOfAnswers(task.getAnswers().size());
         }
+        task.getType().setLineNumbersVisibility(lineNumbersCheckBox.isSelected());
     }
     
     /**
@@ -666,6 +667,7 @@ public class GUIMainController implements Initializable {
         }
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
+        if (file == null) return;
         try {
             Exam.getInstance().save(file);
         } catch (NullPointerException e) {
@@ -761,6 +763,7 @@ public class GUIMainController implements Initializable {
         Task task = Exam.getInstance().getCurrentTask();
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, Exam.getInstance().getNames().get(exam.idx).replace(" ", "") + ".xml");
+        if (file == null) return;
         try {
             task.save(file.getAbsolutePath());
         } catch (NullPointerException e) {
