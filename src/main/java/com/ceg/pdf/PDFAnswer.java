@@ -67,7 +67,7 @@ public class PDFAnswer extends PDFAbstractTaskPart {
     }
     
     @Override
-    public int writeToPDF(int y) throws IOException, EmptyPartOfTaskException {
+    public int writeToPDF(int y, boolean lineNumbersVisibility) throws IOException, EmptyPartOfTaskException {
         int answerIndex = 0;
         for (PDFLine pdfLine : pdfLines) {
             if (pdfLine.getLineParts().get(0).getText().contains("#placeForAnswer")) {
@@ -81,6 +81,6 @@ public class PDFAnswer extends PDFAbstractTaskPart {
                 pdfLine.getLineParts().get(0).setText(line + list[list.length - 1]);
             }
         }
-        return super.writeToPDF(y);
+        return super.writeToPDF(y, lineNumbersVisibility);
     }
 }

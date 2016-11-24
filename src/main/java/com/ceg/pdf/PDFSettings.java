@@ -2,7 +2,6 @@ package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
-import com.ceg.gui.PdfSavingController;
 import com.ceg.utils.FontType;
 import com.ceg.utils.FontTypeUtil;
 import javafx.stage.Stage;
@@ -13,8 +12,6 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Calendar;
 import java.util.Properties;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 
 public class PDFSettings {
@@ -41,6 +38,8 @@ public class PDFSettings {
     public static int bottomMargin;
     public static int breakBetweenTasks;
     public static int pdfContentWidth;
+    
+    public static float separatorWidth;
 
     private static final PDFSettings instance = new PDFSettings();
 
@@ -53,6 +52,7 @@ public class PDFSettings {
         rightMargin = Integer.parseInt(defaultSettings.getProperty("right.margin"));
         breakBetweenTasks = Integer.parseInt(defaultSettings.getProperty("break.between.tasks")); 
         int breakBetweenTaskParts = Integer.parseInt(defaultSettings.getProperty("break.between.task.parts"));
+        separatorWidth = Float.parseFloat(defaultSettings.getProperty("separator.width"));
         
         this.commandFont = FontTypeUtil.change(defaultSettings.getProperty("command.font"));
         this.codeFont = FontTypeUtil.change(defaultSettings.getProperty("code.font"));
@@ -160,6 +160,10 @@ public class PDFSettings {
         return pdfFile;
     }
     public void setPdfFile(File pdfFile) { this.pdfFile = pdfFile; }
+    
+    public float getSeparatorWidth() {
+        return separatorWidth;
+    }
 
     public void formatDate() {
         date = "";

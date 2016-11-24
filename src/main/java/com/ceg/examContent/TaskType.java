@@ -28,10 +28,12 @@ abstract public class TaskType {
     public String command;
     protected int noOfAnswers;
     private boolean updateAnswers;
+    protected boolean lineNumbersVisibility;
     
     TaskType(){
         noOfAnswers = Integer.MAX_VALUE-1;
         updateAnswers = true;
+        lineNumbersVisibility = false;
     }
 
     /**
@@ -84,5 +86,11 @@ abstract public class TaskType {
     } 
     public boolean getUpdateAnswers() {
         return this.updateAnswers;
-    }      
+    }    
+    public void setLineNumbersVisibility(boolean lineNumbersVisibility) {
+        this.lineNumbersVisibility = lineNumbersVisibility;
+    } 
+    public boolean getLineNumbersVisibility() {
+        return this.lineNumbersVisibility;
+    } 
 }

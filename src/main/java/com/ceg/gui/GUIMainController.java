@@ -80,6 +80,8 @@ public class GUIMainController implements Initializable {
     @FXML
     CheckBox rememberCheckBox;
     @FXML
+    CheckMenuItem lineNumbersCheckBox;
+    @FXML
     private void advancedOptionsClicked(MouseEvent event){
         try {
             AdvancedOptionsController.show();
@@ -490,6 +492,7 @@ public class GUIMainController implements Initializable {
         taskEdition.setVisible(visibility);
         pdfContentWidth.setVisible(visibility);
         answer.setVisible(visibility);
+        lineNumbersCheckBox.setVisible(visibility);
        
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
@@ -534,6 +537,7 @@ public class GUIMainController implements Initializable {
             updateCode(t.getText());
             updateResult(t.getResult());
             updateAnswer(t.getLabels(), t.getAnswers(), t.getType().getUpdateAnswers());
+            lineNumbersCheckBox.setSelected(t.getType().getLineNumbersVisibility());
         }
     }
 
@@ -634,7 +638,8 @@ public class GUIMainController implements Initializable {
     }
 
     /**
-     * Zapisuje kod wraz ze znacznikami w odpowiednie pole obiektu reprezentującego dane zadanie.
+     * Zapisuje informację czy do zadania mają zostać dodane numery linii oraz
+     * kod wraz ze znacznikami w odpowiednie pole obiektu reprezentującego dane zadanie.
      * W przypadku zadania z lukami dodatkowo generuje odpowiedzi do zadania.
      * @param idx Indeks zadania, dla którego ma zostać uaktualnione pole z kodem.
      */
@@ -645,6 +650,7 @@ public class GUIMainController implements Initializable {
             task.calculateGapsAnswers(task.getText().getTextParts());
             task.getType().setNoOfAnswers(task.getAnswers().size());
         }
+        task.getType().setLineNumbersVisibility(lineNumbersCheckBox.isSelected());
     }
     
     /**
