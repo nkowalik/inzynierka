@@ -56,7 +56,7 @@ public class PdfWidthChangingController implements Initializable {
             Scene scene = new Scene((Pane)loader.load(location.openStream()));
             appStage = new Stage();
             appStage.setScene(scene);
-            appStage.setTitle("Zmień szerokość elementów zadania");
+            appStage.setTitle("Szerokość zadania");
             appStage.setResizable(false);
         }
         PdfWidthChangingController.getInstance().setCurrentTaskWidth();

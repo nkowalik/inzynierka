@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ChoiceBox?>
@@ -10,7 +14,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
-<BorderPane prefHeight="157.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.PdfSavingController">
+<BorderPane prefHeight="157.0" prefWidth="485.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.PdfSavingController">
     <center>         
         <GridPane>
             <columnConstraints>
@@ -52,18 +56,18 @@
         </GridPane>
     </center>
     <bottom>
-        <GridPane prefHeight="35.0" prefWidth="445.0">            
+        <GridPane prefHeight="35.0" prefWidth="456.0">            
             <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="394.0" minWidth="101.0" prefWidth="106.0" />
-            <ColumnConstraints maxWidth="372.0" minWidth="98.0" prefWidth="339.0" />
+                <ColumnConstraints hgrow="SOMETIMES" maxWidth="394.0" minWidth="101.0" prefWidth="132.0" />
+            <ColumnConstraints maxWidth="372.0" minWidth="98.0" prefWidth="313.0" />
             </columnConstraints>
             <rowConstraints>
             <RowConstraints />
             </rowConstraints>
             <children>
-                <Button layoutX="475.0" onAction="#advancedOptions" prefHeight="25.0" prefWidth="146.0" text="Opcje zaawansowane" BorderPane.alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
-                <Button minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#saveFile" prefHeight="25.0" prefWidth="96.0" text="Zapisz arkusz" GridPane.halignment="LEFT" />
-                <Button contentDisplay="RIGHT" minHeight="22.0" minWidth="77.0" mnemonicParsing="false" onAction="#cancel" text="Anuluj" GridPane.columnIndex="1" GridPane.halignment="LEFT">
+                <Button layoutX="475.0" minWidth="160.0" onAction="#advancedOptions" text="Opcje zaawansowane" BorderPane.alignment="TOP_RIGHT" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.valignment="TOP" />
+                <Button minWidth="100.0" mnemonicParsing="false" onAction="#saveFile" text="Zapisz arkusz" GridPane.halignment="LEFT" />
+                <Button contentDisplay="RIGHT" minHeight="22.0" minWidth="61.0" mnemonicParsing="false" onAction="#cancel" prefHeight="25.0" prefWidth="73.0" text="Anuluj" GridPane.columnIndex="1" GridPane.halignment="LEFT">
                 </Button> 
             </children>
             <BorderPane.margin>
