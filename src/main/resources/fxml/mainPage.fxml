@@ -97,7 +97,7 @@
                     <MenuItem mnemonicParsing="false" onAction="#createPDF" text="Generuj PDF" />
                     <MenuItem fx:id="saveExamItem" mnemonicParsing="false" onAction="#saveExam" text="Zapisz arkusz" />
                     <MenuItem fx:id="saveExamAsItem" mnemonicParsing="false" onAction="#saveExamAs" text="Zapisz arkusz jako..."/>
-                    <MenuItem mnemonicParsing="false" onAction="#loadXMLToCodeArea" text="Wczytaj arkusz" />
+                    <MenuItem mnemonicParsing="false" onAction="#loadExam" text="Wczytaj arkusz" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Zadanie">

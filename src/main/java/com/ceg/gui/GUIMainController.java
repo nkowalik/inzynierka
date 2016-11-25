@@ -696,6 +696,10 @@ public class GUIMainController implements Initializable {
         }
     }
 
+    /**
+     * Zapisuje stan bieżącego zadania i generuje plik .xml z egzaminem.
+     * Uruchamia okno wyboru pliku do zapisu w przypadku gdy w danej instancji programu nie był jeszcze wykonywany zapis.
+     */
     public void saveExam() {
         saveTaskInfo(exam.idx);
 
@@ -735,7 +739,7 @@ public class GUIMainController implements Initializable {
      * Laduje egzamin do programu ze z góry określonego pliku.
      * Uruchamia okno wyboru pliku do odczytu.
      */
-    public void loadXMLToCodeArea() {
+    public void loadExam() {
         try {
             File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
             if (file == null || !Exam.getInstance().load(file.getAbsolutePath())) {
@@ -768,11 +772,9 @@ public class GUIMainController implements Initializable {
 
     /**
      * Zapisuje stan bieżącego zadania w pliku (i egzaminie).
-     * Uruchamia okno wyboru pliku do zapisu.
-     * @param event
-     * @throws Exception
+     * Uruchamia okno wyboru pliku do zapisu w przypadku gdy w danej instancji programu nie był jeszcze wykonywany zapis.
      */
-    public void saveTask(ActionEvent event) throws Exception {
+    public void saveTask() throws Exception {
         saveTaskInfo(exam.idx);
         Task task = Exam.getInstance().getCurrentTask();
         String filename = task.getFilename();
@@ -790,6 +792,10 @@ public class GUIMainController implements Initializable {
         }
     }
 
+    /**
+     * Zapisuje stan bieżącego zadania w pliku (i egzaminie).
+     * Uruchamia okno wyboru pliku do zapisu.
+     */
     public void saveTaskAs() {
         saveTaskInfo(exam.idx);
 
