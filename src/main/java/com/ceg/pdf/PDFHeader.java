@@ -21,6 +21,10 @@ public class PDFHeader {
         int top = topMargin;
         PDFLine line = new PDFLine(fontSize, leftMargin);
         PDFLinePart linePart = new PDFLinePart(fontType);
+
+        //przejście do następnej linii
+        top -= 45;
+
         linePart.setText("________________________________________________________");
         line.setLineParts(Arrays.asList(linePart));
         line.writeLine(top);
@@ -36,8 +40,7 @@ public class PDFHeader {
         linePart.setText(testDate);
         line.setLineParts(Arrays.asList(linePart));
         line.writeLine(top);
-        
-        //przejście do następnej linii
+
         top -= 15;
         
         line = new PDFLine(fontSize, leftMargin + 1);
@@ -51,7 +54,9 @@ public class PDFHeader {
         linePart.setText("Nr indeksu");
         line.setLineParts(Arrays.asList(linePart));
         line.writeLine(top);
-        
+
+        top -= 45;
+
         return top-breakAfterHeader;
     }
 }
