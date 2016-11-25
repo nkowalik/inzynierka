@@ -13,7 +13,7 @@ import java.util.List;
 /* klasa odpowiedzialna za wyglad pola odpowiedzi w arkuszu pdf */
 public class PDFAnswer extends PDFAbstractTaskPart {
     protected List<String> placesForAnswers = new ArrayList<>();
-    private final String placeForAnswer = "_________";
+    private String placeForAnswer = "";
 
     public PDFAnswer(List<String> lines, float pdfContentWidthPercentage) throws IOException {
         super();
@@ -60,7 +60,19 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         }
     }
     
-    public void setAnswers(List<String> answers) {   
+    public void setAnswers(List<String> answers) {
+        int placeLength = 0, maxLength = 35;
+
+        for (String a : answers) {
+            if (placeLength < a.length()) {
+                placeLength = a.length();
+            }
+        }
+
+        for (int i = 0; i < placeLength && i < maxLength; i++) {
+            placeForAnswer += "_";
+        }
+
         answers.stream().forEach((_item) -> {
             placesForAnswers.add(placeForAnswer);
         });
