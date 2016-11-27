@@ -67,7 +67,8 @@ public class PDFSettings {
         day = calendar.get(Calendar.DAY_OF_MONTH);
         
         File file = new File(".");
-        pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);   
+        pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);  
+        pdfFile = null;
         pdfContentWidth = rightMargin - leftMargin - breakBetweenTaskParts;
     }
     

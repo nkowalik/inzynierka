@@ -191,6 +191,12 @@ public final class Alerts {
         showAlert(AlertType.ERROR, "Błąd", "Nie można zapisać pliku", "Plik jest już otwarty, zamknij go i spróbuj ponownie.");
     }
 
+     /**
+     * Wyświetla okno z informacją o poprawnej generacji pliku PDF.
+     */
+    public static void fileGenerated() {
+        showAlert(AlertType.INFORMATION, "Zapisano", "Operacja zakończona pomyślnie", "Wygenerowano plik PDF.");
+    }
 
     /**
      * Wyświetla okno z alertem.

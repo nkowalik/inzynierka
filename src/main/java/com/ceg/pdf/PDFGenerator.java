@@ -3,6 +3,8 @@ package com.ceg.pdf;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.gui.GUIMainController;
+import com.ceg.utils.Alerts;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -11,6 +13,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import javafx.application.Platform;
 
 /**
  * klasa odpowiedzialna za generowanie pdfa. Aby utworzyć dokument należy utworzyć obiekt tej klasy za pomocą konstruktora
@@ -62,16 +65,11 @@ public class PDFGenerator {
     /* Funkcja tworząca dokument pdf */
     private void savePDF(File pdfFile) throws IOException {
         document.save(pdfFile);
-        document.close();
-        Desktop desktop = Desktop.getDesktop();
-        EventQueue EQ = new EventQueue();
-        if(desktop.isSupported(Desktop.Action.OPEN)){
-             EventQueue.invokeLater(() -> {
-                 try {
-                     desktop.open(pdfFile);
-                 } catch (IOException ex) {}
-             });
-        }
+        document.close();      
+        Platform.runLater(() -> {
+            GUIMainController.getInstance().openPdfItem.setDisable(false);
+            Alerts.fileGenerated();
+        });       
     }
     
     private void createNewPage() throws IOException {

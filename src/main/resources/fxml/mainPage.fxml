@@ -95,6 +95,7 @@
                 <Menu mnemonicParsing="false" text="Arkusz">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#createPDF" text="Generuj PDF" />
+                    <MenuItem fx:id="openPdfItem" disable="true"  mnemonicParsing="false" onAction="#openPDF" text="Otwórz ostatni PDF" />
                     <MenuItem fx:id="saveExamItem" mnemonicParsing="false" onAction="#saveCodeAreaToXML" text="Zapisz arkusz" />
                     <MenuItem mnemonicParsing="false" onAction="#loadXMLToCodeArea" text="Wczytaj arkusz" />
                   </items>
