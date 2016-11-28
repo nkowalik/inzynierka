@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import org.apache.commons.lang.SystemUtils;
 
 /**
  * Klasa reprezentująca rozszerzoną, możliwą do przesunięcia zakładkę.
@@ -65,87 +66,87 @@ public class DraggableTab extends Tab {
 
         addContextMenu();
 
-        /**
-         * Definiuje sposób zachowania zakładki w trakcie jej przeciągania.
-         * Ustala kiedy oraz gdzie ma zostać wyświetlona pionowa czarna linia oddzielająca zadania oraz wyświetla ją.
-         */
-        nameLabel.setOnMouseDragged(new EventHandler<MouseEvent>() {
+        if(SystemUtils.IS_OS_WINDOWS) {
+            /**
+             * Definiuje sposób zachowania zakładki w trakcie jej przeciągania.
+             * Ustala kiedy oraz gdzie ma zostać wyświetlona pionowa czarna linia oddzielająca zadania oraz wyświetla ją.
+             */
+            nameLabel.setOnMouseDragged(new EventHandler<MouseEvent>() {
 
-            @Override
-            public void handle(MouseEvent t) {
-                dragStage.setWidth(nameLabel.getWidth() + 10);
-                dragStage.setHeight(nameLabel.getHeight() + 10);
-                dragStage.setX(t.getScreenX());
-                dragStage.setY(t.getScreenY());
-                dragStage.show();
-                Point2D screenPoint = new Point2D(t.getScreenX(), t.getScreenY());
-                tabPane = getTabPane();
-                InsertData data = getInsertData(screenPoint);
-                if(data == null || data.getInsertPane().getTabs().isEmpty()) {
-                    markerStage.hide();
-                }
-                else {
-                    int index = data.getIndex();
-                    boolean end = false;
-                    if(index == data.getInsertPane().getTabs().size()) {
-                        end = true;
-                        index--;
-                    }
-                    Rectangle2D rect = getAbsoluteRect(data.getInsertPane().getTabs().get(index));
-                    if(end) {
-                        markerStage.setX(rect.getMaxX() + 7);
-                    }
-                    else {
-                        markerStage.setX(rect.getMinX() - 7);
-                    }
-                    markerStage.setY(rect.getMaxY() - 15);
-                    markerStage.show();
-                }
-            }
-        });
-
-        /**
-         * Definiuje sposób zachowania zakładki w trakcie jej 'upuszczenia' po przeciągnięciu.
-         * Zmienia kolejność zadań w egzaminie zgodnie z nowym układem, poprawia indeksy zakładek.
-         */
-        nameLabel.setOnMouseReleased(new EventHandler<MouseEvent>() {
-
-            @Override
-            public void handle(MouseEvent t) {
-                markerStage.hide();
-                dragStage.hide();
-                if(!t.isStillSincePress()) {
+                @Override
+                public void handle(MouseEvent t) {
+                    dragStage.setWidth(nameLabel.getWidth() + 10);
+                    dragStage.setHeight(nameLabel.getHeight() + 10);
+                    dragStage.setX(t.getScreenX());
+                    dragStage.setY(t.getScreenY());
+                    dragStage.show();
                     Point2D screenPoint = new Point2D(t.getScreenX(), t.getScreenY());
-                    TabPane oldTabPane = getTabPane();
-                    int oldIndex = oldTabPane.getTabs().indexOf(DraggableTab.this);
-                    tabPane = oldTabPane;
-                    InsertData insertData = getInsertData(screenPoint);
-                    if(insertData != null) {
-                        int addIndex = insertData.getIndex();
-                        if(oldTabPane == insertData.getInsertPane() && oldTabPane.getTabs().size() == 1) {
+                    tabPane = getTabPane();
+                    InsertData data = getInsertData(screenPoint);
+                    if (data == null || data.getInsertPane().getTabs().isEmpty()) {
+                        markerStage.hide();
+                    } else {
+                        int index = data.getIndex();
+                        boolean end = false;
+                        if (index == data.getInsertPane().getTabs().size()) {
+                            end = true;
+                            index--;
+                        }
+                        Rectangle2D rect = getAbsoluteRect(data.getInsertPane().getTabs().get(index));
+                        if (end) {
+                            markerStage.setX(rect.getMaxX() + 7);
+                        } else {
+                            markerStage.setX(rect.getMinX() - 7);
+                        }
+                        markerStage.setY(rect.getMaxY() - 15);
+                        markerStage.show();
+                    }
+                }
+            });
+
+            /**
+             * Definiuje sposób zachowania zakładki w trakcie jej 'upuszczenia' po przeciągnięciu.
+             * Zmienia kolejność zadań w egzaminie zgodnie z nowym układem, poprawia indeksy zakładek.
+             */
+            nameLabel.setOnMouseReleased(new EventHandler<MouseEvent>() {
+
+                @Override
+                public void handle(MouseEvent t) {
+                    markerStage.hide();
+                    dragStage.hide();
+                    if (!t.isStillSincePress()) {
+                        Point2D screenPoint = new Point2D(t.getScreenX(), t.getScreenY());
+                        TabPane oldTabPane = getTabPane();
+                        int oldIndex = oldTabPane.getTabs().indexOf(DraggableTab.this);
+                        tabPane = oldTabPane;
+                        InsertData insertData = getInsertData(screenPoint);
+                        if (insertData != null) {
+                            int addIndex = insertData.getIndex();
+                            if (oldTabPane == insertData.getInsertPane() && oldTabPane.getTabs().size() == 1) {
+                                return;
+                            }
+                            GUIMainController mainInstance = GUIMainController.getInstance();
+                            mainInstance.setStatus(GUIMainController.Status.DRAG);
+                            oldTabPane.getTabs().remove(DraggableTab.this);
+                            if (oldIndex < addIndex && oldTabPane == insertData.getInsertPane()) {
+                                addIndex--;
+                            }
+                            if (addIndex > insertData.getInsertPane().getTabs().size()) {
+                                addIndex = insertData.getInsertPane().getTabs().size();
+                            }
+                            Exam.getInstance().changeTasksOrder(oldIndex, addIndex);
+                            insertData.getInsertPane().getTabs().add(addIndex, DraggableTab.this);
+                            insertData.getInsertPane().selectionModelProperty().get().select(addIndex);
+                            mainInstance.updateTabPaneTabIndexes();
+                            mainInstance.setStatus(GUIMainController.Status.SWITCH);
+                            Exam.getInstance().idx = addIndex;
                             return;
                         }
-                        GUIMainController mainInstance = GUIMainController.getInstance();
-                        mainInstance.setStatus(GUIMainController.Status.DRAG);
-                        oldTabPane.getTabs().remove(DraggableTab.this);
-                        if(oldIndex < addIndex && oldTabPane == insertData.getInsertPane()) {
-                            addIndex--;
-                        }
-                        if(addIndex > insertData.getInsertPane().getTabs().size()) {
-                            addIndex = insertData.getInsertPane().getTabs().size();
-                        }
-                        Exam.getInstance().changeTasksOrder(oldIndex, addIndex);
-                        insertData.getInsertPane().getTabs().add(addIndex, DraggableTab.this);
-                        insertData.getInsertPane().selectionModelProperty().get().select(addIndex);
-                        mainInstance.updateTabPaneTabIndexes();
-                        mainInstance.setStatus(GUIMainController.Status.SWITCH);
-                        Exam.getInstance().idx = addIndex;
-                        return;
                     }
                 }
-            }
 
-        });
+            });
+        }
     }
 
 
@@ -247,32 +248,12 @@ public class DraggableTab extends Tab {
     }
 
     public void addContextMenu() {
-        MenuItem addItem = new MenuItem("Dodaj zadanie");
-        MenuItem deleteItem = new MenuItem("Usuń zadanie");
         MenuItem changeItem = new MenuItem("Zmień nazwę");
+        MenuItem moveForwards = new MenuItem("Przesuń w prawo");
+        MenuItem moveBackwards = new MenuItem("Przesuń w lewo");
 
         GUIMainController instance = GUIMainController.getInstance();
 
-        addItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    instance.addTask(event);
-                } catch (Exception e) {
-
-                }
-            }
-        });
-        deleteItem.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    instance.deleteTask(event);
-                } catch (Exception e) {
-
-                }
-            }
-        });
         changeItem.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -283,9 +264,49 @@ public class DraggableTab extends Tab {
                 }
             }
         });
+        moveForwards.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    instance.setStatus(GUIMainController.Status.DRAG);
+                    int idx = instance.tabPane.getSelectionModel().getSelectedIndex();
+                    if(idx+1 < Exam.getInstance().getTasks().size()) {
+                        instance.tabPane.getTabs().remove(DraggableTab.this);
+
+                        Exam.getInstance().changeTasksOrder(idx, idx + 1);
+                        instance.tabPane.getTabs().add(idx + 1, DraggableTab.this);
+                        instance.tabPane.getSelectionModel().select(DraggableTab.this);
+                        instance.updateTabPaneTabIndexes();
+                    }
+                    instance.setStatus(GUIMainController.Status.SWITCH);
+                } catch (Exception e) {
+
+                }
+            }
+        });
+        moveBackwards.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                try {
+                    instance.setStatus(GUIMainController.Status.DRAG);
+                    int idx = instance.tabPane.getSelectionModel().getSelectedIndex();
+                    if(idx-1 >= 0) {
+                        instance.tabPane.getTabs().remove(DraggableTab.this);
+
+                        Exam.getInstance().changeTasksOrder(idx, idx - 1);
+                        instance.tabPane.getTabs().add(idx - 1, DraggableTab.this);
+                        instance.tabPane.getSelectionModel().select(DraggableTab.this);
+                        instance.updateTabPaneTabIndexes();
+                    }
+                    instance.setStatus(GUIMainController.Status.SWITCH);
+                } catch (Exception e) {
+
+                }
+            }
+        });
 
         ContextMenu menu = new ContextMenu();
-        menu.getItems().addAll(addItem, deleteItem, changeItem);
+        menu.getItems().addAll(changeItem, moveForwards, moveBackwards);
 
         this.setContextMenu(menu);
     }
