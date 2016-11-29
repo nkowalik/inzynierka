@@ -2,20 +2,26 @@ package com.ceg.gui;
 
 import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
+import com.ceg.utils.ColorPicker;
+import com.ceg.utils.ColorPickerUtil;
+import com.ceg.utils.ContentCssClass;
+import com.ceg.utils.FontType;
 import com.ceg.utils.FontTypeUtil;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -36,16 +42,30 @@ public class AdvancedOptionsController implements Initializable {
     @FXML
     TextField codeFontSize;
     @FXML
+    ChoiceBox answerFont;
+    @FXML
+    TextField answerFontSize;
+    @FXML
+    ChoiceBox fontColor;
+    @FXML
+    CheckBox isBold;
+    @FXML
+    CheckBox isItalic;
+    @FXML
     Slider changeTimeout;
     
     public static Stage appStage;
     private PDFSettings pdfSettings;
     
     private final List<String> fontList = FontTypeUtil.getFontNamesList();
+    private List<String> colorList;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) { 
-        
+        colorList = Arrays.asList(ColorPicker.values())
+                .stream()
+                .map(p -> p.getColorName())
+                .collect(Collectors.toList());
         pdfSettings = PDFSettings.getInstance();
         
         commandFont.setItems(FXCollections.observableList(fontList));
@@ -54,8 +74,18 @@ public class AdvancedOptionsController implements Initializable {
         codeFont.setItems(FXCollections.observableList(fontList));
         codeFont.setValue(pdfSettings.getCodeFont().getFontName());
         
+        answerFont.setItems(FXCollections.observableList(fontList));
+        answerFont.setValue(pdfSettings.getAnswerFont().getFontName());
+        
+        fontColor.setItems(FXCollections.observableList(colorList));
+        fontColor.setValue(ColorPicker.BLACK.getColorName());
+        
         commandFontSize.setText(pdfSettings.getCommandFontSize().toString());
         codeFontSize.setText(pdfSettings.getCodeFontSize().toString());
+        answerFontSize.setText(pdfSettings.getAnswerFontSize().toString());
+        
+        isBold.setSelected(pdfSettings.getIsAnswerBold());
+        isItalic.setSelected(pdfSettings.getIsAnswerItalic());
         
         changeTimeout.valueProperty().addListener(new ChangeListener<Number>(){
             public void changed(ObservableValue<? extends Number> ov,
@@ -96,8 +126,15 @@ public class AdvancedOptionsController implements Initializable {
         PDFSettings.getInstance().setCommandFont(FontTypeUtil.change(commandFont.getValue().toString()));
         PDFSettings.getInstance().setCodeFont(FontTypeUtil.change(codeFont.getValue().toString()));
         
+        PDFSettings.getInstance().setAnswerFont(FontTypeUtil.change(answerFont.getValue().toString()));
+       
         PDFSettings.getInstance().setCommandFontSize(Integer.parseInt(commandFontSize.getText()));
         PDFSettings.getInstance().setCodeFontSize(Integer.parseInt(codeFontSize.getText()));
+        PDFSettings.getInstance().setAnswerFontSize(Integer.parseInt(answerFontSize.getText()));
+        
+        PDFSettings.getInstance().setAnswerColor(ColorPickerUtil.change(fontColor.getValue().toString()));
+        PDFSettings.getInstance().setIsAnswerBold(isBold.isSelected());
+        PDFSettings.getInstance().setIsAnswerItalic(isItalic.isSelected());
         
         appStage.hide();
     }
