@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+
+<AnchorPane id="AnchorPane" prefHeight="584.0" prefWidth="744.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8" fx:controller="com.ceg.gui.HelpController">
+   <children>
+      <TabPane layoutX="-2.0" layoutY="-4.0" prefHeight="586.0" prefWidth="751.0" tabClosingPolicy="UNAVAILABLE">
+        <tabs>
+          <Tab text="Okno główne">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="557.0" prefWidth="759.0" />
+            </content>
+          </Tab>
+            <Tab text="Typy zadań">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Accordion layoutX="5.0" layoutY="11.0" prefHeight="532.0" prefWidth="742.0">
+                          <panes>
+                              <TitledPane animated="false" text="Wyjście programu">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Text layoutX="14.0" layoutY="28.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="W tym typie zadania wszystko, co pojawi się na wyjściu programu jest traktowane jako jedna odpowiedź." textAlignment="JUSTIFY" wrappingWidth="248.966796875">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <TitledPane animated="false" text="Wyjście funkcji">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Text layoutX="14.0" layoutY="28.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="W tym typie zadania poszczególne wywołania funkcji printf / cout są rozdzielane znakami nowej linii. Każda linia wyjścia jest traktowana jako osobna odpowiedź w egzaminie." textAlignment="JUSTIFY" wrappingWidth="260.42578125">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                              <TitledPane animated="false" text="Wartość zmiennej">
+                                <content>
+                                  <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Text layoutX="14.0" layoutY="28.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="W kodzie dołączonym do zadania tego typu należy umieścić przynajmniej jedno wypisanie wartości zmiennej. Każda linia wyjścia będzie traktowana jako osobna odpowiedź (tak jak dla typu „Wyjście funkcji”)." textAlignment="JUSTIFY" wrappingWidth="355.322265625">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </AnchorPane>
+                                </content>
+                              </TitledPane>
+                            <TitledPane animated="false" text="Zwrócona wartość">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Text layoutX="14.0" layoutY="28.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="W kodzie dołączonym do zadania tego typu należy umieścić wypisanie wartości zwróconej przez funkcję. Każda linia wyjścia będzie traktowana jako osobna odpowiedź (tak jak dla typu „Wyjście funkcji”). " textAlignment="JUSTIFY" wrappingWidth="279.384765625">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </TitledPane>
+                            <TitledPane animated="false" text="Numery linii">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Text layoutX="14.0" layoutY="37.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Kod dołączony do zadania tego typu powinien powodować błędy kompilacji. Odpowiedziami do tego zadania są numery linii powodujących błędy kompilacji. UWAGA: należy zawsze upewnić się, że wygenerowane odpowiedzi są poprawne." textAlignment="JUSTIFY" wrappingWidth="256.818359375">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </TitledPane>
+                            <TitledPane animated="false" text="Uzupełnianie luk">
+                              <content>
+                                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Text layoutX="14.0" layoutY="35.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dla tego typu zadania dostępny jest dodatkowy marker. Zaznaczone fragmenty kodu będą stanowiły odpowiedzi do zadania." textAlignment="JUSTIFY" wrappingWidth="255.201171875">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </AnchorPane>
+                              </content>
+                            </TitledPane>
+                              <TitledPane animated="false" layoutX="10.0" layoutY="135.0" text="Typ własny">
+                                 <content>
+                                    <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                                       <children>
+                                          <Text layoutX="14.0" layoutY="26.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dla tego typu zadania nie są generowane odpowiedzi, nie ma też domyślnego polecenia." textAlignment="JUSTIFY" wrappingWidth="242.318359375">
+                                             <font>
+                                                <Font size="13.0" />
+                                             </font>
+                                          </Text>
+                                       </children>
+                                    </AnchorPane>
+                                 </content>
+                              </TitledPane>
+                          </panes>
+                        </Accordion>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Markery">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="52.0" layoutY="417.0" strokeType="OUTSIDE" strokeWidth="0.0" text="„Ukryty” kod nie pojawi się w arkuszu PDF, natomiast zostanie skompilowany zarówno dla wykonania zwykłego, jak i testowego.." textAlignment="JUSTIFY" wrappingWidth="338.46484375">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="409.0" layoutY="417.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Przycisk „Cofnij” powoduje wyczyszczenie markerów dla zaznaczonego fragmentu kodu." textAlignment="JUSTIFY" wrappingWidth="258.40625">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="409.0" layoutY="321.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dla typu „Uzupełnianie luk” dostępny jest dodatkowy marker „Luka” (patrz: Typy zadań). " textAlignment="JUSTIFY" wrappingWidth="280.787109375">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="53.0" layoutY="321.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="„Usunięty” kod nie pojawi się w arkuszu PDF i nie zostanie skompilowany podczas zwykłego wykonania. Zostanie skompilowany w przypadku wykonania testowego." textAlignment="JUSTIFY" wrappingWidth="336.404296875">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="60.0" layoutY="236.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dla wszystkich typów zadań dostępne są dwa markery: „Usuń” i „Ukryj”. " textAlignment="JUSTIFY" wrappingWidth="234.13671875">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Tworzenie zadania">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="76.0" layoutY="359.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wybierz w menu okna głównego opcję Zadanie &gt; Dodaj. Zostanie otwarte okno dodawania zadania. Z rozwijanej listy wybierz typ zadania. W oknie po prawej stronie pojawi się domyślne polecenie dla danego typu. Po kliknięciu przycisku „Wczytaj kod” możesz wybrać plik znajdujący się na dysku, z którego chcesz wczytać kod do zadania. Po kliknięciu przycisku „Zakończ” okno dodawania zadania zostanie zamknięte, a utworzone zadanie zostanie dodane do aktualnie otwartego egzaminu." textAlignment="JUSTIFY" wrappingWidth="585.025390625">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Wykonanie programu">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <Text layoutX="42.0" layoutY="69.0" lineSpacing="3.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Po kliknięciu przycisku „Wykonaj” nastąpi kompilacja kodu z wykluczeniem kodu „usuniętego” za pomocą pomarańczowego markera. Przycisk „Wykonaj testowo” uruchamia kompilację całego kodu. " textAlignment="JUSTIFY" wrappingWidth="523.646484375">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Text>
+                     </children>
+                  </AnchorPane>
+              </content>
+            </Tab>
+            <Tab text="Generowanie PDF">
+              <content>
+                <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              </content>
+            </Tab>
+          <Tab text="Opcje zaawansowane">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </children>
+</AnchorPane>

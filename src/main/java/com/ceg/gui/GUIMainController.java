@@ -81,14 +81,7 @@ public class GUIMainController implements Initializable {
     CheckBox rememberCheckBox;
     @FXML
     CheckMenuItem lineNumbersCheckBox;
-    @FXML
-    private void advancedOptionsClicked(MouseEvent event){
-        try {
-            AdvancedOptionsController.show();
-        } catch (IOException ex) {
-            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
-        }
-    }
+    
     public static Scene scene = null; 
     private static Stage stage = null;
     private static GUIMainController instance = null;
@@ -374,6 +367,7 @@ public class GUIMainController implements Initializable {
             }
             end++;
         }
+        
         code.setStyleClass(ir.getStart(), ir.getEnd(), className);
     }
 
@@ -471,6 +465,24 @@ public class GUIMainController implements Initializable {
                 }
         }
         exam.getTaskAtIndex(exam.idx).getType().setNoOfAnswers(answNum);
+    }
+    
+    @FXML
+    private void advancedOptionsClicked(MouseEvent event){
+        try {
+            AdvancedOptionsController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
+        }
+    }
+    
+    @FXML
+    private void helpClicked(MouseEvent event){
+        try {
+            HelpController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
+        }
     }
 
     /**
