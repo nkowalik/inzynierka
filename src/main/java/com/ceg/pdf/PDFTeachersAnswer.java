@@ -27,6 +27,7 @@ public class PDFTeachersAnswer extends PDFAnswer {
         teacherAnswerFontSize = PDFSettings.getInstance().getAnswerFontSize();
         teacherAnswerFontType = PDFSettings.getInstance().getAnswerFont();
         answerColor = PDFSettings.getInstance().getAnswerColor();
+        lineHeight = teacherAnswerFontSize + 3;
         
         setFontTypeBoldOrItalic();
     }
@@ -37,6 +38,7 @@ public class PDFTeachersAnswer extends PDFAnswer {
         teacherAnswerFontSize = PDFSettings.getInstance().getAnswerFontSize();
         teacherAnswerFontType = PDFSettings.getInstance().getAnswerFont();
         answerColor = PDFSettings.getInstance().getAnswerColor();
+        lineHeight = teacherAnswerFontSize + 3;
         
         setFontTypeBoldOrItalic();
     }
