@@ -11,11 +11,11 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TextField;
@@ -37,6 +37,8 @@ public class AdvancedOptionsController implements Initializable {
     TextField codeFontSize;
     @FXML
     Slider changeTimeout;
+    @FXML
+    CheckBox separators;
     
     public static Stage appStage;
     private PDFSettings pdfSettings;
@@ -64,6 +66,10 @@ public class AdvancedOptionsController implements Initializable {
             }
         });
         
+        separators.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, 
+                Boolean oldVal, Boolean newVal) -> {
+            PDFSettings.getInstance().setSeparatorsAfterTasks(newVal);
+        });
     }
 
     /**
