@@ -5,6 +5,7 @@ import com.ceg.utils.Alerts;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import javafx.application.Platform;
 
 public class PDFCode extends PDFAbstractTaskPart {
     private String line;
@@ -60,7 +61,11 @@ public class PDFCode extends PDFAbstractTaskPart {
             
             else {
                 if (!alert) {
-                    Alerts.codeLineIsTooLong();
+                    Platform.runLater(new Runnable(){
+                         @Override public void run() {
+                             Alerts.codeLineIsTooLong();
+                         }
+                    });
                     alert = true;
                 }
                 for (String string : operatorList) {
