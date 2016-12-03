@@ -75,7 +75,11 @@ public class GUIMainController implements Initializable {
     @FXML
     public MenuItem openPdfItem;
     @FXML
+    MenuItem saveTaskAsItem;
+    @FXML
     MenuItem saveExamItem;
+    @FXML
+    MenuItem saveExamAsItem;
     @FXML
     MenuItem taskEdition;
     @FXML
@@ -164,15 +168,7 @@ public class GUIMainController implements Initializable {
                 case SWITCH:
                     if(oldValue != null) {
                         int id = Integer.parseInt(oldValue.getId());
-                        saveText(id);
-                        saveContent(id);
-                        saveResult(id);
-                        saveLabels(id);
-                        exam.getTaskAtIndex(id).getType().setUpdateAnswers(true);
-                        if (rememberCheckBox.isSelected()) {
-                            exam.getTaskAtIndex(id).getType().setUpdateAnswers(false);
-                            saveAnswers(id);
-                        }
+                        saveTaskInfo(id);
                     }
                     updateWindow(Integer.parseInt(newValue.getId()));
                     break;
@@ -306,14 +302,7 @@ public class GUIMainController implements Initializable {
             if (exam.getTasks().isEmpty()) {
                 throw new EmptyExamException();
             }
-            saveText(exam.idx);
-            saveContent(exam.idx);
-            saveResult(exam.idx);
-            saveLabels(exam.idx);
-            if (rememberCheckBox.isSelected()) {
-                exam.getTaskAtIndex(exam.idx).getType().setUpdateAnswers(false);
-                saveAnswers(exam.idx);
-            }
+            saveTaskInfo(exam.idx);
             PdfSavingController.show();
         } catch (EmptyExamException ex) {
             Alerts.emptyExamAlert();
@@ -508,7 +497,9 @@ public class GUIMainController implements Initializable {
         changeNameItem.setVisible(visibility);
         deleteTaskItem.setVisible(visibility);
         saveTaskItem.setVisible(visibility);
+        saveTaskAsItem.setVisible(visibility);
         saveExamItem.setVisible(visibility);
+        saveExamAsItem.setVisible(visibility);
         taskEdition.setVisible(visibility);
         pdfContentWidth.setVisible(visibility);
         answer.setVisible(visibility);
@@ -672,24 +663,92 @@ public class GUIMainController implements Initializable {
         }
         task.getType().setLineNumbersVisibility(lineNumbersCheckBox.isSelected());
     }
-    
+
+    /**
+     * Zapisuje etykiety odpowiedzi
+     */
+    private void saveLabels(int id) {
+        exam.getTaskAtIndex(id).getLabels().clear();
+        String label = "";
+
+        for (int i = 0; i < answer.getText().length(); i++) {
+            if (answer.getText().charAt(i) == '\n') {
+                exam.getTaskAtIndex(id).getLabels().add(label);
+                label = "";
+            }
+            else if (answer.getStyleOfChar(i).toString().equals(BOLD.getClassList())) {
+                label += answer.getText().charAt(i);
+            }
+        }
+        if (!label.equals("")) {
+            exam.getTaskAtIndex(id).getLabels().add(label);
+        }
+    }
+
+    private void saveAnswers(int id) {
+        exam.getTaskAtIndex(id).getAnswers().clear();
+        String ans = "";
+
+        for (int i = 0; i < answer.getText().length(); i++) {
+            if (answer.getText().charAt(i) == '\n') {
+                exam.getTaskAtIndex(id).getAnswers().add(ans);
+                ans = "";
+            }
+            else if (answer.getStyleOfChar(i).isEmpty() || answer.getStyleOfChar(i).toString().equals(EMPTY.getClassList())) {
+                ans += answer.getText().charAt(i);
+            }
+        }
+        if (!ans.equals("")) {
+            exam.getTaskAtIndex(id).getAnswers().add(ans);
+        }
+    }
+
+    private void saveTaskInfo(int idx) {
+        saveText(idx);
+        saveContent(idx);
+        saveResult(idx);
+        saveLabels(idx);
+        if (rememberCheckBox.isSelected()) {
+            exam.getTaskAtIndex(idx).getType().setUpdateAnswers(false);
+            saveAnswers(idx);
+        } else {
+            exam.getTaskAtIndex(idx).getType().setUpdateAnswers(true);
+        }
+    }
+
+    /**
+     * Zapisuje stan bieżącego zadania i generuje plik .xml z egzaminem.
+     * Uruchamia okno wyboru pliku do zapisu w przypadku gdy w danej instancji programu nie był jeszcze wykonywany zapis.
+     */
+    public void saveExam() {
+        saveTaskInfo(exam.idx);
+
+        String filename = exam.getFilename();
+        if(filename.isEmpty()) {
+            File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
+            if (file == null) return;
+            filename = file.getAbsolutePath();
+            exam.setFilename(filename);
+        }
+        try {
+            Exam.getInstance().save(filename);
+        } catch (NullPointerException e) {
+            Alerts.taskSavingErrorAlert();
+            System.out.println("Cannot save task. Error caused by: " + e.toString());
+        }
+    }
+
     /**
      * Zapisuje stan bieżącego zadania i generuje plik .xml z egzaminem.
      * Uruchamia okno wyboru pliku do zapisu.
      */
-    public void saveCodeAreaToXML() {
-        saveText(exam.idx);
-        saveContent(exam.idx);
-        saveResult(exam.idx);
-        saveLabels(exam.idx);
-        if (rememberCheckBox.isSelected()) {
-            saveAnswers(exam.idx);
-        }
+    public void saveExamAs() {
+        saveTaskInfo(exam.idx);
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, "arkusz.xml");
         if (file == null) return;
         try {
-            Exam.getInstance().save(file);
+            Exam.getInstance().save(file.getAbsolutePath());
         } catch (NullPointerException e) {
             Alerts.taskSavingErrorAlert();
             System.out.println("Cannot save task. Error caused by: " + e.toString());
@@ -700,10 +759,10 @@ public class GUIMainController implements Initializable {
      * Laduje egzamin do programu ze z góry określonego pliku.
      * Uruchamia okno wyboru pliku do odczytu.
      */
-    public void loadXMLToCodeArea() {
+    public void loadExam() {
         try {
             File file = FileChooserCreator.getInstance().createLoadDialog(stage, FileChooserCreator.FileType.XML);
-            if (file == null || !Exam.getInstance().load(file)) {
+            if (file == null || !Exam.getInstance().load(file.getAbsolutePath())) {
                 return;
             }
         } catch (Exception e) {
@@ -730,60 +789,41 @@ public class GUIMainController implements Initializable {
         Content content = Exam.getInstance().getTaskAtIndex(0).getContent();
         content.creatStyleClassedTextAreaText(this.text);
     }
-    
+
     /**
-     * Zapisuje etykiety odpowiedzi
+     * Zapisuje stan bieżącego zadania w pliku (i egzaminie).
+     * Uruchamia okno wyboru pliku do zapisu w przypadku gdy w danej instancji programu nie był jeszcze wykonywany zapis.
      */
-    private void saveLabels(int id) {
-        exam.getTaskAtIndex(id).getLabels().clear();
-        String label = "";
-        
-        for (int i = 0; i < answer.getText().length(); i++) {
-            if (answer.getText().charAt(i) == '\n') {
-                exam.getTaskAtIndex(id).getLabels().add(label);
-                label = "";
-            }
-            else if (answer.getStyleOfChar(i).toString().equals(BOLD.getClassList())) {
-                label += answer.getText().charAt(i);
-            }
+    public void saveTask() throws Exception {
+        saveTaskInfo(exam.idx);
+        Task task = Exam.getInstance().getCurrentTask();
+        String filename = task.getFilename();
+        if(filename.isEmpty()) {
+            File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, Exam.getInstance().getNames().get(exam.idx).replace(" ", "") + ".xml");
+            if (file == null) return;
+            filename = file.getAbsolutePath();
+            task.setFilename(filename);
         }
-        if (!label.equals("")) {
-            exam.getTaskAtIndex(id).getLabels().add(label);
-        }
-    }
-    
-    private void saveAnswers(int id) {
-        exam.getTaskAtIndex(id).getAnswers().clear();
-        String ans = "";
-        
-        for (int i = 0; i < answer.getText().length(); i++) {
-            if (answer.getText().charAt(i) == '\n') {
-                exam.getTaskAtIndex(id).getAnswers().add(ans);
-                ans = "";
-            }
-            else if (answer.getStyleOfChar(i).isEmpty() || answer.getStyleOfChar(i).toString().equals(EMPTY.getClassList())) {
-                ans += answer.getText().charAt(i);
-            }
-        }
-        if (!ans.equals("")) {
-            exam.getTaskAtIndex(id).getAnswers().add(ans);
+        try {
+            task.save(filename);
+        } catch (NullPointerException e) {
+            Alerts.taskSavingErrorAlert();
+            System.out.println("Cannot save task. Error caused by: " + e.toString());
         }
     }
 
     /**
      * Zapisuje stan bieżącego zadania w pliku (i egzaminie).
      * Uruchamia okno wyboru pliku do zapisu.
-     * @param event
-     * @throws Exception
      */
-    public void saveTask(ActionEvent event) throws Exception {
-        saveText(exam.idx);
-        saveContent(exam.idx);
-        saveResult(exam.idx);
+    public void saveTaskAs() {
+        saveTaskInfo(exam.idx);
+
         Task task = Exam.getInstance().getCurrentTask();
 
         File file = FileChooserCreator.getInstance().createSaveDialog(stage, FileChooserCreator.FileType.XML, Exam.getInstance().getNames().get(exam.idx).replace(" ", "") + ".xml");
         if (file == null) return;
+        task.setFilename(file.getAbsolutePath());
         try {
             task.save(file.getAbsolutePath());
         } catch (NullPointerException e) {

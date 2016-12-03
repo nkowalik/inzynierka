@@ -13,12 +13,12 @@ import java.util.List;
 /* klasa odpowiedzialna za wyglad pola odpowiedzi w arkuszu pdf */
 public class PDFAnswer extends PDFAbstractTaskPart {
     protected List<String> placesForAnswers = new ArrayList<>();
-    private final String placeForAnswer = "_________";
+    private String placeForAnswer = "";
 
     public PDFAnswer(List<String> lines, float pdfContentWidthPercentage) throws IOException {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = (int)Math.floor(pdfContentWidthPercentage * PDFSettings.pdfContentWidth);;
+        maxTextWidth = (int)Math.floor(pdfContentWidthPercentage * PDFSettings.pdfContentWidth);;
         leftMargin = pdfSettings.leftMargin;
         lineHeight+=2;
         defaultFontType = pdfSettings.getCommandFont();
@@ -28,7 +28,7 @@ public class PDFAnswer extends PDFAbstractTaskPart {
 
     public PDFAnswer(List<String> lines, int textWidth, FontType font, int fontSize, int leftMargin) throws IOException {
         super();
-        this.textWidth = textWidth;
+        this.maxTextWidth = textWidth;
         this.defaultFontType = font;
         this.leftMargin = leftMargin;
         this.fontSize = fontSize;
@@ -44,7 +44,7 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         for (String line : lines) {
             actualLineWidth = getWidth(line, defaultFontType, fontSize);
             
-            if (actualLineWidth <= textWidth) {
+            if (actualLineWidth <= maxTextWidth) {
                 PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
                 PDFLinePart lp = new PDFLinePart(defaultFontType);
                 lp.setText(line);
@@ -60,7 +60,30 @@ public class PDFAnswer extends PDFAbstractTaskPart {
         }
     }
     
-    public void setAnswers(List<String> answers) {   
+    public void setAnswers(List<String> answers) {
+        int placeLength = 0;
+        float underscore = 0, maxLength = 0;
+
+        /* pobranie szerokości podkreślnika w pikselach */
+        try {
+            underscore = getWidth("_", defaultFontType,fontSize);
+        } catch (IOException e) {
+            System.out.println("Problem z pobraniem szerokości znaku");
+        }
+
+        /* ustalenie maksymalnej szerokości podkreślnika */
+        maxLength = (float)maxTextWidth/underscore;
+
+        for (String a : answers) {
+            if (placeLength < a.length()) {
+                placeLength = a.length();
+            }
+        }
+
+        for (int i = 0; i < placeLength && i < (int)maxLength; i++) {
+            placeForAnswer += "_";
+        }
+
         answers.stream().forEach((_item) -> {
             placesForAnswers.add(placeForAnswer);
         });

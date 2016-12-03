@@ -193,10 +193,16 @@ public final class Alerts {
 
      /**
      * Wyświetla okno z informacją o poprawnej generacji pliku PDF.
-     */
+    */
     public static void fileGenerated() {
         showAlert(AlertType.INFORMATION, "Zapisano", "Operacja zakończona pomyślnie", "Wygenerowano plik PDF.");
+     /**
+     * Wyświetla okno z informacją o błędzie przy zapisie poleceń do pliku
+     */
+    public static void taskDataSavingErrorAlert() {
+        showAlert(AlertType.ERROR, "Błąd", "Nastąpił błąd zapisu", "Nie udało się zapisać poleceń do pliku.");
     }
+
 
     /**
      * Wyświetla okno z alertem.
