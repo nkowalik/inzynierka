@@ -18,7 +18,7 @@ public class PDFCommand extends PDFAbstractTaskPart {
         super();
         this.taskNumber = taskNumber;
         PDFSettings pdfSettings = PDFSettings.getInstance();
-        textWidth = (int)Math.floor(content.getPdfWidthPercentage() * PDFSettings.pdfContentWidth);
+        maxTextWidth = (int)Math.floor(content.getPdfWidthPercentage() * PDFSettings.pdfContentWidth);
         fontSize = pdfSettings.getCommandFontSize();
         defaultFontType = pdfSettings.getCommandFont();
         leftMargin = pdfSettings.leftMargin;
@@ -54,7 +54,7 @@ public class PDFCommand extends PDFAbstractTaskPart {
                     word = word.replaceAll("\r", "");
 
                      //linia wystarczająco długa, żaden wyraz więcej się nie zmieści
-                    if (actualWidth + actualWordWidth + spaceWidth  >= textWidth) {
+                    if (actualWidth + actualWordWidth + spaceWidth  >= maxTextWidth) {
                         //jeśli ostatnim znakiem w linii jest spacja to usuwamy ją
 
                         //jeśli spacja występuje w zakończonym PDFLinePart, zaktualizujemy poprzedni

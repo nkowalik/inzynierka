@@ -30,6 +30,7 @@ public class Exam extends Observable {
     private List<String> outputList = new ArrayList<>();
     @XmlElement
     private ArrayList<String> names;
+    private String filename;
     private static Exam instance;
 
     /**
@@ -58,6 +59,7 @@ public class Exam extends Observable {
         names = new ArrayList<>();
         idx = 0;
         maxIdx = 0;
+        filename = "";
     }
     
     public int compile() {
@@ -123,6 +125,8 @@ public class Exam extends Observable {
     public void setNames(ArrayList<String> tabsNames) {
         this.names = tabsNames;
     }
+    public String getFilename() { return filename; }
+    public void setFilename(String filename) { this.filename = filename; }
     /**
      * Dodaje nowe zadanie do egzaminu.
      * @param t Zadanie które ma zostać dodane do egzaminu.
@@ -208,12 +212,12 @@ public class Exam extends Observable {
      * Zapisuje egzamin ze z góry zdefiniowaną nazwą.
      * Uruchamia okno wyboru pliku do zapisu.
      */
-    public void save(File file) {
+    public void save(String filename) {
         try {
             JAXBContext jc = JAXBContext.newInstance(Exam.class);
             Marshaller marshaller = jc.createMarshaller();
             marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-            marshaller.marshal(this, file);
+            marshaller.marshal(this, new File(filename));
         } catch (JAXBException e) {
             Alerts.examSavingErrorAlert();
             System.out.println("Cannot save exam. Error caused by: " + e.toString());
@@ -223,18 +227,19 @@ public class Exam extends Observable {
     /**
      * Wczytuje zawartość pliku do obiektu klasy Exam.
      * W przypadku niepowodzenia wyświetla odpowiedni alert.
-     * @param file Plik który ma zostać odczytany.
+     * @param filename Nazwa pliku który ma zostać odczytany.
      * @return Wartość określająca powodzenie operacji.
      */
-    public boolean load(File file) {
+    public boolean load(String filename) {
         try {
             JAXBContext context = JAXBContext.newInstance(Exam.class);
             Unmarshaller un = context.createUnmarshaller();
-            Exam exam = (Exam)un.unmarshal(file);
+            Exam exam = (Exam)un.unmarshal(new File(filename));
             this.setTasks(exam.tasks);
             this.idx = exam.idx;
             this.maxIdx = exam.maxIdx;
             this.names = exam.names;
+            this.filename = "";
         } catch (JAXBException e) {
             Alerts.wrongFileContentAlert();
             System.out.println("Cannot load exam. Error caused by: " + e.getCause().toString());
