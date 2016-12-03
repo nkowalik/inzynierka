@@ -3,22 +3,26 @@ package com.ceg.gui;
 import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
 import com.ceg.utils.FontTypeUtil;
+
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import com.ceg.xml.TaskData;
+import com.ceg.xml.TasksLoading;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Slider;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -39,10 +43,19 @@ public class AdvancedOptionsController implements Initializable {
     Slider changeTimeout;
     @FXML
     CheckBox separators;
+    @FXML
+    Menu chooseType;
+    @FXML
+    TextArea text;
+    @FXML
+    Button confirm;
     
     public static Stage appStage;
     private PDFSettings pdfSettings;
-    
+    private TaskData taskData;
+    private List<String> taskNames = new ArrayList(Arrays.asList("Simple output", "Returned value",
+            "Complex output", "Gaps", "Var value", "Line numbers", "Own type"));
+    private int activeTask = -1;
     private final List<String> fontList = FontTypeUtil.getFontNamesList();
 
     @Override
@@ -70,6 +83,24 @@ public class AdvancedOptionsController implements Initializable {
                 Boolean oldVal, Boolean newVal) -> {
             PDFSettings.getInstance().setSeparatorsAfterTasks(newVal);
         });
+
+        taskData = TasksLoading.loadFromXml();
+
+        for(MenuItem item : chooseType.getItems()) {
+            item.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    chooseType.setText(item.getText());
+                    activeTask = chooseType.getItems().indexOf(item);
+                    for(TaskData td : taskData.getTaskData()) {
+                        if(td.getName().equals(taskNames.get(activeTask))) {
+                            text.setText(td.getText());
+                            break;
+                        }
+                    }
+                }
+            });
+        }
     }
 
     /**
@@ -114,5 +145,12 @@ public class AdvancedOptionsController implements Initializable {
      */
     public void cancel(ActionEvent event) {
         appStage.hide();
+    }
+
+    public void saveTask(ActionEvent event) throws  IOException {
+        if(activeTask != -1) {
+            taskData.getTaskData().get(activeTask).setText(text.getText());
+            TasksLoading.saveToXml(taskData);
+        }
     }
 }

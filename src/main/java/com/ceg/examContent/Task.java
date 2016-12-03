@@ -36,6 +36,7 @@ public class Task {
     private String result;
     private TaskType type;
     private Text text;
+    private String filename;
     public GCC compiler;
 
     /**
@@ -48,6 +49,7 @@ public class Task {
         compiler = new GCC();
         content = new Content();
         text = new Text();
+        filename = "";
     }
 
     /**
@@ -98,6 +100,8 @@ public class Task {
     public void setText(Text text) {
         this.text = text;
     }
+    public String getFilename() { return filename; }
+    public void setFilename(String filename) { this.filename = filename; }
 
     /**
      * Wyznacza odpowiedzi do zadania z lukami i zapisuje je w klasie Task.
@@ -154,6 +158,7 @@ public class Task {
             this.setResult(task.result);
             this.setText(task.text);
             this.setType(task.type);
+            this.setFilename("");
         } catch (JAXBException e) {
             Alerts.wrongFileContentAlert();
             System.out.println("Cannot load task. Error caused by: " + e.toString());

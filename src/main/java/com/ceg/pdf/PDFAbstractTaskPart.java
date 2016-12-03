@@ -12,7 +12,7 @@ import org.apache.pdfbox.pdmodel.font.PDType0Font;
 public abstract class PDFAbstractTaskPart {
     protected int lineHeight;
     protected static PDPageContentStream cs;
-    protected int textWidth;
+    protected int maxTextWidth;
     protected float actualWidth = 0;  
     protected int leftMargin = 0;
     protected List<PDFLine> pdfLines;
@@ -23,7 +23,7 @@ public abstract class PDFAbstractTaskPart {
         PDFSettings pdfSettings = PDFSettings.getInstance();
         cs = PDFGenerator.cs;
         pdfLines = new ArrayList<>();
-        this.textWidth = 0;
+        this.maxTextWidth = 0;
         lineHeight = pdfSettings.getCodeFontSize() + 1;
     }
     public int getNumberOfLines() {
