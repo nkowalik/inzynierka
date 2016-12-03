@@ -1,25 +1,10 @@
 package com.ceg.gui;
 
 import com.ceg.examContent.Exam;
-import com.ceg.pdf.PDFHeader;
 import com.ceg.pdf.PDFSettings;
 import com.ceg.utils.ColorPicker;
 import com.ceg.utils.ColorPickerUtil;
-import com.ceg.utils.ContentCssClass;
-import com.ceg.utils.FontType;
 import com.ceg.utils.FontTypeUtil;
-
-import java.io.IOException;
-import java.net.URL;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-import java.util.stream.Collectors;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.ResourceBundle;
-
 import com.ceg.xml.TaskData;
 import com.ceg.xml.TasksLoading;
 import javafx.beans.value.ChangeListener;
@@ -34,6 +19,14 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 
 /**
  * Klasa reprezentująca kontroler opcji zaawansowanych.
@@ -198,10 +191,10 @@ public class AdvancedOptionsController implements Initializable {
 
     public void saveOptions(ActionEvent event) {
         if (examTitle != null) {
-            PDFHeader.title = examTitle.getText();
+            Exam.title = examTitle.getText();
         }
         if (examComment != null) {
-            PDFHeader.comment = examComment.getText();
+            Exam.comment = examComment.getText();
         }
     }
 }

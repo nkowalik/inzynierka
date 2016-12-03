@@ -1,22 +1,18 @@
 package com.ceg.examContent;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.utils.Alerts;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-
-import com.ceg.exceptions.EmptyPartOfTaskException;
-import com.ceg.utils.Alerts;
-
-import javax.xml.bind.annotation.XmlElement;
 
 /**
  * Klasa Exam stanowi kontekst dla modelu danych aplikacji, dla każdego wywołania aplikacji istnieje jedna statyczna instancja.
@@ -32,6 +28,8 @@ public class Exam extends Observable {
     private ArrayList<String> names;
     private String filename;
     private static Exam instance;
+    public static String title = "";
+    public static String comment = "";
 
     /**
      * Indeks aktualnego zadania (wskazywanego przez zakładkę).
