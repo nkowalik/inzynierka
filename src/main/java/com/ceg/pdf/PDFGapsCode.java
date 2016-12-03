@@ -10,7 +10,7 @@ public class PDFGapsCode extends PDFCode {
 
     PDFGapsCode(List<String> lines, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {
         super(lines, pdfContentWidthPercentage);
-        answer = new PDFGapsAnswer(lines, textWidth, defaultFontType, fontSize, leftMargin);
+        answer = new PDFGapsAnswer(lines, maxTextWidth, defaultFontType, fontSize, leftMargin);
     }
 
     @Override
