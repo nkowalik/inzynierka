@@ -3,6 +3,7 @@ package com.ceg.pdf;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.Color;
 
 
 public class PDFLine {
@@ -17,9 +18,13 @@ public class PDFLine {
     }
     
     public void writeLine(int startY) throws IOException { 
+        writeLineInColor(startY, Color.BLACK);
+    }
+    
+    public void writeLineInColor(int startY, Color color) throws IOException {
         float x = leftMargin;
         for (PDFLinePart lp : lineParts) {
-            x = lp.writeLinePart(x, startY, fontSize);
+            x = lp.writeLinePart(x, startY, fontSize, color);
         }
     }
     
