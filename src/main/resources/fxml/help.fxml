@@ -8,40 +8,40 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="595.0" prefWidth="768.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.HelpController">
+<AnchorPane id="AnchorPane" prefHeight="598.0" prefWidth="784.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.HelpController">
    <children>
-      <TabPane layoutX="-2.0" layoutY="-4.0" prefHeight="602.0" prefWidth="768.0" tabClosingPolicy="UNAVAILABLE">
+      <TabPane layoutX="-2.0" layoutY="-4.0" prefHeight="602.0" prefWidth="794.0" tabClosingPolicy="UNAVAILABLE">
         <tabs>
           <Tab text="Okno główne">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="576.0" prefWidth="775.0">
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="569.0" prefWidth="801.0">
                      <children>
                         <ImageView fitHeight="408.0" fitWidth="570.0" layoutX="89.0" layoutY="14.0">
                            <image>
                               <Image url="@../help/mainWindow.JPG" />
                            </image>
                         </ImageView>
-                        <Text fill="#69158a" layoutX="56.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
+                        <Text fill="#69158a" layoutX="35.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Text>
-                        <Text fill="#69158a" layoutX="56.0" layoutY="461.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2">
+                        <Text fill="#69158a" layoutX="35.0" layoutY="461.0" strokeType="OUTSIDE" strokeWidth="0.0" text="2">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Text>
-                        <Text fill="#69158a" layoutX="56.0" layoutY="481.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3">
+                        <Text fill="#69158a" layoutX="35.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text="3">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Text>
-                        <Text fill="#69158a" layoutX="56.0" layoutY="501.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4">
+                        <Text fill="#69158a" layoutX="35.0" layoutY="501.0" strokeType="OUTSIDE" strokeWidth="0.0" text="4">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Text>
-                        <Text fill="#69158a" layoutX="56.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
+                        <Text fill="#69158a" layoutX="35.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text="5">
                            <font>
                               <Font name="System Bold" size="14.0" />
                            </font>
@@ -71,12 +71,12 @@
                               <Font name="System Bold" size="14.0" />
                            </font>
                         </Text>
-                        <Text layoutX="78.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - pole z tekstem polecenia" />
-                        <Text layoutX="78.0" layoutY="461.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - przyciski formatowania polecenia" />
-                        <Text layoutX="78.0" layoutY="481.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - pole z odpowiedziami do zadania" />
-                        <Text layoutX="78.0" layoutY="500.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - przyciski do oznaczania etykiet i odpowiedzi" />
-                        <Text layoutX="78.0" layoutY="520.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - pole z wyjściem programu dołączonego do zadania" />
-                        <Text layoutX="397.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - przyciski do kompilacji i wykonania kodu dołączonego do zadania" />
+                        <Text layoutX="53.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - pole z tekstem polecenia" />
+                        <Text layoutX="53.0" layoutY="461.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - przyciski formatowania polecenia" />
+                        <Text layoutX="54.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - pole z odpowiedziami do zadania" />
+                        <Text layoutX="53.0" layoutY="500.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - przyciski do oznaczania etykiet i odpowiedzi" />
+                        <Text layoutX="54.0" layoutY="521.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - pole z wyjściem programu dołączonego do zadania" wrappingWidth="308.80126953125" />
+                        <Text layoutX="397.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - przyciski do kompilacji i wykonania kodu " />
                         <Text layoutX="397.0" layoutY="459.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - pole z kodem dołączonym do zadania" />
                         <Text layoutX="397.0" layoutY="480.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - markery kodu" />
                         <Text layoutX="397.0" layoutY="500.0" strokeType="OUTSIDE" strokeWidth="0.0" text=" - zakładki z zadaniami należącymi do egzaminu" />
@@ -88,7 +88,7 @@
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
-                        <Accordion layoutX="5.0" layoutY="4.0" prefHeight="567.0" prefWidth="762.0">
+                        <Accordion layoutX="5.0" layoutY="4.0" prefHeight="567.0" prefWidth="784.0">
                           <panes>
                               <TitledPane animated="false" text="Wyjście programu">
                                 <content>
@@ -268,7 +268,7 @@
                   </AnchorPane>
               </content>
             </Tab>
-            <Tab text="Wykonanie programu">
+            <Tab text="Wykonanie">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                      <children>
