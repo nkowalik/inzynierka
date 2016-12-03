@@ -30,8 +30,8 @@ public class PDFCode extends PDFAbstractTaskPart {
         super();
         PDFSettings pdfSettings = PDFSettings.getInstance();
 
-        textWidth = (int)Math.ceil(pdfSettings.pdfContentWidth * codeWidthPercentage);
-        leftMargin = pdfSettings.rightMargin - textWidth;
+        maxTextWidth = (int)Math.ceil(pdfSettings.pdfContentWidth * codeWidthPercentage);
+        leftMargin = pdfSettings.rightMargin - maxTextWidth;
         defaultFontType = pdfSettings.getCodeFont();
         fontSize = pdfSettings.getCodeFontSize();
         textSplitting(lines);
@@ -51,7 +51,7 @@ public class PDFCode extends PDFAbstractTaskPart {
             line = ifTabDoTab(line);
             actualLineWidth = getWidth(line, defaultFontType, fontSize); 
             
-            if (actualLineWidth <= textWidth) {
+            if (actualLineWidth <= maxTextWidth) {
                 PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
                 PDFLinePart lp = new PDFLinePart(defaultFontType);
                 lp.setText(line);
@@ -93,7 +93,7 @@ public class PDFCode extends PDFAbstractTaskPart {
                     return false;
                 String end;
                 end = line.substring(0, i+1);
-                if (getWidth(end, defaultFontType, fontSize) <= textWidth) {
+                if (getWidth(end, defaultFontType, fontSize) <= maxTextWidth) {
                     PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
                     PDFLinePart lp = new PDFLinePart(defaultFontType);
                     lp.setText(end);
@@ -101,7 +101,7 @@ public class PDFCode extends PDFAbstractTaskPart {
                     pdfLines.add(pdfLine);
                     line = line.substring(i+1);
                     i = line.length();
-                    if (getWidth(line, defaultFontType, fontSize) <= textWidth) {
+                    if (getWidth(line, defaultFontType, fontSize) <= maxTextWidth) {
                         pdfLine = new PDFLine(fontSize, leftMargin);
                         lp = new PDFLinePart(defaultFontType);
                         lp.setText(line);

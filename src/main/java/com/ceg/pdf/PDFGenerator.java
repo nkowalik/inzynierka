@@ -3,6 +3,8 @@ package com.ceg.pdf;
 import com.ceg.examContent.Exam;
 import com.ceg.examContent.Task;
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.gui.GUIMainController;
+import com.ceg.utils.Alerts;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -11,6 +13,7 @@ import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
+import javafx.application.Platform;
 
 /**
  * klasa odpowiedzialna za generowanie pdfa. Aby utworzyć dokument należy utworzyć obiekt tej klasy za pomocą konstruktora
@@ -51,8 +54,9 @@ public class PDFGenerator {
 
             answer.setAnswers(i.getAnswers());
             code.setAnswer(answer);
-
-            writeTaskToPdf(i.getType().getLineNumbersVisibility());
+   
+            boolean lastTask = (taskList.indexOf(i) == taskList.size() - 1);
+            writeTaskToPdf(i.getType().getLineNumbersVisibility(), PDFSettings.getInstance().getSeparatorsAfterTasks(), lastTask);
             actualY -= breakBetweenTasks;
         }
         cs.close();
@@ -62,16 +66,11 @@ public class PDFGenerator {
     /* Funkcja tworząca dokument pdf */
     private void savePDF(File pdfFile) throws IOException {
         document.save(pdfFile);
-        document.close();
-        Desktop desktop = Desktop.getDesktop();
-        EventQueue EQ = new EventQueue();
-        if(desktop.isSupported(Desktop.Action.OPEN)){
-             EventQueue.invokeLater(() -> {
-                 try {
-                     desktop.open(pdfFile);
-                 } catch (IOException ex) {}
-             });
-        }
+        document.close();      
+        Platform.runLater(() -> {
+            GUIMainController.getInstance().openPdfItem.setDisable(false);
+            Alerts.fileGenerated();
+        });       
     }
     
     private void createNewPage() throws IOException {
@@ -85,7 +84,7 @@ public class PDFGenerator {
         actualY = topMargin;
     }
 
-    private void writeTaskToPdf(boolean lineNumbersVisibility) throws IOException, EmptyPartOfTaskException {
+    private void writeTaskToPdf(boolean lineNumbersVisibility, boolean separators, boolean lastTask) throws IOException, EmptyPartOfTaskException {
         if (actualY - comm.getLineHeight()*comm.getNumberOfLines() -
                 answer.getLineHeight()*answer.getNumberOfLines() < bottomMargin  ||
                 actualY - code.getLineHeight()*code.getNumberOfLines() < bottomMargin) {
@@ -99,6 +98,13 @@ public class PDFGenerator {
             commandLines = answer.writeToPDF(commandLines, lineNumbersVisibility);
 
         actualY = (commandLines < codeLines) ? commandLines : codeLines;
+        
+        if (separators && !lastTask) {
+            PDFGenerator.cs.moveTo(comm.leftMargin, actualY);
+            PDFGenerator.cs.lineTo(code.leftMargin+code.maxTextWidth, actualY);
+            PDFGenerator.cs.setLineWidth(PDFSettings.getInstance().getSeparatorWidth());
+            PDFGenerator.cs.stroke();
+        }
     }
 
     private void createCodeAndAnswer(Task task, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {
@@ -111,11 +117,6 @@ public class PDFGenerator {
                 else {
                     code = new PDFCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
                     answer = new PDFTeachersAnswer(task.getPdfAnswers(), pdfContentWidthPercentage);
-                }
-                break;
-            case "interaktywny":
-                if (task.getType().name.equals("Gaps")) {
-                    
                 }
                 break;
             default:
