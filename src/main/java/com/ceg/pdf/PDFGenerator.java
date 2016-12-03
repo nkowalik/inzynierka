@@ -51,8 +51,9 @@ public class PDFGenerator {
 
             answer.setAnswers(i.getAnswers());
             code.setAnswer(answer);
-
-            writeTaskToPdf(i.getType().getLineNumbersVisibility());
+   
+            boolean lastTask = (taskList.indexOf(i) == taskList.size() - 1);
+            writeTaskToPdf(i.getType().getLineNumbersVisibility(), PDFSettings.getInstance().getSeparatorsAfterTasks(), lastTask);
             actualY -= breakBetweenTasks;
         }
         cs.close();
@@ -85,7 +86,7 @@ public class PDFGenerator {
         actualY = topMargin;
     }
 
-    private void writeTaskToPdf(boolean lineNumbersVisibility) throws IOException, EmptyPartOfTaskException {
+    private void writeTaskToPdf(boolean lineNumbersVisibility, boolean separators, boolean lastTask) throws IOException, EmptyPartOfTaskException {
         if (actualY - comm.getLineHeight()*comm.getNumberOfLines() -
                 answer.getLineHeight()*answer.getNumberOfLines() < bottomMargin  ||
                 actualY - code.getLineHeight()*code.getNumberOfLines() < bottomMargin) {
@@ -99,6 +100,13 @@ public class PDFGenerator {
             commandLines = answer.writeToPDF(commandLines, lineNumbersVisibility);
 
         actualY = (commandLines < codeLines) ? commandLines : codeLines;
+        
+        if (separators && !lastTask) {
+            PDFGenerator.cs.moveTo(comm.leftMargin, actualY);
+            PDFGenerator.cs.lineTo(code.leftMargin+code.maxTextWidth, actualY);
+            PDFGenerator.cs.setLineWidth(PDFSettings.getInstance().getSeparatorWidth());
+            PDFGenerator.cs.stroke();
+        }
     }
 
     private void createCodeAndAnswer(Task task, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {
@@ -111,11 +119,6 @@ public class PDFGenerator {
                 else {
                     code = new PDFCode(task.getText().getPDFCode(), 1.0f - pdfContentWidthPercentage);
                     answer = new PDFTeachersAnswer(task.getPdfAnswers(), pdfContentWidthPercentage);
-                }
-                break;
-            case "interaktywny":
-                if (task.getType().name.equals("Gaps")) {
-                    
                 }
                 break;
             default:

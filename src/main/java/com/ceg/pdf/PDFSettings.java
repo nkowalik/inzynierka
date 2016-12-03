@@ -47,6 +47,7 @@ public class PDFSettings {
     public static int pdfContentWidth;
     
     public static float separatorWidth;
+    private boolean separatorsAfterTasks;
 
     private static final PDFSettings instance = new PDFSettings();
 
@@ -81,6 +82,7 @@ public class PDFSettings {
         File file = new File(".");
         pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);   
         pdfContentWidth = rightMargin - leftMargin - breakBetweenTaskParts;
+        separatorsAfterTasks = false;
     }
     
     private void preparePropertiesInput() {
@@ -146,6 +148,9 @@ public class PDFSettings {
     public void setDay(Integer day) {
         this.day = day;
     }
+    public void setSeparatorsAfterTasks(boolean separatorsAfterTasks) {
+        this.separatorsAfterTasks = separatorsAfterTasks;
+    }
     
     public FontType getCommandFont() {
         return commandFont;
@@ -206,6 +211,10 @@ public class PDFSettings {
     public float getSeparatorWidth() {
         return separatorWidth;
     }
+    
+    public boolean getSeparatorsAfterTasks() {
+        return separatorsAfterTasks;
+    }
 
     public void formatDate() {
         date = "";
@@ -227,7 +236,6 @@ public class PDFSettings {
         } catch (EmptyPartOfTaskException ex) {
             Alerts.emptyPartOfTaskAlert();
         }
-       // stage.hide();
     }
 
     public static PDFSettings getInstance() {

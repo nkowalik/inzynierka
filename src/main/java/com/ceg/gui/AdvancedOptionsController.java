@@ -60,6 +60,8 @@ public class AdvancedOptionsController implements Initializable {
     @FXML
     Slider changeTimeout;
     @FXML
+    CheckBox separators;
+    @FXML
     Menu chooseType;
     @FXML
     TextArea text;
@@ -107,6 +109,11 @@ public class AdvancedOptionsController implements Initializable {
                 Number oldVal, Number newVal){
                 Exam.getInstance().setExecutionTimetout(newVal.floatValue());
             }
+        });
+        
+        separators.selectedProperty().addListener((ObservableValue<? extends Boolean> ov, 
+                Boolean oldVal, Boolean newVal) -> {
+            PDFSettings.getInstance().setSeparatorsAfterTasks(newVal);
         });
 
         taskData = TasksLoading.loadFromXml();
