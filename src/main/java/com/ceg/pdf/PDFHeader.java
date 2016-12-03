@@ -23,7 +23,6 @@ public class PDFHeader {
         int top = topMargin;
         PDFLine line;
         PDFLinePart linePart;
-        top -= 45;
 
         if (!title.isEmpty()) {
             linePart = new PDFLinePart(fontType);
@@ -75,7 +74,6 @@ public class PDFHeader {
             line.setLineParts(Arrays.asList(linePart));
             line.writeLine(top);
         }
-        top -= 45;
 
         return top-breakAfterHeader;
     }
