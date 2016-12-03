@@ -2,6 +2,8 @@ package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
+import javafx.application.Platform;
+
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
@@ -60,7 +62,11 @@ public class PDFCode extends PDFAbstractTaskPart {
             
             else {
                 if (!alert) {
-                    Alerts.codeLineIsTooLong();
+                    Platform.runLater(new Runnable(){
+                        @Override public void run() {
+                            Alerts.codeLineIsTooLong();
+                        }
+                    });
                     alert = true;
                 }
                 for (String string : operatorList) {

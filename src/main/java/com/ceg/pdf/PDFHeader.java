@@ -14,17 +14,28 @@ public class PDFHeader {
     private static int topMargin = PDFSettings.getInstance().topMargin;
     private static final int leftMargin = PDFSettings.getInstance().leftMargin;
     private static final String testDate = PDFSettings.getInstance().getDate();
+    public static String title = "";
+    public static String comment = "";
     
     
         /* Funkcja dodająca nagłówek postaci miejsc na imię  i nazwisko oraz numer indeksu studenta */
     public int setHeader(int breakAfterHeader) throws IOException {
         int top = topMargin;
-        PDFLine line = new PDFLine(fontSize, leftMargin);
-        PDFLinePart linePart = new PDFLinePart(fontType);
-
-        //przejście do następnej linii
+        PDFLine line;
+        PDFLinePart linePart;
         top -= 45;
 
+        if (!title.isEmpty()) {
+            linePart = new PDFLinePart(fontType);
+            line = new PDFLine(fontSize, leftMargin);
+            linePart.setText(title);
+            line.setLineParts(Arrays.asList(linePart));
+            line.writeLine(top);
+            top -= 15;
+        }
+
+        line = new PDFLine(fontSize, leftMargin);
+        linePart = new PDFLinePart(fontType);
         linePart.setText("________________________________________________________");
         line.setLineParts(Arrays.asList(linePart));
         line.writeLine(top);
@@ -41,6 +52,7 @@ public class PDFHeader {
         line.setLineParts(Arrays.asList(linePart));
         line.writeLine(top);
 
+        //przejście do następnej linii
         top -= 15;
         
         line = new PDFLine(fontSize, leftMargin + 1);
@@ -48,13 +60,21 @@ public class PDFHeader {
         linePart.setText("Imię i nazwisko");
         line.setLineParts(Arrays.asList(linePart));
         line.writeLine(top);
-        
+
         line = new PDFLine(fontSize, placeForIndexNumberX + 1);
         linePart = new PDFLinePart(fontType);
         linePart.setText("Nr indeksu");
         line.setLineParts(Arrays.asList(linePart));
         line.writeLine(top);
 
+        if (!comment.isEmpty()) {
+            top -= 15;
+            linePart = new PDFLinePart(fontType);
+            line = new PDFLine(fontSize, leftMargin);
+            linePart.setText(comment);
+            line.setLineParts(Arrays.asList(linePart));
+            line.writeLine(top);
+        }
         top -= 45;
 
         return top-breakAfterHeader;

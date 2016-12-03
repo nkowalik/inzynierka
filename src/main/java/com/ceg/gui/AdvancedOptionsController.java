@@ -1,6 +1,7 @@
 package com.ceg.gui;
 
 import com.ceg.examContent.Exam;
+import com.ceg.pdf.PDFHeader;
 import com.ceg.pdf.PDFSettings;
 import com.ceg.utils.FontTypeUtil;
 
@@ -51,7 +52,9 @@ public class AdvancedOptionsController implements Initializable {
     @FXML
     TextArea text;
     @FXML
-    Button confirm;
+    TextField examTitle;
+    @FXML
+    TextField examComment;
     
     public static Stage appStage;
     private PDFSettings pdfSettings;
@@ -149,6 +152,15 @@ public class AdvancedOptionsController implements Initializable {
         if(activeTask != -1) {
             taskData.getTaskData().get(activeTask).setText(text.getText());
             TasksLoading.saveToXml(taskData);
+        }
+    }
+
+    public void saveOptions(ActionEvent event) {
+        if (examTitle != null) {
+            PDFHeader.title = examTitle.getText();
+        }
+        if (examComment != null) {
+            PDFHeader.comment = examComment.getText();
         }
     }
 }
