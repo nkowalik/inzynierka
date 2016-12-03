@@ -103,7 +103,7 @@ public class PDFGenerator {
         
         if (separators && !lastTask) {
             PDFGenerator.cs.moveTo(comm.leftMargin, actualY);
-            PDFGenerator.cs.lineTo(code.leftMargin+code.textWidth, actualY);
+            PDFGenerator.cs.lineTo(code.leftMargin+code.maxTextWidth, actualY);
             PDFGenerator.cs.setLineWidth(PDFSettings.getInstance().getSeparatorWidth());
             PDFGenerator.cs.stroke();
         }
