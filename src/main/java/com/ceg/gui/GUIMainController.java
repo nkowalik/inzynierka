@@ -28,7 +28,10 @@ import java.net.URL;
 
 import javafx.scene.layout.Pane;
 import com.ceg.exceptions.EmptyExamException;
+import com.ceg.pdf.PDFSettings;
 import static com.ceg.utils.ContentCssClass.*;
+import java.awt.Desktop;
+import java.awt.EventQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.scene.input.MouseEvent;
@@ -68,6 +71,8 @@ public class GUIMainController implements Initializable {
     MenuItem deleteTaskItem;
     @FXML
     MenuItem saveTaskItem;
+    @FXML
+    public MenuItem openPdfItem;
     @FXML
     MenuItem saveTaskAsItem;
     @FXML
@@ -300,6 +305,21 @@ public class GUIMainController implements Initializable {
             PdfSavingController.show();
         } catch (EmptyExamException ex) {
             Alerts.emptyExamAlert();
+        }
+    }
+    
+    public void openPDF(ActionEvent actionEvent) throws IOException {
+        Desktop desktop = Desktop.getDesktop();
+        File pdfFile = PDFSettings.getInstance().getPdfFile();
+        if(pdfFile != null){  
+            EventQueue EQ = new EventQueue();
+            if(desktop.isSupported(Desktop.Action.OPEN)){
+                 EventQueue.invokeLater(() -> {
+                     try {
+                         desktop.open(pdfFile);
+                     } catch (IOException ex) {}
+                 });
+            }
         }
     }
 
