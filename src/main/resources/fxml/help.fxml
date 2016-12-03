@@ -18,7 +18,7 @@
                      <children>
                         <ImageView fitHeight="408.0" fitWidth="570.0" layoutX="89.0" layoutY="14.0">
                            <image>
-                              <Image url="@../../../../../../../Desktop/inz_instrukcja/mainWindow.JPG" />
+                              <Image url="@../help/mainWindow.JPG" />
                            </image>
                         </ImageView>
                         <Text fill="#69158a" layoutX="56.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="1">
@@ -101,7 +101,7 @@
                                           </Text>
                                           <ImageView fitHeight="357.0" fitWidth="567.0" layoutX="169.0" layoutY="17.0">
                                              <image>
-                                                <Image url="@../../../../../../../Desktop/inz_instrukcja/1pdf.JPG" />
+                                                <Image url="@../help/1pdf.JPG" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -119,7 +119,7 @@
                                           </Text>
                                           <ImageView fitHeight="235.0" fitWidth="524.0" layoutX="29.0" layoutY="78.0">
                                              <image>
-                                                <Image url="@../../../../../../../Desktop/inz_instrukcja/3pdf.JPG" />
+                                                <Image url="@../help/3pdf.JPG" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -137,7 +137,7 @@
                                           </Text>
                                           <ImageView fitHeight="301.0" fitWidth="558.0" layoutX="189.0" layoutY="37.0">
                                              <image>
-                                                <Image url="@../../../../../../../Desktop/inz_instrukcja/5pdf.JPG" />
+                                                <Image url="@../help/5pdf.JPG" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -155,7 +155,7 @@
                                           </Text>
                                           <ImageView fitHeight="138.0" fitWidth="613.0" layoutX="65.0" layoutY="152.0">
                                              <image>
-                                                <Image url="@../../../../../../../Desktop/inz_instrukcja/2pdf.JPG" />
+                                                <Image url="@../help/2pdf.JPG" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -173,7 +173,7 @@
                                           </Text>
                                           <ImageView fitHeight="273.0" fitWidth="550.0" layoutX="196.0" layoutY="39.0">
                                              <image>
-                                                <Image url="@../../../../../../../Desktop/inz_instrukcja/6pdf.JPG" />
+                                                <Image url="@../help/6pdf.JPG" />
                                              </image>
                                           </ImageView>
                                        </children>
@@ -243,7 +243,7 @@
                         </Text>
                         <ImageView fitHeight="100.0" fitWidth="352.0" layoutX="207.0" layoutY="70.0">
                            <image>
-                              <Image url="@../../../../../../../Desktop/inz_instrukcja/markery.png" />
+                              <Image url="@../help/markery.png" />
                            </image>
                         </ImageView>
                      </children>
@@ -261,7 +261,7 @@
                         </Text>
                         <ImageView fitHeight="361.0" fitWidth="437.0" layoutX="158.0" layoutY="176.0">
                            <image>
-                              <Image url="@../../../../../../../Desktop/inz_instrukcja/addTask.JPG" />
+                              <Image url="@../help/addTask.JPG" />
                            </image>
                         </ImageView>
                      </children>
@@ -279,7 +279,7 @@
                         </Text>
                         <ImageView fitHeight="181.0" fitWidth="500.0" layoutX="134.0" layoutY="95.0">
                            <image>
-                              <Image url="@../../../../../../../Desktop/inz_instrukcja/output.png" />
+                              <Image url="@../help/output.png" />
                            </image>
                         </ImageView>
                         <Text layoutX="108.0" layoutY="442.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="W polu nad przyciskami pojawi się wyjście skompilowanego programu lub informacja o ewentualnych błędach kompilacji czy wykonania." textAlignment="JUSTIFY" wrappingWidth="551.8173828125">
@@ -307,12 +307,12 @@
                         </Text>
                         <ImageView fitHeight="196.0" fitWidth="335.0" layoutX="232.0" layoutY="321.0">
                            <image>
-                              <Image url="@../../../../../../../Desktop/inz_instrukcja/trwaKompilacja.png" />
+                              <Image url="@../help/trwaKompilacja.png" />
                            </image>
                         </ImageView>
                         <ImageView fitHeight="129.0" fitWidth="303.0" layoutX="248.0" layoutY="98.0">
                            <image>
-                              <Image url="@../../../../../../../Desktop/inz_instrukcja/savePdfwindow.JPG" />
+                              <Image url="@../help/savePdfwindow.JPG" />
                            </image>
                         </ImageView>
                      </children></AnchorPane>

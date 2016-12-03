@@ -32,6 +32,8 @@ import com.ceg.exceptions.EmptyExamException;
 import static com.ceg.utils.ContentCssClass.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.fxmisc.richtext.StyleClassedTextArea;
@@ -167,6 +169,17 @@ public class GUIMainController implements Initializable {
             }
         });
 
+        rememberCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                Boolean old_val, Boolean new_val) {
+                    if(new_val == true){
+                        rememberCheckBox.tooltipProperty().set(new Tooltip("Włącza automatyczne generowanie odpowiedzi"));
+                    }
+                    else{
+                        rememberCheckBox.tooltipProperty().set(new Tooltip("Wyłącza automatyczne generowanie odpowiedzi"));
+                    }
+            }
+        });
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
 
