@@ -19,7 +19,7 @@
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="522.0" xmlns="http://javafx.com/javafx/8.0.76-ea" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.AdvancedOptionsController">
+<AnchorPane prefHeight="400.0" prefWidth="522.0" xmlns="http://javafx.com/javafx/null" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.ceg.gui.AdvancedOptionsController">
    <children>
        <TabPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="722.0" tabClosingPolicy="UNAVAILABLE">
          <tabs>
@@ -88,6 +88,42 @@
              </GridPane>
              </content>
            </Tab>
+           <Tab text="Dodatkowe opcje PDF">
+             <content>
+               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <CheckBox fx:id="separators" layoutX="23.0" layoutY="331.0" mnemonicParsing="false" text="Dodaj separatory po każdym zadaniu" />
+                        <Label layoutX="23.0" layoutY="15.0" text="Tytuł egzaminu">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
+                        <Label layoutX="375.0" layoutY="15.0" text="Komentarz zbiorczy">
+                           <font>
+                              <Font size="16.0" />
+                           </font></Label>
+                        <TextField fx:id="examTitle" layoutX="23.0" layoutY="47.0" prefHeight="25.0" prefWidth="300.0" />
+                        <TextField fx:id="examComment" layoutX="375.0" layoutY="46.0" prefHeight="25.0" prefWidth="300.0" />
+                        <Button fx:id="save" layoutX="599.0" layoutY="291.0" mnemonicParsing="false" onAction="#saveOptions" text="Zapisz pola" />
+                        <Label layoutX="23.0" layoutY="99.0" text="Czcionka" />
+                        <Label layoutX="23.0" layoutY="138.0" text="Rozmiar czcionki" />
+                        <Label layoutX="23.0" layoutY="177.0" text="Kolor czcionki" />
+                        <Label layoutX="375.0" layoutY="99.0" text="Czcionka" />
+                        <Label layoutX="374.0" layoutY="138.0" text="Rozmiar czcionki" />
+                        <Label layoutX="374.0" layoutY="177.0" text="Kolor czcionki" />
+                        <ChoiceBox fx:id="titleFont" layoutX="148.0" layoutY="95.0" prefWidth="150.0" />
+                        <ChoiceBox fx:id="commentFont" layoutX="500.0" layoutY="95.0" prefWidth="150.0" />
+                        <ChoiceBox fx:id="titleFontColor" layoutX="148.0" layoutY="173.0" prefWidth="150.0" />
+                        <ChoiceBox fx:id="commentFontColor" layoutX="500.0" layoutY="173.0" prefWidth="150.0" />
+                        <TextField fx:id="titleFontSize" layoutX="149.0" layoutY="134.0" />
+                        <TextField fx:id="commentFontSize" layoutX="501.0" layoutY="134.0" />
+                        <CheckBox fx:id="isTitleBold" layoutX="23.0" layoutY="215.0" mnemonicParsing="false" text="Pogrubienie" />
+                        <CheckBox fx:id="isTitleItalic" layoutX="22.0" layoutY="251.0" mnemonicParsing="false" text="Kursywa" />
+                        <CheckBox fx:id="isCommentBold" layoutX="374.0" layoutY="215.0" mnemonicParsing="false" text="Pogrubienie" />
+                        <CheckBox fx:id="isCommentItalic" layoutX="374.0" layoutY="251.0" mnemonicParsing="false" text="Kursywa" />
+                     </children>
+                  </AnchorPane>
+             </content>
+           </Tab>
             <Tab text="Czas wykonania">
               <content>
                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
@@ -146,20 +182,6 @@
                      </AnchorPane>
                  </content>
              </Tab>
-           <Tab text="Dodatkowe opcje PDF">
-             <content>
-               <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-                     <children>
-                        <CheckBox fx:id="separators" layoutX="48.0" layoutY="199.0" mnemonicParsing="false" text="Dodaj separatory po każdym zadaniu" />
-                        <Label layoutX="48.0" layoutY="32.0" text="Tytuł egzaminu:" />
-                        <Label layoutX="48.0" layoutY="74.0" text="Komentarz zbiorczy:" />
-                        <TextField fx:id="examTitle" layoutX="192.0" layoutY="28.0" prefHeight="25.0" prefWidth="300.0" />
-                        <TextField fx:id="examComment" layoutX="192.0" layoutY="72.0" prefHeight="25.0" prefWidth="300.0" />
-                        <Button fx:id="save" layoutX="192.0" layoutY="121.0" mnemonicParsing="false" onAction="#saveOptions" text="Zapisz" />
-                     </children>
-                  </AnchorPane>
-             </content>
-           </Tab>
          </tabs>
        </TabPane>
    </children>

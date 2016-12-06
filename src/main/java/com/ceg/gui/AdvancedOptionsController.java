@@ -52,6 +52,26 @@ public class AdvancedOptionsController implements Initializable {
     @FXML
     CheckBox isItalic;
     @FXML
+    ChoiceBox titleFont;
+    @FXML
+    TextField titleFontSize;
+    @FXML
+    ChoiceBox titleFontColor;
+    @FXML
+    CheckBox isTitleBold;
+    @FXML
+    CheckBox isTitleItalic;
+    @FXML
+    ChoiceBox commentFont;
+    @FXML
+    TextField commentFontSize;
+    @FXML
+    ChoiceBox commentFontColor;
+    @FXML
+    CheckBox isCommentBold;
+    @FXML
+    CheckBox isCommentItalic;
+    @FXML
     Slider changeTimeout;
     @FXML
     CheckBox separators;
@@ -92,13 +112,31 @@ public class AdvancedOptionsController implements Initializable {
         
         fontColor.setItems(FXCollections.observableList(colorList));
         fontColor.setValue(ColorPicker.BLACK.getColorName());
+
+        titleFont.setItems(FXCollections.observableList(fontList));
+        titleFont.setValue(pdfSettings.getAnswerFont().getFontName());
+
+        titleFontColor.setItems(FXCollections.observableList(colorList));
+        titleFontColor.setValue(ColorPicker.BLACK.getColorName());
+
+        commentFont.setItems(FXCollections.observableList(fontList));
+        commentFont.setValue(pdfSettings.getAnswerFont().getFontName());
+
+        commentFontColor.setItems(FXCollections.observableList(colorList));
+        commentFontColor.setValue(ColorPicker.BLACK.getColorName());
         
         commandFontSize.setText(pdfSettings.getCommandFontSize().toString());
         codeFontSize.setText(pdfSettings.getCodeFontSize().toString());
         answerFontSize.setText(pdfSettings.getAnswerFontSize().toString());
+        titleFontSize.setText(pdfSettings.getTitleFontSize().toString());
+        commentFontSize.setText(pdfSettings.getCommentFontSize().toString());
         
         isBold.setSelected(pdfSettings.getIsAnswerBold());
         isItalic.setSelected(pdfSettings.getIsAnswerItalic());
+        isCommentBold.setSelected((pdfSettings.getIsCommentBold()));
+        isCommentItalic.setSelected((pdfSettings.getIsCommentItalic()));
+        isTitleBold.setSelected((pdfSettings.getIsTitleBold()));
+        isTitleItalic.setSelected((pdfSettings.getIsTitleItalic()));
         
         changeTimeout.valueProperty().addListener(new ChangeListener<Number>(){
             public void changed(ObservableValue<? extends Number> ov,
@@ -196,5 +234,16 @@ public class AdvancedOptionsController implements Initializable {
         if (examComment != null) {
             Exam.comment = examComment.getText();
         }
+        PDFSettings.getInstance().setTitleFont(FontTypeUtil.change(titleFont.getValue().toString()));
+        PDFSettings.getInstance().setTitleFontSize(Integer.parseInt(titleFontSize.getText()));
+        PDFSettings.getInstance().setTitleColor(ColorPickerUtil.change(titleFontColor.getValue().toString()));
+        PDFSettings.getInstance().setIsTitleBold(isTitleBold.isSelected());
+        PDFSettings.getInstance().setIsTitleItalic(isTitleItalic.isSelected());
+
+        PDFSettings.getInstance().setCommentFont(FontTypeUtil.change(commentFont.getValue().toString()));
+        PDFSettings.getInstance().setCommentFontSize(Integer.parseInt(commentFontSize.getText()));
+        PDFSettings.getInstance().setCommentColor(ColorPickerUtil.change(commentFontColor.getValue().toString()));
+        PDFSettings.getInstance().setIsCommentBold(isCommentBold.isSelected());
+        PDFSettings.getInstance().setIsCommentItalic(isCommentItalic.isSelected());
     }
 }
