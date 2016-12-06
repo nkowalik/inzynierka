@@ -184,7 +184,12 @@
                               <content>
                                 <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
                                        <children>
-                                          <Text layoutX="14.0" layoutY="35.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dla tego typu zadania dostępny jest dodatkowy marker. Zaznaczone fragmenty kodu będą stanowiły odpowiedzi do zadania." textAlignment="JUSTIFY" wrappingWidth="255.201171875">
+                                          <ImageView fitHeight="287.0" fitWidth="508.0" layoutX="251.0" layoutY="45.0">
+                                             <image>
+                                                <Image url="@../help/4pdf.JPG" />
+                                             </image>
+                                          </ImageView>
+                                          <Text layoutX="14.0" layoutY="59.0" lineSpacing="2.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dla tego typu zadania dostępny jest dodatkowy marker. Zaznaczone fragmenty kodu będą stanowiły odpowiedzi do zadania." textAlignment="JUSTIFY" wrappingWidth="237.201171875">
                                              <font>
                                                 <Font size="13.0" />
                                              </font>
@@ -320,7 +325,39 @@
             </Tab>
           <Tab text="Opcje zaawansowane">
             <content>
-              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <ImageView fitHeight="317.0" fitWidth="515.0" layoutX="140.0" layoutY="28.0">
+                           <image>
+                              <Image url="@../help/zaawansowane.JPG" />
+                           </image>
+                        </ImageView>
+                        <Text layoutX="57.0" layoutY="379.0" strokeType="OUTSIDE" strokeWidth="0.0" text="W tym oknie można zmienić zaawansowane ustawienia programu." wrappingWidth="418.482421875">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="57.0" layoutY="408.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Wygląd PDF - w tej zakładce dostępna jest zmiana czcionek dla kodu, polecenia i odpowiedzi.">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="57.0" layoutY="437.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dodatkowe opcje PDF - w tej zakładce można dodać tytuł i komentarz do egzaminu, oraz włączyć drukowanie w arkuszu PDF poziomych linii pomiędzy zadaniami za pomocą opcji &quot;Dodaj separatory po każdym zadaniu&quot;." textAlignment="JUSTIFY" wrappingWidth="687.04296875">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="57.0" layoutY="484.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Czas wykonania - ta zakładka pozwala na zmianę limitu czasu wykonania kodu dołączonego do zadania za pomocą suwaka." wrappingWidth="680.9697265625">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                        <Text layoutX="57.0" layoutY="529.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Polecenia domyślne - tutaj można edytować domyślne polecenia dla poszczególnych typów zadań.">
+                           <font>
+                              <Font size="14.0" />
+                           </font>
+                        </Text>
+                     </children></AnchorPane>
             </content>
           </Tab>
         </tabs>
