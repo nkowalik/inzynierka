@@ -8,8 +8,6 @@ import com.ceg.utils.Alerts;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
-
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;

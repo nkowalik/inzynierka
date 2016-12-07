@@ -1,5 +1,6 @@
 package com.ceg.pdf;
 
+import com.ceg.examContent.ContentPart;
 import com.ceg.examContent.Exam;
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
@@ -47,13 +48,16 @@ public class PDFHeader {
         commentColor = PDFSettings.getInstance().getCommentColor();
         setFontTypeBoldOrItalic();
 
-        if (!Exam.title.isEmpty()) {
-            linePart = new PDFLinePart(titleFontType);
-            line = new PDFLine(titleFontSize, leftMargin);
-            linePart.setText(Exam.title);
-            line.setLineParts(Arrays.asList(linePart));
-            line.writeLineInColor(top, titleColor.getColor());
-            top -= 30;
+        if (!Exam.getInstance().getTitleContent().getContentParts().isEmpty()) {
+            try {
+                contentSplitting(Exam.getInstance().getTitleContent().getContentParts(), titleFontType,titleFontSize);
+                for (PDFLine p : pdfLines) {
+                    p.writeLineInColor(top, titleColor.getColor());
+                    top -= titleFontSize + 2;
+                }
+            } catch (EmptyPartOfTaskException e) {
+                Alerts.emptyPartOfTaskAlert();
+            }
         }
 
         line = new PDFLine(fontSize, leftMargin);
@@ -89,14 +93,10 @@ public class PDFHeader {
         line.setLineParts(Arrays.asList(linePart));
         line.writeLine(top);
 
-        if (!Exam.comment.isEmpty()) {
+        if (!Exam.getInstance().getCommentContent().getContentParts().isEmpty()) {
             top -= 30;
-            linePart = new PDFLinePart(commentFontType);
-            line = new PDFLine(commentFontSize, leftMargin);
-            linePart.setText(Exam.comment);
-            line.setLineParts(Arrays.asList(linePart));
             try {
-                contentSplitting(line, commentFontType,commentFontSize);
+                contentSplitting(Exam.getInstance().getCommentContent().getContentParts(), commentFontType,commentFontSize);
                 for (PDFLine p : pdfLines) {
                     p.writeLineInColor(top, commentColor.getColor());
                     top -= commentFontSize + 2;
@@ -109,37 +109,41 @@ public class PDFHeader {
         return top-breakAfterHeader;
     }
     
-    /*  Funkcja odpowiedzialna za formatowanie tekstu polecenia. Argumentem jest tekst polecenia.
+    /*  Funkcja odpowiedzialna za formatowanie tekstu. Argumentem jest tekst polecenia.
         Dzieli wyrazy po spacji i układa jak najwięcej w jednej linii. Wrażliwa na znaki entera:
         każdy enter w poleceniu będzie widoczny w dokumencie pdf. Brak możliwości używania innych
         białych znaków poza spacją i enterem. */    
-    public void contentSplitting (PDFLine line, FontType fType, int fSize) throws IOException, EmptyPartOfTaskException {
+    public void contentSplitting (List<ContentPart> contentParts, FontType fType, int fSize) throws IOException, EmptyPartOfTaskException {
+        pdfLines.clear();
+        List<ContentPart> command = new ArrayList<>(contentParts);
         float actualWidth = 0;       
         float actualWordWidth;
         float spaceWidth;
         String[] words;
         float maxTextWidth = rightMargin - leftMargin;
- 
+        
         PDFLine pdfLine = new PDFLine(fSize, leftMargin);
-        PDFLinePart lp = new PDFLinePart(fType);
- 
-            spaceWidth = getWidth(" ", fType, fSize);
-            String withSpaces = " " + line.getLineParts().get(0).getText() + " ";
+        
+        for (ContentPart cp : command) {
+            FontType ft = fType.contentCssClassToFontType(cp.getCssClassName());
+            PDFLinePart lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
+            spaceWidth = getWidth(" ", ft, fSize);
+            String withSpaces = " " + cp.getText()+ " ";
             words = withSpaces.split("\n");
- 
-            if (line.getLineParts().get(0).getText().charAt(0) == ' ') {
+            
+            if (cp.getText().charAt(0) == ' ') {
                 lp.setText(" ");
             }    
             for (int i = 0; i < words.length; i++) {
                 String[] spaceSplit = words[i].split(" ");
                 for (String word : spaceSplit) {
-                    actualWordWidth = getWidth(word, fType, fSize);
+                    actualWordWidth = getWidth(word, ft, fSize);
                     word = word.replaceAll("\r", "");
- 
+
                      //linia wystarczająco długa, żaden wyraz więcej się nie zmieści
                     if (actualWidth + actualWordWidth + spaceWidth  >= maxTextWidth) {
                         //jeśli ostatnim znakiem w linii jest spacja to usuwamy ją
- 
+
                         //jeśli spacja występuje w zakończonym PDFLinePart, zaktualizujemy poprzedni
                         if (lp.getText().length() == 0) {
                             PDFLinePart lp2 = pdfLine.getLineParts().get(pdfLine.getLineParts().size() - 1);
@@ -154,10 +158,10 @@ public class PDFHeader {
                         }
                         pdfLine.getLineParts().add(lp);
                         pdfLines.add(pdfLine);
-                        lp = new PDFLinePart(fType);
+                        lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
                         pdfLine = new PDFLine(fSize, leftMargin);
                         lp.setText(lp.getText() + word);
- 
+
                         actualWidth = actualWordWidth;
                     }
                     //do linii dopisujemy wyraz
@@ -171,7 +175,7 @@ public class PDFHeader {
                         actualWidth += actualWordWidth;
                     }
                 }
-                if (line.getLineParts().get(0).getText().charAt(line.getLineParts().get(0).getText().length() - 1) == ' ' && 
+                if (cp.getText().charAt(cp.getText().length() - 1) == ' ' && 
                         lp.getText().charAt(lp.getText().length() - 1) != ' ') {
                     lp.setText(lp.getText() + ' ');
                 }
@@ -181,16 +185,17 @@ public class PDFHeader {
                 }
                 if (i < words.length - 1) {
                     pdfLines.add(pdfLine);
-                    lp = new PDFLinePart(fType);
+                    lp = new PDFLinePart(ft, cp.getCssClassName().isUnderlined());
                     pdfLine = new PDFLine(fontSize, leftMargin);
                     lp.setText("");
- 
+
                     actualWidth = 0;
                 }
             }
+        }
         pdfLines.add(pdfLine);
         pdfLines.add(new PDFLine(12, leftMargin));
-    } 
+    }  
  
     /**
      * Oblicza szerokość tekstu napisanego czcionką o konkretnym rozmiarze.

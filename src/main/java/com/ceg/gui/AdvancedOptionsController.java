@@ -1,5 +1,6 @@
 package com.ceg.gui;
 
+import com.ceg.examContent.Content;
 import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
 import com.ceg.utils.Alerts;
@@ -273,10 +274,14 @@ public class AdvancedOptionsController implements Initializable {
 
     public void saveOptions(ActionEvent event) {
         if (examTitle != null) {
-            Exam.title = examTitle.getText();
+            Content content = new Content();
+            content.extractContent(examTitle);
+            Exam.getInstance().setTitleContent(content);
         }
         if (examComment != null) {
-            Exam.comment = examComment.getText();
+            Content content = new Content();
+            content.extractContent(examComment);
+            Exam.getInstance().setCommentContent(content);
         }
         PDFSettings.getInstance().setTitleFont(FontTypeUtil.change(titleFont.getValue().toString()));
         PDFSettings.getInstance().setTitleFontSize(Integer.parseInt(titleFontSize.getText()));

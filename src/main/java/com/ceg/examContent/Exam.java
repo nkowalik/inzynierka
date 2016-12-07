@@ -27,9 +27,9 @@ public class Exam extends Observable {
     @XmlElement
     private ArrayList<String> names;
     private String filename;
-    private static Exam instance;
-    public static String title = "";
-    public static String comment = "";
+    private static Exam instance;    
+    private Content titleContent;
+    private Content commentContent;
 
     /**
      * Indeks aktualnego zadania (wskazywanego przez zakładkę).
@@ -58,6 +58,8 @@ public class Exam extends Observable {
         idx = 0;
         maxIdx = 0;
         filename = "";
+        titleContent = new Content();
+        commentContent = new Content();
     }
     
     public int compile() {
@@ -249,5 +251,18 @@ public class Exam extends Observable {
         }
 
         return true;
+    }
+    public Content getTitleContent() {
+        return titleContent;
+    }
+    public Content getCommentContent() {
+        return commentContent;
+    }
+    
+    public void setTitleContent(Content content) {
+        this.titleContent = content;
+    }
+    public void setCommentContent(Content content) {
+        this.commentContent = content;
     }
 }
