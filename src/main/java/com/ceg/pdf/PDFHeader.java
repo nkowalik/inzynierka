@@ -101,6 +101,7 @@ public class PDFHeader {
                     p.writeLineInColor(top, commentColor.getColor());
                     top -= commentFontSize + 2;
                 }
+                top += commentFontSize + 2;
             } catch (EmptyPartOfTaskException e) {
                 Alerts.emptyPartOfTaskAlert();
             }
