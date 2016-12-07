@@ -2,6 +2,8 @@ package com.ceg.pdf;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
 import com.ceg.utils.Alerts;
+import com.ceg.utils.ColorPicker;
+import com.ceg.utils.ColorPickerUtil;
 import com.ceg.utils.FontType;
 import com.ceg.utils.FontTypeUtil;
 import javafx.stage.Stage;
@@ -19,11 +21,16 @@ public class PDFSettings {
     
     private FontType commandFont;
     private FontType codeFont;
+    private FontType answerFont;
     private Integer commandFontSize;
     private Integer codeFontSize;
+    private Integer answerFontSize;
     private String testType;
     private String pdfFilePath;
     private String pdfFileName;
+    private ColorPicker answerColor;
+    private boolean isAnswerBold;
+    private boolean isAnswerItalic;
     
     private Integer year;
     private Integer month;
@@ -40,6 +47,7 @@ public class PDFSettings {
     public static int pdfContentWidth;
     
     public static float separatorWidth;
+    private boolean separatorsAfterTasks;
 
     private static final PDFSettings instance = new PDFSettings();
 
@@ -60,6 +68,11 @@ public class PDFSettings {
         this.codeFontSize = Integer.parseInt(defaultSettings.getProperty("code.font.size"));
         this.testType = defaultSettings.getProperty("test.type");
         this.pdfFileName = defaultSettings.getProperty("pdf.file.name");
+        this.answerFont = commandFont;
+        this.answerFontSize = commandFontSize;
+        this.answerColor = ColorPickerUtil.change(defaultSettings.getProperty("answer.default.color"));
+        this.isAnswerBold = false;
+        this.isAnswerItalic = false;
         
         Calendar calendar = Calendar.getInstance();        
         year = calendar.get(Calendar.YEAR);
@@ -67,8 +80,10 @@ public class PDFSettings {
         day = calendar.get(Calendar.DAY_OF_MONTH);
         
         File file = new File(".");
-        pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);   
+        pdfFilePath = file.getAbsolutePath().substring(0, file.getAbsolutePath().length()-2);  
+        pdfFile = null;
         pdfContentWidth = rightMargin - leftMargin - breakBetweenTaskParts;
+        separatorsAfterTasks = false;
     }
     
     private void preparePropertiesInput() {
@@ -94,11 +109,26 @@ public class PDFSettings {
     public void setCodeFont(FontType codeFont) {
         this.codeFont = codeFont;
     }
+    public void setAnswerFont(FontType codeFont) {
+        this.answerFont = codeFont;
+    }
+    public void setAnswerColor(ColorPicker answerColor) {
+        this.answerColor = answerColor;
+    }
+    public void setIsAnswerBold(boolean isAnswerBold) {
+        this.isAnswerBold = isAnswerBold;
+    }
+    public void setIsAnswerItalic(boolean isAnswerItalic) {
+        this.isAnswerItalic = isAnswerItalic;
+    }
     public void setCommandFontSize(Integer commandFontSize) {
         this.commandFontSize = commandFontSize;
     }
     public void setCodeFontSize(Integer codeFontSize) {
         this.codeFontSize = codeFontSize;
+    }
+    public void setAnswerFontSize(Integer codeFontSize) {
+        this.answerFontSize = codeFontSize;
     }
     public void setTestType(String testType) {
         this.testType = testType;
@@ -119,6 +149,9 @@ public class PDFSettings {
     public void setDay(Integer day) {
         this.day = day;
     }
+    public void setSeparatorsAfterTasks(boolean separatorsAfterTasks) {
+        this.separatorsAfterTasks = separatorsAfterTasks;
+    }
     
     public FontType getCommandFont() {
         return commandFont;
@@ -126,11 +159,26 @@ public class PDFSettings {
     public FontType getCodeFont() {
         return codeFont;
     }
+    public FontType getAnswerFont() {
+        return answerFont;
+    }
+    public ColorPicker getAnswerColor() {
+        return answerColor;
+    }
+    public boolean getIsAnswerBold() {
+        return isAnswerBold;
+    }
+    public boolean getIsAnswerItalic() {
+        return isAnswerItalic;
+    }
     public Integer getCommandFontSize() {
         return commandFontSize;
     }
     public Integer getCodeFontSize() {
         return codeFontSize;
+    }
+    public Integer getAnswerFontSize() {
+        return answerFontSize;
     }
     public String getTestType() {
         return testType;
@@ -164,6 +212,10 @@ public class PDFSettings {
     public float getSeparatorWidth() {
         return separatorWidth;
     }
+    
+    public boolean getSeparatorsAfterTasks() {
+        return separatorsAfterTasks;
+    }
 
     public void formatDate() {
         date = "";
@@ -185,7 +237,6 @@ public class PDFSettings {
         } catch (EmptyPartOfTaskException ex) {
             Alerts.emptyPartOfTaskAlert();
         }
-       // stage.hide();
     }
 
     public static PDFSettings getInstance() {
