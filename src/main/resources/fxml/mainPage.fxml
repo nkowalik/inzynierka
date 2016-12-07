@@ -162,8 +162,7 @@
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
 
                     <MenuItem fx:id="deleteTaskItem" mnemonicParsing="false" onAction="#deleteTask" text="Usuń" />
-                    <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę" />
-                    <MenuItem fx:id="changeAnswersNum" mnemonicParsing="false" onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi" visible="false" />
+                    <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę" />                 
                     <MenuItem fx:id="saveTaskItem" mnemonicParsing="false" onAction="#saveTask" text="Zapisz zadanie" visible="false" />
                     <MenuItem fx:id="saveTaskAsItem" mnemonicParsing="false" onAction="#saveTaskAs" text="Zapisz zadanie jako..." visible="false"/>
                     <MenuItem mnemonicParsing="false" onAction="#loadTask" text="Wczytaj zadanie" visible="true" />
