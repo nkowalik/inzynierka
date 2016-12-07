@@ -457,9 +457,6 @@ public class GUIMainController implements Initializable {
         }
         status = Status.SWITCH;
     }
-
-    /**
-    }
     
     @FXML
     private void advancedOptionsClicked(MouseEvent event){
@@ -477,6 +474,8 @@ public class GUIMainController implements Initializable {
         } catch (IOException ex) {
             Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
         }
+    }
+    /*
      * Ustawia widoczność elementów okna głównego.
      * @param visibility Określa żądaną widoczność elementów okna.
      */
