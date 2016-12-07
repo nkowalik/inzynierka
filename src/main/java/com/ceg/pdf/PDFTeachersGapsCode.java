@@ -9,6 +9,6 @@ import java.util.List;
 public class PDFTeachersGapsCode extends PDFGapsCode {
     PDFTeachersGapsCode(List<String> lines, float pdfContentWidthPercentage) throws IOException, EmptyPartOfTaskException {
         super(lines, pdfContentWidthPercentage);
-        answer = new PDFGapsTeachersAnswer(lines, textWidth, defaultFontType, fontSize, leftMargin);
+        answer = new PDFGapsTeachersAnswer(lines, maxTextWidth, defaultFontType, fontSize, leftMargin);
     }
 }

@@ -4,6 +4,7 @@ import static com.ceg.pdf.PDFGenerator.cs;
 import com.ceg.utils.FontType;
 import java.io.File;
 import java.io.IOException;
+import java.awt.Color;
 import org.apache.pdfbox.pdmodel.font.PDType0Font;
 
 
@@ -25,12 +26,13 @@ public class PDFLinePart {
         this.underlined = underlined;
     }
     
-    public float writeLinePart(float x, int y, int fontSize) throws IOException {
+    public float writeLinePart(float x, int y, int fontSize, Color color) throws IOException {
         float result = x;
         if (!text.equals("")) {
             result = x + getWidth(fontSize);
             cs.beginText();
             cs.newLineAtOffset(x, y);
+            cs.setNonStrokingColor(color);
             cs.setFont(PDType0Font.load(PDFGenerator.document, new File(font.getFileName())), fontSize);
             cs.showText(text);
             cs.endText();

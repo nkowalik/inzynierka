@@ -147,8 +147,10 @@
                 <Menu mnemonicParsing="false" text="Arkusz">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#createPDF" text="Generuj PDF" />
-                    <MenuItem fx:id="saveExamItem" mnemonicParsing="false" onAction="#saveCodeAreaToXML" text="Zapisz arkusz" />
-                    <MenuItem mnemonicParsing="false" onAction="#loadXMLToCodeArea" text="Wczytaj arkusz" />
+                    <MenuItem fx:id="openPdfItem" disable="true"  mnemonicParsing="false" onAction="#openPDF" text="Otwórz ostatni PDF" />
+                    <MenuItem fx:id="saveExamItem" mnemonicParsing="false" onAction="#saveExam" text="Zapisz arkusz" />
+                    <MenuItem fx:id="saveExamAsItem" mnemonicParsing="false" onAction="#saveExamAs" text="Zapisz arkusz jako..."/>
+                    <MenuItem mnemonicParsing="false" onAction="#loadExam" text="Wczytaj arkusz" />
                   </items>
                 </Menu>
                 <Menu mnemonicParsing="false" text="Zadanie">
@@ -159,6 +161,7 @@
                     <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę" />
                     <MenuItem fx:id="changeAnswersNum" mnemonicParsing="false" onAction="#changeNumberofAnswers" text="Zmień liczbę odpowiedzi" visible="false" />
                     <MenuItem fx:id="saveTaskItem" mnemonicParsing="false" onAction="#saveTask" text="Zapisz zadanie" visible="false" />
+                    <MenuItem fx:id="saveTaskAsItem" mnemonicParsing="false" onAction="#saveTaskAs" text="Zapisz zadanie jako..." visible="false"/>
                     <MenuItem mnemonicParsing="false" onAction="#loadTask" text="Wczytaj zadanie" visible="true" />
                     <MenuItem fx:id="taskEdition" mnemonicParsing="false" onAction="#editTask" text="Edytuj" visible="false" />
                     <MenuItem fx:id="pdfContentWidth" mnemonicParsing="false" onAction="#changePdfContentWidth" text="Zmień szerokość w dokumencie" visible="false" />
