@@ -7,9 +7,11 @@ import java.util.*;
 import com.ceg.examContent.Text;
 import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -165,8 +167,19 @@ public class GUIMainController implements Initializable {
                 case SWITCH:
                     if(oldValue != null) {
                         int id = Integer.parseInt(oldValue.getId());
+                        saveText(id);
+                        saveContent(id);
+                        saveResult(id);
+                        saveLabels(id);
+                        exam.getTaskAtIndex(id).getType().setUpdateAnswers(true);
+                        if (rememberCheckBox.isSelected()) {
+                            exam.getTaskAtIndex(id).getType().setUpdateAnswers(false);
+                            saveAnswers(id);
+                        }
+                        ((DraggableTab)oldValue).disableContextMenu();
                         saveTaskInfo(id);
                     }
+                    ((DraggableTab)newValue).enableContextMenu();
                     updateWindow(Integer.parseInt(newValue.getId()));
                     break;
             }

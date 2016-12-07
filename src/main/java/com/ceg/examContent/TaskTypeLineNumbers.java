@@ -1,6 +1,7 @@
 package com.ceg.examContent;
 
 import com.ceg.exceptions.EmptyPartOfTaskException;
+import org.apache.commons.lang.SystemUtils;
 
 import java.util.List;
 
@@ -29,7 +30,7 @@ public class TaskTypeLineNumbers extends TaskType{
                     if(line.contains("error")){
                         String[] substr = line.split(":");
                         int lineNumber;
-                        if(task.compiler.osName.indexOf("win") >= 0) // windows uzywa dodatkowego znaku ':' po nazwie dysku
+                        if(SystemUtils.IS_OS_WINDOWS) // windows uzywa dodatkowego znaku ':' po nazwie dysku
                             lineNumber = Integer.parseInt(substr[2]);
                         else
                             lineNumber = Integer.parseInt(substr[1]);
