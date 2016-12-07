@@ -36,6 +36,8 @@ import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.fxmisc.richtext.StyleClassedTextArea;
@@ -89,14 +91,7 @@ public class GUIMainController implements Initializable {
     CheckBox rememberCheckBox;
     @FXML
     CheckMenuItem lineNumbersCheckBox;
-    @FXML
-    private void advancedOptionsClicked(MouseEvent event){
-        try {
-            AdvancedOptionsController.show();
-        } catch (IOException ex) {
-            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
-        }
-    }
+    
     public static Scene scene = null; 
     private static Stage stage = null;
     private static GUIMainController instance = null;
@@ -185,6 +180,17 @@ public class GUIMainController implements Initializable {
             }
         });
 
+        rememberCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                Boolean old_val, Boolean new_val) {
+                    if(new_val == true){
+                        rememberCheckBox.tooltipProperty().set(new Tooltip("Włącza automatyczne generowanie odpowiedzi"));
+                    }
+                    else{
+                        rememberCheckBox.tooltipProperty().set(new Tooltip("Wyłącza automatyczne generowanie odpowiedzi"));
+                    }
+            }
+        });
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
 
@@ -393,6 +399,7 @@ public class GUIMainController implements Initializable {
             }
             end++;
         }
+        
         code.setStyleClass(ir.getStart(), ir.getEnd(), className);
     }
 
@@ -463,8 +470,25 @@ public class GUIMainController implements Initializable {
         }
         status = Status.SWITCH;
     }
-
-    /**
+    
+    @FXML
+    private void advancedOptionsClicked(MouseEvent event){
+        try {
+            AdvancedOptionsController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
+        }
+    }
+    
+    @FXML
+    private void helpClicked(MouseEvent event){
+        try {
+            HelpController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
+        }
+    }
+    /*
      * Ustawia widoczność elementów okna głównego.
      * @param visibility Określa żądaną widoczność elementów okna.
      */
