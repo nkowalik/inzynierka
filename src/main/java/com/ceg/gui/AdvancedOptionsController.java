@@ -2,6 +2,7 @@ package com.ceg.gui;
 
 import com.ceg.examContent.Exam;
 import com.ceg.pdf.PDFSettings;
+import com.ceg.utils.Alerts;
 import com.ceg.utils.ColorPicker;
 import com.ceg.utils.ColorPickerUtil;
 import com.ceg.utils.FontTypeUtil;
@@ -27,6 +28,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
+import org.fxmisc.richtext.StyleClassedTextArea;
+
+import static com.ceg.utils.ContentCssClass.*;
 
 /**
  * Klasa reprezentująca kontroler opcji zaawansowanych.
@@ -58,19 +62,11 @@ public class AdvancedOptionsController implements Initializable {
     @FXML
     ChoiceBox titleFontColor;
     @FXML
-    CheckBox isTitleBold;
-    @FXML
-    CheckBox isTitleItalic;
-    @FXML
     ChoiceBox commentFont;
     @FXML
     TextField commentFontSize;
     @FXML
     ChoiceBox commentFontColor;
-    @FXML
-    CheckBox isCommentBold;
-    @FXML
-    CheckBox isCommentItalic;
     @FXML
     Slider changeTimeout;
     @FXML
@@ -80,10 +76,10 @@ public class AdvancedOptionsController implements Initializable {
     @FXML
     TextArea text;
     @FXML
-    TextField examTitle;
+    StyleClassedTextArea examTitle;
     @FXML
-    TextField examComment;
-    
+    StyleClassedTextArea examComment;
+
     public static Stage appStage;
     private PDFSettings pdfSettings;
     private TaskData taskData;
@@ -133,10 +129,6 @@ public class AdvancedOptionsController implements Initializable {
         
         isBold.setSelected(pdfSettings.getIsAnswerBold());
         isItalic.setSelected(pdfSettings.getIsAnswerItalic());
-        isCommentBold.setSelected((pdfSettings.getIsCommentBold()));
-        isCommentItalic.setSelected((pdfSettings.getIsCommentItalic()));
-        isTitleBold.setSelected((pdfSettings.getIsTitleBold()));
-        isTitleItalic.setSelected((pdfSettings.getIsTitleItalic()));
         
         changeTimeout.valueProperty().addListener(new ChangeListener<Number>(){
             public void changed(ObservableValue<? extends Number> ov,
@@ -184,10 +176,62 @@ public class AdvancedOptionsController implements Initializable {
             appStage.setScene(scene);
             appStage.setTitle("Opcje zaawansowane");
             appStage.setResizable(false);
+
+            boolean result;
+            result = scene.getStylesheets().add("/styles/Styles.css");
+            if(!result){
+                Alerts.stylesLoadingErrorAlert();
+            }
         }
         
         appStage.show();
         appStage.toFront();
+    }
+
+    public void boldTitleMarker(ActionEvent actionEvent) {
+        IndexRange ir = examTitle.getSelection();
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            examTitle.setStyleClass(i, i+1, BOLD.changeClass(examTitle.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void italicTitleMarker(ActionEvent actionEvent) {
+        IndexRange ir = examTitle.getSelection();
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            examTitle.setStyleClass(i, i+1, ITALIC.changeClass(examTitle.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void underlineTitleMarker(ActionEvent actionEvent) {
+        IndexRange ir = examTitle.getSelection();
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            examTitle.setStyleClass(i, i+1, UNDERLINE.changeClass(examTitle.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void undoTitleMarker(ActionEvent actionEvent) {
+        IndexRange ir = examTitle.getSelection();
+        examTitle.setStyleClass(ir.getStart(), ir.getEnd(), UNDO.getClassName());
+    }
+
+    public void boldCommentMarker(ActionEvent actionEvent) {
+        IndexRange ir = examComment.getSelection();
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            examComment.setStyleClass(i, i+1, BOLD.changeClass(examComment.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void italicCommentMarker(ActionEvent actionEvent) {
+        IndexRange ir = examComment.getSelection();
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            examComment.setStyleClass(i, i+1, ITALIC.changeClass(examComment.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void underlineCommentMarker(ActionEvent actionEvent) {
+        IndexRange ir = examComment.getSelection();
+        for (int i = ir.getStart(); i < ir.getEnd(); i++) {
+            examComment.setStyleClass(i, i+1, UNDERLINE.changeClass(examComment.getStyleOfChar(i).toString()).getClassName());
+        }
+    }
+    public void undoCommentMarker(ActionEvent actionEvent) {
+        IndexRange ir = examComment.getSelection();
+        examComment.setStyleClass(ir.getStart(), ir.getEnd(), UNDO.getClassName());
     }
 
     /**
@@ -237,13 +281,9 @@ public class AdvancedOptionsController implements Initializable {
         PDFSettings.getInstance().setTitleFont(FontTypeUtil.change(titleFont.getValue().toString()));
         PDFSettings.getInstance().setTitleFontSize(Integer.parseInt(titleFontSize.getText()));
         PDFSettings.getInstance().setTitleColor(ColorPickerUtil.change(titleFontColor.getValue().toString()));
-        PDFSettings.getInstance().setIsTitleBold(isTitleBold.isSelected());
-        PDFSettings.getInstance().setIsTitleItalic(isTitleItalic.isSelected());
 
         PDFSettings.getInstance().setCommentFont(FontTypeUtil.change(commentFont.getValue().toString()));
         PDFSettings.getInstance().setCommentFontSize(Integer.parseInt(commentFontSize.getText()));
         PDFSettings.getInstance().setCommentColor(ColorPickerUtil.change(commentFontColor.getValue().toString()));
-        PDFSettings.getInstance().setIsCommentBold(isCommentBold.isSelected());
-        PDFSettings.getInstance().setIsCommentItalic(isCommentItalic.isSelected());
     }
 }
