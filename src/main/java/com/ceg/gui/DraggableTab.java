@@ -17,6 +17,7 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+import javafx.stage.WindowEvent;
 import org.apache.commons.lang.SystemUtils;
 
 /**
@@ -35,6 +36,7 @@ public class DraggableTab extends Tab {
     private Stage dragStage;
     private static Stage markerStage;
     private TabPane tabPane;
+    private ContextMenu contextMenu;
 
     /**
      * Definiuje separator, który jest wyświetlany w momencie przeciągania zakładki (czarna pionowa kreska).
@@ -64,7 +66,7 @@ public class DraggableTab extends Tab {
         sp.getChildren().add(dragText);
         dragStage.setScene(new Scene(sp));
 
-        addContextMenu();
+        contextMenu = createContextMenu();
 
         if(SystemUtils.IS_OS_WINDOWS) {
             /**
@@ -247,7 +249,7 @@ public class DraggableTab extends Tab {
 
     }
 
-    public void addContextMenu() {
+    public ContextMenu createContextMenu() {
         MenuItem changeItem = new MenuItem("Zmień nazwę");
         MenuItem moveForwards = new MenuItem("Przesuń w prawo");
         MenuItem moveBackwards = new MenuItem("Przesuń w lewo");
@@ -307,8 +309,15 @@ public class DraggableTab extends Tab {
 
         ContextMenu menu = new ContextMenu();
         menu.getItems().addAll(changeItem, moveForwards, moveBackwards);
+        return menu;
+    }
 
-        this.setContextMenu(menu);
+    void enableContextMenu() {
+        this.setContextMenu(contextMenu);
+    }
+
+    void disableContextMenu() {
+        this.setContextMenu(null);
     }
 
 }

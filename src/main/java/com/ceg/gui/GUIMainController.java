@@ -7,9 +7,11 @@ import java.util.*;
 import com.ceg.examContent.Text;
 import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -168,7 +170,9 @@ public class GUIMainController implements Initializable {
                             exam.getTaskAtIndex(id).getType().setUpdateAnswers(false);
                             saveAnswers(id);
                         }
+                        ((DraggableTab)oldValue).disableContextMenu();
                     }
+                    ((DraggableTab)newValue).enableContextMenu();
                     updateWindow(Integer.parseInt(newValue.getId()));
                     break;
             }
