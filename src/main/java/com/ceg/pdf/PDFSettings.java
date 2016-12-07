@@ -22,15 +22,25 @@ public class PDFSettings {
     private FontType commandFont;
     private FontType codeFont;
     private FontType answerFont;
+    private FontType titleFont;
+    private FontType commentFont;
     private Integer commandFontSize;
     private Integer codeFontSize;
     private Integer answerFontSize;
+    private Integer titleFontSize;
+    private Integer commentFontSize;
     private String testType;
     private String pdfFilePath;
     private String pdfFileName;
     private ColorPicker answerColor;
+    private ColorPicker titleColor;
+    private ColorPicker commentColor;
     private boolean isAnswerBold;
     private boolean isAnswerItalic;
+    private boolean isTitleBold;
+    private boolean isTitleItalic;
+    private boolean isCommentBold;
+    private boolean isCommentItalic;
     
     private Integer year;
     private Integer month;
@@ -71,8 +81,18 @@ public class PDFSettings {
         this.answerFont = commandFont;
         this.answerFontSize = commandFontSize;
         this.answerColor = ColorPickerUtil.change(defaultSettings.getProperty("answer.default.color"));
+        this.titleFont = FontTypeUtil.change(defaultSettings.getProperty("title.font"));
+        this.titleFontSize = Integer.parseInt(defaultSettings.getProperty("title.font.size"));;
+        this.titleColor = ColorPickerUtil.change(defaultSettings.getProperty("title.default.color"));;
+        this.commentFont = FontTypeUtil.change(defaultSettings.getProperty("comment.font"));
+        this.commentFontSize = Integer.parseInt(defaultSettings.getProperty("comment.font.size"));;
+        this.commentColor = ColorPickerUtil.change(defaultSettings.getProperty("comment.default.color"));;
         this.isAnswerBold = false;
         this.isAnswerItalic = false;
+        this.isCommentBold = false;
+        this.isCommentItalic = false;
+        this.isTitleBold = false;
+        this.isTitleItalic = false;
         
         Calendar calendar = Calendar.getInstance();        
         year = calendar.get(Calendar.YEAR);
@@ -121,6 +141,18 @@ public class PDFSettings {
     public void setIsAnswerItalic(boolean isAnswerItalic) {
         this.isAnswerItalic = isAnswerItalic;
     }
+    public void setTitleFont(FontType titleFont) { this.titleFont = titleFont; }
+    public void setTitleColor(ColorPicker titleColor) { this.titleColor = titleColor; }
+    public void setIsTitleBold(boolean isTitleBold) {
+        this.isTitleBold = isTitleBold;
+    }
+    public void setIsTitleItalic(boolean isTitleItalic) {
+        this.isTitleItalic = isTitleItalic;
+    }
+    public void setCommentFont(FontType commentFont) { this.commentFont = commentFont; }
+    public void setCommentColor(ColorPicker commentColor) { this.commentColor = commentColor; }
+    public void setIsCommentBold(boolean isCommentBold) { this.isCommentBold = isCommentBold; }
+    public void setIsCommentItalic(boolean isCommentItalic) { this.isCommentItalic = isCommentItalic; }
     public void setCommandFontSize(Integer commandFontSize) {
         this.commandFontSize = commandFontSize;
     }
@@ -130,6 +162,8 @@ public class PDFSettings {
     public void setAnswerFontSize(Integer codeFontSize) {
         this.answerFontSize = codeFontSize;
     }
+    public void setTitleFontSize(Integer titleFontSize) { this.titleFontSize = titleFontSize; }
+    public void setCommentFontSize(Integer commentFontSize) { this.commentFontSize = commentFontSize; }
     public void setTestType(String testType) {
         this.testType = testType;
     }
@@ -162,15 +196,33 @@ public class PDFSettings {
     public FontType getAnswerFont() {
         return answerFont;
     }
+    public FontType getTitleFont() {
+        return titleFont;
+    }
+    public FontType getCommentFont() {
+        return commentFont;
+    }
     public ColorPicker getAnswerColor() {
         return answerColor;
+    }
+    public ColorPicker getTitleColor() {
+        return titleColor;
+    }
+    public ColorPicker getCommentColor() {
+        return commentColor;
     }
     public boolean getIsAnswerBold() {
         return isAnswerBold;
     }
-    public boolean getIsAnswerItalic() {
-        return isAnswerItalic;
+    public boolean getIsAnswerItalic() { return isAnswerItalic; }
+    public boolean getIsTitleBold() {
+        return isTitleBold;
     }
+    public boolean getIsCommentBold() {
+        return isCommentBold;
+    }
+    public boolean getIsTitleItalic() { return isTitleItalic; }
+    public boolean getIsCommentItalic() { return isCommentItalic; }
     public Integer getCommandFontSize() {
         return commandFontSize;
     }
@@ -179,6 +231,12 @@ public class PDFSettings {
     }
     public Integer getAnswerFontSize() {
         return answerFontSize;
+    }
+    public Integer getCommentFontSize() {
+        return commentFontSize;
+    }
+    public Integer getTitleFontSize() {
+        return titleFontSize;
     }
     public String getTestType() {
         return testType;

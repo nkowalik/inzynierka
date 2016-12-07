@@ -1,22 +1,18 @@
 package com.ceg.examContent;
 
+import com.ceg.exceptions.EmptyPartOfTaskException;
+import com.ceg.utils.Alerts;
+
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.File;
-import java.io.IOException;
-import java.nio.file.AccessDeniedException;
-import java.nio.file.FileSystemException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Observable;
-
-import com.ceg.exceptions.EmptyPartOfTaskException;
-import com.ceg.utils.Alerts;
-
-import javax.xml.bind.annotation.XmlElement;
 
 /**
  * Klasa Exam stanowi kontekst dla modelu danych aplikacji, dla każdego wywołania aplikacji istnieje jedna statyczna instancja.
@@ -31,7 +27,9 @@ public class Exam extends Observable {
     @XmlElement
     private ArrayList<String> names;
     private String filename;
-    private static Exam instance;
+    private static Exam instance;    
+    private Content titleContent;
+    private Content commentContent;
 
     /**
      * Indeks aktualnego zadania (wskazywanego przez zakładkę).
@@ -60,6 +58,8 @@ public class Exam extends Observable {
         idx = 0;
         maxIdx = 0;
         filename = "";
+        titleContent = new Content();
+        commentContent = new Content();
     }
     
     public int compile() {
@@ -251,5 +251,18 @@ public class Exam extends Observable {
         }
 
         return true;
+    }
+    public Content getTitleContent() {
+        return titleContent;
+    }
+    public Content getCommentContent() {
+        return commentContent;
+    }
+    
+    public void setTitleContent(Content content) {
+        this.titleContent = content;
+    }
+    public void setCommentContent(Content content) {
+        this.commentContent = content;
     }
 }

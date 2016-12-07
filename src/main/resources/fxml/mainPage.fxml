@@ -160,13 +160,12 @@
                 <Menu mnemonicParsing="false" text="Zadanie">
                   <items>
                     <MenuItem mnemonicParsing="false" onAction="#addTask" text="Dodaj" />
-
+                      <MenuItem fx:id="taskEdition" mnemonicParsing="false" onAction="#editTask" text="Edytuj" visible="false" />
                     <MenuItem fx:id="deleteTaskItem" mnemonicParsing="false" onAction="#deleteTask" text="Usuń" />
-                    <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę" />                 
+                    <MenuItem fx:id="changeNameItem" mnemonicParsing="false" onAction="#changeTaskName" text="Zmień nazwę" />
                     <MenuItem fx:id="saveTaskItem" mnemonicParsing="false" onAction="#saveTask" text="Zapisz zadanie" visible="false" />
                     <MenuItem fx:id="saveTaskAsItem" mnemonicParsing="false" onAction="#saveTaskAs" text="Zapisz zadanie jako..." visible="false"/>
                     <MenuItem mnemonicParsing="false" onAction="#loadTask" text="Wczytaj zadanie" visible="true" />
-                    <MenuItem fx:id="taskEdition" mnemonicParsing="false" onAction="#editTask" text="Edytuj" visible="false" />
                     <MenuItem fx:id="pdfContentWidth" mnemonicParsing="false" onAction="#changePdfContentWidth" text="Zmień szerokość w dokumencie" visible="false" />
                     <CheckMenuItem fx:id="lineNumbersCheckBox" mnemonicParsing="false" text="Dodaj numerowanie linii" />
                   </items>
