@@ -7,9 +7,11 @@ import java.util.*;
 import com.ceg.examContent.Text;
 import com.ceg.utils.FileChooserCreator;
 import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.input.ContextMenuEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
@@ -34,6 +36,8 @@ import java.awt.Desktop;
 import java.awt.EventQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
 import org.fxmisc.richtext.StyleClassedTextArea;
@@ -64,8 +68,6 @@ public class GUIMainController implements Initializable {
     @FXML
     Button answerBtn;
     @FXML
-    MenuItem changeAnswersNum;
-    @FXML
     MenuItem changeNameItem;
     @FXML
     MenuItem deleteTaskItem;
@@ -89,14 +91,7 @@ public class GUIMainController implements Initializable {
     CheckBox rememberCheckBox;
     @FXML
     CheckMenuItem lineNumbersCheckBox;
-    @FXML
-    private void advancedOptionsClicked(MouseEvent event){
-        try {
-            AdvancedOptionsController.show();
-        } catch (IOException ex) {
-            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
-        }
-    }
+    
     public static Scene scene = null; 
     private static Stage stage = null;
     private static GUIMainController instance = null;
@@ -167,13 +162,35 @@ public class GUIMainController implements Initializable {
                 case SWITCH:
                     if(oldValue != null) {
                         int id = Integer.parseInt(oldValue.getId());
+                        saveText(id);
+                        saveContent(id);
+                        saveResult(id);
+                        saveLabels(id);
+                        exam.getTaskAtIndex(id).getType().setUpdateAnswers(true);
+                        if (rememberCheckBox.isSelected()) {
+                            exam.getTaskAtIndex(id).getType().setUpdateAnswers(false);
+                            saveAnswers(id);
+                        }
+                        ((DraggableTab)oldValue).disableContextMenu();
                         saveTaskInfo(id);
                     }
+                    ((DraggableTab)newValue).enableContextMenu();
                     updateWindow(Integer.parseInt(newValue.getId()));
                     break;
             }
         });
 
+        rememberCheckBox.selectedProperty().addListener(new ChangeListener<Boolean>() {
+            public void changed(ObservableValue<? extends Boolean> ov,
+                Boolean old_val, Boolean new_val) {
+                    if(new_val == true){
+                        rememberCheckBox.tooltipProperty().set(new Tooltip("Włącza automatyczne generowanie odpowiedzi"));
+                    }
+                    else{
+                        rememberCheckBox.tooltipProperty().set(new Tooltip("Wyłącza automatyczne generowanie odpowiedzi"));
+                    }
+            }
+        });
         code.setParagraphGraphicFactory(LineNumberFactory.get(code));
         code.setWrapText(true);
 
@@ -382,6 +399,7 @@ public class GUIMainController implements Initializable {
             }
             end++;
         }
+        
         code.setStyleClass(ir.getStart(), ir.getEnd(), className);
     }
 
@@ -452,36 +470,25 @@ public class GUIMainController implements Initializable {
         }
         status = Status.SWITCH;
     }
-
-    /**
-     * Wyświetla okno dialogowe umożliwiające zmianę odpowiedzi w zadaniu.
-     * @param event
-     * @throws Exception
-     */
-    public void changeNumberofAnswers(ActionEvent event) throws Exception {
-        int answNum = Integer.MAX_VALUE-1;
-        Dialog dialog;
-        dialog = new TextInputDialog("MAX");
-	dialog.setTitle("Liczba odpowiedzi");
-	dialog.setHeaderText("Ile odpowiedzi będzie miało zadanie?");
-	
-	Optional<String> result = dialog.showAndWait();
-	String entered = "MAX";
-	 
-	if (result.isPresent()) {	 
-	    entered = result.get();
-            if(!entered.contentEquals("MAX"))
-                try{
-                    answNum= Integer.valueOf(entered);
-                }
-                catch(NumberFormatException ex){
-                    answNum=Integer.MAX_VALUE-1;
-                }
+    
+    @FXML
+    private void advancedOptionsClicked(MouseEvent event){
+        try {
+            AdvancedOptionsController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
         }
-        exam.getTaskAtIndex(exam.idx).getType().setNoOfAnswers(answNum);
     }
-
-    /**
+    
+    @FXML
+    private void helpClicked(MouseEvent event){
+        try {
+            HelpController.show();
+        } catch (IOException ex) {
+            Logger.getLogger(PdfSavingController.class.getName()).log(Level.SEVERE, null, ex); // TODO: obsluga wyjatku
+        }
+    }
+    /*
      * Ustawia widoczność elementów okna głównego.
      * @param visibility Określa żądaną widoczność elementów okna.
      */
@@ -504,14 +511,6 @@ public class GUIMainController implements Initializable {
         answer.setVisible(visibility);
         lineNumbersCheckBox.setVisible(visibility);
        
-        if(visibility){
-            if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
-                changeAnswersNum.setVisible(visibility);
-            }
-            else{
-                changeAnswersNum.setVisible(false);
-            }
-        }
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("Gaps")){
                 gapsMarkerBtn.setVisible(visibility);
@@ -687,10 +686,12 @@ public class GUIMainController implements Initializable {
     private void saveAnswers(int id) {
         exam.getTaskAtIndex(id).getAnswers().clear();
         String ans = "";
+        int noOfAnswers = 0;
 
         for (int i = 0; i < answer.getText().length(); i++) {
             if (answer.getText().charAt(i) == '\n') {
                 exam.getTaskAtIndex(id).getAnswers().add(ans);
+                noOfAnswers++;
                 ans = "";
             }
             else if (answer.getStyleOfChar(i).isEmpty() || answer.getStyleOfChar(i).toString().equals(EMPTY.getClassList())) {
@@ -699,7 +700,9 @@ public class GUIMainController implements Initializable {
         }
         if (!ans.equals("")) {
             exam.getTaskAtIndex(id).getAnswers().add(ans);
+            noOfAnswers++;
         }
+        exam.getTaskAtIndex(id).getType().setNoOfAnswers(noOfAnswers);
     }
 
     private void saveTaskInfo(int idx) {

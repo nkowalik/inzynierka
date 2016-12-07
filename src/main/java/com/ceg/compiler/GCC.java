@@ -23,14 +23,12 @@ public class GCC {
     private File file = null;
     private String cppName;
     private String executableName;
-    public String osName;
 
     /**
      * Tworzy obiekt kompilatora.
      * Przypisuje nazwę systemu operacyjnego, oraz ścieżkę programu.
      */
     public GCC() {
-        osName = System.getProperty("os.name").toLowerCase();
 
         CodeSource codeSource = GCC.class.getProtectionDomain().getCodeSource();
         File jarFile;
