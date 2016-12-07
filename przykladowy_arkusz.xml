@@ -1,0 +1,483 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<exam>
+    <names>Zadanie 1</names>
+    <names>Zadanie 3</names>
+    <names>Zadanie 4</names>
+    <names>Zadanie 5</names>
+    <names>Zadanie 6</names>
+    <names>Zadanie 7</names>
+    <idx>0</idx>
+    <maxIdx>8</maxIdx>
+    <executionTimetout>4.0</executionTimetout>
+    <tasks>
+        <compiler>
+            <osName>windows 10</osName>
+        </compiler>
+        <answers>!!!jest-d-u-i-wxyz</answers>
+        <content>
+            <contentParts>
+                <cssClassName>EMPTY</cssClassName>
+                <text>Podaj co pojawi się na wyjściu w wyniku wykonania podanego programu.</text>
+            </contentParts>
+            <pdfWidthPercentage>0.5</pdfWidthPercentage>
+        </content>
+        <labels></labels>
+        <pdfAnswers> #placeForAnswer</pdfAnswers>
+        <result>Kompilacja przebiegła pomyślnie.
+!!!jest-d-u-i-wxyz</result>
+        <text>
+            <textParts>
+                <textPart>
+                    <text>#include &lt;iostream&gt;
+using namespace std;
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+                <textPart>
+                    <text>
+char pomoc( char *s ){
+	char znak = *s;
+	while( *s &gt;= 'a' &amp;&amp; *s &lt;= 'z' ){
+		if( znak &gt; *(--s) + 1 )
+			znak = *s;
+	}
+	return znak;
+}
+
+void pytanie5( char *s ){
+	char znak = s[0];
+	s[0] = pomoc( s + 1 );
+	if( znak &lt; 't' &amp;&amp; znak &gt; 'a' )
+		pytanie5( s + 2 );
+}
+
+int main()
+{
+	char napis[100] = "!!!jest-dlugi-wxyz";
+	pytanie5( napis + 9 );
+	cout &lt;&lt; napis;	
+
+	return 0;
+}
+</text>
+                    <type>[]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeSimpleOutput">
+            <name>SimpleOutput</name>
+            <command>Wyjście programu</command>
+            <defaultContents>Podaj co pojawi się na wyjściu w wyniku wykonania programu.</defaultContents>
+            <lineNumbersVisibility>false</lineNumbersVisibility>
+            <noOfAnswers>1</noOfAnswers>
+            <updateAnswers>true</updateAnswers>
+        </type>
+    </tasks>
+    <tasks>
+        <compiler>
+            <osName>windows 10</osName>
+        </compiler>
+        <answers>-1</answers>
+        <answers> -2</answers>
+        <answers> -3</answers>
+        <answers> -1</answers>
+        <content>
+            <contentParts>
+                <cssClassName>EMPTY</cssClassName>
+                <text>Jaka wartość zostanie zwrócona przez poniższe wywołania funkcji:</text>
+            </contentParts>
+            <pdfWidthPercentage>0.5</pdfWidthPercentage>
+        </content>
+        <labels>c( 1 ):</labels>
+        <labels>c(3):</labels>
+        <labels>c(5):</labels>
+        <labels>c(6):</labels>
+        <pdfAnswers>c( 1 ): #placeForAnswer</pdfAnswers>
+        <pdfAnswers>c(3): #placeForAnswer</pdfAnswers>
+        <pdfAnswers>c(5): #placeForAnswer</pdfAnswers>
+        <pdfAnswers>c(6): #placeForAnswer</pdfAnswers>
+        <result>Kompilacja przebiegła pomyślnie.
+-1
+-2
+-3
+-1</result>
+        <text>
+            <textParts>
+                <textPart>
+                    <text>#include &lt;iostream&gt;
+using namespace std;
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+                <textPart>
+                    <text>
+int c( int k )
+{
+	if( k &lt; 1 )
+		return k;
+	else
+		return c( k - 2 ) + c( k / 3 );
+}
+
+</text>
+                    <type>[]</type>
+                </textPart>
+                <textPart>
+                    <text>int main()
+{
+	cout &lt;&lt; c( 1 );
+	cout &lt;&lt; c( 3 );
+	cout &lt;&lt; c( 5 );
+	cout &lt;&lt; c( 6 );
+
+	return 0;
+}
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeReturnedValue">
+            <name>ReturnedValue</name>
+            <command>Zwrócona liczba</command>
+            <lineNumbersVisibility>false</lineNumbersVisibility>
+            <noOfAnswers>4</noOfAnswers>
+            <updateAnswers>false</updateAnswers>
+        </type>
+    </tasks>
+    <tasks>
+        <compiler>
+            <osName>windows 10</osName>
+        </compiler>
+        <answers>B</answers>
+        <answers>A</answers>
+        <answers>B</answers>
+        <answers>A</answers>
+        <answers>D</answers>
+        <content>
+            <contentParts>
+                <cssClassName>EMPTY</cssClassName>
+                <text>Podaj jaki tekst zostanie wypisany na ekran w wyniku wywołania funkcji:</text>
+            </contentParts>
+            <pdfWidthPercentage>0.5</pdfWidthPercentage>
+        </content>
+        <labels>f( 'a' - 1 ) </labels>
+        <labels>f( 4.0 - (int)2.0 ) </labels>
+        <labels>f( 3/2, 4/3 ) </labels>
+        <labels>f( 3.0 / 'x', 1 ) </labels>
+        <labels>f( 2.0 - 1, 0.0 ) </labels>
+        <pdfAnswers>f( 'a' - 1 )  #placeForAnswer</pdfAnswers>
+        <pdfAnswers>f( 4.0 - (int)2.0 )  #placeForAnswer</pdfAnswers>
+        <pdfAnswers>f( 3/2, 4/3 )  #placeForAnswer</pdfAnswers>
+        <pdfAnswers>f( 3.0 / 'x', 1 )  #placeForAnswer</pdfAnswers>
+        <pdfAnswers>f( 2.0 - 1, 0.0 )  #placeForAnswer</pdfAnswers>
+        <result>Kompilacja przebiegła pomyślnie.
+B
+A
+B
+A
+D</result>
+        <text>
+            <textParts>
+                <textPart>
+                    <text>#include &lt;iostream&gt;
+using namespace std;
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+                <textPart>
+                    <text>
+void f( double x, int y=0 ) { 
+    cout &lt;&lt; "A"; 
+}
+void f( int x, int y=0 ) { 
+    cout &lt;&lt; "B"; 
+}
+void f( int x, double y ) { 
+    cout &lt;&lt; "C"; 
+}
+void f( double x, double y ) { 
+    cout &lt;&lt; "D"; 
+}
+void f( char x ) { 
+    cout &lt;&lt; "E"; 
+}
+
+</text>
+                    <type>[]</type>
+                </textPart>
+                <textPart>
+                    <text>int main() {
+
+	f( 'a' - 1 );
+	f( 4.0 - (int)2.0 );
+	f( 3/2, 4/3 );
+	f( 3.0 / 'x', 1 );
+	f( 2.0 - 1, 0.0 );
+
+}
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeComplexOutput">
+            <name>ComplexOutput</name>
+            <command>Wyjście funkcji</command>
+            <defaultContents>Podaj co pojawi się na wyjściu w wyniku kolejnych wywołań funkcji.</defaultContents>
+            <lineNumbersVisibility>false</lineNumbersVisibility>
+            <noOfAnswers>5</noOfAnswers>
+            <updateAnswers>true</updateAnswers>
+        </type>
+    </tasks>
+    <tasks>
+        <compiler>
+            <osName>windows 10</osName>
+        </compiler>
+        <answers>+</answers>
+        <answers>i</answers>
+        <answers>j</answers>
+        <content>
+            <contentParts>
+                <cssClassName>EMPTY</cssClassName>
+                <text>Uzupełnij pola, aby w wyniku wykonania programu na wyjściu wypisano "1 2 3 4 5 6 7 8 9 ".</text>
+            </contentParts>
+            <pdfWidthPercentage>0.5</pdfWidthPercentage>
+        </content>
+        <labels></labels>
+        <labels></labels>
+        <labels></labels>
+        <pdfAnswers>#placeForAnswer</pdfAnswers>
+        <pdfAnswers>#placeForAnswer</pdfAnswers>
+        <pdfAnswers>#placeForAnswer</pdfAnswers>
+        <result>Kompilacja przebiegła pomyślnie.
+1 2 3 4 5 6 7 8 9 </result>
+        <text>
+            <textParts>
+                <textPart>
+                    <text>#include &lt;iostream&gt;
+using namespace std;
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+                <textPart>
+                    <text>
+int main()
+{
+	int tab[3][3], i, j, na=0, wynik[3][3];
+	
+	for ( i=0; i &lt; 3; i++)
+		for ( j=0; j &lt; 3; j++)
+		
+			tab[i][j] = </text>
+                    <type>[]</type>
+                </textPart>
+                <textPart>
+                    <text>+</text>
+                    <type>[gap]</type>
+                </textPart>
+                <textPart>
+                    <text>+na;
+	
+	for ( i=0; i &lt; 3; i++)
+		for ( j=0; j &lt; 3; j++)
+		
+			wynik[i][j] = tab[</text>
+                    <type>[]</type>
+                </textPart>
+                <textPart>
+                    <text>i</text>
+                    <type>[gap]</type>
+                </textPart>
+                <textPart>
+                    <text>][</text>
+                    <type>[]</type>
+                </textPart>
+                <textPart>
+                    <text>j</text>
+                    <type>[gap]</type>
+                </textPart>
+                <textPart>
+                    <text>];
+			
+	for ( i=0; i &lt; 3; i++)
+		for ( j=0; j &lt; 3; j++)
+			cout &lt;&lt; wynik[i][j] &lt;&lt; ' ';
+
+	return 0;
+}
+</text>
+                    <type>[]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeGaps">
+            <name>Gaps</name>
+            <command>Uzupełnianie pól</command>
+            <lineNumbersVisibility>false</lineNumbersVisibility>
+            <noOfAnswers>3</noOfAnswers>
+            <updateAnswers>true</updateAnswers>
+        </type>
+    </tasks>
+    <tasks>
+        <compiler>
+            <osName>windows 10</osName>
+        </compiler>
+        <answers> błąd</answers>
+        <answers>3</answers>
+        <answers> 5</answers>
+        <answers> 4</answers>
+        <content>
+            <contentParts>
+                <cssClassName>EMPTY</cssClassName>
+                <text>Podaj wartości podanych zmiennych przed instrukcją return. Wpisz "błąd" jeśli nie można ich jednoznacznie określić:</text>
+            </contentParts>
+            <pdfWidthPercentage>0.5</pdfWidthPercentage>
+        </content>
+        <labels>str[0].x</labels>
+        <labels>str[1].x </labels>
+        <labels>str[2].x</labels>
+        <labels>str[3].x</labels>
+        <pdfAnswers>str[0].x #placeForAnswer</pdfAnswers>
+        <pdfAnswers>str[1].x  #placeForAnswer</pdfAnswers>
+        <pdfAnswers>str[2].x #placeForAnswer</pdfAnswers>
+        <pdfAnswers>str[3].x #placeForAnswer</pdfAnswers>
+        <result>Kompilacja przebiegła pomyślnie.
+2000254013
+3
+5
+4</result>
+        <text>
+            <textParts>
+                <textPart>
+                    <text>#include &lt;iostream&gt;
+using namespace std;
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+                <textPart>
+                    <text>
+typedef struct { int x; } l_t;
+
+void param( l_t p0, l_t *p1, l_t **p2, l_t p3[] )
+{
+	p0.x = 3;
+	(*p1).x = 3;
+	p1++;
+	p2++;
+	p3-&gt;x = 4;
+}
+
+int main(){
+	l_t str[4];
+	l_t *e = &amp;str[2];
+	param( str[1], str+1, &amp;e, &amp;(str[3]) );
+	e-&gt;x = 5;
+	
+	</text>
+                    <type>[]</type>
+                </textPart>
+                <textPart>
+                    <text>cout &lt;&lt; str[0].x &lt;&lt; endl;
+	cout &lt;&lt; str[1].x &lt;&lt; endl;
+	cout &lt;&lt; str[2].x &lt;&lt; endl;
+	cout &lt;&lt; str[3].x &lt;&lt; endl;
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+                <textPart>
+                    <text>
+	return 0;
+}
+</text>
+                    <type>[]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeVarValue">
+            <name>VarValue</name>
+            <command>Wartości zmiennych</command>
+            <lineNumbersVisibility>false</lineNumbersVisibility>
+            <noOfAnswers>4</noOfAnswers>
+            <updateAnswers>false</updateAnswers>
+        </type>
+    </tasks>
+    <tasks>
+        <compiler>
+            <osName>windows 10</osName>
+        </compiler>
+        <answers>4</answers>
+        <answers>7</answers>
+        <answers>16</answers>
+        <answers>18</answers>
+        <content>
+            <contentParts>
+                <cssClassName>EMPTY</cssClassName>
+                <text>Podaj numery linii, które powodują błąd kompilacji programu.</text>
+            </contentParts>
+            <pdfWidthPercentage>0.5</pdfWidthPercentage>
+        </content>
+        <labels></labels>
+        <labels></labels>
+        <labels></labels>
+        <labels></labels>
+        <pdfAnswers> #placeForAnswer</pdfAnswers>
+        <pdfAnswers> #placeForAnswer</pdfAnswers>
+        <pdfAnswers> #placeForAnswer</pdfAnswers>
+        <pdfAnswers> #placeForAnswer</pdfAnswers>
+        <result>C:\Users\mazur\Documents\Workspace\ceg\target\linenumbers7296220179723671055.cpp: In function 'void f(const int*)':
+C:\Users\mazur\Documents\Workspace\ceg\target\linenumbers7296220179723671055.cpp:5:7: error: assignment of read-only location '* w'
+  w[0] = 1;
+       ^
+C:\Users\mazur\Documents\Workspace\ceg\target\linenumbers7296220179723671055.cpp:8:4: error: cannot convert 'const int*' to 'char*' in assignment
+  s = w;
+    ^
+C:\Users\mazur\Documents\Workspace\ceg\target\linenumbers7296220179723671055.cpp: In function 'int main()':
+C:\Users\mazur\Documents\Workspace\ceg\target\linenumbers7296220179723671055.cpp:17:7: error: cannot convert 'int*' to 'int (*)[2]' for argument '1' to 'void g(int (*)[2])'
+  g( t );
+       ^
+C:\Users\mazur\Documents\Workspace\ceg\target\linenumbers7296220179723671055.cpp:19:3: error: lvalue required as increment operand
+  t++;
+   ^</result>
+        <text>
+            <textParts>
+                <textPart>
+                    <text>#include &lt;iostream&gt;
+</text>
+                    <type>[hidden]</type>
+                </textPart>
+                <textPart>
+                    <text>
+void f( const int *w ){
+	char *s;
+	w[0] = 1;
+	w++;
+	w = NULL;
+	s = w;
+	s[0] = 0;
+}
+void g( int t[2][2] ){
+	t[0][0] = t[1][1];
+}
+int main(){
+	int t[10], u[10][2];
+	f( t );
+	g( t );
+	g( u );
+	t++;
+	return 0;
+}
+</text>
+                    <type>[]</type>
+                </textPart>
+            </textParts>
+        </text>
+        <type xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="taskTypeLineNumbers">
+            <name>LineNumbers</name>
+            <command>Numery linii</command>
+            <lineNumbersVisibility>true</lineNumbersVisibility>
+            <noOfAnswers>4</noOfAnswers>
+            <updateAnswers>true</updateAnswers>
+        </type>
+    </tasks>
+</exam>
