@@ -57,7 +57,11 @@
                            <tooltip>
                               <Tooltip text="Usuwa markery" />
                            </tooltip></Button>
-                             <Button fx:id="gapsMarkerBtn" mnemonicParsing="false" onAction="#gapsMarker" styleClass="gapsButton" text="Luka" visible="false" />
+                             <Button fx:id="gapsMarkerBtn" mnemonicParsing="false" onAction="#gapsMarker" styleClass="gapsButton" text="Luka" visible="false">
+                                <tooltip>
+                                 <Tooltip text="Zamienia zaznaczony kod na lukę do uzupełnienia" />
+                               </tooltip>
+                             </Button>
                          </children>
                      </HBox>
                  </children>

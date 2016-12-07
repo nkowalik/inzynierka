@@ -712,10 +712,12 @@ public class GUIMainController implements Initializable {
     private void saveAnswers(int id) {
         exam.getTaskAtIndex(id).getAnswers().clear();
         String ans = "";
+        int noOfAnswers = 0;
 
         for (int i = 0; i < answer.getText().length(); i++) {
             if (answer.getText().charAt(i) == '\n') {
                 exam.getTaskAtIndex(id).getAnswers().add(ans);
+                noOfAnswers++;
                 ans = "";
             }
             else if (answer.getStyleOfChar(i).isEmpty() || answer.getStyleOfChar(i).toString().equals(EMPTY.getClassList())) {
@@ -724,7 +726,9 @@ public class GUIMainController implements Initializable {
         }
         if (!ans.equals("")) {
             exam.getTaskAtIndex(id).getAnswers().add(ans);
+            noOfAnswers++;
         }
+        exam.getTaskAtIndex(id).getType().setNoOfAnswers(noOfAnswers);
     }
 
     private void saveTaskInfo(int idx) {

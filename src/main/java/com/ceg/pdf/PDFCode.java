@@ -10,6 +10,7 @@ import javafx.application.Platform;
 public class PDFCode extends PDFAbstractTaskPart {
     private String line;
     public PDFAnswer answer = null;
+    protected boolean showAlerts = true;
     
     private final List<String> operatorList = Arrays.asList("//", 
                                                             ";", 
@@ -37,35 +38,56 @@ public class PDFCode extends PDFAbstractTaskPart {
         textSplitting(lines);
     }
     
+    PDFCode(List<String> lines, float codeWidthPercentage, boolean showAlerts) throws IOException, EmptyPartOfTaskException {
+        super();
+        this.showAlerts = showAlerts;
+        PDFSettings pdfSettings = PDFSettings.getInstance();
+
+        maxTextWidth = (int)Math.ceil(pdfSettings.pdfContentWidth * codeWidthPercentage);
+        leftMargin = pdfSettings.rightMargin - maxTextWidth;
+        defaultFontType = pdfSettings.getCodeFont();
+        fontSize = pdfSettings.getCodeFontSize();
+        textSplitting(lines);
+    }
+    
     /*  Funkcja formatująca kod do pdfa. Jako parametr przyjmuje listę linii kodu.
         Reaguje na spacje i tabulatory (jeśli używa się albo jednego albo drugiego.
         Nie przesyłać z enterami.    */   
     @Override
     public void textSplitting (List<String> codeLines) throws IOException, EmptyPartOfTaskException {
+        pdfLines.clear();
         super.textSplitting(codeLines);
         float actualLineWidth;
         boolean alert = false;
+        int numberOfAnswer = 0;
         
         for (String codeLine : codeLines) { 
-            line = codeLine;
+            if (answer != null && codeLine.contains("#placeForAnswer")) {
+                line = codeLine.replace("#placeForAnswer", answer.placesForAnswers.get(numberOfAnswer++));
+            }
+            else {
+                line = codeLine;
+            }
             line = ifTabDoTab(line);
+            codeLine = ifTabDoTab(codeLine);
             actualLineWidth = getWidth(line, defaultFontType, fontSize); 
             
             if (actualLineWidth <= maxTextWidth) {
                 PDFLine pdfLine = new PDFLine(fontSize, leftMargin);
                 PDFLinePart lp = new PDFLinePart(defaultFontType);
-                lp.setText(line);
+                lp.setText(codeLine);
                 pdfLine.setLineParts(Arrays.asList(lp));
                 pdfLines.add(pdfLine);
             }
             
             else {
-                if (!alert) {
-                    Platform.runLater(new Runnable(){
-                         @Override public void run() {
-                             Alerts.codeLineIsTooLong();
-                         }
-                    });
+                if (!alert && showAlerts) {
+                     Platform.runLater(new Runnable(){ 
+                            @Override
+                            public void run() {
+                              Alerts.codeLineIsTooLong();
+                          }
+                     });
                     alert = true;
                 }
                 for (String string : operatorList) {

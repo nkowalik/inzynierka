@@ -1,5 +1,6 @@
 package com.ceg.gui;
 
+import static com.ceg.gui.AdvancedOptionsController.appStage;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -38,6 +39,7 @@ public class HelpController implements Initializable {
 
             stage = new Stage();
             stage.setScene(scene);
+            stage.setTitle("Poradnik użytkownika");
             stage.setResizable(false);
         }
         stage.show();
