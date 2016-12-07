@@ -57,13 +57,16 @@ public class PDFTeachersAnswer extends PDFAnswer {
                 String[] answersPlaces;
                 if (i.getLineParts().get(0).getText().contains("#placeForAnswer")) {
                     i.getLineParts().get(0).setText(i.getLineParts().get(0).getText() + ' ');
-                    answersPlaces = i.getLineParts().get(0).getText().split("#placeForAnswer");               
+                    answersPlaces = i.getLineParts().get(0).getText().split("#placeForAnswer"); 
+                    float lineWidth = leftMargin;
 
                     for (int j = 0; j < answersPlaces.length - 1; j++) {
                         answerWidth = getWidth(answersPlaces[j], defaultFontType, fontSize);
-                        PDFLine pdfLine = new PDFLine(teacherAnswerFontSize, leftMargin + (int)answerWidth + 2);
+                        lineWidth += answerWidth + 1;
+                        PDFLine pdfLine = new PDFLine(teacherAnswerFontSize, (int)lineWidth);
                         PDFLinePart linePart = new PDFLinePart(teacherAnswerFontType);
-                        linePart.setText(answers.get(answersIndex++));
+                        linePart.setText(answers.get(answersIndex));
+                        lineWidth += getWidth(placesForAnswers.get(answersIndex++), defaultFontType, fontSize);
                         pdfLine.setLineParts(Arrays.asList(linePart));
                         pdfLine.writeLineInColor(myY, answerColor.getColor());
                     }
