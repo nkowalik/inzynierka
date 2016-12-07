@@ -64,8 +64,6 @@ public class GUIMainController implements Initializable {
     @FXML
     Button answerBtn;
     @FXML
-    MenuItem changeAnswersNum;
-    @FXML
     MenuItem changeNameItem;
     @FXML
     MenuItem deleteTaskItem;
@@ -454,34 +452,6 @@ public class GUIMainController implements Initializable {
     }
 
     /**
-     * Wyświetla okno dialogowe umożliwiające zmianę odpowiedzi w zadaniu.
-     * @param event
-     * @throws Exception
-     */
-    public void changeNumberofAnswers(ActionEvent event) throws Exception {
-        int answNum = Integer.MAX_VALUE-1;
-        Dialog dialog;
-        dialog = new TextInputDialog("MAX");
-	dialog.setTitle("Liczba odpowiedzi");
-	dialog.setHeaderText("Ile odpowiedzi będzie miało zadanie?");
-	
-	Optional<String> result = dialog.showAndWait();
-	String entered = "MAX";
-	 
-	if (result.isPresent()) {	 
-	    entered = result.get();
-            if(!entered.contentEquals("MAX"))
-                try{
-                    answNum= Integer.valueOf(entered);
-                }
-                catch(NumberFormatException ex){
-                    answNum=Integer.MAX_VALUE-1;
-                }
-        }
-        exam.getTaskAtIndex(exam.idx).getType().setNoOfAnswers(answNum);
-    }
-
-    /**
      * Ustawia widoczność elementów okna głównego.
      * @param visibility Określa żądaną widoczność elementów okna.
      */
@@ -504,14 +474,6 @@ public class GUIMainController implements Initializable {
         answer.setVisible(visibility);
         lineNumbersCheckBox.setVisible(visibility);
        
-        if(visibility){
-            if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("ComplexOutput")){
-                changeAnswersNum.setVisible(visibility);
-            }
-            else{
-                changeAnswersNum.setVisible(false);
-            }
-        }
         if(visibility){
             if(exam.getTaskAtIndex(exam.idx).getType().name.contentEquals("Gaps")){
                 gapsMarkerBtn.setVisible(visibility);
